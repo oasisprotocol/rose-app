@@ -2,31 +2,36 @@
     "name": "dapp-staking-contracts",
     "version": "0.1.0",
     "description": "Backend contracts for Oasis Sapphire Staking dApp",
-    "main": "lib/index.js",
+    "files": ["./lib.esm/"],
+    "types": "./lib.esm/index.d.ts",
+    "type": "module",
+    "private": true,
     "keywords": [
         "oasis",
         "sapphire",
         "staking"
     ],
-    "directories": {
-        "test": "tests"
+    "scripts": {
+        "build": "hardhat compile && pnpm typechain --node16-modules --out-dir ./src --target=ethers-v6 'artifacts/contracts/Staking.sol/Staking.json' && tsc",
+        "clean": "hardhat clean && rm -rf artifacts cache lib.esm tsconfig.tsbuildinfo"
     },
-    "author": "CedarMist",
+    "author": "oasisprotocol",
     "license": "Apache-2.0",
     "devDependencies": {
         "@nomicfoundation/hardhat-ethers": "3.0.5",
         "@nomicfoundation/hardhat-network-helpers": "1.0.10",
         "@nomicfoundation/hardhat-toolbox": "4.0.0",
-        "@oasisprotocol/sapphire-hardhat": "2.16.1",
-        "@oasisprotocol/sapphire-paratime": "1.2.2",
         "@openzeppelin/contracts": "4.9.5",
         "@types/node": "20.10.4",
         "hardhat": "2.19.2",
         "ts-node": "10.9.2",
         "typescript": "5.3.3",
-        "ethers": "6.9.0"
+        "@oasisprotocol/sapphire-contracts": "0.2.6"
     },
     "dependencies": {
-        "@oasisprotocol/sapphire-contracts": "0.2.5"
+        "ethers": "6.9.0"
+    },
+    "exports": {
+        ".": {"import": "./lib.esm/index.js"}
     }
 }

@@ -2,8 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-//import {Subcall, StakingAddress} from "@oasisprotocol/sapphire-contracts/contracts/Subcall.sol";
-import {Subcall, StakingAddress} from "./lib/Subcall.sol";
+import {Subcall, StakingAddress} from "@oasisprotocol/sapphire-contracts/contracts/Subcall.sol";
 
 import {EnumerableSet} from '@openzeppelin/contracts/utils/structs/EnumerableSet.sol';
 
@@ -56,7 +55,7 @@ contract Staking {
         StakingAddress from;
         address payable to;
         uint128 shares;
-        uint256 stakedProportion;
+        uint256 costBasis;
         uint64 endReceiptId;
         uint64 epoch;
     }
@@ -111,14 +110,14 @@ contract Staking {
      *
      * Delegation will fail if the minimum per-validator amount has not been
      * reached, at the time of writing this is 100 ROSE.
-
-     See https://docs.oasis.io/node/genesis-doc#delegations.
+     *
+     * See https://docs.oasis.io/node/genesis-doc#delegations.
      *
      * Only one delegation can occur per transaction.
      *
      * @param to Staking address of validator on the consensus layer
      */
-    function delegate(StakingAddress to) public payable returns (uint64) {
+    function Delegate(StakingAddress to) public payable returns (uint64) {
         // Whatever is sent to the contract is delegated.
         require(msg.value < type(uint128).max);
 
@@ -145,7 +144,7 @@ contract Staking {
      * Retrieve the number of pending delegations for a user
      * @param user Who made the delegations
      */
-    function getPendingDelegationCount(address user)
+    function GetPendingDelegationCount(address user)
         external view
         returns (uint256)
     {
@@ -159,7 +158,7 @@ contract Staking {
      * @return receiptIds Receipt IDs for the delegation
      * @return pendings Pending delegations
      */
-    function getPendingDelegations(address user)
+    function GetPendingDelegations(address user)
         external view
         returns (
             uint64[] memory receiptIds,
@@ -192,7 +191,7 @@ contract Staking {
      *
      * @param receiptId Receipt ID previously emitted/returned by `delegate`.
      */
-    function delegateDone(uint64 receiptId) public returns (uint128 shares) {
+    function DelegateDone(uint64 receiptId) public returns (uint128 shares) {
         PendingDelegation memory pending = pendingDelegations[receiptId];
 
         if (pending.from == address(0)) revert UnknownReceipt();
@@ -221,7 +220,7 @@ contract Staking {
      * @param from Validator which the shares were staked with
      * @param shares Number of shares to debond
      */
-    function undelegate(StakingAddress from, uint128 shares)
+    function Undelegate(StakingAddress from, uint128 shares)
         public
         returns (uint64)
     {
@@ -264,7 +263,7 @@ contract Staking {
             to: payable(msg.sender),
             shares: shares,
             endReceiptId: 0,
-            stakedProportion: undelegateAmount,
+            costBasis: undelegateAmount,
             epoch: 0
         });
 
@@ -275,12 +274,14 @@ contract Staking {
      * Number of delegates a user is currently staking to
      * @param in_who User to query delegations of
      */
-    function getDelegationsCount(address in_who)
+    function GetDelegationsCount(address in_who)
         external view
         returns (uint)
     {
         return EnumerableSet.length(delegatesByUser[in_who]);
     }
+
+    error PaginationError(uint offset, uint pageSize, uint count);
 
     /**
      * Retrieve all a users delegation details
@@ -288,26 +289,35 @@ contract Staking {
      * @return out_delegates Staking addresses of the delegates
      * @return out_delegations Details of the delegations (shares, amount)
      */
-    function getDelegations(address in_who)
+    function GetDelegations(address in_who, uint in_offset, uint in_pageSize)
         external view
         returns (
             StakingAddress[] memory out_delegates,
             Delegation[] memory out_delegations
         )
     {
-        bytes32[] memory values = EnumerableSet.values(delegatesByUser[in_who]);
+        uint count = EnumerableSet.length(delegatesByUser[in_who]);
 
-        out_delegates = new StakingAddress[](values.length);
-
-        out_delegations = new Delegation[](values.length);
-
-        for( uint i = 0; i < values.length; i++ )
+        if( (in_offset + in_pageSize) >= count )
         {
-            StakingAddress sa = StakingAddress.wrap(bytes21(values[i]));
+            revert PaginationError(in_offset, in_pageSize, count);
+        }
 
-            out_delegates[i] = sa;
+        out_delegates = new StakingAddress[](in_pageSize);
 
-            out_delegations[i] = delegations[in_who][sa];
+        out_delegations = new Delegation[](in_pageSize);
+
+        for( uint i = 0; i < in_pageSize; i++ )
+        {
+            uint j = in_offset + i;
+
+            bytes32 value = EnumerableSet.at(delegatesByUser[in_who], j);
+
+            StakingAddress delegateAddr = StakingAddress.wrap(bytes21(value));
+
+            out_delegates[j] = delegateAddr;
+
+            out_delegations[j] = delegations[in_who][delegateAddr];
         }
     }
 
@@ -321,7 +331,7 @@ contract Staking {
      *
      * @param receiptId Receipt retuned/emitted from `undelegate`
      */
-    function undelegateStart(uint64 receiptId) public {
+    function UndelegateStart(uint64 receiptId) public {
         PendingUndelegation storage pending = pendingUndelegations[receiptId];
 
         if (pending.to == address(0)) revert UnknownReceipt();
@@ -343,7 +353,7 @@ contract Staking {
      *
      * @param receiptId returned/emitted from `undelegateStart`
      */
-    function undelegateDone(uint64 receiptId) public {
+    function UndelegateDone(uint64 receiptId) public {
         PendingUndelegation memory pending = pendingUndelegations[receiptId];
 
         if (pending.to == address(0)) revert UnknownReceipt();
@@ -378,7 +388,7 @@ contract Staking {
      * Retrieve the number of pending delegations for a user
      * @param user Who made the delegations
      */
-    function getUndelegationCount(address user)
+    function GetUndelegationCount(address user)
         external view
         returns (uint256)
     {
@@ -392,7 +402,7 @@ contract Staking {
      * @return receiptIds Receipt IDs for the delegation
      * @return undelegations Pending delegations
      */
-    function getUndelegations(address user)
+    function GetUndelegations(address user)
         external view
         returns (
             uint64[] memory receiptIds,
