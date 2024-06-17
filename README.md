@@ -47,14 +47,14 @@ Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` in
 ### Step-by-Step Process
 
    1. Message Hashing:
-        * Compute the SHA-256 hash of the message `msg`:
+        * Compute the [SHA-256] hash of the message `msg`:
             * `hash=SHA-256(msg)`
         * The result is a 256-bit hash value.
 
    2. HMAC with Private Key:
         * Compute the HMAC of the hash using a private key:
             * `hmac_output=HMAC(privateKey,hash)`
-        * HMAC is a keyed hash function that produces a 256-bit output when using SHA-256.
+        * [HMAC] is a keyed hash function that produces a 256-bit output when using SHA-256.
 
    3. ECDSA Signature Generation:
         * Use the HMAC output as the message to sign with ECDSA:
@@ -65,6 +65,9 @@ Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` in
         * Concatenate `r` and `s` to form a 512-bit value:
             * `mapped_output=r∥s`
 
+[HMAC]: https://www.rfc-editor.org/rfc/rfc2104
+[SHA-256]: https://en.wikipedia.org/wiki/SHA-2
+
 ### Cryptographic Properties
 
    1. HMAC Properties:
@@ -74,12 +77,14 @@ Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` in
 
    2. ECDSA Properties:
         * **Digital Signature:** ECDSA provides a way to sign data such that the signature can be verified using the corresponding public key.
-        * **Security Assumptions:** ECDSA security is based on the difficulty of the elliptic curve discrete logarithm problem (ECDLP).
+        * **Security Assumptions:** ECDSA security is based on the difficulty of the elliptic curve discrete logarithm problem ([ECDLP]).
         * **Deterministic Signature:** If deterministic signing (RFC 6979) is used, ECDSA will produce the same signature for the same message and key, removing the need for a random nonce.
 
    3. Mapping Properties:
         * **512-bit Output:** By concatenating the `r` and `s` values of the ECDSA signature, we map the HMAC output into a 512-bit domain.
         * **Unique Mapping:** Given the same private key and message, the process will always produce the same 512-bit output due to the deterministic nature of HMAC and ECDSA.
+
+[ECDLP]: https://rtullydo.github.io/cryptography-notes/section-ecdlp.html
 
 ### Algebraic Properties
 
