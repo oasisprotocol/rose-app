@@ -1,8 +1,10 @@
-Uses Sign-In-With-Ethereum (SIWE) to derive an Oasis Staking keypair.
+Uses Sign-In-With-Ethereum ([SIWE]) to derive an Oasis Staking keypair.
 
 This allows for ROSE to be received from `oasis1...` addresses at the consensus
 level then transferred to Sapphire without installing the Oasis extension or the
 Oasis Web Wallet.
+
+[SIWE]: https://eips.ethereum.org/EIPS/eip-4361
 
 ## SIWE Key Derivation
 
