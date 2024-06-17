@@ -22,7 +22,8 @@ def SIWE(msg):
     h = SHA256(msg)
     k = HMAC256(privateKey, h)
     R = k*G
-    return [R.x, k*G, k^-1 * (h + (R.x*privateKey))]
+    r = R.x
+    return dict(r=r, s=k*G, k^-1 * (h + (r*privateKey)))
 ```
 
 The signature can then be used as seed for a key-pair, or used as the root of a
@@ -33,3 +34,72 @@ with that wallet.
 
 [RFC-6979]: https://datatracker.ietf.org/doc/html/rfc6979#section-3.2
 [ECDSA]: https://en.wikipedia.org/wiki/Elliptic_Curve_Digital_Signature_Algorithm
+
+## ChatGPT Notes on mapping
+
+Sure, let's break down the process of mapping HMAC(privateKey, SHA256(msg)) into a 512-bit domain via ECDSA, and examine its cryptographic and algebraic properties.
+
+### Step-by-Step Process
+
+   1. Message Hashing:
+        * Compute the SHA-256 hash of the message msg:
+            * `hash=SHA-256(msg)`
+        * The result is a 256-bit hash value.
+
+   2. HMAC with Private Key:
+        * Compute the HMAC of the hash using a private key:
+            * `hmac_output=HMAC(privateKey,hash)`
+        * HMAC is a keyed hash function that produces a 256-bit output when using SHA-256.
+
+   3. ECDSA Signature Generation:
+        * Use the HMAC output as the message to sign with ECDSA:
+            * `signature=ECDSA_sign(privateKey,hmac_output)`
+        * The ECDSA signature typically consists of two components, rr and ss, each of which is a 256-bit integer.
+
+   4. Mapping to 512-bit Domain:
+        * Concatenate rr and ss to form a 512-bit value:
+        * `mapped_output=r∥s`
+
+### Cryptographic Properties
+
+   1. HMAC Properties:
+        * **Keyed Hash:** HMAC uses a private key and a hash function, ensuring that the output is only computable by someone who knows the private key.
+        * **Collision Resistance:** HMAC inherits the collision resistance of the underlying hash function (SHA-256), making it infeasible to find two different inputs that produce the same HMAC output.
+        * **Message Authentication:** HMAC provides integrity and authenticity, ensuring that the message hash has not been tampered with.
+
+   2. ECDSA Properties:
+        * **Digital Signature:** ECDSA provides a way to sign data such that the signature can be verified using the corresponding public key.
+        * **Security Assumptions:** ECDSA security is based on the difficulty of the elliptic curve discrete logarithm problem (ECDLP).
+        * **Deterministic Signature:** If deterministic signing (RFC 6979) is used, ECDSA will produce the same signature for the same message and key, removing the need for a random nonce.
+
+   3. Mapping Properties:
+        * **512-bit Output:** By concatenating the `r` and `s` values of the ECDSA signature, we map the HMAC output into a 512-bit domain.
+        * **Unique Mapping:** Given the same private key and message, the process will always produce the same 512-bit output due to the deterministic nature of HMAC and ECDSA.
+
+### Algebraic Properties
+
+   1. Elliptic Curve Operations:
+        * The ECDSA signature generation involves elliptic curve point multiplications and modular arithmetic.
+        * `r` is derived from the x-coordinate of a point on the elliptic curve, while ss is computed using modular inverses and the private key.
+
+   2. Deterministic Mapping:
+        * The process is deterministic due to the use of HMAC and deterministic ECDSA (if applicable). This means the same inputs will always yield the same output.
+
+   3. Concatenation:
+        * The concatenation of `r` and `s` to form a 512-bit value is a simple algebraic operation that preserves the uniqueness of the ECDSA signature components.
+
+### Security Considerations
+
+   1. Key Management:
+        * The private key used in HMAC and ECDSA must be securely managed and protected. Compromise of the private key would compromise the entire process.
+
+   2. Hash Function Strength:
+        * The security of the scheme depends on the cryptographic strength of SHA-256. Any weaknesses in SHA-256 would affect the overall security.
+
+   3. HMAC Integrity:
+        * HMAC provides strong integrity guarantees. However, the choice of the private key and proper implementation are crucial for maintaining these guarantees.
+
+   4. ECDSA Implementation:
+        * Proper implementation of ECDSA is essential to avoid vulnerabilities like weak random number generation (if non-deterministic ECDSA is used) and side-channel attacks.
+
+By carefully considering these cryptographic and algebraic properties and ensuring secure implementation practices, the process of mapping `HMAC(privateKey, SHA256(msg))` into a 512-bit domain via ECDSA can provide robust security guarantees.
