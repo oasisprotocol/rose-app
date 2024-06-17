@@ -6,6 +6,9 @@ This allows for ROSE to be received from `oasis1...` addresses at the consensus
 level then transferred to Sapphire without installing the Oasis extension or the
 Oasis Web Wallet.
 
+![image](https://github.com/CedarMist/dapp-rosemigrate/assets/134699267/b56267a7-1c46-4da2-916d-4919682d8014)
+
+
 [SIWE]: https://eips.ethereum.org/EIPS/eip-4361
 
 ## SIWE Key Derivation
