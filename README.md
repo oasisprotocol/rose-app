@@ -1,3 +1,5 @@
+# Sign-Into-Oasis-With-Ethereum (SIOWE)
+
 Uses Sign-In-With-Ethereum ([SIWE]) to derive an Oasis Staking keypair.
 
 This allows for ROSE to be received from `oasis1...` addresses at the consensus
@@ -37,12 +39,12 @@ with that wallet.
 
 ## ChatGPT Notes on mapping
 
-Sure, let's break down the process of mapping HMAC(privateKey, SHA256(msg)) into a 512-bit domain via ECDSA, and examine its cryptographic and algebraic properties.
+Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` into a 512-bit domain via ECDSA, and examine its cryptographic and algebraic properties.
 
 ### Step-by-Step Process
 
    1. Message Hashing:
-        * Compute the SHA-256 hash of the message msg:
+        * Compute the SHA-256 hash of the message `msg`:
             * `hash=SHA-256(msg)`
         * The result is a 256-bit hash value.
 
@@ -57,8 +59,8 @@ Sure, let's break down the process of mapping HMAC(privateKey, SHA256(msg)) into
         * The ECDSA signature typically consists of two components, rr and ss, each of which is a 256-bit integer.
 
    4. Mapping to 512-bit Domain:
-        * Concatenate rr and ss to form a 512-bit value:
-        * `mapped_output=r∥s`
+        * Concatenate `r` and `s` to form a 512-bit value:
+            * `mapped_output=r∥s`
 
 ### Cryptographic Properties
 
