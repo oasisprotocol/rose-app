@@ -2,7 +2,7 @@ import { useAccount, useSignMessage } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
 import { bytesToHex, hexToBytes } from 'viem';
-import { OasisClient, getAccountBalance, getAccountFromSecret, getOasisNic } from './oasisshit';
+import { OasisClient, getAccountBalance, getAccountFromSecret, getOasisNic } from './oasisstuff';
 
 function toBase64(u8: Uint8Array) {
   return btoa(String.fromCharCode(...u8));
@@ -95,6 +95,14 @@ function App() {
     })();
   }, [account.address]);
 
+  async function submitWithdrawTx ()
+  {
+    if( ! stakingSecret ) {
+      return;
+    }
+    const a = await getAccountFromSecret(stakingSecret);
+  }
+
   // When 'Generate' button is pressed, do SIWE then derive Consensus key
   async function generateKeypair() {
     console.log('generateKeypair for', account.address);
@@ -105,10 +113,10 @@ function App() {
       console.log('Signature is', signature);
       const digest = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature));
       console.log('Digest', digest);
-      const key = new Uint8Array(digest);
-      saveAccountKey(account.address, key);
-      if( ! stakingSecret || bytesToHex(key) != bytesToHex(stakingSecret) ) {
-        setConsensusSecret(key);
+      const secret = new Uint8Array(digest);
+      saveAccountKey(account.address, secret);
+      if( ! stakingSecret || bytesToHex(secret) != bytesToHex(stakingSecret) ) {
+        setConsensusSecret(secret);
         // TODO: load account details
       }
     }
@@ -161,7 +169,7 @@ function App() {
       {stakingBalance &&
         <div>
           <h2>Step 4</h2>
-          <button>Withdraw all to {account.address}</button>
+          <button onClick={submitWithdrawTx}>Withdraw all to {account.address}</button>
         </div>
       }
     </>
