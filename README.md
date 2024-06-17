@@ -25,7 +25,7 @@ def SIWE(msg):
     k = HMAC256(privateKey, h)
     R = k*G
     r = R.x
-    return dict(r=r, s=k*G, k^-1 * (h + (r*privateKey)))
+    return dict(r=r, s=k^-1 * (h + (r*privateKey)))
 ```
 
 The signature can then be used as seed for a key-pair, or used as the root of a
