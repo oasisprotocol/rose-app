@@ -85,7 +85,7 @@ Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` in
 
    1. Elliptic Curve Operations:
         * The ECDSA signature generation involves elliptic curve point multiplications and modular arithmetic.
-        * `r` is derived from the x-coordinate of a point on the elliptic curve, while ss is computed using modular inverses and the private key.
+        * `r` is derived from the x-coordinate of a point on the elliptic curve, while `s` is computed using modular inverses and the private key.
 
    2. Deterministic Mapping:
         * The process is deterministic due to the use of HMAC and deterministic ECDSA (if applicable). This means the same inputs will always yield the same output.
