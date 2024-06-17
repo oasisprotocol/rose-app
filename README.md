@@ -59,7 +59,7 @@ Sure, let's break down the process of mapping `HMAC(privateKey, SHA256(msg))` in
    3. ECDSA Signature Generation:
         * Use the HMAC output as the message to sign with ECDSA:
             * `signature=ECDSA_sign(privateKey,hmac_output)`
-        * The ECDSA signature typically consists of two components, rr and ss, each of which is a 256-bit integer.
+        * The ECDSA signature typically consists of two components, `r` and `s`, each of which is a 256-bit integer.
 
    4. Mapping to 512-bit Domain:
         * Concatenate `r` and `s` to form a 512-bit value:
