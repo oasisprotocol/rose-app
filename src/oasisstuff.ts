@@ -1,13 +1,29 @@
 import * as oasis from '@oasisprotocol/client';
-import nacl from 'tweetnacl'
+import * as oasisRT from '@oasisprotocol/client-rt';
 export type OasisClient = oasis.client.NodeInternal
 
-import { Signer } from '@oasisprotocol/client/dist/signature';
-import { staking } from '@oasisprotocol/client'
+export type NetworkType = 'testnet' | 'mainnet'
 
-type TransactionWrapper<T> = oasis.consensus.TransactionWrapper<T>;
+const sapphireConfig = {
+  mainnet: {
+    address: 'oasis1qrd3mnzhhgst26hsp96uf45yhq6zlax0cuzdgcfc',
+    runtimeId: '000000000000000000000000000000000000000000000000f80306c9858e7279',
+  },
+  testnet: {
+    address: 'oasis1qqczuf3x6glkgjuf0xgtcpjjw95r3crf7y2323xd',
+    runtimeId: '000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c',
+  },
+  gasPrice: 100n,
+  feeGas: 70_000n, // hardcoded. TODO: update when sapphire is upgraded
+  decimals: 18,
+}
 
-export type NetworkType = 'local' | 'testnet' | 'mainnet'
+const consensusConfig = {
+  decimals: 9,
+}
+
+const multiplyConsensusToSapphire = 10n ** BigInt(sapphireConfig.decimals - consensusConfig.decimals)
+
 
 enum BackendAPIs {
     OasisMonitor = 'oasismonitor',
@@ -24,6 +40,8 @@ type BackendProviders = {
     grpc: string
     ticker: string // from nic.stakingTokenSymbol()
     min_delegation: number // from nic.stakingConsensusParameters().min_delegation
+    consensusAddress: string
+    runtimeId: string
     [BackendAPIs.OasisMonitor]: BackendApiUrls
     [BackendAPIs.OasisScan]: BackendApiUrls
 }
@@ -37,6 +55,8 @@ const config: BackendConfig = {
       grpc: 'https://grpc.oasis.io',
       ticker: 'ROSE',
       min_delegation: 100,
+      consensusAddress: sapphireConfig.mainnet.address,
+      runtimeId: sapphireConfig.mainnet.runtimeId,
       [BackendAPIs.OasisMonitor]: {
         explorer: 'https://monitor.oasis.dev',
         blockExplorer: 'https://oasismonitor.com/operation/{{txHash}}',
@@ -51,6 +71,8 @@ const config: BackendConfig = {
       grpc: 'https://testnet.grpc.oasis.io',
       ticker: 'TEST',
       min_delegation: 100,
+      consensusAddress: sapphireConfig.testnet.address,
+      runtimeId: sapphireConfig.testnet.runtimeId,
       [BackendAPIs.OasisMonitor]: {
         explorer: 'https://monitor.oasis.dev/api/testnet',
         blockExplorer: 'https://testnet.oasismonitor.com/operation/{{txHash}}',
@@ -62,6 +84,7 @@ const config: BackendConfig = {
           'https://testnet.oasisscan.com/paratimes/transactions/{{txHash}}?runtime={{runtimeId}}',
       },
     },
+    /*
     local: {
       grpc: 'http://localhost:42280',
       ticker: 'TEST',
@@ -77,36 +100,109 @@ const config: BackendConfig = {
           'http://localhost:9001/data/paratimes/transactions/{{txHash}}?runtime={{runtimeId}}',
       },
     },
+    */
 }
 
-export async function getAccountFromSecret(secret:Uint8Array) {
-    const s = oasis.signature.NaclSigner.fromSecret(secret, 'this key is not important');
-    const a = await oasis.staking.addressFromPublicKey(s.public());
-    return {
-        signer: s,
-        address: a,
-        addressBech32: oasis.staking.addressToBech32(a)
-    }
+function getEvmBech32Address(evmAddress:`0x${string}`) {
+  const evmBytes = oasis.misc.fromHex(evmAddress.replace('0x', ''))
+  const address = oasis.address.fromData(
+    oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
+    oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
+    evmBytes,
+  )
+  return oasisRT.address.toBech32(address);
 }
 
-export async function getAccountBalance(nic: OasisClient, stakingAddress:Uint8Array) {
-    const x = await nic.consensusGetStatus();
-    console.log('consensus status', x);
-    const acct = await nic.stakingAccount({
-        height: x.latest_height,
-        owner: stakingAddress
+export class OasisSigner {
+  public readonly signer: oasis.signature.Signer;
+  public readonly address: Uint8Array;
+  public readonly addressBech32: string;
+
+  constructor(public readonly client: OasisClient, public readonly secret: Uint8Array) {
+    this.signer = oasis.signature.NaclSigner.fromSecret(secret, 'this key is not important');
+    this.address = oasis.staking.addressFromPublicKey(this.signer.public())
+    this.addressBech32 = oasis.staking.addressToBech32(this.address);
+  }
+
+  async nonce() {
+    const nonce = await this.client.consensusGetSignerNonce({
+      account_address: this.address,
+      height: 0,
     });
-    console.log('Allowances', acct.general?.allowances);
+
+    return BigInt(nonce || 0n);
+  }
+
+  async balance() {
+    return await this.client.stakingAccount({
+      height: 0,
+      owner: this.address
+    });
+  }
+
+  async niceBalance() {
+    interface NiceBalance {
+      balance?: bigint;
+      allowances?: Map<Uint8Array, Uint8Array>;
+    }
+    const result: NiceBalance = {};
+
+    const acct = await this.balance();
     if( acct.general ) {
-        if( acct.general.balance ) {
-            return {
-                balance: oasis.quantity.toBigInt(acct.general.balance)
-            }
-        }
+      result.allowances = acct.general.allowances;
+      if( acct.general.balance ) {
+        result.balance = oasis.quantity.toBigInt(acct.general.balance);
+      }
     }
-    return {
-        balance: 0n
-    }
+
+    return result;
+  }
+
+  async setAllowance(who:Uint8Array, amount:bigint) {
+      const tw = oasis.staking.allowWrapper()
+      tw.setNonce(await this.nonce())
+      tw.setFeeAmount(oasis.quantity.fromBigInt(0n))
+      tw.setBody({
+        beneficiary: who,
+        negative: false,
+        amount_change: oasis.quantity.fromBigInt(amount), // TODO: this assumes that initial allowance is 0
+      })
+      const gas = await tw.estimateGas(this.client, this.signer.public())
+      tw.setFeeGas(gas)
+
+      const chainContext = await this.client.consensusGetChainContext()
+      await tw.sign(new oasis.signature.BlindContextSigner(this.signer), chainContext)
+      await tw.submit(this.client)
+      return tw.hash()
+  }
+
+  async depositToSapphire(sapphireAddress:`0x${string}`, amountToDeposit:bigint) {
+    const rtw = new oasisRT.consensusAccounts.Wrapper(
+      oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId),
+    ).callDeposit()
+    rtw
+      .setBody({
+        amount: [oasis.quantity.fromBigInt(amountToDeposit * multiplyConsensusToSapphire), oasisRT.token.NATIVE_DENOMINATION],
+        to: oasis.staking.addressFromBech32(getEvmBech32Address(sapphireAddress)),
+      })
+      .setFeeAmount([oasis.quantity.fromBigInt(0n), oasisRT.token.NATIVE_DENOMINATION])
+      .setFeeGas(sapphireConfig.feeGas)
+      .setFeeConsensusMessages(1)
+      .setSignerInfo([
+        {
+          address_spec: {
+            signature: { ed25519: this.signer.public() },
+          },
+          nonce: await this.nonce(),
+        },
+      ])
+
+    const chainContext = await this.client.consensusGetChainContext()
+    await rtw.sign([new oasis.signature.BlindContextSigner(this.signer)], chainContext)
+    await rtw.submit(this.client)
+
+    // XXX: how to get transaction ID?
+  }
 }
 
 /**
@@ -118,35 +214,3 @@ export function getOasisNic(network: NetworkType)
     const url = config[network].grpc
     return new oasis.client.NodeInternal(url)
 }
-
-async function getNonce(nic: OasisClient, signer: Signer): Promise<bigint>
-{
-    const nonce = await nic.consensusGetSignerNonce({
-        account_address: await staking.addressFromPublicKey(signer.public()),
-        height: 0,
-    });
-
-    return BigInt(nonce || 0n);
-}
-
-export async function buildTransfer(
-  nic: OasisClient,
-  signer: Signer,
-  to: string,
-  amount: bigint,
-): Promise<TransactionWrapper<oasis.types.StakingTransfer>>
-{
-  const tw = oasis.staking.transferWrapper()
-  const nonce = await getNonce(nic, signer)
-  tw.setNonce(nonce)
-  tw.setFeeAmount(oasis.quantity.fromBigInt(0n))
-  tw.setBody({
-    to: staking.addressFromBech32(to),
-    amount: oasis.quantity.fromBigInt(amount),
-  })
-
-  const gas = await tw.estimateGas(nic, signer.public())
-  tw.setFeeGas(gas)
-
-  return tw
-};
