@@ -1,37 +1,37 @@
 {
-    "name": "dapp-staking-contracts",
-    "version": "0.1.0",
-    "description": "Backend contracts for Oasis Sapphire Staking dApp",
-    "files": ["./lib.esm/"],
-    "types": "./lib.esm/index.d.ts",
-    "type": "module",
-    "private": true,
-    "keywords": [
-        "oasis",
-        "sapphire",
-        "staking"
-    ],
-    "scripts": {
-        "build": "hardhat compile && pnpm typechain --node16-modules --out-dir ./src --target=ethers-v6 'artifacts/contracts/Staking.sol/Staking.json' && tsc",
-        "clean": "hardhat clean && rm -rf artifacts cache lib.esm tsconfig.tsbuildinfo"
-    },
-    "author": "oasisprotocol",
-    "license": "Apache-2.0",
-    "devDependencies": {
-        "@nomicfoundation/hardhat-ethers": "3.0.5",
-        "@nomicfoundation/hardhat-network-helpers": "1.0.10",
-        "@nomicfoundation/hardhat-toolbox": "4.0.0",
-        "@openzeppelin/contracts": "4.9.5",
-        "@types/node": "20.10.4",
-        "hardhat": "2.19.2",
-        "ts-node": "10.9.2",
-        "typescript": "5.3.3",
-        "@oasisprotocol/sapphire-contracts": "0.2.6"
-    },
-    "dependencies": {
-        "ethers": "6.9.0"
-    },
-    "exports": {
-        ".": {"import": "./lib.esm/index.js"}
+  "private": true,
+  "name": "@oasisprotocol/dapp-staker-backend",
+  "version": "0.0.0",
+  "description": "Backend contracts for Oasis Sapphire Staking dApp",
+  "keywords": [
+    "oasis",
+    "sapphire",
+    "staking"
+  ],
+  "scripts": {
+    "build": "pnpm run clean && hardhat compile",
+    "clean": "hardhat clean && rm -rf cache",
+    "test": "echo 'Warning: No test/s specified'",
+    "typecheck": "pnpm build && pnpm test && pnpm tsc --noEmit"
+  },
+  "license": "See License in ../LICENSE",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-ethers": "3.0.5",
+    "@nomicfoundation/hardhat-network-helpers": "1.0.10",
+    "@nomicfoundation/hardhat-toolbox": "4.0.0",
+    "@openzeppelin/contracts": "4.9.5",
+    "@types/node": "20.10.4",
+    "hardhat": "2.19.2",
+    "ts-node": "10.9.2",
+    "typescript": "5.3.3",
+    "@oasisprotocol/sapphire-contracts": "0.2.6"
+  },
+  "dependencies": {
+    "ethers": "6.10.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/index.ts"
     }
+  }
 }
