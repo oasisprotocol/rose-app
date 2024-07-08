@@ -1,0 +1,109 @@
+.button {
+  width: auto;
+  border-radius: 8px;
+  border: 1px transparent solid;
+  box-shadow: none;
+  cursor: pointer;
+  font-style: normal;
+  outline: none;
+  text-decoration: none;
+  user-select: none;
+  text-transform: none;
+  text-align: center;
+  font-family: 'Figtree Variable', system-ui, sans-serif;
+
+  > label {
+    display: flex;
+    vertical-align: middle;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  > * {
+    font-family: 'Figtree Variable', system-ui, sans-serif;
+  }
+
+  &:not(.buttonDisabled) > * {
+    cursor: pointer;
+  }
+}
+
+.buttonSmall {
+  font-size: 14px;
+  line-height: 140%;
+  font-weight: 400;
+  padding: 0.4125rem 1.21875rem;
+  letter-spacing: 0;
+}
+
+.buttonMedium {
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 125%;
+  padding: 0.5rem 2.25rem;
+  letter-spacing: -0.03em;
+}
+
+.buttonSolid {
+  &.buttonPrimary {
+    background-color: var(--black);
+    color: var(--white);
+  }
+
+  &.buttonSecondary {
+    background-color: var(--white);
+    color: var(--black);
+  }
+
+  &.buttonSuccess {
+    background: var(--black);
+    color: var(--white);
+    border: 1px var(--black) solid;
+  }
+}
+
+.buttonOutline {
+  &.buttonPrimary {
+    background-color: var(--black);
+    color: var(--white);
+    border: 1px var(--white) solid;
+  }
+
+  &.buttonSecondary {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px var(--black) solid;
+  }
+
+  &.buttonSuccess {
+    background-color: var(--white);
+    color: var(--black);
+    border: 1px var(--black) solid;
+  }
+}
+
+.buttonText {
+  &.buttonPrimary,
+  &.buttonSecondary {
+    background-color: transparent;
+    color: var(--black);
+    border: transparent;
+    text-decoration: underline;
+    text-underline-offset: 0.5rem;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 137%;
+    letter-spacing: -0.03em;
+    padding: 0.5rem;
+  }
+}
+
+.buttonDisabled {
+  cursor: not-allowed;
+  background-color: #e3e3e3;
+  opacity: 0.5;
+}
+
+.fullWidth {
+  width: 100%;
+}
