@@ -27,7 +27,9 @@ export const LayoutBase: FC<PropsWithChildren> = ({ children }) => {
                 {VITE_REACT_APP_BUILD_VERSION.substring(0, 7)}
               </a>{' '}
               built on{' '}
-              {DateUtils.intlDateFormat(VITE_REACT_APP_BUILD_DATETIME, { longFormat: isDesktopScreen })}
+              {DateUtils.intlDateFormat(VITE_REACT_APP_BUILD_DATETIME, {
+                format: isDesktopScreen ? 'long' : 'short',
+              })}
             </div>
           </div>
         )}

@@ -1,10 +1,19 @@
 import { FC, PropsWithChildren, useCallback, useState } from 'react'
 import * as sapphire from '@oasisprotocol/sapphire-paratime'
-import { CHAINS, VITE_NETWORK } from '../constants/config'
+import {
+  CHAINS,
+  MAX_GAS_LIMIT,
+  VITE_NETWORK,
+  VITE_STAKING_CONTRACT_ADDRESS,
+  VITE_WEB3_GATEWAY,
+} from '../constants/config'
 import { UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
-import { BrowserProvider } from 'ethers'
+import { BrowserProvider, JsonRpcProvider } from 'ethers'
+import { Staking__factory } from '@oasisprotocol/dapp-staker-backend'
+import * as oasis from '@oasisprotocol/client'
+import { FormattingUtils } from '../utils/formatting.utils'
 
 let EVENT_LISTENERS_INITIALIZED = false
 
@@ -15,6 +24,7 @@ const web3ProviderInitialState: Web3ProviderState = {
   account: null,
   explorerBaseUrl: null,
   chainName: null,
+  stakingWithoutSigner: null,
 }
 
 export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -103,12 +113,20 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const network = await sapphireEthProvider.getNetwork()
       _setNetworkSpecificVars(network.chainId, sapphireEthProvider)
 
+      const stakingWithoutSigner = Staking__factory.connect(
+        VITE_STAKING_CONTRACT_ADDRESS,
+        new JsonRpcProvider(VITE_WEB3_GATEWAY, undefined, {
+          staticNetwork: true,
+        })
+      )
+
       setState(prevState => ({
         ...prevState,
         isConnected: true,
         ethProvider,
         sapphireEthProvider,
         account,
+        stakingWithoutSigner,
       }))
     } catch (ex) {
       setState(prevState => ({
@@ -170,6 +188,116 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return await sapphireEthProvider.getBalance(account)
   }
 
+  const delegate = async (value: bigint, to: string) => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      throw new Error('[sapphireEthProvider] not initialized!')
+    }
+
+    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+
+    const toBech32 = oasis.staking.addressFromBech32(to)
+    return await staking.Delegate(toBech32, { value, gasLimit: MAX_GAS_LIMIT })
+  }
+
+  const getPendingDelegations = async () => {
+    const { stakingWithoutSigner, account } = state
+
+    if (!stakingWithoutSigner) {
+      throw new Error('[stakingWithoutSigner] not initialized!')
+    }
+
+    if (!account) {
+      throw new Error('[account] not connected!')
+    }
+
+    return await stakingWithoutSigner.GetPendingDelegations(account)
+  }
+
+  const delegateDone = async (receiptId: bigint) => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      throw new Error('[sapphireEthProvider] not initialized!')
+    }
+
+    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+
+    return await staking.DelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT })
+  }
+
+  const getDelegations = async () => {
+    const { stakingWithoutSigner, account } = state
+
+    if (!stakingWithoutSigner) {
+      throw new Error('[stakingWithoutSigner] not initialized!')
+    }
+
+    if (!account) {
+      throw new Error('[account] not connected!')
+    }
+
+    const delegationsCount = await stakingWithoutSigner.GetDelegationsCount(account)
+    return await stakingWithoutSigner.GetDelegations(account, 0n, delegationsCount)
+  }
+
+  const undelegate = async (shares: bigint, from: string) => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      throw new Error('[sapphireEthProvider] not initialized!')
+    }
+
+    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+
+    const fromBech32 = await FormattingUtils.toUint8Array(from)
+    return await staking.Undelegate(fromBech32, shares, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+  }
+
+  const getUndelegations = async () => {
+    const { stakingWithoutSigner, account } = state
+
+    if (!stakingWithoutSigner) {
+      throw new Error('[stakingWithoutSigner] not initialized!')
+    }
+
+    if (!account) {
+      throw new Error('[account] not connected!')
+    }
+
+    return await stakingWithoutSigner.GetUndelegations(account)
+  }
+
+  const undelegateStart = async (receiptId: bigint) => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      throw new Error('[sapphireEthProvider] not initialized!')
+    }
+
+    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+
+    return await staking.UndelegateStart(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+  }
+
+  const undelegateDone = async (receiptId: bigint) => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      throw new Error('[sapphireEthProvider] not initialized!')
+    }
+
+    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+
+    return await staking.UndelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+  }
+
   const providerState: Web3ProviderContext = {
     state,
     isProviderAvailable,
@@ -177,6 +305,14 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     switchNetwork,
     getTransaction,
     getBalance,
+    delegate,
+    getPendingDelegations,
+    delegateDone,
+    getDelegations,
+    undelegate,
+    getUndelegations,
+    undelegateStart,
+    undelegateDone,
   }
 
   return <Web3Context.Provider value={providerState}>{children}</Web3Context.Provider>
