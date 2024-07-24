@@ -298,7 +298,7 @@ contract Staking {
     {
         uint count = EnumerableSet.length(delegatesByUser[in_who]);
 
-        if( (in_offset + in_pageSize) >= count )
+        if( (in_offset + in_pageSize) > count )
         {
             revert PaginationError(in_offset, in_pageSize, count);
         }
