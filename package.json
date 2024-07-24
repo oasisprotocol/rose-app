@@ -17,7 +17,7 @@
     "node": ">=20"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0",
+    "*.{js,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
     "*.{js,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
   },
   "devDependencies": {
