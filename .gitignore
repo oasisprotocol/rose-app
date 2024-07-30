@@ -35,3 +35,6 @@ backend/abis
 backend/artifacts
 backend/cache
 backend/src
+
+# Add Nexus API distribution package
+!nexus/dist/

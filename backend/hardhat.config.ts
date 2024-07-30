@@ -16,9 +16,6 @@ const config: HardhatUserConfig = {
   mocha: {
     timeout: 400000,
   },
-  paths: {
-    tests: './tests',
-  },
   solidity: {
     version: '0.8.22',
     settings: {
@@ -32,6 +29,21 @@ const config: HardhatUserConfig = {
   networks: {
     hardhat: {
       chainId: 1337, // We set 1337 to make interacting with MetaMask simpler
+    },
+    local: {
+      url: 'http://localhost:8545',
+      accounts,
+      chainId: 1337,
+    },
+    emerald_local: {
+      url: 'http://localhost:8545',
+      accounts,
+      chainId: 0xa514,
+    },
+    emerald_testnet: {
+      url: 'https://testnet.emerald.oasis.io',
+      accounts,
+      chainId: 0xa515,
     },
     sapphire_local: {
       url: 'http://localhost:8545',

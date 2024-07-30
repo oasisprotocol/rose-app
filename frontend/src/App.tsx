@@ -7,6 +7,9 @@ import { Web3ContextProvider } from './providers/Web3Provider'
 import { AppStateContextProvider } from './providers/AppStateProvider'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { RouterErrorBoundary } from './components/RouterErrorBoundary'
+import { TestPage } from './pages/TestPage'
+import { ApiContextProvider } from './providers/ApiProvider'
+import { GrpcContextProvider } from './providers/GrpcProvider'
 
 const router = createHashRouter([
   {
@@ -18,6 +21,10 @@ const router = createHashRouter([
         path: '',
         element: <HomePage />,
       },
+      {
+        path: 'test',
+        element: <TestPage />,
+      },
     ],
   },
 ])
@@ -25,13 +32,17 @@ const router = createHashRouter([
 export const App: FC = () => {
   return (
     <ErrorBoundary>
-      <EIP1193ContextProvider>
-        <Web3ContextProvider>
-          <AppStateContextProvider>
-            <RouterProvider router={router} />
-          </AppStateContextProvider>
-        </Web3ContextProvider>
-      </EIP1193ContextProvider>
+      <ApiContextProvider>
+        <GrpcContextProvider>
+          <EIP1193ContextProvider>
+            <Web3ContextProvider>
+              <AppStateContextProvider>
+                <RouterProvider router={router} />
+              </AppStateContextProvider>
+            </Web3ContextProvider>
+          </EIP1193ContextProvider>
+        </GrpcContextProvider>
+      </ApiContextProvider>
     </ErrorBoundary>
   )
 }
