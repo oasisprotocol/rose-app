@@ -4,6 +4,8 @@
 :root {
   --white: #fff;
   --black: #000;
+  --blue-bg: #3902e1;
+  --brand-extra-dark: #000062;
 }
 
 /** Use Figtree for "…" instead of Roboto Mono. */
@@ -31,10 +33,20 @@ body {
   line-height: 150%;
   color: var(--black);
   text-align: left;
-  background-color: var(--white);
+  background-color: var(--blue-bg);
   background-image: url('/background.webp');
-  background-size: cover;
+  background-size: 100vw auto;
   background-position: center center;
   background-repeat: no-repeat;
   min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
 }

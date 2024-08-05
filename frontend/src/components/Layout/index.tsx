@@ -16,11 +16,14 @@ export const Layout: FC = () => {
   } = useAppState()
 
   return (
-    <LayoutBase>
-      <header className={classes.header}>
-        <LogoIcon />
-        <ConnectWallet />
-      </header>
+    <LayoutBase
+      header={
+        <header className={classes.header}>
+          <LogoIcon />
+          <ConnectWallet />
+        </header>
+      }
+    >
       <section>
         {appError && (
           <Alert

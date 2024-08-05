@@ -46,10 +46,12 @@ export const NETWORK_NAMES: Record<string, string> = {
 
 export const METAMASK_HOME_PAGE_URL = 'https://metamask.io/'
 export const GITHUB_REPOSITORY_URL = 'https://github.com/oasisprotocol/dapp-staker/'
+export const OASIS_HOME_PAGE_URL = 'https://oasisprotocol.org/'
+export const OASIS_DOCS_PAGE_URL = 'https://docs.oasis.io/'
 
 export const MAX_GAS_LIMIT = 275000n
 
-export const AVERAGE_BLOCK_TIME_IN_MS = 6
+export const AVERAGE_BLOCK_TIME_IN_SEC = 6
 export const AVERAGE_BLOCKS_PER_EPOCH = 600
 
 const {
@@ -60,6 +62,7 @@ const {
   VITE_REACT_APP_BUILD_DATETIME: ENV_VITE_REACT_APP_BUILD_DATETIME,
   VITE_NEXUS_BASE_URL,
   VITE_GRPC_URL,
+  VITE_APP_VERSION,
 } = import.meta.env
 
 const VITE_NETWORK = BigInt(ENV_VITE_NETWORK) ?? 0n
@@ -73,4 +76,5 @@ export {
   VITE_REACT_APP_BUILD_DATETIME,
   VITE_NEXUS_BASE_URL,
   VITE_GRPC_URL,
+  VITE_APP_VERSION,
 }

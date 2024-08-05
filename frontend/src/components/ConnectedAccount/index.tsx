@@ -29,7 +29,7 @@ export const ConnectedAccount: FC<Props> = ({ className, address, chainName }) =
       target="_blank"
       rel="nofollow noreferrer"
     >
-      <JazzIcon size={isDesktopScreen ? 30 : 20} address={address} />
+      <JazzIcon className={classes.jazzIcon} size={isDesktopScreen ? 30 : 20} address={address} />
       {isDesktopScreen && (
         <p className={classes.connectedAccountDetails}>
           <span className={classes.network}>{networkName}</span>
