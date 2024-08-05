@@ -24,7 +24,7 @@ export const Layout: FC = () => {
         </header>
       }
     >
-      <section>
+      <section className={classes.mainSection}>
         {appError && (
           <Alert
             type="error"

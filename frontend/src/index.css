@@ -6,6 +6,12 @@
   --black: #000;
   --blue-bg: #3902e1;
   --brand-extra-dark: #000062;
+  --brand-blue: #0500e1;
+  --gray-light: #fafafa;
+  --gray: #b0aabd;
+  --gray-blue-border: #2c3bd533;
+  --brand-extra-dark-75: #000062bf;
+  --gray-dark-box-shadow: #222f3f3d;
 }
 
 /** Use Figtree for "…" instead of Roboto Mono. */
@@ -49,4 +55,25 @@ h5,
 h6,
 p {
   margin: 0;
+}
+
+p.body {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 24px;
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 33.8px;
+  letter-spacing: -0.03em;
+  color: var(--brand-blue);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25.2px;
+  color: var(--brand-extra-dark);
 }
