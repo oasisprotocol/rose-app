@@ -1,0 +1,9 @@
+.activeIcon {
+  &:before {
+    color: var(--green);
+  }
+
+  svg {
+    color: var(--gray-light);
+  }
+}

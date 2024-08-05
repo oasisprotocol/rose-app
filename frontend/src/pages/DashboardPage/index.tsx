@@ -1,11 +1,15 @@
 import { FC, useEffect } from 'react'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { useNavigate } from 'react-router-dom'
+import { Card } from '../../components/Card'
+import { StakingTabs } from '../../components/StakingTabs'
+import { StringUtils } from '../../utils/string.utils'
+import classes from './index.module.css'
 
 export const DashboardPage: FC = () => {
   const navigate = useNavigate()
   const {
-    state: { isConnected },
+    state: { isConnected, nativeCurrency },
   } = useWeb3()
 
   useEffect(() => {
@@ -14,5 +18,13 @@ export const DashboardPage: FC = () => {
     }
   }, [isConnected, navigate])
 
-  return <h1>Dashboard page</h1>
+  return (
+    <Card header={<h2>Dashboard</h2>}>
+      <h3 className={classes.subHeader}>Your balances</h3>
+      <p className={StringUtils.clsx('body', classes.description)}>
+        Overview of your current {nativeCurrency?.symbol} balances.
+      </p>
+      <StakingTabs />
+    </Card>
+  )
 }

@@ -12,7 +12,7 @@ const TimeEstimate: FC<TimeEstimateProps> = ({ getTimeEstimate }) => {
 
   if (!timeEstimate) return null
 
-  return DateUtils.intlDateFormat(timeEstimate, { format: 'long' })
+  return DateUtils.intlDateFormat(timeEstimate, { format: 'short' })
 }
 
 interface Props {
@@ -24,7 +24,7 @@ const EpochTimeEstimateCmp: FC<Props> = ({ epoch }) => {
   const wTimeEstimate = PromiseUtils.wrapPromise(getTimeEstimateForFutureEpoch(epoch))
 
   return (
-    <Suspense fallback={<div>Calculating...</div>}>
+    <Suspense fallback={<span>Calculating...</span>}>
       <TimeEstimate getTimeEstimate={wTimeEstimate} />
     </Suspense>
   )

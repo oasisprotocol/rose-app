@@ -25,6 +25,11 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const getTimeEstimateForFutureEpoch = async (futureEpoch: bigint) => {
+    // Skip in case futureEpoch unset(= 0n) UndelegateStart not called yet
+    if (futureEpoch === 0n) {
+      return null
+    }
+
     const { node, consensusStatus } = state
 
     if (consensusStatus === null) {
@@ -49,7 +54,6 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return DateUtils.unixFormatToDate(Number(latest_time) + diffBlocksInMilliseconds)
   }
 
-  // TODO: Trigger once wallet connected
   useEffect(() => {
     fetchConsensusStatus()
     // eslint-disable-next-line react-hooks/exhaustive-deps

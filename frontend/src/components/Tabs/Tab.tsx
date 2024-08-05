@@ -25,7 +25,9 @@ const useTabState = () => {
   )
 }
 
-export const Tab: FC<{ children: ((...args: unknown[]) => ReactNode) | ReactNode }> = ({ children }) => {
+export const Tab: FC<{ children: ((state: ReturnType<typeof useTabState>) => ReactNode) | ReactNode }> = ({
+  children,
+}) => {
   const state = useTabState()
 
   if (typeof children === 'function') {
