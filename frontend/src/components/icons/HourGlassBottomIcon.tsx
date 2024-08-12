@@ -1,12 +1,12 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import { FC } from 'react'
-import CheckCircleSvg from '@material-design-icons/svg/filled/check_circle.svg?react'
+import HourGlassBottomSvg from '@material-design-icons/svg/filled/hourglass_bottom.svg?react'
 import { Icon } from '../Icon'
 import { IconProps } from '../../types'
 
-export const CheckCircleIcon: FC<IconProps> = props => (
+export const HourGlassBottomIcon: FC<IconProps> = props => (
   <Icon {...props}>
-    <CheckCircleSvg />
+    <HourGlassBottomSvg />
   </Icon>
 )
