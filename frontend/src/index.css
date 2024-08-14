@@ -4,6 +4,23 @@
 :root {
   --white: #fff;
   --black: #000;
+  --blue-bg: #3902e1;
+  --brand-extra-dark: #000062;
+  --brand-blue: #0500e1;
+  --brand-dark-blue: #1e1e73;
+  --gray-light: #fafafa;
+  --gray: #b0aabd;
+  --gray-blue-border: #2c3bd533;
+  --brand-extra-dark-75: #000062bf;
+  --brand-extra-dark-21: #00006236;
+  --gray-dark-box-shadow: #222f3f3d;
+  --gray-extra-dark: #242629;
+  --gray-dark: #eae6f0;
+  --green: #4cd4a9;
+  --green-25: #4cd4a940;
+  --red: #ff0e0e;
+  --orange: #ed6c02;
+  --orange-light: #fff0e4;
 }
 
 /** Use Figtree for "…" instead of Roboto Mono. */
@@ -31,10 +48,44 @@ body {
   line-height: 150%;
   color: var(--black);
   text-align: left;
-  background-color: var(--white);
+  background-color: var(--blue-bg);
   background-image: url('/background.webp');
-  background-size: cover;
-  background-position: center center;
+  background-size: 100vw auto;
+  background-position: top center;
   background-repeat: no-repeat;
   min-height: 100dvh;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p,
+span {
+  &.body {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+}
+
+h2 {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 33.8px;
+  letter-spacing: -0.03em;
+  color: var(--brand-blue);
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25.2px;
+  color: var(--brand-extra-dark);
 }

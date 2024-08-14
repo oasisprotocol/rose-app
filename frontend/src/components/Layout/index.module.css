@@ -3,14 +3,16 @@
   justify-content: space-between;
   vertical-align: middle;
   align-items: center;
-  padding-top: 2.8125rem;
-  padding-bottom: 1.5625rem;
+  padding: 3.125rem 3.125rem 2.5rem;
   background: transparent;
+}
+
+.mainSection {
+  width: 100%;
 }
 
 @media screen and (max-width: 1000px) {
   .header {
-    padding-top: 0.8125rem;
-    padding-bottom: 0.8125rem;
+    padding: 1rem;
   }
 }

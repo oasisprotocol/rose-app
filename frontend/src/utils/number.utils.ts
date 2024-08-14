@@ -4,4 +4,8 @@ export abstract class NumberUtils {
     const addr = address.slice(2, 10)
     return parseInt(addr, 16)
   }
+
+  static uniqueId = (counter => {
+    return (str = '') => `${str}${++counter}`
+  })(0)
 }

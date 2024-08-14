@@ -1,0 +1,9 @@
+.inactiveIcon {
+  &:before {
+    color: var(--red);
+  }
+
+  svg {
+    color: var(--gray-light);
+  }
+}

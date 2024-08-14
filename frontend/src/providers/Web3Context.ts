@@ -2,7 +2,7 @@ import { createContext } from 'react'
 import * as sapphire from '@oasisprotocol/sapphire-paratime'
 import { BrowserProvider, TransactionResponse } from 'ethers'
 import { Staking } from '@oasisprotocol/dapp-staker-backend'
-import { DefaultReturnType } from '../types'
+import { DefaultReturnType, Delegations, PendingDelegations, Undelegations } from '../types'
 
 export interface Web3ProviderState {
   isConnected: boolean
@@ -12,6 +12,11 @@ export interface Web3ProviderState {
   explorerBaseUrl: string | null
   chainName: string | null
   stakingWithoutSigner: Staking | null
+  nativeCurrency: {
+    name: string
+    symbol: string
+    decimals: number
+  } | null
 }
 
 export interface Web3ProviderContext {
@@ -22,38 +27,11 @@ export interface Web3ProviderContext {
   isProviderAvailable: () => Promise<boolean>
   getBalance: () => Promise<bigint>
   delegate: (value: bigint, to: string) => Promise<TransactionResponse>
-  getPendingDelegations: () => Promise<
-    DefaultReturnType<
-      [
-        [bigint[], Staking.PendingDelegationStructOutput[]] & {
-          receiptIds: bigint[]
-          pendings: Staking.PendingDelegationStructOutput[]
-        },
-      ]
-    >
-  >
+  getPendingDelegations: () => Promise<DefaultReturnType<[PendingDelegations]>>
   delegateDone: (receiptId: bigint) => Promise<TransactionResponse>
-  getDelegations: () => Promise<
-    DefaultReturnType<
-      [
-        [string[], Staking.DelegationStructOutput[]] & {
-          out_delegates: string[]
-          out_delegations: Staking.DelegationStructOutput[]
-        },
-      ]
-    >
-  >
+  getDelegations: () => Promise<DefaultReturnType<[Delegations]>>
   undelegate: (shares: bigint, from: string) => Promise<TransactionResponse>
-  getUndelegations: () => Promise<
-    DefaultReturnType<
-      [
-        [bigint[], Staking.PendingUndelegationStructOutput[]] & {
-          receiptIds: bigint[]
-          undelegations: Staking.PendingUndelegationStructOutput[]
-        },
-      ]
-    >
-  >
+  getUndelegations: () => Promise<DefaultReturnType<[Undelegations]>>
   undelegateStart: (receiptId: bigint) => Promise<TransactionResponse>
   undelegateDone: (receiptId: bigint) => Promise<TransactionResponse>
 }

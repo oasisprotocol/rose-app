@@ -6,8 +6,10 @@ import { toErrorString, UnknownNetworkError } from '../../utils/errors'
 import { ConnectedAccount } from '../ConnectedAccount'
 import { useAppState } from '../../hooks/useAppState'
 import classes from './index.module.css'
+import { useNavigate } from 'react-router-dom'
 
 export const ConnectWallet: FC = () => {
+  const navigate = useNavigate()
   const { setAppError } = useAppState()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -20,6 +22,12 @@ export const ConnectWallet: FC = () => {
     switchNetwork,
     isProviderAvailable,
   } = useWeb3()
+
+  useEffect(() => {
+    if (isConnected) {
+      navigate('/dashboard')
+    }
+  }, [isConnected, navigate])
 
   useEffect(() => {
     const init = async () => {

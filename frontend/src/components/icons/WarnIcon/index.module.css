@@ -1,0 +1,15 @@
+.warnIcon {
+  &:before {
+    color: var(--orange);
+  }
+
+  &:after {
+    color: var(--brand-extra-dark);
+    background: var(--orange-light);
+  }
+
+  svg {
+    color: var(--white);
+    padding-left: 1px;
+  }
+}

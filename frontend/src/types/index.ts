@@ -1,3 +1,6 @@
 export type { IconSize } from './icon-size'
 export type { IconProps } from './icon-props'
 export type { DefaultReturnType } from './default-return-type'
+export type { PendingDelegations } from './pending-delegations'
+export type { Delegations } from './delegations'
+export type { Undelegations } from './undelegations'

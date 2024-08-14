@@ -25,6 +25,7 @@ const web3ProviderInitialState: Web3ProviderState = {
   explorerBaseUrl: null,
   chainName: null,
   stakingWithoutSigner: null,
+  nativeCurrency: null,
 }
 
 export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -70,13 +71,14 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new UnknownNetworkError('Unknown network!')
     }
 
-    const { blockExplorerUrls, chainName } = CHAINS.get(chainId)!
+    const { blockExplorerUrls, chainName, nativeCurrency } = CHAINS.get(chainId)!
     const [explorerBaseUrl] = blockExplorerUrls
 
     setState(prevState => ({
       ...prevState,
       explorerBaseUrl,
       chainName,
+      nativeCurrency,
     }))
   }
 

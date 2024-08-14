@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { GrpcContext, GrpcProviderContext, GrpcProviderState } from './GrpcContext'
-import { AVERAGE_BLOCK_TIME_IN_MS, AVERAGE_BLOCKS_PER_EPOCH, VITE_GRPC_URL } from '../constants/config'
+import { AVERAGE_BLOCK_TIME_IN_SEC, AVERAGE_BLOCKS_PER_EPOCH, VITE_GRPC_URL } from '../constants/config'
 import * as oasis from '@oasisprotocol/client'
 import { DateUtils } from '../utils/date.utils'
 
@@ -25,6 +25,11 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const getTimeEstimateForFutureEpoch = async (futureEpoch: bigint) => {
+    // Skip in case futureEpoch unset(= 0n) UndelegateStart not called yet
+    if (futureEpoch === 0n) {
+      return null
+    }
+
     const { node, consensusStatus } = state
 
     if (consensusStatus === null) {
@@ -43,12 +48,12 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const diffBlocksInCurrentEpoch =
       AVERAGE_BLOCKS_PER_EPOCH -
       Math.min(Math.max(Number(latest_height) - Number(currentEpochStartHeight), 0), 600)
-    const diffBlocksInMilliseconds = (diffEpochInBlocks + diffBlocksInCurrentEpoch) * AVERAGE_BLOCK_TIME_IN_MS
+    const diffBlocksInMilliseconds =
+      (diffEpochInBlocks + diffBlocksInCurrentEpoch) * AVERAGE_BLOCK_TIME_IN_SEC
 
     return DateUtils.unixFormatToDate(Number(latest_time) + diffBlocksInMilliseconds)
   }
 
-  // TODO: Trigger once wallet connected
   useEffect(() => {
     fetchConsensusStatus()
     // eslint-disable-next-line react-hooks/exhaustive-deps

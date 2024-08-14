@@ -1,0 +1,8 @@
+.subHeader {
+  margin-bottom: 0.625rem;
+}
+
+.description {
+  color: var(--brand-extra-dark-75);
+  margin-bottom: 2rem;
+}

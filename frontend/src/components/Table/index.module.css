@@ -1,0 +1,27 @@
+.table {
+  width: 100%;
+  max-width: 100%;
+  background-color: transparent;
+  border-collapse: collapse;
+
+  tbody {
+    tr {
+      &:not(:last-child) {
+        border-bottom: 2px solid var(--brand-extra-dark-21);
+
+        :global(&.expanded) {
+          border-bottom-color: transparent;
+        }
+      }
+    }
+
+    td {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 150%;
+      letter-spacing: -0.03em;
+    }
+  }
+}

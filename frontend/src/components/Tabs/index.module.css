@@ -1,0 +1,12 @@
+.tabs {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+
+  > li {
+    display: flex;
+    flex: 1 0;
+    cursor: pointer;
+  }
+}
