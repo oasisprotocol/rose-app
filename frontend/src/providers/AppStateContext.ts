@@ -31,7 +31,7 @@ export interface AppStateProviderContext {
   readonly state: AppStateProviderState
   setAppError: (error: Error | object | string) => void
   clearAppError: () => void
-  getValidatorByAddress: (address: string) => Promise<Validator | null>
+  getValidatorByAddress: (opts: { hexAddress?: string; address?: string }) => Promise<Validator | null>
 }
 
 export const AppStateContext = createContext<AppStateProviderContext>({} as AppStateProviderContext)

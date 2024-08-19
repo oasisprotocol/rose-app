@@ -11,6 +11,8 @@ import { TestPage } from './pages/TestPage'
 import { ApiContextProvider } from './providers/ApiProvider'
 import { GrpcContextProvider } from './providers/GrpcProvider'
 import { DashboardPage } from './pages/DashboardPage'
+import { StakePage } from './pages/StakePage'
+import { StakingAmountPage } from './pages/StakingAmountPage'
 
 const router = createHashRouter([
   {
@@ -25,6 +27,14 @@ const router = createHashRouter([
       {
         path: 'dashboard',
         element: <DashboardPage />,
+      },
+      {
+        path: 'stake/:address',
+        element: <StakingAmountPage />,
+      },
+      {
+        path: 'stake',
+        element: <StakePage />,
       },
       {
         path: 'test',

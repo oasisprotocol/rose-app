@@ -12,8 +12,10 @@ import { Notification } from '../Notification'
 import classes from './index.module.css'
 import { TabsContext } from '../Tabs/TabsContext'
 import { Button } from '../Button'
+import { useNavigate } from 'react-router-dom'
 
 export const StakingTabsCmp: FC = () => {
+  const navigate = useNavigate()
   const {
     state: { stats, pendingDelegations, delegations, undelegations },
   } = useAppState()
@@ -22,6 +24,8 @@ export const StakingTabsCmp: FC = () => {
   const numOfTotalStakes = (stats?.numOfItems.numOfPendingStakes ?? 0) + (stats?.numOfItems.numOfStakes ?? 0)
   const numOfTotalDebondings =
     (stats?.numOfItems.numOfPendingDebondings ?? 0) + (stats?.numOfItems.numOfDebondings ?? 0)
+
+  const navigateToStake = () => navigate('/stake')
 
   return (
     <>
@@ -80,7 +84,7 @@ export const StakingTabsCmp: FC = () => {
       </div>
       {activeIndex === 0 && (
         <div className={classes.stakeBtnContainer}>
-          <Button>Stake</Button>
+          <Button onClick={navigateToStake}>Stake</Button>
         </div>
       )}
     </>

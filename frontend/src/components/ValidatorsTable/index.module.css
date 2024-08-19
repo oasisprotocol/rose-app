@@ -1,0 +1,122 @@
+.validatorsTable {
+  border: 2px solid var(--brand-blue);
+  border-radius: 12px;
+
+  table {
+    tr {
+      td:first-child {
+        width: 40px;
+        text-align: center;
+        padding: 1rem 1rem 1rem 1.5rem;
+      }
+
+      td:nth-child(2) {
+        text-align: left;
+        color: var(--brand-blue);
+      }
+
+      td:nth-child(3) {
+        width: 80px;
+        text-align: right;
+        color: var(--brand-extra-dark);
+
+        &.bold {
+          font-weight: 700;
+        }
+      }
+
+      td:last-child {
+        text-align: center;
+        width: 40px;
+        vertical-align: middle;
+        line-height: 0;
+      }
+    }
+  }
+}
+
+.bold {
+  && {
+    font-weight: 700;
+  }
+}
+
+.radioFormItem {
+  position: relative;
+
+  [type='radio'] {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .radioBtn {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%);
+    height: 1.125rem;
+    width: 1.125rem;
+    background-color: transparent;
+    border: 1px solid var(--brand-extra-dark);
+    border-radius: 50%;
+
+    &:after {
+      content: '';
+      position: absolute;
+      display: none;
+    }
+  }
+
+  &:hover [type='radio']:not(:checked) ~ .radioBtn {
+    &:after {
+      display: block;
+      background-color: var(--brand-extra-dark-75);
+    }
+  }
+
+  [type='radio']:checked ~ .radioBtn:after {
+    display: block;
+  }
+
+  .radioBtn:after {
+    top: 3px;
+    left: 3px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--brand-extra-dark);
+  }
+}
+
+.expandedRow {
+  td {
+    &&& {
+      padding: 0;
+    }
+  }
+}
+
+.validatorDetails {
+  padding: 0 6.125rem 0.75rem 4rem;
+
+  p {
+    display: flex;
+    justify-content: space-between;
+    font-weight: 400;
+    line-height: 38px;
+
+    span {
+      &:first-child {
+        color: var(--brand-extra-dark);
+      }
+
+      &:last-child {
+        color: var(--gray-extra-dark);
+        line-height: 38px;
+      }
+    }
+  }
+}

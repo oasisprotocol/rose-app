@@ -7,12 +7,12 @@ import { Amount } from '../Amount'
 import { formatUnits } from 'ethers'
 import { Button } from '../Button'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { ArrowDownIcon } from '../icons/ArrowDownIcon'
 import { ActiveIcon } from '../icons/ActiveIcon'
 import classes from './index.module.css'
 import { InactiveIcon } from '../icons/InactiveIcon'
 import { WarnIcon } from '../icons/WarnIcon'
 import { Notification } from '../Notification'
+import { ToggleButton } from '../ToggleButton'
 
 type PendingDelegationStakedItem = {
   receiptId: bigint
@@ -71,7 +71,7 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
           const isPendingDelegation = !isDelegationStakedItem(entry)
 
           return (
-            <Validator key={entry.key} address={entry.to} fallback={<tr />}>
+            <Validator key={entry.key} hexAddress={entry.to} fallback={<tr />}>
               {validator => (
                 <Fragment>
                   <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.stakedRow)}>
@@ -88,12 +88,7 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                       <Amount amount={entry.amount} />
                     </td>
                     <td>
-                      <button
-                        className={StringUtils.clsx(classes.toggleBtn, isExpanded ? 'open' : undefined)}
-                        onClick={toggleRow}
-                      >
-                        <ArrowDownIcon />
-                      </button>
+                      <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
                     </td>
                   </tr>
                   {isExpanded && (

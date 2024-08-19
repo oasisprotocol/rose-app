@@ -5,7 +5,7 @@ import { useWeb3 } from '../../hooks/useWeb3'
 import { formatUnits } from 'ethers'
 
 interface Props {
-  amount: bigint
+  amount: bigint | string
   className?: string
 }
 

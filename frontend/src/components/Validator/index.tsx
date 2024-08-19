@@ -3,23 +3,23 @@ import { Validator as APIValidator } from '@oasisprotocol/nexus-api'
 import { useAppState } from '../../hooks/useAppState'
 
 interface Props {
-  address: string
+  hexAddress: string
   children: (validator: APIValidator) => ReactNode
   fallback?: ReactNode
 }
 
-const ValidatorCmp: FC<Props> = ({ address, children, fallback = <span>...</span> }) => {
+const ValidatorCmp: FC<Props> = ({ hexAddress, children, fallback = <span>...</span> }) => {
   const { getValidatorByAddress } = useAppState()
   const [validator, setValidator] = useState<APIValidator | null>()
 
   useEffect(() => {
     const getValidator = async () => {
-      const _validator = await getValidatorByAddress(address)
+      const _validator = await getValidatorByAddress({ hexAddress })
       setValidator(_validator)
     }
 
     getValidator()
-  }, [address, getValidatorByAddress, setValidator])
+  }, [hexAddress, getValidatorByAddress, setValidator])
 
   if (!validator) return fallback
 

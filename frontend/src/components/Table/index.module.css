@@ -5,6 +5,9 @@
   border-collapse: collapse;
 
   tbody {
+    max-height: 200px;
+    overflow-y: scroll;
+
     tr {
       &:not(:last-child) {
         border-bottom: 2px solid var(--brand-extra-dark-21);
