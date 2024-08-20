@@ -1,0 +1,9 @@
+.errorIcon {
+  &:before {
+    color: var(--red);
+  }
+
+  svg {
+    color: var(--white);
+  }
+}

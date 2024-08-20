@@ -5,7 +5,7 @@ import { WarningIcon } from '../WarningIcon'
 import classes from './index.module.css'
 import { IconProps } from '../../../types'
 
-export const WarnIcon: FC<Pick<IconProps, 'label'>> = props => (
+export const WarnIcon: FC<Pick<IconProps, 'label' | 'width' | 'height'>> = props => (
   <WarningIcon
     className={classes.warnIcon}
     width={24}

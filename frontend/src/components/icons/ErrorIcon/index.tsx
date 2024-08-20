@@ -3,15 +3,15 @@
 import { FC } from 'react'
 import classes from './index.module.css'
 import { IconProps } from '../../../types'
-import { CheckIcon } from '../CheckIcon'
+import { CloseIcon } from '../CloseIcon'
 import { StringUtils } from '../../../utils/string.utils'
 
-export const SuccessIcon: FC<Pick<IconProps, 'label' | 'className' | 'width' | 'height'>> = ({
+export const ErrorIcon: FC<Pick<IconProps, 'label' | 'className' | 'width' | 'height'>> = ({
   className,
   ...restProps
 }) => (
-  <CheckIcon
-    className={StringUtils.clsx(classes.successIcon, className)}
+  <CloseIcon
+    className={StringUtils.clsx(classes.errorIcon, className)}
     width={24}
     height={24}
     circleOutline

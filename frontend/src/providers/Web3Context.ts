@@ -24,9 +24,10 @@ export interface Web3ProviderContext {
   connectWallet: () => Promise<void>
   switchNetwork: (chainId?: bigint) => Promise<void>
   getTransaction: (txHash: string) => Promise<TransactionResponse | null>
+  getGasPrice: () => Promise<bigint>
   isProviderAvailable: () => Promise<boolean>
   getBalance: () => Promise<bigint>
-  delegate: (value: bigint, to: string) => Promise<TransactionResponse>
+  delegate: (value: bigint, to: string, txSubmittedCb?: () => void) => Promise<bigint>
   getPendingDelegations: () => Promise<DefaultReturnType<[PendingDelegations]>>
   delegateDone: (receiptId: bigint) => Promise<TransactionResponse>
   getDelegations: () => Promise<DefaultReturnType<[Delegations]>>

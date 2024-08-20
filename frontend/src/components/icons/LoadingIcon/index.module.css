@@ -1,0 +1,9 @@
+.loadingIcon {
+  &:before {
+    color: var(--brand-blue);
+  }
+
+  svg {
+    color: var(--white);
+  }
+}
