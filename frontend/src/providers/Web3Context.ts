@@ -33,7 +33,8 @@ export interface Web3ProviderContext {
   getDelegations: () => Promise<DefaultReturnType<[Delegations]>>
   undelegate: (shares: bigint, from: string) => Promise<TransactionResponse>
   getUndelegations: () => Promise<DefaultReturnType<[Undelegations]>>
-  undelegateStart: (receiptId: bigint) => Promise<TransactionResponse>
+  getUndelegationReceiptId: (filterBy: Partial<Staking.PendingUndelegationStruct>) => Promise<bigint | null>
+  undelegateStart: (receiptId: bigint, txSubmittedCb?: () => void) => Promise<bigint>
   undelegateDone: (receiptId: bigint) => Promise<TransactionResponse>
 }
 

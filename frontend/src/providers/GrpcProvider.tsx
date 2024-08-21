@@ -17,6 +17,8 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const fetchConsensusStatus = async () => {
     const { node } = state
 
+    if (state.consensusStatus) return state.consensusStatus
+
     const consensusStatus = await node.consensusGetStatus()
 
     setState(prevState => ({ ...prevState, consensusStatus }))

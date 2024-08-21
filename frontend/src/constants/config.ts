@@ -53,6 +53,7 @@ export const MAX_GAS_LIMIT = 275000n
 
 export const AVERAGE_BLOCK_TIME_IN_SEC = 6
 export const AVERAGE_BLOCKS_PER_EPOCH = 600
+export const CONSENSUS_DECIMALS = 9
 
 const {
   VITE_NETWORK: ENV_VITE_NETWORK,

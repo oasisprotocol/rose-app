@@ -6,6 +6,7 @@ import { usePrevious } from '../hooks/usePrevious'
 import { useWeb3 } from '../hooks/useWeb3'
 import { useApi } from '../hooks/useApi'
 import { FormattingUtils } from '../utils/formatting.utils'
+import { useGrpc } from '../hooks/useGrpc'
 
 const appStateProviderInitialState: AppStateProviderState = {
   appError: '',
@@ -27,6 +28,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     getDelegations,
     getUndelegations,
   } = useWeb3()
+  const { fetchConsensusStatus } = useGrpc()
   const isDesktopScreen = useMediaQuery({ query: '(min-width: 1000px)' })
 
   const [state, setState] = useState<AppStateProviderState>({
@@ -56,40 +58,47 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     }
 
     const fetchAccountData = async () => {
-      const [accountBalance, pendingDelegations, delegations, undelegations] = await Promise.all([
-        getBalance(),
-        getPendingDelegations(),
-        getDelegations(),
-        getUndelegations(),
-      ])
+      const [accountBalance, pendingDelegations, delegations, undelegations, consensusStatus] =
+        await Promise.all([
+          getBalance(),
+          getPendingDelegations(),
+          getDelegations(),
+          getUndelegations(),
+          fetchConsensusStatus(),
+        ])
 
       const totalPendingStake = pendingDelegations.pendings.reduce((acc, { amount }) => acc + amount, 0n)
       const totalStaked = delegations.out_delegations.reduce((acc, { amount }) => acc + amount, 0n)
 
-      const [totalPendingDebondings, totalDebonding, numOfPendingDebondings, numOfDebondings] =
-        undelegations.undelegations.reduce(
-          (
-            [accPendingDebond, accDebonding, accNumOfPendingDebondings, numOfDebondings],
-            { costBasis, endReceiptId }
-          ) => {
-            if (endReceiptId === 0n) {
-              return [
-                accPendingDebond + costBasis,
-                accDebonding,
-                accNumOfPendingDebondings + 1,
-                numOfDebondings,
-              ]
-            } else {
-              return [
-                accPendingDebond,
-                accDebonding + costBasis,
-                accNumOfPendingDebondings,
-                numOfDebondings + 1,
-              ]
-            }
-          },
-          [0n, 0n, 0, 0]
-        )
+      const [
+        totalPendingDebondings,
+        totalDebonding,
+        numOfPendingDebondings,
+        numOfDebondings,
+        numOfAvailableToClaimDebondings,
+      ] = undelegations.undelegations.reduce(
+        (
+          [
+            accPendingDebond,
+            accDebonding,
+            accNumOfPendingDebondings,
+            numOfDebondings,
+            accNumOfAvailableToClaimDebondings,
+          ],
+          { costBasis, endReceiptId, epoch }
+        ) => {
+          return [
+            endReceiptId === 0n ? accPendingDebond + costBasis : accPendingDebond,
+            endReceiptId === 0n ? accDebonding : accDebonding + costBasis,
+            endReceiptId === 0n ? accNumOfPendingDebondings + 1 : accNumOfPendingDebondings,
+            endReceiptId === 0n ? numOfDebondings : numOfDebondings + 1,
+            epoch !== 0n && epoch <= consensusStatus.latest_epoch
+              ? accNumOfAvailableToClaimDebondings + 1
+              : accNumOfAvailableToClaimDebondings,
+          ]
+        },
+        [0n, 0n, 0, 0, 0]
+      )
 
       setState(prevState => ({
         ...prevState,
@@ -109,6 +118,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
             numOfStakes: delegations.out_delegations.length ?? 0,
             numOfPendingDebondings,
             numOfDebondings,
+            numOfAvailableToClaimDebondings,
           },
         },
       }))

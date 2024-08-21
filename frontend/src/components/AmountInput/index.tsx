@@ -1,9 +1,10 @@
-import { FC, useId, useState } from 'react'
+import { FC, useId } from 'react'
 import classes from './index.module.css'
 import { Button } from '../Button'
 import { formatUnits } from 'ethers'
-import { useWeb3 } from '../../hooks/useWeb3'
 import { amountPattern } from '../../utils/string.utils'
+import BigNumber from 'bignumber.js'
+import { CONSENSUS_DECIMALS } from '../../constants/config'
 
 interface PercentageEntry {
   label: string
@@ -30,19 +31,23 @@ const percentageList: PercentageEntry[] = [
 ]
 
 interface Props {
-  value?: string | bigint
+  value?: string | bigint | BigNumber
   required?: boolean
   label?: string
+  decimals?: number
   onChange?: (opts: { value?: Props['value']; percentage?: number }) => void
 }
 
-export const AmountInput: FC<Props> = ({ value, required, label, onChange }) => {
-  const {
-    state: { nativeCurrency },
-  } = useWeb3()
+export const AmountInput: FC<Props> = ({
+  value,
+  required,
+  label,
+  decimals = CONSENSUS_DECIMALS,
+  onChange,
+}) => {
   const id = useId()
 
-  const [amount, setAmount] = useState(value ? formatUnits(value ?? '', nativeCurrency?.decimals) : '')
+  const amount = value ? formatUnits(value.toString(), decimals) : ''
 
   return (
     <div>
@@ -61,7 +66,6 @@ export const AmountInput: FC<Props> = ({ value, required, label, onChange }) => 
           value={amount}
           onChange={({ target: { value: targetValue } }) => {
             onChange?.({ value: targetValue })
-            setAmount(targetValue)
           }}
           pattern={amountPattern}
           inputMode="decimal"

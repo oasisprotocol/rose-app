@@ -3,18 +3,23 @@ import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { formatUnits } from 'ethers'
+import { CONSENSUS_DECIMALS } from '../../constants/config'
 
 const supportedUnits = {
   nano: {
     decimals: 9,
     prefix: 'n',
   },
+  consensus: {
+    decimals: CONSENSUS_DECIMALS,
+    prefix: '',
+  },
 }
 
 interface Props {
   amount: bigint | string
   className?: string
-  unit?: 'nano'
+  unit?: 'nano' | 'consensus'
 }
 
 export const Amount: FC<Props> = ({ amount, className, unit }) => {
