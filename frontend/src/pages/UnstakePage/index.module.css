@@ -1,0 +1,49 @@
+.description {
+  color: var(--brand-extra-dark-75);
+  margin-bottom: 1rem;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0 2rem;
+  margin-top: auto;
+
+  button {
+    margin: 0 auto;
+  }
+}
+
+.undelegatePreviewTransactionTable {
+  border: 2px solid var(--brand-blue);
+  border-radius: 12px;
+  padding: 2.25rem 2.625rem 3.125rem 3rem;
+
+  div {
+    div {
+      &:first-child {
+        color: var(--brand-blue);
+      }
+
+      &:last-child {
+        color: var(--brand-extra-dark);
+      }
+    }
+  }
+}
+
+.undelegateSuccessfulAlertActions,
+.undelegateStartSuccessfulAlertActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  p {
+    color: var(--brand-extra-dark);
+  }
+
+  button {
+    margin: 0 auto;
+  }
+}

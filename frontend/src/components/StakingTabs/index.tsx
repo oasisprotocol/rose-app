@@ -51,8 +51,13 @@ export const StakingTabsCmp: FC = () => {
               {numOfTotalDebondings > 0 && (
                 <span className={classes.mute}>&nbsp;({numOfTotalDebondings})</span>
               )}
-              {(stats?.numOfItems.numOfPendingDebondings ?? 0) > 0 && (
-                <Notification>{stats?.numOfItems.numOfPendingDebondings}</Notification>
+              {(stats?.numOfItems.numOfPendingDebondings ?? 0) +
+                (stats?.numOfItems.numOfAvailableToClaimDebondings ?? 0) >
+                0 && (
+                <Notification>
+                  {(stats?.numOfItems.numOfPendingDebondings ?? 0) +
+                    (stats?.numOfItems.numOfAvailableToClaimDebondings ?? 0)}
+                </Notification>
               )}
             </p>
           </Tab>

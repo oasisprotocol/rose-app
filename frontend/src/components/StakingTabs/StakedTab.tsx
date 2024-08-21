@@ -13,6 +13,7 @@ import { InactiveIcon } from '../icons/InactiveIcon'
 import { WarnIcon } from '../icons/WarnIcon'
 import { Notification } from '../Notification'
 import { ToggleButton } from '../ToggleButton'
+import { useNavigate } from 'react-router-dom'
 
 type PendingDelegationStakedItem = {
   receiptId: bigint
@@ -39,7 +40,8 @@ interface Props {
 }
 
 const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
-  const { delegateDone, undelegate } = useWeb3()
+  const navigate = useNavigate()
+  const { delegateDone } = useWeb3()
 
   const pendingDelegationsNormalized: StakedItem[] = pendingDelegations.receiptIds.map((receiptId, i) => {
     const { amount, from, to } = pendingDelegations.pendings[i]
@@ -125,7 +127,7 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                             <div>
                               {/*TODO: Navigate to undelegate page*/}
                               <Button
-                                onClick={() => undelegate(entry.shares, entry.to)}
+                                onClick={() => navigate(`/unstake/${entry.to}`)}
                                 className={classes.unstakeBtn}
                               >
                                 Unstake

@@ -13,6 +13,7 @@ import { GrpcContextProvider } from './providers/GrpcProvider'
 import { DashboardPage } from './pages/DashboardPage'
 import { StakePage } from './pages/StakePage'
 import { StakingAmountPage } from './pages/StakingAmountPage'
+import { UnstakePage } from './pages/UnstakePage'
 
 const router = createHashRouter([
   {
@@ -35,6 +36,10 @@ const router = createHashRouter([
       {
         path: 'stake',
         element: <StakePage />,
+      },
+      {
+        path: 'unstake/:address',
+        element: <UnstakePage />,
       },
       {
         path: 'test',

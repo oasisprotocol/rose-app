@@ -95,7 +95,7 @@ export const StakingAmountPage: FC = () => {
   }
 
   if (!validator) {
-    return <p>Loading...</p>
+    return <Alert type="loading" />
   }
 
   return (
@@ -114,6 +114,7 @@ export const StakingAmountPage: FC = () => {
             onChange={({ value }) => {
               setAmount(value ? parseUnits(value.toString(), nativeCurrency?.decimals) : 0n)
             }}
+            decimals={nativeCurrency?.decimals}
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => setStep(Steps.DelegatePreviewTransaction)}>Delegate</Button>
@@ -126,7 +127,7 @@ export const StakingAmountPage: FC = () => {
       {step === Steps.DelegatePreviewTransaction && (
         <Card header={<h2>Preview</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
-            Check the details of the stake below.
+            Check the details of the transaction below.
           </p>
           <PreviewTable
             className={classes.delegatePreviewTransactionTable}
@@ -184,8 +185,8 @@ export const StakingAmountPage: FC = () => {
           actions={
             <div className={classes.stakingSuccessfulAlertActions}>
               <p className="body">
-                To conclude the staking procedure, it is necessary to claim a receipt for the delegation you
-                have recently submitted.
+                To conclude the staking procedure, it is necessary to claim a receipt for the stake you have
+                just submitted.
               </p>
               <Button onClick={() => handleDelegateDone()}>Continue</Button>
             </div>
@@ -195,7 +196,7 @@ export const StakingAmountPage: FC = () => {
       {step === Steps.DelegateDoneSuccessful && (
         <Alert
           type="success"
-          headerText="Successfully claimed receipt"
+          headerText="Staking successful"
           actions={<Button onClick={navigateToDashboard}>Go to dashboard</Button>}
         />
       )}
@@ -230,9 +231,9 @@ export const StakingAmountPage: FC = () => {
           headerText={(() => {
             switch (step) {
               case Steps.DelegateInProgress:
-                return 'Staking in progress...'
+                return 'Staking initiated'
               case Steps.DelegateDoneInProgress:
-                return 'Claiming receipt...'
+                return 'Claiming staking receipt'
               default:
                 return 'In progress...'
             }

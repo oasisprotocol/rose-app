@@ -19,6 +19,7 @@ export interface AppStateProviderState {
       numOfStakes: number
       numOfPendingDebondings: number
       numOfDebondings: number
+      numOfAvailableToClaimDebondings: number
     }
   } | null
   pendingDelegations: PendingDelegations | null

@@ -11,7 +11,7 @@ import { UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
 import { BrowserProvider, EventLog, JsonRpcProvider } from 'ethers'
-import { Staking__factory } from '@oasisprotocol/dapp-staker-backend'
+import { Staking, Staking__factory } from '@oasisprotocol/dapp-staker-backend'
 import * as oasis from '@oasisprotocol/client'
 import { FormattingUtils } from '../utils/formatting.utils'
 
@@ -282,7 +282,9 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const fromBech32 = await FormattingUtils.toUint8Array(from)
-    return await staking.Undelegate(fromBech32, shares, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+    return await staking.Undelegate(fromBech32, shares, {
+      gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT,
+    })
   }
 
   const getUndelegations = async () => {
@@ -299,7 +301,22 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return await stakingWithoutSigner.GetUndelegations(account)
   }
 
-  const undelegateStart = async (receiptId: bigint) => {
+  const getUndelegationReceiptId = async (filterBy?: Partial<Staking.PendingUndelegationStruct>) => {
+    const undelegations = await getUndelegations()
+
+    if (!filterBy) return null
+
+    const filterByIndex = undelegations.undelegations.findIndex(undelegation =>
+      Object.keys(filterBy).every(k => {
+        const key = k as keyof Staking.PendingUndelegationStruct
+        return filterBy[key] === undelegation[key]
+      })
+    )
+
+    return filterByIndex < 0 ? null : undelegations.receiptIds[filterByIndex]
+  }
+
+  const undelegateStart = async (receiptId: bigint, txSubmittedCb?: () => void) => {
     const { sapphireEthProvider } = state
 
     if (!sapphireEthProvider) {
@@ -309,7 +326,22 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
-    return await staking.UndelegateStart(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+    const txResponse = await staking.UndelegateStart(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+    txSubmittedCb?.()
+
+    const txReciept = await txResponse.wait()
+
+    const log = txReciept!.logs.find(log => {
+      const {
+        fragment: { name },
+      } = log as EventLog
+
+      return name === staking.filters.OnUndelegateStart.name
+    })! as EventLog
+
+    const [, , epoch] = log.args
+
+    return epoch satisfies bigint
   }
 
   const undelegateDone = async (receiptId: bigint) => {
@@ -339,6 +371,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     getDelegations,
     undelegate,
     getUndelegations,
+    getUndelegationReceiptId,
     undelegateStart,
     undelegateDone,
   }

@@ -162,7 +162,9 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                             <Button
                               size="small"
                               variant="text"
-                              onClick={() => undelegateStart(entry.receiptId)}
+                              onClick={() => {
+                                undelegateStart(entry.receiptId)
+                              }}
                               className={classes.checkEstimatedTimeBtn}
                             >
                               Check estimated time
