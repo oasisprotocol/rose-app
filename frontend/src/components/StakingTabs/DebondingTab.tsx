@@ -9,10 +9,10 @@ import { Button } from '../Button'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { useGrpc } from '../../hooks/useGrpc'
 import { EpochTimeEstimate } from '../EpochTimeEstimate'
-import { ArrowDownIcon } from '../icons/ArrowDownIcon'
 import { HourglassIcon } from '../icons/HourglassIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
 import { Notification } from '../Notification'
+import { ToggleButton } from '../ToggleButton'
 
 type DebondingItemStatus = 'ready' | 'waiting' | 'pending' | null
 
@@ -75,7 +75,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
     <div className={classes.debondingTab}>
       <Table data={debondingItems} isExpandable>
         {({ entry, isExpanded, toggleRow }) => (
-          <Validator key={entry.receiptId} address={entry.from} fallback={<tr />}>
+          <Validator key={entry.receiptId} hexAddress={entry.from} fallback={<tr />}>
             {validator => (
               <>
                 <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
@@ -103,12 +103,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                     <Amount amount={entry.costBasis} />
                   </td>
                   <td>
-                    <button
-                      className={StringUtils.clsx(classes.toggleBtn, isExpanded ? 'open' : undefined)}
-                      onClick={toggleRow}
-                    >
-                      <ArrowDownIcon />
-                    </button>
+                    <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
                   </td>
                 </tr>
                 {isExpanded && (

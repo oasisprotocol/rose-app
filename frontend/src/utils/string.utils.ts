@@ -3,6 +3,7 @@ import { Validator } from '@oasisprotocol/nexus-api'
 
 const truncateEthRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
 const truncateOasisRegex = /^(oasis1[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
+export const amountPattern = '^[0-9]*[.]?[0-9]*$'
 
 export abstract class StringUtils {
   static truncateAddress = (address: string, type: 'eth' | 'oasis' = 'eth') => {
@@ -42,5 +43,29 @@ export abstract class StringUtils {
     }
 
     return StringUtils.truncateAddress(validator.entity_address, 'oasis')
+  }
+
+  static getValidatorName = (validator?: Validator) => {
+    if (!validator) {
+      return 'Unknown'
+    }
+
+    if (validator.media?.name) {
+      return validator.media.name
+    }
+
+    return null
+  }
+
+  static getValidatorFriendlyAddress = (validator?: Validator) => {
+    if (!validator) {
+      return 'Unknown'
+    }
+
+    if (validator.entity_address) {
+      return StringUtils.truncateAddress(validator.entity_address, 'oasis')
+    }
+
+    return null
   }
 }

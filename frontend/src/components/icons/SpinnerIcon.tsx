@@ -1,7 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 
 import { FC } from 'react'
-import LoopSvg from '@material-design-icons/svg/outlined/loop.svg?react'
+import LoopSvg from '@material-design-icons/svg/outlined/refresh.svg?react'
 import { Icon } from '../Icon'
 import { IconProps } from '../../types'
 

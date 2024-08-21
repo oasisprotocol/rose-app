@@ -114,17 +114,22 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }))
     }
 
+    if (account) {
+      fetchAccountData()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
+
+  useEffect(() => {
     const fetchValidators = async () => {
       const validators = await getValidators()
 
       setState(prevState => ({ ...prevState, validatorsList: validators }))
     }
 
-    if (account) {
-      fetchAccountData().then(fetchValidators)
-    }
+    fetchValidators()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  }, [])
 
   const setAppError = (error: Error | object | string) => {
     if (error === undefined || error === null) return
@@ -143,12 +148,12 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   }
 
   const getValidatorByAddress = useCallback(
-    async (hexAddress: string) => {
-      if (!hexAddress) {
+    async ({ hexAddress, address }: { hexAddress?: string; address?: string }) => {
+      if (!hexAddress && !address) {
         return null
       }
 
-      const bech32Address = await FormattingUtils.toBech32(hexAddress)
+      const bech32Address = hexAddress ? await FormattingUtils.toBech32(hexAddress) : address
 
       if (!state.validatorsList) {
         return null

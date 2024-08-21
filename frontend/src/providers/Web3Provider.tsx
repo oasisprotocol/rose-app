@@ -10,7 +10,7 @@ import {
 import { UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
-import { BrowserProvider, JsonRpcProvider } from 'ethers'
+import { BrowserProvider, EventLog, JsonRpcProvider } from 'ethers'
 import { Staking__factory } from '@oasisprotocol/dapp-staker-backend'
 import * as oasis from '@oasisprotocol/client'
 import { FormattingUtils } from '../utils/formatting.utils'
@@ -180,6 +180,16 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return await sapphireEthProvider.getTransaction(txHash)
   }
 
+  const getGasPrice = async () => {
+    const { sapphireEthProvider } = state
+
+    if (!sapphireEthProvider) {
+      return 0n
+    }
+
+    return (await sapphireEthProvider.getFeeData()).gasPrice ?? 0n
+  }
+
   const getBalance = async () => {
     const { account, sapphireEthProvider } = state
 
@@ -190,7 +200,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return await sapphireEthProvider.getBalance(account)
   }
 
-  const delegate = async (value: bigint, to: string) => {
+  const delegate = async (value: bigint, to: string, txSubmittedCb?: () => void) => {
     const { sapphireEthProvider } = state
 
     if (!sapphireEthProvider) {
@@ -201,7 +211,22 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const toBech32 = oasis.staking.addressFromBech32(to)
-    return await staking.Delegate(toBech32, { value, gasLimit: MAX_GAS_LIMIT })
+    const txResponse = await staking.Delegate(toBech32, { value, gasLimit: MAX_GAS_LIMIT })
+    txSubmittedCb?.()
+
+    const txReciept = await txResponse.wait()
+
+    const log = txReciept!.logs.find(log => {
+      const {
+        fragment: { name },
+      } = log as EventLog
+
+      return name === staking.filters.OnDelegateStart.name
+    })! as EventLog
+
+    const [, , , receiptId] = log.args
+
+    return receiptId satisfies bigint
   }
 
   const getPendingDelegations = async () => {
@@ -306,6 +331,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     connectWallet,
     switchNetwork,
     getTransaction,
+    getGasPrice,
     getBalance,
     delegate,
     getPendingDelegations,
