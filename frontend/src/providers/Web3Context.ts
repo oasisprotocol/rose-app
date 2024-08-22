@@ -26,7 +26,7 @@ export interface Web3ProviderContext {
   getTransaction: (txHash: string) => Promise<TransactionResponse | null>
   getGasPrice: () => Promise<bigint>
   isProviderAvailable: () => Promise<boolean>
-  getBalance: () => Promise<bigint>
+  getAccountBalance: () => Promise<bigint>
   delegate: (value: bigint, to: string, txSubmittedCb?: () => void) => Promise<bigint>
   getPendingDelegations: () => Promise<DefaultReturnType<[PendingDelegations]>>
   delegateDone: (receiptId: bigint) => Promise<TransactionResponse>

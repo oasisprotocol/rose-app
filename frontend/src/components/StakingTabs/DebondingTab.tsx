@@ -13,6 +13,7 @@ import { HourglassIcon } from '../icons/HourglassIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
 import { Notification } from '../Notification'
 import { ToggleButton } from '../ToggleButton'
+import { SharesAmount } from '../SharesAmount'
 
 type DebondingItemStatus = 'ready' | 'waiting' | 'pending' | null
 
@@ -100,7 +101,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                     )}
                   </td>
                   <td>
-                    <Amount amount={entry.costBasis} />
+                    <SharesAmount shares={entry.shares} validator={validator} />
                   </td>
                   <td>
                     <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
