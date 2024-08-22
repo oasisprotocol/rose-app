@@ -190,7 +190,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return (await sapphireEthProvider.getFeeData()).gasPrice ?? 0n
   }
 
-  const getBalance = async () => {
+  const getAccountBalance = async () => {
     const { account, sapphireEthProvider } = state
 
     if (!account || !sapphireEthProvider) {
@@ -364,7 +364,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     switchNetwork,
     getTransaction,
     getGasPrice,
-    getBalance,
+    getAccountBalance,
     delegate,
     getPendingDelegations,
     delegateDone,

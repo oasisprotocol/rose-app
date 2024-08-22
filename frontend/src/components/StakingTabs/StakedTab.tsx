@@ -14,6 +14,7 @@ import { WarnIcon } from '../icons/WarnIcon'
 import { Notification } from '../Notification'
 import { ToggleButton } from '../ToggleButton'
 import { useNavigate } from 'react-router-dom'
+import { SharesAmount } from '../SharesAmount'
 
 type PendingDelegationStakedItem = {
   receiptId: bigint
@@ -87,7 +88,8 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                       {isPendingDelegation && <WarnIcon label={!isExpanded ? 'Confirm stake' : undefined} />}
                     </td>
                     <td>
-                      <Amount amount={entry.amount} />
+                      {isPendingDelegation && <Amount amount={entry.amount} />}
+                      {!isPendingDelegation && <SharesAmount shares={entry.shares} validator={validator} />}
                     </td>
                     <td>
                       <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
@@ -125,7 +127,6 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                         <div className={classes.stakedRowActions}>
                           {!isPendingDelegation && (
                             <div>
-                              {/*TODO: Navigate to undelegate page*/}
                               <Button
                                 onClick={() => navigate(`/unstake/${entry.to}`)}
                                 className={classes.unstakeBtn}

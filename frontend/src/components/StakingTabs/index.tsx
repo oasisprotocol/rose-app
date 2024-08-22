@@ -13,6 +13,7 @@ import classes from './index.module.css'
 import { TabsContext } from '../Tabs/TabsContext'
 import { Button } from '../Button'
 import { useNavigate } from 'react-router-dom'
+import { NumberUtils } from '../../utils/number.utils'
 
 export const StakingTabsCmp: FC = () => {
   const navigate = useNavigate()
@@ -21,9 +22,12 @@ export const StakingTabsCmp: FC = () => {
   } = useAppState()
   const [activeIndex] = useContext(TabsContext)
 
-  const numOfTotalStakes = (stats?.numOfItems.numOfPendingStakes ?? 0) + (stats?.numOfItems.numOfStakes ?? 0)
+  const numOfTotalStakes =
+    NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingStakes) +
+    NumberUtils.orZeroNumber(stats?.numOfItems.numOfStakes)
   const numOfTotalDebondings =
-    (stats?.numOfItems.numOfPendingDebondings ?? 0) + (stats?.numOfItems.numOfDebondings ?? 0)
+    NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
+    NumberUtils.orZeroNumber(stats?.numOfItems.numOfDebondings)
 
   const navigateToStake = () => navigate('/stake')
 
@@ -40,7 +44,7 @@ export const StakingTabsCmp: FC = () => {
               {numOfTotalStakes > 0 && (
                 <span className={StringUtils.clsx(classes.mute)}>&nbsp;({numOfTotalStakes})</span>
               )}
-              {(stats?.numOfItems.numOfPendingStakes ?? 0) > 0 && (
+              {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingStakes) > 0 && (
                 <Notification>{stats?.numOfItems.numOfPendingStakes}</Notification>
               )}
             </p>
@@ -51,12 +55,12 @@ export const StakingTabsCmp: FC = () => {
               {numOfTotalDebondings > 0 && (
                 <span className={classes.mute}>&nbsp;({numOfTotalDebondings})</span>
               )}
-              {(stats?.numOfItems.numOfPendingDebondings ?? 0) +
-                (stats?.numOfItems.numOfAvailableToClaimDebondings ?? 0) >
+              {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
+                NumberUtils.orZeroNumber(stats?.numOfItems.numOfAvailableToClaimDebondings) >
                 0 && (
                 <Notification>
-                  {(stats?.numOfItems.numOfPendingDebondings ?? 0) +
-                    (stats?.numOfItems.numOfAvailableToClaimDebondings ?? 0)}
+                  {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
+                    NumberUtils.orZeroNumber(stats?.numOfItems.numOfAvailableToClaimDebondings)}
                 </Notification>
               )}
             </p>
@@ -66,17 +70,17 @@ export const StakingTabsCmp: FC = () => {
           {stats !== null && (
             <OverviewTab
               totalAmount={
-                stats.balances.accountBalance +
-                stats.balances.totalPendingStake +
-                stats.balances.totalStaked +
-                stats.balances.totalPendingDebondings +
-                stats.balances.totalDebonding
+                NumberUtils.orZeroBigInt(stats.balances.accountBalance) +
+                NumberUtils.orZeroBigInt(stats.balances.totalPendingStake) +
+                NumberUtils.orZeroBigInt(stats.balances.totalStaked) +
+                NumberUtils.orZeroBigInt(stats.balances.totalPendingDebondings) +
+                NumberUtils.orZeroBigInt(stats.balances.totalDebonding)
               }
-              availableAmount={stats.balances.accountBalance}
-              pendingStakedAmount={stats.balances.totalPendingStake}
-              stakedAmount={stats.balances.totalStaked}
-              pendingDebondingAmount={stats.balances.totalPendingDebondings}
-              debondingAmount={stats.balances.totalDebonding}
+              availableAmount={NumberUtils.orZeroBigInt(stats.balances.accountBalance)}
+              pendingStakedAmount={NumberUtils.orZeroBigInt(stats.balances.totalPendingStake)}
+              stakedAmount={NumberUtils.orZeroBigInt(stats.balances.totalStaked)}
+              pendingDebondingAmount={NumberUtils.orZeroBigInt(stats.balances.totalPendingDebondings)}
+              debondingAmount={NumberUtils.orZeroBigInt(stats.balances.totalDebonding)}
             />
           )}
         </Panel>

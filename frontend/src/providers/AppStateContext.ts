@@ -8,18 +8,18 @@ export interface AppStateProviderState {
   isMobileScreen: boolean
   stats: {
     balances: {
-      accountBalance: bigint
-      totalPendingStake: bigint
-      totalStaked: bigint
-      totalPendingDebondings: bigint
-      totalDebonding: bigint
+      accountBalance?: bigint
+      totalPendingStake?: bigint
+      totalStaked?: bigint
+      totalPendingDebondings?: bigint
+      totalDebonding?: bigint
     }
     numOfItems: {
-      numOfPendingStakes: number
-      numOfStakes: number
-      numOfPendingDebondings: number
-      numOfDebondings: number
-      numOfAvailableToClaimDebondings: number
+      numOfPendingStakes?: number
+      numOfStakes?: number
+      numOfPendingDebondings?: number
+      numOfDebondings?: number
+      numOfAvailableToClaimDebondings?: number
     }
   } | null
   pendingDelegations: PendingDelegations | null

@@ -9,7 +9,7 @@ import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
 export const TestPage: FC = () => {
   const {
     state: { account, isConnected },
-    getBalance,
+    getAccountBalance,
     delegate,
     delegateDone,
     getPendingDelegations,
@@ -34,7 +34,7 @@ export const TestPage: FC = () => {
 
   useEffect(() => {
     const init = async () => {
-      const balance = await getBalance()
+      const balance = await getAccountBalance()
       setAccountBalance(balance)
 
       const validatorList = await getValidators()
@@ -67,7 +67,7 @@ export const TestPage: FC = () => {
     if (isConnected) {
       init()
     }
-  }, [isConnected, getBalance, getDelegations, getPendingDelegations, getUndelegations, getValidators])
+  }, [isConnected, getAccountBalance, getDelegations, getPendingDelegations, getUndelegations, getValidators])
 
   if (!isConnected) {
     return <>Connect your wallet first</>

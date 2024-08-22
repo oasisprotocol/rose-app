@@ -7,6 +7,9 @@ import { useWeb3 } from '../hooks/useWeb3'
 import { useApi } from '../hooks/useApi'
 import { FormattingUtils } from '../utils/formatting.utils'
 import { useGrpc } from '../hooks/useGrpc'
+import { Delegations, Undelegations } from '../types'
+import { NumberUtils } from '../utils/number.utils'
+import BigNumber from 'bignumber.js'
 
 const appStateProviderInitialState: AppStateProviderState = {
   appError: '',
@@ -23,7 +26,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   const { getValidators } = useApi()
   const {
     state: { account },
-    getBalance,
+    getAccountBalance,
     getPendingDelegations,
     getDelegations,
     getUndelegations,
@@ -44,6 +47,99 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     }))
   }, [isDesktopScreen])
 
+  const fetchAccountBalance = async () => {
+    const accountBalance = await getAccountBalance()
+    setState(prevState => ({
+      ...prevState,
+
+      stats: {
+        numOfItems: {
+          ...(prevState.stats?.numOfItems ?? {}),
+        },
+        balances: {
+          ...(prevState.stats?.balances ?? {}),
+          accountBalance,
+        },
+      },
+    }))
+  }
+
+  const fetchPendingDelegations = async () => {
+    const pendingDelegations = await getPendingDelegations()
+    const totalPendingStake = pendingDelegations.pendings.reduce((acc, { amount }) => acc + amount, 0n)
+
+    setState(prevState => ({
+      ...prevState,
+      pendingDelegations,
+      stats: {
+        numOfItems: {
+          ...(prevState.stats?.numOfItems ?? {}),
+          numOfPendingStakes: pendingDelegations.pendings.length ?? 0,
+        },
+        balances: {
+          ...(prevState.stats?.balances ?? {}),
+          totalPendingStake,
+        },
+      },
+    }))
+  }
+
+  const fetchDelegations = async () => {
+    const delegations = await getDelegations()
+
+    setState(prevState => ({
+      ...prevState,
+      delegations,
+      stats: {
+        numOfItems: {
+          ...(prevState.stats?.numOfItems ?? {}),
+          numOfStakes: delegations.out_delegations.length ?? 0,
+        },
+        balances: {
+          ...(prevState.stats?.balances ?? {}),
+        },
+      },
+    }))
+  }
+
+  const fetchUndelegations = async () => {
+    const undelegations = await getUndelegations()
+    const consensusStatus = await fetchConsensusStatus()
+
+    const [numOfPendingDebondings, numOfDebondings, numOfAvailableToClaimDebondings] =
+      undelegations.undelegations.reduce(
+        (
+          [accNumOfPendingDebondings, numOfDebondings, accNumOfAvailableToClaimDebondings],
+          { endReceiptId, epoch }
+        ) => {
+          return [
+            endReceiptId === 0n ? accNumOfPendingDebondings + 1 : accNumOfPendingDebondings,
+            endReceiptId === 0n ? numOfDebondings : numOfDebondings + 1,
+            epoch !== 0n && epoch <= consensusStatus.latest_epoch
+              ? accNumOfAvailableToClaimDebondings + 1
+              : accNumOfAvailableToClaimDebondings,
+          ]
+        },
+        [0, 0, 0]
+      )
+
+    setState(prevState => ({
+      ...prevState,
+      undelegations,
+      stats: {
+        numOfItems: {
+          ...(prevState.stats?.numOfItems ?? {}),
+          numOfPendingDebondings,
+          numOfDebondings,
+          numOfAvailableToClaimDebondings,
+        },
+        balances: {
+          ...(prevState.stats?.balances ?? {}),
+        },
+      },
+    }))
+  }
+
   useEffect(() => {
     if (previousAccount !== null && previousAccount !== account) {
       setState(prevState => ({
@@ -58,70 +154,17 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     }
 
     const fetchAccountData = async () => {
-      const [accountBalance, pendingDelegations, delegations, undelegations, consensusStatus] =
+      try {
         await Promise.all([
-          getBalance(),
-          getPendingDelegations(),
-          getDelegations(),
+          fetchAccountBalance(),
+          fetchPendingDelegations(),
+          fetchDelegations(),
           getUndelegations(),
-          fetchConsensusStatus(),
+          fetchUndelegations(),
         ])
-
-      const totalPendingStake = pendingDelegations.pendings.reduce((acc, { amount }) => acc + amount, 0n)
-      const totalStaked = delegations.out_delegations.reduce((acc, { amount }) => acc + amount, 0n)
-
-      const [
-        totalPendingDebondings,
-        totalDebonding,
-        numOfPendingDebondings,
-        numOfDebondings,
-        numOfAvailableToClaimDebondings,
-      ] = undelegations.undelegations.reduce(
-        (
-          [
-            accPendingDebond,
-            accDebonding,
-            accNumOfPendingDebondings,
-            numOfDebondings,
-            accNumOfAvailableToClaimDebondings,
-          ],
-          { costBasis, endReceiptId, epoch }
-        ) => {
-          return [
-            endReceiptId === 0n ? accPendingDebond + costBasis : accPendingDebond,
-            endReceiptId === 0n ? accDebonding : accDebonding + costBasis,
-            endReceiptId === 0n ? accNumOfPendingDebondings + 1 : accNumOfPendingDebondings,
-            endReceiptId === 0n ? numOfDebondings : numOfDebondings + 1,
-            epoch !== 0n && epoch <= consensusStatus.latest_epoch
-              ? accNumOfAvailableToClaimDebondings + 1
-              : accNumOfAvailableToClaimDebondings,
-          ]
-        },
-        [0n, 0n, 0, 0, 0]
-      )
-
-      setState(prevState => ({
-        ...prevState,
-        pendingDelegations,
-        delegations,
-        undelegations,
-        stats: {
-          balances: {
-            accountBalance,
-            totalPendingStake,
-            totalStaked,
-            totalPendingDebondings,
-            totalDebonding,
-          },
-          numOfItems: {
-            numOfPendingStakes: pendingDelegations.pendings.length ?? 0,
-            numOfStakes: delegations.out_delegations.length ?? 0,
-            numOfPendingDebondings,
-            numOfDebondings,
-            numOfAvailableToClaimDebondings,
-          },
-        },
-      }))
+      } catch (e) {
+        setAppError(e as Error)
+      }
     }
 
     if (account) {
@@ -132,14 +175,90 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
   useEffect(() => {
     const fetchValidators = async () => {
-      const validators = await getValidators()
+      const validatorsList = await getValidators()
 
-      setState(prevState => ({ ...prevState, validatorsList: validators }))
+      setState(prevState => ({ ...prevState, validatorsList }))
     }
 
     fetchValidators()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
+
+  useEffect(() => {
+    if (!state.delegations || !state.validatorsList) return
+
+    const calcDelegationsTotalStaked = async (delegations: Delegations) => {
+      const validators = await Promise.all(
+        delegations.out_delegates.map(to => getValidatorByAddress({ hexAddress: to }))
+      )
+
+      const totalStaked = validators
+        .reduce((acc, validator, i) => {
+          const { shares } = delegations.out_delegations[i]
+
+          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!))
+        }, BigNumber(0))
+        .toString()
+
+      setState(prevState => ({
+        ...prevState,
+        stats: {
+          numOfItems: {
+            ...(prevState.stats?.numOfItems ?? {}),
+          },
+          balances: {
+            ...(prevState.stats?.balances ?? {}),
+            totalStaked: BigInt(totalStaked),
+          },
+        },
+      }))
+    }
+
+    calcDelegationsTotalStaked(state.delegations)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.delegations, state.validatorsList])
+
+  useEffect(() => {
+    if (!state.undelegations || !state.validatorsList) return
+
+    const calcUndelegationsStats = async (undelegations: Undelegations) => {
+      const validators = await Promise.all(
+        undelegations.undelegations.map(({ from }) => getValidatorByAddress({ hexAddress: from }))
+      )
+
+      const [totalPendingDebondings, totalDebonding] = validators.reduce(
+        ([accPendingDebond, accDebonding], validator, i) => {
+          const { shares, endReceiptId } = undelegations.undelegations[i]
+
+          const amount = NumberUtils.getAmountFromShares(shares.toString(), validator!)
+          return [
+            endReceiptId === 0n ? accPendingDebond.plus(amount) : accPendingDebond,
+            endReceiptId === 0n ? accDebonding : accDebonding.plus(amount),
+          ]
+        },
+        [BigNumber(0), BigNumber(0)]
+      )
+
+      setState(prevState => ({
+        ...prevState,
+        stats: {
+          numOfItems: {
+            ...(prevState.stats?.numOfItems ?? {}),
+          },
+          balances: {
+            ...(prevState.stats?.balances ?? {}),
+            totalPendingDebondings: BigInt(totalPendingDebondings.toString()),
+            totalDebonding: BigInt(totalDebonding.toString()),
+          },
+        },
+      }))
+    }
+
+    calcUndelegationsStats(state.undelegations)
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.undelegations, state.validatorsList])
 
   const setAppError = (error: Error | object | string) => {
     if (error === undefined || error === null) return
