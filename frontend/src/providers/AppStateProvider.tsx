@@ -25,7 +25,7 @@ const appStateProviderInitialState: AppStateProviderState = {
 export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const { getValidators } = useApi()
   const {
-    state: { account },
+    state: { account, stakingWithoutSigner },
     getAccountBalance,
     getPendingDelegations,
     getDelegations,
@@ -84,6 +84,31 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     }))
   }
 
+  useEffect(() => {
+    if (!stakingWithoutSigner || !account) {
+      console.warn(`Skipping pending delegations event listener initialization!`)
+      return
+    }
+
+    const onDelegateStartFilter = stakingWithoutSigner.filters.OnDelegateStart(account)
+
+    let initialized = false
+    const initializePendingDelegationsListener = async () => {
+      await stakingWithoutSigner.on(onDelegateStartFilter, fetchPendingDelegations).catch(console.error)
+      initialized = true
+    }
+
+    initializePendingDelegationsListener()
+
+    return () => {
+      if (initialized) {
+        stakingWithoutSigner.off(onDelegateStartFilter).catch(console.error)
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [account])
+
   const fetchDelegations = async () => {
     const delegations = await getDelegations()
 
@@ -101,6 +126,41 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
       },
     }))
   }
+
+  useEffect(() => {
+    if (!state.pendingDelegations?.length) return
+
+    if (!stakingWithoutSigner || !account) {
+      console.warn(`Skipping delegations event listener initialization!`)
+      return
+    }
+
+    const onDelegateStartFilter = stakingWithoutSigner.filters.OnDelegateDone(
+      // Not sure what TS is complaining about - as array means OR
+      state.pendingDelegations.receiptIds as unknown as bigint
+    )
+
+    let initialized = false
+    const initializeDelegationsListener = async () => {
+      await stakingWithoutSigner
+        .on(onDelegateStartFilter, () => {
+          fetchPendingDelegations()
+          fetchDelegations()
+        })
+        .catch(console.error)
+      initialized = true
+    }
+
+    initializeDelegationsListener()
+
+    return () => {
+      if (initialized) {
+        stakingWithoutSigner.off(onDelegateStartFilter).catch(console.error)
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.pendingDelegations])
 
   const fetchUndelegations = async () => {
     const undelegations = await getUndelegations()
@@ -141,6 +201,48 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   }
 
   useEffect(() => {
+    if (!state.undelegations?.length) return
+
+    if (!stakingWithoutSigner || !account) {
+      console.warn(`Skipping undelegations event listener initialization!`)
+      return
+    }
+
+    const receiptIds = state.undelegations.undelegations.reduce((acc, { endReceiptId }, i) => {
+      const receiptId = state.undelegations!.receiptIds[i]
+      if (endReceiptId === 0n) {
+        return [...acc, receiptId]
+      }
+      return acc
+    }, [] as bigint[])
+
+    const onUndelegateStartFilter = stakingWithoutSigner.filters.OnUndelegateStart(
+      // Not sure what TS is complaining about - as array means OR
+      receiptIds as unknown as bigint
+    )
+
+    let initialized = false
+    const initializeUndelegationsListener = async () => {
+      stakingWithoutSigner
+        .on(onUndelegateStartFilter, () => {
+          fetchUndelegations()
+        })
+        .catch(console.error)
+      initialized = true
+    }
+
+    initializeUndelegationsListener()
+
+    return () => {
+      if (initialized) {
+        stakingWithoutSigner.off(onUndelegateStartFilter).catch(console.error)
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.undelegations])
+
+  useEffect(() => {
     if (previousAccount !== null && previousAccount !== account) {
       setState(prevState => ({
         ...prevState,
@@ -151,6 +253,11 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         delegations: null,
         undelegations: null,
       }))
+
+      if (stakingWithoutSigner) {
+        stakingWithoutSigner.removeAllListeners()
+        return
+      }
     }
 
     const fetchAccountData = async () => {
@@ -198,7 +305,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
           return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!))
         }, BigNumber(0))
-        .toString()
+        .toString(10)
 
       setState(prevState => ({
         ...prevState,
@@ -248,8 +355,8 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
           },
           balances: {
             ...(prevState.stats?.balances ?? {}),
-            totalPendingDebondings: BigInt(totalPendingDebondings.toString()),
-            totalDebonding: BigInt(totalDebonding.toString()),
+            totalPendingDebondings: BigInt(totalPendingDebondings.toString(10)),
+            totalDebonding: BigInt(totalDebonding.toString(10)),
           },
         },
       }))
@@ -304,6 +411,8 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     setAppError,
     clearAppError,
     getValidatorByAddress,
+    fetchDelegations,
+    fetchUndelegations,
   }
 
   return <AppStateContext.Provider value={providerState}>{children}</AppStateContext.Provider>

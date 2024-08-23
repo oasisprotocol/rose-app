@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { Outlet } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 import classes from './index.module.css'
 import { LogoIcon } from '../icons/LogoIcon'
 import { ConnectWallet } from '../ConnectWallet'
@@ -19,7 +19,9 @@ export const Layout: FC = () => {
     <LayoutBase
       header={
         <header className={classes.header}>
-          <LogoIcon />
+          <NavLink to="/dashboard">
+            <LogoIcon />
+          </NavLink>
           <ConnectWallet />
         </header>
       }
