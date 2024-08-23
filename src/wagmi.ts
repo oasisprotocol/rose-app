@@ -1,28 +1,14 @@
 import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { mainnet, sepolia } from "wagmi/chains";
-
-/*
-import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors'
-import { http, createConfig } from 'wagmi'
-export const config = createConfig({
-  chains: [mainnet, sepolia],
-  connectors: [
-    injected(),
-    coinbaseWallet({ appName: 'Create Wagmi' }),
-    walletConnect({ projectId: import.meta.env.VITE_WC_PROJECT_ID }),
-  ],
-  transports: {
-    [mainnet.id]: http(),
-    [sepolia.id]: http(),
-  },
-});
-*/
+import { sapphire } from "wagmi/chains";
 
 export const config = getDefaultConfig({
   appName: "ROSE Migrator",
   projectId: "YOUR_PROJECT_ID",
-  chains: [mainnet, sepolia],
+  chains: [sapphire],
   ssr: false, // If your dApp uses server side rendering (SSR)
+  batch: {
+    multicall: false,
+  },
 });
 
 declare module "wagmi" {
