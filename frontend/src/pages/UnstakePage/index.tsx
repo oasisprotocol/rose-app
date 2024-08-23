@@ -1,4 +1,4 @@
-import { FC, useEffect, useMemo, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { Card } from '../../components/Card'
 import { StringUtils } from '../../utils/string.utils'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -41,8 +41,16 @@ export const UnstakePage: FC = () => {
   const {
     state: { delegations },
     getValidatorByAddress,
+    fetchDelegations,
+    fetchUndelegations,
   } = useAppState()
-  const { undelegate, undelegateStart, getTransaction, getUndelegationReceiptId } = useWeb3()
+  const {
+    state: { account },
+    undelegate,
+    undelegateStart,
+    getTransaction,
+    getUndelegationReceiptId,
+  } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.UndelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [sharePerRoseRatio, setSharePerRoseRatio] = useState<BigNumber>(BigNumber(0))
@@ -51,6 +59,7 @@ export const UnstakePage: FC = () => {
   const [error, setError] = useState('')
   const [undelegationReceiptId, setUndelegationReceiptId] = useState(0n)
   const [undelegationEpoch, setUndelegationEpoch] = useState(0n)
+  const delegation = useRef<Delegation | null | undefined>()
 
   const navigateToDashboard = () => navigate('/dashboard')
 
@@ -83,9 +92,9 @@ export const UnstakePage: FC = () => {
     init()
   }, [getValidatorByAddress, hexAddress])
 
-  const delegation: Delegation | null | undefined = useMemo(() => {
-    if (!delegations) {
-      return undefined
+  useEffect(() => {
+    if (delegation.current || !delegations) {
+      return
     }
 
     const delagationIndex = delegations.out_delegates.findIndex(
@@ -98,19 +107,19 @@ export const UnstakePage: FC = () => {
 
       setShares(BigNumber(_shares.toString()))
 
-      return {
+      delegation.current = {
         to,
         shares: _shares,
         amount,
       }
+    } else {
+      delegation.current = null
     }
-
-    return null
   }, [hexAddress, delegations])
 
   const handleUndelegate = async (
     amountShares: bigint = BigInt(shares.integerValue(BigNumber.ROUND_DOWN).toString()),
-    to = delegation!.to
+    to = delegation.current!.to
   ) => {
     setError('')
 
@@ -121,7 +130,7 @@ export const UnstakePage: FC = () => {
 
       const receiptId = await getUndelegationReceiptId({
         from: to,
-        costBasis: delegation?.amount,
+        to: account!,
       })
 
       if (!receiptId) {
@@ -131,6 +140,8 @@ export const UnstakePage: FC = () => {
       setUndelegationReceiptId(receiptId)
 
       setStep(Steps.UndelegateSuccessful)
+
+      Promise.all([fetchDelegations(), fetchUndelegations()])
     } catch (e) {
       setError(toErrorString(e as Error))
       setStep(Steps.UndelegateFailed)
@@ -196,7 +207,7 @@ export const UnstakePage: FC = () => {
                     .multipliedBy(sharePerRoseRatio)
                 )
               } else if (percentage) {
-                setShares(BigNumber(delegation?.shares.toString() ?? 0).multipliedBy(percentage))
+                setShares(BigNumber(delegation.current?.shares.toString() ?? 0).multipliedBy(percentage))
               } else {
                 setShares(BigNumber(0))
               }
@@ -278,8 +289,8 @@ export const UnstakePage: FC = () => {
           actions={
             <div className={classes.undelegateSuccessfulAlertActions}>
               <p className="body">
-                To conclude the unstaking procedure, it is necessary to claim a receipt for the undelegation
-                you have just submitted.
+                To conclude the unstaking procedure, it is necessary to claim a receipt for the unstake you
+                have just submitted.
               </p>
               <Button onClick={() => handleUndelegateStart()}>Continue</Button>
             </div>

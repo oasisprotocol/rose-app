@@ -4,7 +4,6 @@ import { Undelegations } from '../../types'
 import { Table } from '../Table'
 import { Validator } from '../Validator'
 import { StringUtils } from '../../utils/string.utils'
-import { Amount } from '../Amount'
 import { Button } from '../Button'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { useGrpc } from '../../hooks/useGrpc'
@@ -14,6 +13,8 @@ import { SuccessIcon } from '../icons/SuccessIcon'
 import { Notification } from '../Notification'
 import { ToggleButton } from '../ToggleButton'
 import { SharesAmount } from '../SharesAmount'
+import { useAppState } from '../../hooks/useAppState'
+import { toErrorString } from '../../utils/errors'
 
 type DebondingItemStatus = 'ready' | 'waiting' | 'pending' | null
 
@@ -56,6 +57,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
   const {
     state: { consensusStatus },
   } = useGrpc()
+  const { fetchUndelegations, setAppError } = useAppState()
 
   const debondingItems: DebondingItem[] = undelegations.receiptIds.map((receiptId, i) => {
     const { from, to, shares, costBasis, endReceiptId, epoch } = undelegations.undelegations[i]
@@ -71,6 +73,15 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
       status: getDebondingItemStatus(epoch, consensusStatus?.latest_epoch),
     } satisfies DebondingItem
   })
+
+  const handleDebondingDone = async (receiptId: bigint) => {
+    try {
+      await undelegateDone(receiptId)
+      fetchUndelegations()
+    } catch (e) {
+      setAppError(toErrorString(e as Error))
+    }
+  }
 
   return (
     <div className={classes.debondingTab}>
@@ -114,7 +125,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                         <div className={classes.debondingRowExpanded}>
                           <p className="body">
                             <span>Expected amount:</span>
-                            <Amount amount={entry.costBasis} />
+                            <SharesAmount shares={entry.shares} validator={validator} />
                           </p>
                         </div>
                       )}
@@ -123,12 +134,13 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                           <div className={classes.debondingReady}>
                             <div className={StringUtils.clsx(classes.infoBox, classes.infoBoxSuccess)}>
                               <p className="body">
-                                Your <Amount amount={entry.costBasis} /> is available to be claimed.
+                                Your <SharesAmount shares={entry.shares} validator={validator} /> is available
+                                to be claimed.
                               </p>
                             </div>
                             <div>
                               <Button
-                                onClick={() => undelegateDone(entry.receiptId)}
+                                onClick={() => handleDebondingDone(entry.receiptId)}
                                 className={classes.claimNowBtn}
                               >
                                 Claim now

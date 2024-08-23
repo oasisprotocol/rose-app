@@ -306,14 +306,37 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
     if (!filterBy) return null
 
-    const filterByIndex = undelegations.undelegations.findIndex(undelegation =>
-      Object.keys(filterBy).every(k => {
-        const key = k as keyof Staking.PendingUndelegationStruct
-        return filterBy[key] === undelegation[key]
+    const foundUndelegation = undelegations.undelegations
+      .map(({ from, to, shares, costBasis, endReceiptId, epoch }, i) => {
+        const receiptId = undelegations.receiptIds[i]
+        return {
+          from,
+          to,
+          shares,
+          costBasis,
+          endReceiptId,
+          epoch,
+          receiptId,
+        }
       })
-    )
+      .filter(({ endReceiptId }) => endReceiptId === 0n)
+      .sort(({ receiptId: receiptIdA, receiptId: receiptIdB }) => {
+        if (receiptIdA > receiptIdB) {
+          return -1
+        } else if (receiptIdA < receiptIdB) {
+          return 1
+        } else {
+          return 0
+        }
+      })
+      .find(undelegation =>
+        Object.keys(filterBy).every(k => {
+          const key = k as keyof Staking.PendingUndelegationStruct
+          return filterBy[key]?.toString().toLowerCase() == undelegation[key].toString().toLowerCase()
+        })
+      )
 
-    return filterByIndex < 0 ? null : undelegations.receiptIds[filterByIndex]
+    return foundUndelegation?.receiptId ?? null
   }
 
   const undelegateStart = async (receiptId: bigint, txSubmittedCb?: () => void) => {
