@@ -1,5 +1,5 @@
-import { mainnet, sepolia } from 'wagmi/chains'
-import { getDefaultConfig } from '@rainbow-me/rainbowkit';
+import { getDefaultConfig } from "@rainbow-me/rainbowkit";
+import { mainnet, sepolia } from "wagmi/chains";
 
 /*
 import { coinbaseWallet, injected, walletConnect } from 'wagmi/connectors'
@@ -19,15 +19,14 @@ export const config = createConfig({
 */
 
 export const config = getDefaultConfig({
-  appName: 'ROSE Migrator',
-  projectId: 'YOUR_PROJECT_ID',
+  appName: "ROSE Migrator",
+  projectId: "YOUR_PROJECT_ID",
   chains: [mainnet, sepolia],
   ssr: false, // If your dApp uses server side rendering (SSR)
 });
 
-
-declare module 'wagmi' {
+declare module "wagmi" {
   interface Register {
-    config: typeof config
+    config: typeof config;
   }
 }
