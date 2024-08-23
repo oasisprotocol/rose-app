@@ -13,7 +13,21 @@
     "indentStyle": "space",
     "lineWidth": 120
   },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded"
+    }
+  },
   "linter": {
-    "enabled": true
+    "rules": {
+      "style": {
+        "useImportType": "off",
+        "useSelfClosingElements": "off",
+        "noNonNullAssertion": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noUselessElse": "off"
+      }
+    }
   }
 }

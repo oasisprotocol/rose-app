@@ -1,18 +1,18 @@
-import { getDefaultConfig } from "@rainbow-me/rainbowkit";
-import { sapphire } from "wagmi/chains";
+import { getDefaultConfig } from '@rainbow-me/rainbowkit'
+import { sapphire } from 'wagmi/chains'
 
 export const config = getDefaultConfig({
-  appName: "ROSE Migrator",
-  projectId: "YOUR_PROJECT_ID",
+  appName: 'ROSE Migrator',
+  projectId: 'YOUR_PROJECT_ID',
   chains: [sapphire],
   ssr: false, // If your dApp uses server side rendering (SSR)
   batch: {
     multicall: false,
   },
-});
+})
 
-declare module "wagmi" {
+declare module 'wagmi' {
   interface Register {
-    config: typeof config;
+    config: typeof config
   }
 }
