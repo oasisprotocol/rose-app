@@ -10,28 +10,23 @@ function toBase64(u8: Uint8Array) {
 
 const LOCALSTORAGE_ACCOUNTS_KEY = "accounts";
 
-const LOGIN_STATEMENT =
-  "Signing this message will generate an Oasis Consensus address, " + "please don't sign the message on any other site";
-
-function createSiweMessage(address: `0x${string}`, chainId: number, statement: string) {
-  const scheme = window.location.protocol.slice(0, -1);
-  const domain = window.location.host;
-  const uri = window.location;
-
-  const version = "1";
-  const nonce = "ROSEMIGRATOR";
+// https://docs.metamask.io/wallet/how-to/sign-data/siwe/
+// https://eips.ethereum.org/EIPS/eip-4361
+function siweMessageConsensusToSapphire(address: `0x${string}`) {
+  const statement =
+    "Signing this message will generate an Oasis Consensus account, " +
+    "please don't sign this message on any other site";
   const issuedAt = "2000-01-01T00:00:01Z";
-
   return (
-    `${scheme}://${domain} wants you to sign in with your Ethereum account:\n` +
+    `${window.location.host} wants you to sign in with your Ethereum account:\n` +
     `${address}\n` +
     `\n` +
     `${statement}\n` +
     `\n` +
-    `URI: ${uri}\n` +
-    `Version: ${version}\n` +
-    `Chain ID: ${chainId}\n` +
-    `Nonce: ${nonce}\n` +
+    `URI: ${window.location.href}\n` +
+    `Version: 1\n` + // Must be 1
+    `Chain ID: 23294\n` + // Sapphire Mainnet
+    `Nonce: noReplayProtection\n` + // All fields must be constant to always derive the same account
     `Issued At: ${issuedAt}`
   );
 }
@@ -107,7 +102,7 @@ function App() {
     console.log("generateKeypair for", account.address);
     if (chainId && account.address) {
       const signature = await signMessageAsync({
-        message: createSiweMessage(account.address, chainId, LOGIN_STATEMENT),
+        message: siweMessageConsensusToSapphire(account.address),
       });
       console.log("Signature is", signature);
       const digest = await window.crypto.subtle.digest("SHA-512", hexToBytes(signature));
