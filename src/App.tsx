@@ -1,13 +1,14 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useAccountEffect } from 'wagmi'
+import { getBalances, waitForConsensusBalance } from './utils/getBalances'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
-import { getBalances } from './utils/getBalances'
 
 function App() {
   const latestConnectedSapphireAccount = useAccount()
   const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
+  const [progress, setProgress] = useState({ percentage: 0, message: '' })
 
   useAccountEffect({
     onConnect: (d) => {
@@ -23,20 +24,19 @@ function App() {
     }
   }, [sapphireAddress, latestConnectedSapphireAccount.address])
 
+  // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
-    if (sapphireAddress) {
-      await generateConsensusAccount(sapphireAddress)
-    }
+    if (!sapphireAddress) return
+    const consensusAccount = await generateConsensusAccount(sapphireAddress)
+    // TODO: extract so can't consume outdated state vars
+    setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+    const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
+    setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+    const balances = await getBalances({
+      consensusAddress: consensusAccount.address,
+      sapphireAddress: sapphireAddress,
+    })
   }
-
-  useEffect(() => {
-    if (consensusAccount?.address && sapphireAddress) {
-      getBalances({
-        consensusAddress: consensusAccount?.address,
-        sapphireAddress: sapphireAddress,
-      }).then(console.log)
-    }
-  }, [consensusAccount?.address, sapphireAddress])
 
   return (
     <>
@@ -60,9 +60,14 @@ function App() {
               &#x2398;
             </button>
             <br />
-            Awaiting transfer
           </div>
         )}
+      </div>
+      <div>
+        <h2>Progress</h2>
+        {progress.percentage}
+        <br />
+        {progress.message}
       </div>
     </>
   )

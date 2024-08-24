@@ -21,6 +21,20 @@ export async function getBalances({
   }
 }
 
+/** Continuously fetches gRPC balance until it is > minBalance */
+export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, minBalance: bigint) {
+  while (true) {
+    const consensusBalance = await getConsensusBalance(consensusAddress)
+    console.log('waitForConsensusBalance', consensusBalance)
+    if (consensusBalance > minBalance)
+      return {
+        raw: consensusBalance,
+        formatted: fromBaseUnits(consensusBalance, consensusConfig.decimals),
+      }
+    await new Promise((r) => setTimeout(r, 6000))
+  }
+}
+
 async function getConsensusBalance(oasisAddress: `oasis1${string}`) {
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const owner = oasis.staking.addressFromBech32(oasisAddress)
