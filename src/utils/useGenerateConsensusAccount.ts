@@ -18,7 +18,8 @@ export function useGenerateConsensusAccount() {
         message: siweMessageConsensusToSapphire(address),
       })
       const digest = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature))
-      const privateKey = toBase64(new Uint8Array(digest))
+      // Only take half
+      const privateKey = toBase64(new Uint8Array(digest.slice(digest.byteLength / 2)))
       const account = { privateKey }
       setConsensusAccount(account)
       return account
