@@ -4,26 +4,27 @@ import { useAccount, useAccountEffect } from 'wagmi'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
 
 function App() {
-  const latestConnectedAccount = useAccount()
-  const [firstConnectedAccount, setFirstConnectedAccount] = useState<`0x${string}`>()
+  const latestConnectedSapphireAccount = useAccount()
+  const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
 
   useAccountEffect({
     onConnect: (d) => {
-      setFirstConnectedAccount(d.address)
+      // Only save first connected sapphire account
+      setSapphireAddress(d.address)
     },
   })
   useEffect(() => {
-    if (firstConnectedAccount && firstConnectedAccount !== latestConnectedAccount.address) {
+    if (sapphireAddress && sapphireAddress !== latestConnectedSapphireAccount.address) {
       // Correctly supporting switching accounts would require rewriting depositing logic into
       // redux-saga to make it cancelable at any step. Cancel by reloading instead.
       window.location.reload()
     }
-  }, [firstConnectedAccount, latestConnectedAccount.address])
+  }, [sapphireAddress, latestConnectedSapphireAccount.address])
 
   async function step2() {
-    if (firstConnectedAccount) {
-      await generateConsensusAccount(firstConnectedAccount)
+    if (sapphireAddress) {
+      await generateConsensusAccount(sapphireAddress)
     }
   }
 
@@ -31,7 +32,6 @@ function App() {
     <>
       <div>
         <h1>Step 1</h1>
-
         <ConnectButton />
       </div>
 
