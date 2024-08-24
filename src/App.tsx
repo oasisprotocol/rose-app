@@ -43,7 +43,9 @@ function App() {
 
         {consensusAccount && (
           <div>
-            Secret: <input type="text" readOnly value={consensusAccount.privateKey}></input>
+            {consensusAccount.address}
+            <br />
+            Private key: <input type="text" readOnly value={consensusAccount.privateKey}></input>
             <button type="button" onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}>
               &#x2398;
             </button>
