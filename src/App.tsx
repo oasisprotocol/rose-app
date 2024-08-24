@@ -1,6 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useAccountEffect } from 'wagmi'
+import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getBalances, waitForConsensusBalance } from './utils/getBalances'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
 
@@ -32,10 +33,26 @@ function App() {
     setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
     const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
     setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+    await depositToSapphireStep1({
+      amountToDeposit: amountToDeposit.raw,
+      consensusSigner: consensusAccount.signer,
+      consensusAddress: consensusAccount.address,
+      sapphireAddress: sapphireAddress,
+    })
+    setProgress({ percentage: 0.5, message: `${amountToDeposit.formatted} ROSE detected` })
+    await depositToSapphireStep2({
+      amountToDeposit: amountToDeposit.raw,
+      consensusSigner: consensusAccount.signer,
+      consensusAddress: consensusAccount.address,
+      sapphireAddress: sapphireAddress,
+    })
+    setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected` })
     const balances = await getBalances({
       consensusAddress: consensusAccount.address,
       sapphireAddress: sapphireAddress,
     })
+    console.log(balances)
+    setProgress({ percentage: 1.0, message: `${amountToDeposit.formatted} deposited` })
   }
 
   return (

@@ -6,7 +6,11 @@ import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire
 
 export function useGenerateConsensusAccount() {
   const { signMessageAsync } = useSignMessage()
-  const [consensusAccount, setConsensusAccount] = useState<{ address: `oasis1${string}`; privateKey: string }>()
+  const [consensusAccount, setConsensusAccount] = useState<{
+    address: `oasis1${string}`
+    privateKey: string
+    signer: oasis.signature.NaclSigner
+  }>()
 
   return {
     consensusAccount,
@@ -22,7 +26,7 @@ export function useGenerateConsensusAccount() {
       const privateKey = oasis.misc.toBase64(signer.key.secretKey)
       const address = await oasisPublicKeyToAddress(signer.public())
 
-      const consensusAccount = { address, privateKey }
+      const consensusAccount = { address, privateKey, signer }
       setConsensusAccount(consensusAccount)
       return consensusAccount
       // Ignore errors

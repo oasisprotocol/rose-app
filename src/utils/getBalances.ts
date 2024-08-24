@@ -3,12 +3,9 @@ import * as oasisRT from '@oasisprotocol/client-rt'
 import BigNumber from 'bignumber.js'
 import { consensusConfig, oasisConfig, sapphireConfig } from './oasisConfig'
 
-export async function getBalances({
-  consensusAddress,
-  sapphireAddress,
-}: { consensusAddress: `oasis1${string}`; sapphireAddress: `0x${string}` }) {
-  const consensusBalance = await getConsensusBalance(consensusAddress)
-  const sapphireBalance = await getSapphireBalance(sapphireAddress)
+export async function getBalances(props: { consensusAddress: `oasis1${string}`; sapphireAddress: `0x${string}` }) {
+  const consensusBalance = await getConsensusBalance(props.consensusAddress)
+  const sapphireBalance = await getSapphireBalance(props.sapphireAddress)
   return {
     consensus: {
       raw: consensusBalance,
