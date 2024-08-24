@@ -1,4 +1,4 @@
-import { Buffer } from 'buffer'
+import './utils/polyfill.ts'
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
@@ -10,8 +10,6 @@ import { config } from './wagmi.ts'
 
 import '@rainbow-me/rainbowkit/styles.css'
 import './index.css'
-
-globalThis.Buffer = Buffer
 
 const queryClient = new QueryClient()
 
