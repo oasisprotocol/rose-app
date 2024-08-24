@@ -2,6 +2,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useAccountEffect } from 'wagmi'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
+import { getBalances } from './utils/getBalances'
 
 function App() {
   const latestConnectedSapphireAccount = useAccount()
@@ -28,6 +29,15 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    if (consensusAccount?.address && sapphireAddress) {
+      getBalances({
+        consensusAddress: consensusAccount?.address,
+        sapphireAddress: sapphireAddress,
+      }).then(console.log)
+    }
+  }, [consensusAccount?.address, sapphireAddress])
+
   return (
     <>
       <div>
@@ -50,6 +60,7 @@ function App() {
               &#x2398;
             </button>
             <br />
+            Awaiting transfer
           </div>
         )}
       </div>
