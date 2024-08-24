@@ -19,14 +19,28 @@ export async function getBalances(props: { consensusAddress: `oasis1${string}`; 
 }
 
 /** Continuously fetches gRPC balance until it is > minBalance */
-export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, minBalance: bigint) {
+export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, moreThan: bigint) {
   while (true) {
-    const consensusBalance = await getConsensusBalance(consensusAddress)
-    console.log('waitForConsensusBalance', consensusBalance)
-    if (consensusBalance > minBalance)
+    const balance = await getConsensusBalance(consensusAddress)
+    console.log('waitForConsensusBalance', balance)
+    if (balance > moreThan)
       return {
-        raw: consensusBalance,
-        formatted: fromBaseUnits(consensusBalance, consensusConfig.decimals),
+        raw: balance,
+        formatted: fromBaseUnits(balance, consensusConfig.decimals),
+      }
+    await new Promise((r) => setTimeout(r, 6000))
+  }
+}
+
+/** Continuously fetches gRPC balance until it is > minBalance */
+export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, moreThan: bigint) {
+  while (true) {
+    const balance = await getSapphireBalance(sapphireAddress)
+    console.log('waitForSapphireBalance', balance)
+    if (balance > moreThan)
+      return {
+        raw: balance,
+        formatted: fromBaseUnits(balance, sapphireConfig.decimals),
       }
     await new Promise((r) => setTimeout(r, 6000))
   }
