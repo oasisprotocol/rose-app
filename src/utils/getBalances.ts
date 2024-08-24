@@ -4,18 +4,9 @@ import BigNumber from 'bignumber.js'
 import { consensusConfig, oasisConfig, sapphireConfig } from './oasisConfig'
 
 export async function getBalances(props: { consensusAddress: `oasis1${string}`; sapphireAddress: `0x${string}` }) {
-  const consensusBalance = await getConsensusBalance(props.consensusAddress)
-  const sapphireBalance = await getSapphireBalance(props.sapphireAddress)
-  return {
-    consensus: {
-      raw: consensusBalance,
-      formatted: fromBaseUnits(consensusBalance, consensusConfig.decimals),
-    },
-    sapphire: {
-      raw: sapphireBalance,
-      formatted: fromBaseUnits(sapphireBalance, sapphireConfig.decimals),
-    },
-  }
+  const consensus = await getConsensusBalance(props.consensusAddress)
+  const sapphire = await getSapphireBalance(props.sapphireAddress)
+  return { consensus, sapphire }
 }
 
 /** Continuously fetches gRPC balance until it is > minBalance */
@@ -23,11 +14,7 @@ export async function waitForConsensusBalance(consensusAddress: `oasis1${string}
   while (true) {
     const balance = await getConsensusBalance(consensusAddress)
     console.log('waitForConsensusBalance', balance)
-    if (balance > moreThan)
-      return {
-        raw: balance,
-        formatted: fromBaseUnits(balance, consensusConfig.decimals),
-      }
+    if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
   }
 }
@@ -37,23 +24,23 @@ export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, mor
   while (true) {
     const balance = await getSapphireBalance(sapphireAddress)
     console.log('waitForSapphireBalance', balance)
-    if (balance > moreThan)
-      return {
-        raw: balance,
-        formatted: fromBaseUnits(balance, sapphireConfig.decimals),
-      }
+    if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
   }
 }
 
-async function getConsensusBalance(oasisAddress: `oasis1${string}`) {
+export async function getConsensusBalance(oasisAddress: `oasis1${string}`) {
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const owner = oasis.staking.addressFromBech32(oasisAddress)
   const account = await nic.stakingAccount({ height: oasis.consensus.HEIGHT_LATEST, owner: owner })
-  return oasis.quantity.toBigInt(account.general?.balance ?? new Uint8Array([0]))
+  const balance = oasis.quantity.toBigInt(account.general?.balance ?? new Uint8Array([0]))
+  return {
+    raw: balance,
+    formatted: fromBaseUnits(balance, consensusConfig.decimals),
+  }
 }
 
-async function getSapphireBalance(ethAddress: `0x${string}`) {
+export async function getSapphireBalance(ethAddress: `0x${string}`) {
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const consensusWrapper = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
   const underlyingAddress = await oasis.address.fromData(
@@ -69,7 +56,10 @@ async function getSapphireBalance(ethAddress: `0x${string}`) {
     })
     .query(nic)
   const balance = oasis.quantity.toBigInt(balanceResult.balance)
-  return balance
+  return {
+    raw: balance,
+    formatted: fromBaseUnits(balance, sapphireConfig.decimals),
+  }
 }
 
 function fromBaseUnits(valueInBaseUnits: bigint, decimals: number): string {
