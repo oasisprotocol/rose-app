@@ -1,6 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
-import { useAccount, useAccountEffect } from 'wagmi'
+import { useAccount } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getBalances, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
@@ -11,12 +11,13 @@ function App() {
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0, message: '' })
 
-  useAccountEffect({
-    onConnect: (d) => {
+  useEffect(() => {
+    if (latestConnectedSapphireAccount.address && !sapphireAddress) {
       // Only save first connected sapphire account
-      setSapphireAddress(d.address)
-    },
-  })
+      setSapphireAddress(latestConnectedSapphireAccount.address)
+    }
+  }, [sapphireAddress, latestConnectedSapphireAccount.address])
+
   useEffect(() => {
     if (sapphireAddress && sapphireAddress !== latestConnectedSapphireAccount.address) {
       // Correctly supporting switching accounts would require rewriting depositing logic into
