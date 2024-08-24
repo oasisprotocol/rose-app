@@ -1,7 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { bytesToHex, hexToBytes } from 'viem'
-import { useAccount, useSignMessage } from 'wagmi'
+import { useAccount, useAccountEffect, useSignMessage } from 'wagmi'
 
 function toBase64(u8: Uint8Array) {
   return btoa(String.fromCharCode(...u8))
@@ -30,22 +30,36 @@ function siweMessageConsensusToSapphire(address: `0x${string}`) {
 }
 
 function App() {
-  const account = useAccount()
+  const latestConnectedAccount = useAccount()
+  const [firstConnectedAccount, setFirstConnectedAccount] = useState<`0x${string}`>()
   const { signMessageAsync } = useSignMessage()
   const [stakingSecret, setConsensusSecret] = useState<Uint8Array>()
 
+  useAccountEffect({
+    onConnect: (d) => {
+      setFirstConnectedAccount(d.address)
+    },
+  })
+  useEffect(() => {
+    if (firstConnectedAccount && firstConnectedAccount !== latestConnectedAccount.address) {
+      // Correctly supporting switching accounts would require rewriting depositing logic into
+      // redux-saga to make it cancelable at any step. Cancel by reloading instead.
+      window.location.reload()
+    }
+  }, [firstConnectedAccount, latestConnectedAccount.address])
+
   // When 'Generate' button is pressed, do SIWE then derive Consensus key
   async function generateKeypair() {
-    console.log('generateKeypair for', account.address)
-    if (account.address) {
+    console.log('generateKeypair for', latestConnectedAccount.address)
+    if (latestConnectedAccount.address) {
       const signature = await signMessageAsync({
-        message: siweMessageConsensusToSapphire(account.address),
+        message: siweMessageConsensusToSapphire(latestConnectedAccount.address),
       })
       console.log('Signature is', signature)
       const digest = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature))
       console.log('Digest', digest)
       const secret = new Uint8Array(digest)
-      if (!stakingSecret || bytesToHex(secret) != bytesToHex(stakingSecret)) {
+      if (!stakingSecret || bytesToHex(secret) !== bytesToHex(stakingSecret)) {
         setConsensusSecret(secret)
       }
     }
