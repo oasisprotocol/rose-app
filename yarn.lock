@@ -4038,7 +4038,7 @@ vite@^4.4.9:
   optionalDependencies:
     fsevents "~2.3.2"
 
-wagmi@latest:
+wagmi@^2.12.7:
   version "2.12.7"
   resolved "https://registry.yarnpkg.com/wagmi/-/wagmi-2.12.7.tgz#7c50271cd6a3edb7acc5f8cbaee096a0aac0e4ab"
   integrity sha512-E7f+2fd+rZPJ3ggBZmVj064gYuCi/Z32x9WMfSDvj5jmGHDkAmTfSi9isKkjJrTf0I+sNxd3PCWku7pndFYsIw==

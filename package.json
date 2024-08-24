@@ -1,5 +1,5 @@
 {
-  "name": "dapp-rosemigrate",
+  "name": "@oasisprotocol/onramp",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -10,23 +10,23 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@oasisprotocol/client": "^1.1.0",
+    "@rainbow-me/rainbowkit": "^2.1.2",
     "@tanstack/react-query": "5.0.5",
+    "buffer": "^6.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "wagmi": "latest"
+    "tweetnacl": "^1.0.3",
+    "viem": "^2.14.2",
+    "wagmi": "^2.12.7"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.1.2",
-    "@oasisprotocol/client": "^1.1.0",
-    "@rainbow-me/rainbowkit": "^2.1.2",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",
     "@vitejs/plugin-react": "^4.1.0",
     "@wagmi/cli": "latest",
-    "buffer": "^6.0.3",
-    "tweetnacl": "^1.0.3",
     "typescript": "^5.2.2",
-    "viem": "^2.14.2",
     "vite": "^4.4.9"
   }
 }
