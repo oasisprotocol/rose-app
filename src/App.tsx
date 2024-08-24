@@ -1,6 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
-import { useAccount } from 'wagmi'
+import { useAccount, useBalance } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getBalances, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
@@ -10,6 +10,7 @@ function App() {
   const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0, message: '' })
+  const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
 
   useEffect(() => {
     if (latestConnectedSapphireAccount.address && !sapphireAddress) {
@@ -54,6 +55,7 @@ function App() {
     setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected (submit deposit)` })
     await waitForSapphireBalance(sapphireAddress, preDepositBalance.sapphire.raw)
     setProgress({ percentage: 1.0, message: `${amountToDeposit.formatted} deposited (balance changed, event didn't error)` })
+    await updateBalanceInsideConnectButton()
   }
 
   return (
