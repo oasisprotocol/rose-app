@@ -53,7 +53,13 @@ export const AmountInput: FC<Props> = ({
     <div>
       <div className={classes.percentageInputs}>
         {percentageList.map(({ label, percentage }) => (
-          <Button variant="outline" onClick={() => onChange?.({ percentage })} key={label}>
+          <Button
+            color="secondary"
+            variant="outline"
+            size="small"
+            onClick={() => onChange?.({ percentage })}
+            key={label}
+          >
             {label}
           </Button>
         ))}

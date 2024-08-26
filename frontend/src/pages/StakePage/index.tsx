@@ -6,6 +6,7 @@ import { Validator } from '@oasisprotocol/nexus-api'
 import { Button } from '../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import classes from './index.module.css'
+import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 
 export const StakePage: FC = () => {
   const navigate = useNavigate()
@@ -22,7 +23,7 @@ export const StakePage: FC = () => {
         <Button disabled={!selectedValidator} onClick={() => navigateToStakeAmount(selectedValidator!)}>
           Select validator
         </Button>
-        <Button variant="text" onClick={() => navigateToDashboard()}>
+        <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
           Back
         </Button>
       </div>
