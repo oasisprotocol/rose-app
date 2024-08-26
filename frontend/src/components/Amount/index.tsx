@@ -27,12 +27,12 @@ export const Amount: FC<Props> = ({ amount, className, unit }) => {
     state: { nativeCurrency },
   } = useWeb3()
 
-  const unitDecimals = unit ? supportedUnits[unit].decimals : 0
+  const unitDecimals = unit ? supportedUnits[unit].decimals : null
   const unitPrefix = unit ? supportedUnits[unit].prefix : ''
 
   return (
     <span className={StringUtils.clsx('body', classes.amount, className)}>
-      {formatUnits(amount, (nativeCurrency?.decimals ?? 18) - unitDecimals)}&nbsp;{unitPrefix}
+      {formatUnits(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}&nbsp;{unitPrefix}
       {nativeCurrency?.symbol}
     </span>
   )

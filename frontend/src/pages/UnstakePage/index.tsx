@@ -11,12 +11,13 @@ import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
 import { CONSENSUS_DECIMALS, MAX_GAS_LIMIT } from '../../constants/config'
 import { PreviewTable } from '../../components/PreviewTable'
-import { Amount } from '../../components/Amount'
 import { FeeAmount } from '../../components/FeeAmount'
 import { GasPrice } from '../../components/GasPrice'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { toErrorString } from '../../utils/errors'
 import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
+import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
+import { SharesAmount } from '../../components/SharesAmount'
 
 interface Delegation {
   to: string
@@ -174,9 +175,11 @@ export const UnstakePage: FC = () => {
         type="error"
         headerText="Unable to find delegation"
         actions={
-          <Button variant="text" onClick={() => navigateToDashboard()}>
-            Back
-          </Button>
+          <div className={classes.alertActions}>
+            <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
+              Back
+            </Button>
+          </div>
         }
       />
     )
@@ -216,7 +219,7 @@ export const UnstakePage: FC = () => {
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>Unstake</Button>
-            <Button variant="text" onClick={() => navigateToDashboard()}>
+            <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
               Back
             </Button>
           </div>
@@ -233,13 +236,7 @@ export const UnstakePage: FC = () => {
               [
                 <p className="body">Amount:</p>,
                 <p className="body">
-                  <Amount
-                    amount={BigNumber(shares.toString() ?? 0)
-                      .multipliedBy(rosePerShareRatio)
-                      .integerValue(BigNumber.ROUND_DOWN)
-                      .multipliedBy(10 ** CONSENSUS_DECIMALS)
-                      .toString()}
-                  />
+                  <SharesAmount shares={shares} validator={validator} />
                 </p>,
               ],
               [
@@ -276,7 +273,11 @@ export const UnstakePage: FC = () => {
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => handleUndelegate()}>Confirm</Button>
-            <Button variant="text" onClick={() => setStep(prevValue => prevValue - 1)}>
+            <Button
+              variant="text"
+              onClick={() => setStep(Steps.UndelegateInputAmount)}
+              startSlot={<ArrowLeftIcon />}
+            >
               Back
             </Button>
           </div>
@@ -319,21 +320,24 @@ export const UnstakePage: FC = () => {
           type="error"
           headerText="Unstaking failed"
           actions={
-            <Button
-              variant="text"
-              onClick={() => {
-                switch (step) {
-                  case Steps.UndelegateFailed:
-                    setStep(Steps.UndelegatePreviewTransaction)
-                    return
-                  case Steps.UndelegateStartFailed:
-                    setStep(Steps.UndelegateSuccessful)
-                    return
-                }
-              }}
-            >
-              Back
-            </Button>
+            <div className={classes.alertActions}>
+              <Button
+                variant="text"
+                onClick={() => {
+                  switch (step) {
+                    case Steps.UndelegateFailed:
+                      setStep(Steps.UndelegatePreviewTransaction)
+                      return
+                    case Steps.UndelegateStartFailed:
+                      setStep(Steps.UndelegateSuccessful)
+                      return
+                  }
+                }}
+                startSlot={<ArrowLeftIcon />}
+              >
+                Back
+              </Button>
+            </div>
           }
         >
           {StringUtils.truncate(error)}

@@ -1,5 +1,5 @@
 import classes from './index.module.css'
-import { FC, MouseEventHandler, PropsWithChildren } from 'react'
+import { FC, MouseEvent, PropsWithChildren, ReactElement } from 'react'
 import { StringUtils } from '../../utils/string.utils'
 
 type ButtonSize = 'small' | 'medium'
@@ -12,9 +12,10 @@ interface Props extends PropsWithChildren {
   size?: ButtonSize
   variant?: ButtonVariant
   fullWidth?: boolean
-  onClick?: MouseEventHandler<HTMLButtonElement>
+  onClick?: (e?: MouseEvent) => void
   className?: string
   type?: 'submit' | 'reset' | 'button'
+  startSlot?: ReactElement
 }
 
 const sizeMap: Record<ButtonSize, string> = {
@@ -44,21 +45,35 @@ export const Button: FC<Props> = ({
   fullWidth,
   onClick,
   type,
-}) => (
-  <button
-    className={StringUtils.clsx(
-      className,
-      classes.button,
-      disabled ? classes.buttonDisabled : undefined,
-      fullWidth ? classes.fullWidth : undefined,
-      colorMap[color],
-      sizeMap[size],
-      variantMap[variant]
-    )}
-    onClick={onClick}
-    disabled={disabled}
-    type={type}
-  >
-    {children}
-  </button>
-)
+  startSlot,
+}) => {
+  const btnCmp = (
+    <button
+      className={StringUtils.clsx(
+        className,
+        classes.button,
+        disabled ? classes.buttonDisabled : undefined,
+        fullWidth ? classes.fullWidth : undefined,
+        colorMap[color],
+        sizeMap[size],
+        variantMap[variant]
+      )}
+      onClick={onClick}
+      disabled={disabled}
+      type={type}
+    >
+      {children}
+    </button>
+  )
+
+  if (!startSlot) {
+    return btnCmp
+  }
+
+  return (
+    <a className={classes.startSlotLayout} onClick={() => onClick?.()}>
+      {startSlot}
+      {btnCmp}
+    </a>
+  )
+}

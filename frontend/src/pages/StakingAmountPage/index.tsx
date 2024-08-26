@@ -15,6 +15,7 @@ import { FeeAmount } from '../../components/FeeAmount'
 import { GasPrice } from '../../components/GasPrice'
 import { Alert } from '../../components/Alert'
 import { toErrorString } from '../../utils/errors'
+import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 
 enum Steps {
   DelegateInputAmount,
@@ -118,7 +119,7 @@ export const StakingAmountPage: FC = () => {
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => setStep(Steps.DelegatePreviewTransaction)}>Delegate</Button>
-            <Button variant="text" onClick={() => navigateToStake()}>
+            <Button variant="text" onClick={() => navigateToStake()} startSlot={<ArrowLeftIcon />}>
               Back
             </Button>
           </div>
@@ -172,7 +173,11 @@ export const StakingAmountPage: FC = () => {
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => handleDelegate(amount, validator?.entity_address)}>Confirm</Button>
-            <Button variant="text" onClick={() => setStep(prevValue => prevValue - 1)}>
+            <Button
+              variant="text"
+              onClick={() => setStep(prevValue => prevValue - 1)}
+              startSlot={<ArrowLeftIcon />}
+            >
               Back
             </Button>
           </div>
@@ -205,21 +210,24 @@ export const StakingAmountPage: FC = () => {
           type="error"
           headerText="Staking failed"
           actions={
-            <Button
-              variant="text"
-              onClick={() => {
-                switch (step) {
-                  case Steps.DelegateFailed:
-                    setStep(Steps.DelegatePreviewTransaction)
-                    return
-                  case Steps.DelegateDoneFailed:
-                    setStep(Steps.DelegateSuccessful)
-                    return
-                }
-              }}
-            >
-              Back
-            </Button>
+            <div className={classes.stakingFailedActions}>
+              <Button
+                variant="text"
+                onClick={() => {
+                  switch (step) {
+                    case Steps.DelegateFailed:
+                      setStep(Steps.DelegatePreviewTransaction)
+                      return
+                    case Steps.DelegateDoneFailed:
+                      setStep(Steps.DelegateSuccessful)
+                      return
+                  }
+                }}
+                startSlot={<ArrowLeftIcon />}
+              >
+                Back
+              </Button>
+            </div>
           }
         >
           {StringUtils.truncate(error)}
