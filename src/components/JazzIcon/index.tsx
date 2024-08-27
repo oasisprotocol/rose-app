@@ -1,6 +1,5 @@
-import React, { memo, useEffect, useRef } from 'react'
 import jazzicon from '@metamask/jazzicon'
-import { Box } from 'grommet/es6/components/Box'
+import { memo, useEffect, useRef } from 'react'
 
 interface JazzIconProps {
   diameter: number
@@ -8,7 +7,7 @@ interface JazzIconProps {
 }
 
 export const JazzIcon = memo(({ diameter, seed }: JazzIconProps) => {
-  const ref = useRef<HTMLDivElement>(null)
+  const ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     if (ref?.current) {
@@ -16,7 +15,7 @@ export const JazzIcon = memo(({ diameter, seed }: JazzIconProps) => {
 
       ref.current.replaceChildren(icon)
     }
-  }, [diameter, ref, seed])
+  }, [diameter, seed])
 
-  return <Box ref={ref}></Box>
+  return <span ref={ref}></span>
 })
