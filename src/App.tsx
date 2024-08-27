@@ -1,6 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
+import { AccountAvatar } from './components/AccountAvatar'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
@@ -73,6 +74,7 @@ function App() {
 
         {consensusAccount && (
           <div>
+            <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
             {consensusAccount.address}
             <br />
             Private key: <input type="text" readOnly value={consensusAccount.privateKey}></input>
