@@ -12,6 +12,15 @@ export async function depositToSapphireStep1(props: {
   sapphireAddress: `0x${string}`
 }) {
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const existingAllowance = oasis.quantity.toBigInt(
+    await nic.stakingAllowance({
+      owner: oasis.staking.addressFromBech32(props.consensusAddress),
+      beneficiary: oasis.staking.addressFromBech32(sapphireConfig.mainnet.address),
+      height: oasis.consensus.HEIGHT_LATEST,
+    }),
+  )
+  if (existingAllowance >= props.amountToDeposit) return
+
   const chainContext = await nic.consensusGetChainContext()
   const tw = oasis.staking
     .allowWrapper()
@@ -20,7 +29,7 @@ export async function depositToSapphireStep1(props: {
     .setBody({
       beneficiary: oasis.staking.addressFromBech32(sapphireConfig.mainnet.address),
       negative: false,
-      amount_change: oasis.quantity.fromBigInt(props.amountToDeposit), // TODO: this assumes that initial allowance is 0
+      amount_change: oasis.quantity.fromBigInt(props.amountToDeposit - existingAllowance),
     })
   tw.setFeeGas(await tw.estimateGas(nic, props.consensusSigner.public()))
   await tw.sign(new oasis.signature.BlindContextSigner(props.consensusSigner), chainContext)
