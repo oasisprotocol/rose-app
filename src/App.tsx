@@ -2,12 +2,13 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { AccountAvatar } from './components/AccountAvatar'
-import { allowNavigatingAway, blockNavigatingAway } from './utils/blockNavigatingAway'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
+import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { ConsensusAccount, useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
 
 function App() {
+  const { isBlocking, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const latestConnectedSapphireAccount = useAccount()
   const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
@@ -149,10 +150,12 @@ function App() {
         <br />
         <br />
 
-        <p style={{ maxWidth: '670px' }}>
-          Please do not close this window in order to complete the process. If the window is closed you can always
-          recover from the last step and your funds won't be lost.
-        </p>
+        {isBlocking && (
+          <p style={{ maxWidth: '670px' }}>
+            Please do not close this window in order to complete the process. If the window is closed you can always
+            recover from the last step and your funds won't be lost.
+          </p>
+        )}
       </div>
     </div>
   )
