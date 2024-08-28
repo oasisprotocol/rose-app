@@ -60,6 +60,7 @@ function App() {
       })
       setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected (sent deposit)` })
       await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
+      // TODO: handle probable failure if balance doesn't change after ~10 seconds of depositing
       setProgress({
         percentage: 1.0,
         message: `${amountToDeposit.formatted} deposited (balance changed)`,
