@@ -1,5 +1,5 @@
 import { FC } from 'react'
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useMatch } from 'react-router-dom'
 import classes from './index.module.css'
 import { LogoIcon } from '../icons/LogoIcon'
 import { ConnectWallet } from '../ConnectWallet'
@@ -8,8 +8,10 @@ import { useAppState } from '../../hooks/useAppState'
 import { Button } from '../Button'
 import { StringUtils } from '../../utils/string.utils'
 import { LayoutBase } from '../LayoutBase'
+import { OasisIcon } from '../icons/OasisIcon'
 
 export const Layout: FC = () => {
+  const isHomePage = useMatch('/')
   const {
     state: { appError },
     clearAppError,
@@ -19,10 +21,8 @@ export const Layout: FC = () => {
     <LayoutBase
       header={
         <header className={classes.header}>
-          <NavLink to="/dashboard">
-            <LogoIcon />
-          </NavLink>
-          <ConnectWallet />
+          <NavLink to="/dashboard">{isHomePage ? <OasisIcon /> : <LogoIcon />}</NavLink>
+          {!isHomePage && <ConnectWallet />}
         </header>
       }
     >
