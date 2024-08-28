@@ -33,15 +33,16 @@ function App() {
   async function step2() {
     if (!sapphireAddress) return
     const consensusAccount = await generateConsensusAccount(sapphireAddress)
+    blockNavigatingAway() // Start blocking early for the first transfer
     await step3(consensusAccount, sapphireAddress)
   }
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
-      blockNavigatingAway()
       setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
       setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+      blockNavigatingAway()
       await depositToSapphireStep1({
         amountToDeposit: amountToDeposit.raw,
         consensusSigner: consensusAccount.signer,
@@ -62,7 +63,7 @@ function App() {
         percentage: 1.0,
         message: `${amountToDeposit.formatted} deposited (balance changed)`,
       })
-      allowNavigatingAway()
+      allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
 
       await new Promise((r) => setTimeout(r, 6000))
