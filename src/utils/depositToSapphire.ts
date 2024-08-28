@@ -19,6 +19,7 @@ export async function depositToSapphireStep1(props: {
       height: oasis.consensus.HEIGHT_LATEST,
     }),
   )
+  console.log('existingAllowance', existingAllowance)
   if (existingAllowance >= props.amountToDeposit) return
 
   const chainContext = await nic.consensusGetChainContext()
@@ -33,6 +34,7 @@ export async function depositToSapphireStep1(props: {
     })
   tw.setFeeGas(await tw.estimateGas(nic, props.consensusSigner.public()))
   await tw.sign(new oasis.signature.BlindContextSigner(props.consensusSigner), chainContext)
+  console.log('depositToSapphireStep1', props.amountToDeposit)
   await tw.submit(nic)
 }
 
@@ -69,6 +71,7 @@ export async function depositToSapphireStep2(props: {
       },
     ])
   await rtw.sign([new oasis.signature.BlindContextSigner(props.consensusSigner)], chainContext)
+  console.log('depositToSapphireStep2', props.amountToDeposit)
   await rtw.submit(nic)
 }
 

@@ -13,7 +13,7 @@ export async function getBalances(props: { consensusAddress: `oasis1${string}`; 
 export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, moreThan: bigint) {
   while (true) {
     const balance = await getConsensusBalance(consensusAddress)
-    console.log('waitForConsensusBalance', balance)
+    console.log('waitForConsensusBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
   }
@@ -23,7 +23,7 @@ export async function waitForConsensusBalance(consensusAddress: `oasis1${string}
 export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, moreThan: bigint) {
   while (true) {
     const balance = await getSapphireBalance(sapphireAddress)
-    console.log('waitForSapphireBalance', balance)
+    console.log('waitForSapphireBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
   }
