@@ -4,7 +4,7 @@ import { useAccount, useBalance } from 'wagmi'
 import { AccountAvatar } from './components/AccountAvatar'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
-import { useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
+import { ConsensusAccount, useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
 
 function App() {
   const latestConnectedSapphireAccount = useAccount()
@@ -32,31 +32,42 @@ function App() {
   async function step2() {
     if (!sapphireAddress) return
     const consensusAccount = await generateConsensusAccount(sapphireAddress)
-    // TODO: extract so can't consume outdated state vars
-    setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-    const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
-    setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
-    await depositToSapphireStep1({
-      amountToDeposit: amountToDeposit.raw,
-      consensusSigner: consensusAccount.signer,
-      consensusAddress: consensusAccount.address,
-      sapphireAddress: sapphireAddress,
-    })
-    setProgress({ percentage: 0.5, message: `${amountToDeposit.formatted} ROSE detected (set allowance)` })
-    const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
-    await depositToSapphireStep2({
-      amountToDeposit: amountToDeposit.raw,
-      consensusSigner: consensusAccount.signer,
-      consensusAddress: consensusAccount.address,
-      sapphireAddress: sapphireAddress,
-    })
-    setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected (submit deposit)` })
-    await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
-    setProgress({
-      percentage: 1.0,
-      message: `${amountToDeposit.formatted} deposited (balance changed, event didn't error)`,
-    })
-    await updateBalanceInsideConnectButton()
+    await step3(consensusAccount, sapphireAddress)
+  }
+  async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
+    // Note: don't use outside state vars. They are outdated.
+    try {
+      setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+      const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
+      setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+      await depositToSapphireStep1({
+        amountToDeposit: amountToDeposit.raw,
+        consensusSigner: consensusAccount.signer,
+        consensusAddress: consensusAccount.address,
+        sapphireAddress: sapphireAddress,
+      })
+      setProgress({ percentage: 0.5, message: `${amountToDeposit.formatted} ROSE detected (set allowance)` })
+      const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
+      await depositToSapphireStep2({
+        amountToDeposit: amountToDeposit.raw,
+        consensusSigner: consensusAccount.signer,
+        consensusAddress: consensusAccount.address,
+        sapphireAddress: sapphireAddress,
+      })
+      setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected (submit deposit)` })
+      await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
+      setProgress({
+        percentage: 1.0,
+        message: `${amountToDeposit.formatted} deposited (balance changed, event didn't error)`,
+      })
+      await updateBalanceInsideConnectButton()
+    } catch (err) {
+      console.error(err)
+      setProgress({ percentage: 0.1, message: `Error. Retrying` })
+      // Retry
+      await new Promise((r) => setTimeout(r, 6000))
+      await step3(consensusAccount, sapphireAddress)
+    }
   }
 
   return (

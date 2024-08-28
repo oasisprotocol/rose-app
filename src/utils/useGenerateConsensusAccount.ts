@@ -4,13 +4,15 @@ import { hexToBytes } from 'viem'
 import { useSignMessage } from 'wagmi'
 import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire'
 
+export interface ConsensusAccount {
+  address: `oasis1${string}`
+  privateKey: string
+  signer: oasis.signature.NaclSigner
+}
+
 export function useGenerateConsensusAccount() {
   const { signMessageAsync } = useSignMessage()
-  const [consensusAccount, setConsensusAccount] = useState<{
-    address: `oasis1${string}`
-    privateKey: string
-    signer: oasis.signature.NaclSigner
-  }>()
+  const [consensusAccount, setConsensusAccount] = useState<ConsensusAccount>()
 
   return {
     consensusAccount,
