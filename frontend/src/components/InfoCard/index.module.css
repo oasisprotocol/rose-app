@@ -1,0 +1,32 @@
+.card {
+  display: flex;
+  align-items: center;
+  border: 2px solid var(--brand-extra-dark);
+  padding: 16px 14px 16px 16px;
+  gap: 1rem;
+  border-radius: 12px;
+}
+
+.iconWrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--brand-extra-dark);
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
+
+  svg {
+    fill: var(--white);
+  }
+}
+
+.title {
+  margin: 0;
+  color: var(--white);
+}
+
+.description {
+  margin: 0;
+  color: var(--white);
+}

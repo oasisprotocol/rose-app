@@ -1,8 +1,14 @@
 import { FC } from 'react'
 import { useAppState } from '../../hooks/useAppState'
 
-const logoSizeMap: Record<'large' | 'small', { width: number; height: number }> = {
+type LogoSize = 'small' | 'medium' | 'large'
+
+const logoSizeMap: Record<LogoSize, { width: number; height: number }> = {
   large: {
+    width: 400,
+    height: 75.25,
+  },
+  medium: {
     width: 241,
     height: 46,
   },
@@ -14,19 +20,21 @@ const logoSizeMap: Record<'large' | 'small', { width: number; height: number }> 
 
 interface Props {
   className?: string
+  size?: LogoSize
 }
 
-export const LogoIcon: FC<Props> = ({ className }) => {
+export const LogoIcon: FC<Props> = ({ className, size }) => {
   const {
     state: { isDesktopScreen },
   } = useAppState()
-  const size = logoSizeMap[isDesktopScreen ? 'large' : 'small']
+  const defaultSize = isDesktopScreen ? 'medium' : 'small'
+  const logoSize = logoSizeMap[size ?? defaultSize]
 
   return (
     <svg
       className={className}
-      width={size.width}
-      height={size.height}
+      width={logoSize.width}
+      height={logoSize.height}
       viewBox="0 0 241 46"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
