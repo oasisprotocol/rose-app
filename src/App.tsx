@@ -61,13 +61,16 @@ function App() {
         message: `${amountToDeposit.formatted} deposited (balance changed, event didn't error)`,
       })
       await updateBalanceInsideConnectButton()
+      // Stay on "Deposited" screen unless new transfer comes in
+      await waitForConsensusBalance(consensusAccount.address, 0n)
     } catch (err) {
       console.error(err)
       setProgress({ percentage: 0.1, message: `Error. Retrying` })
-      // Retry
-      await new Promise((r) => setTimeout(r, 6000))
-      await step3(consensusAccount, sapphireAddress)
     }
+
+    // Loop
+    await new Promise((r) => setTimeout(r, 6000))
+    await step3(consensusAccount, sapphireAddress)
   }
 
   return (
