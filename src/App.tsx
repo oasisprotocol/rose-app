@@ -64,17 +64,19 @@ function App() {
       })
       allowNavigatingAway()
       await updateBalanceInsideConnectButton()
+
+      await new Promise((r) => setTimeout(r, 6000))
       // Stay on "Deposited" screen unless new transfer comes in
       await waitForConsensusBalance(consensusAccount.address, 0n)
     } catch (err) {
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying` })
+      await new Promise((r) => setTimeout(r, 6000))
     } finally {
       allowNavigatingAway()
     }
 
     // Loop
-    await new Promise((r) => setTimeout(r, 6000))
     await step3(consensusAccount, sapphireAddress)
   }
 
