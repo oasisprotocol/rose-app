@@ -11,7 +11,7 @@ function App() {
   const latestConnectedSapphireAccount = useAccount()
   const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
-  const [progress, setProgress] = useState({ percentage: 0, message: '' })
+  const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function App() {
       await waitForConsensusBalance(consensusAccount.address, 0n)
     } catch (err) {
       console.error(err)
-      setProgress({ percentage: 0.1, message: `Error. Retrying` })
+      setProgress({ percentage: undefined, message: `Error. Retrying` })
     } finally {
       allowNavigatingAway()
     }
