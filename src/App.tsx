@@ -2,6 +2,7 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useEffect, useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { AccountAvatar } from './components/AccountAvatar'
+import { allowNavigatingAway, blockNavigatingAway } from './utils/blockNavigatingAway'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { ConsensusAccount, useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
@@ -37,6 +38,7 @@ function App() {
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
+      blockNavigatingAway()
       setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
       setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
@@ -60,12 +62,15 @@ function App() {
         percentage: 1.0,
         message: `${amountToDeposit.formatted} deposited (balance changed, event didn't error)`,
       })
+      allowNavigatingAway()
       await updateBalanceInsideConnectButton()
       // Stay on "Deposited" screen unless new transfer comes in
       await waitForConsensusBalance(consensusAccount.address, 0n)
     } catch (err) {
       console.error(err)
       setProgress({ percentage: 0.1, message: `Error. Retrying` })
+    } finally {
+      allowNavigatingAway()
     }
 
     // Loop
