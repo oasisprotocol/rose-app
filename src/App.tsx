@@ -62,6 +62,16 @@ export function App() {
                 <button type="button" disabled>
                   Coming soon
                 </button>
+                <button
+                  type="button"
+                  onClick={() => open('https://wallet.oasis.io/')}
+                  style={{
+                    position: 'absolute',
+                    marginTop: -50,
+                  }}
+                >
+                  Instead use our ROSE Wallet &nbsp;&nbsp;&nbsp;&nbsp; ↗
+                </button>
               </div>
             </div>
           </div>
