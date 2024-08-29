@@ -12,13 +12,15 @@ export interface EIP1193Error extends Error {
   code: number
 }
 
-export const handleKnownErrors = (error: Error): void => {
+export const handleKnownErrors = (error: Error) => {
   const errorMessage = (error?.message ?? '').toLowerCase()
 
   switch (errorMessage) {
     case 'failed to fetch':
       throw new Error(NETWORK_ERROR_MESSAGE)
   }
+
+  throw error
 }
 
 export const handleKnownEthersErrors = (error: EthersError) => {
@@ -32,7 +34,7 @@ export const handleKnownEthersErrors = (error: EthersError) => {
       throw new Error(NETWORK_ERROR_MESSAGE)
   }
   // Default to short message
-  throw new Error(error.shortMessage)
+  throw new Error(error?.shortMessage ?? error?.message ?? 'Unknown Error!')
 }
 
 export const toErrorString = (error: Error = new Error('Unknown error')) => {

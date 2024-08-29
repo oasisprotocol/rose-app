@@ -73,6 +73,10 @@ span {
     font-weight: 500;
     line-height: 24px;
   }
+
+  &.error.error {
+    color: var(--red);
+  }
 }
 
 h2 {
