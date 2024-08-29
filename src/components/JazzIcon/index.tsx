@@ -17,5 +17,5 @@ export const JazzIcon = memo(({ diameter, seed }: JazzIconProps) => {
     }
   }, [diameter, seed])
 
-  return <span ref={ref}></span>
+  return <span ref={ref} style={{ lineHeight: 0 }}></span>
 })
