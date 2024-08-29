@@ -4,6 +4,7 @@ import { AccountAvatar } from './components/AccountAvatar'
 import { Button } from './components/Button'
 import { Hint } from './components/Hint'
 import { Layout } from './components/Layout'
+import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
 export function App() {
@@ -106,20 +107,26 @@ export function App() {
           <div className={classes.startAdornment}>Your address</div>
           <div className={classes.address}>
             <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
-            {consensusAccount.address}
+            {progress.percentage && progress.percentage <= 0.05 ? (
+              <span>{consensusAccount.address}</span>
+            ) : (
+              <ShortAddress address={consensusAccount.address} />
+            )}
           </div>
           <div className={classes.endAdornment}>
             <Button
+              title="Copy address"
               className={classes.addressButton}
               onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
             >
-              Copy address &#x2398;
+              {progress.percentage && progress.percentage <= 0.05 ? <span>Copy address 📋️</span> : <span>📋️</span>}
             </Button>
             <Button
+              title="Copy private key"
               className={classes.addressButton}
               onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
             >
-              Copy private key &#x2398;
+              {progress.percentage && progress.percentage <= 0.05 ? <span>Copy private key 🔐️</span> : <span>🔐️</span>}
             </Button>
           </div>
         </div>
