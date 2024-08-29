@@ -5,6 +5,15 @@ interface Props {
   header?: ReactNode
 }
 
+const dateFormatLong = new Intl.DateTimeFormat('en', {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+  hour: 'numeric',
+  minute: 'numeric',
+  second: 'numeric',
+})
+
 export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) => {
   return (
     <div className={classes.layout}>
@@ -18,7 +27,7 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
               <a href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`} rel="noopener noreferrer" target="_blank">
                 {BUILD_COMMIT.substring(0, 7)}
               </a>
-              ) built at {BUILD_DATETIME}
+              ) built at {dateFormatLong.format(BUILD_DATETIME)}
             </div>
           </span>
           <span>|</span>
