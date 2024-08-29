@@ -1,6 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import classes from './App.module.css'
 import { AccountAvatar } from './components/AccountAvatar'
+import { Button } from './components/Button'
 import { Hint } from './components/Hint'
 import { Layout } from './components/Layout'
 import { useDeposit } from './useDeposit'
@@ -48,9 +49,7 @@ export function App() {
               <div className={classes.cardContent}>
                 <h2>Consensus to Sapphire</h2>
                 <p>Move ROSE from your Consensus account (e.g. centralized exchange) to Sapphire.</p>
-                <button type="button" onClick={step2}>
-                  Select and sign-in
-                </button>
+                <Button onClick={step2}>Select and sign-in</Button>
               </div>
             </div>
 
@@ -59,11 +58,8 @@ export function App() {
               <div className={classes.cardContent}>
                 <h2>Sapphire to Consensus</h2>
                 <p>Move ROSE from Sapphire to your Consensus account (e.g. centralized exchange).</p>
-                <button type="button" disabled>
-                  Coming soon
-                </button>
-                <button
-                  type="button"
+                <Button disabled>Coming soon</Button>
+                <Button
                   onClick={() => open('https://wallet.oasis.io/')}
                   style={{
                     position: 'absolute',
@@ -71,7 +67,7 @@ export function App() {
                   }}
                 >
                   Instead use our ROSE Wallet &nbsp;&nbsp;&nbsp;&nbsp; ↗
-                </button>
+                </Button>
               </div>
             </div>
           </div>
