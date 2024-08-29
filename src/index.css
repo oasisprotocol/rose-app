@@ -47,7 +47,7 @@ body {
   font-style: normal;
   font-weight: normal;
   line-height: 150%;
-  color: var(--black);
+  color: var(--white);
   text-align: left;
   background-color: var(--brand-blue);
   background-image: url('/background.webp');
