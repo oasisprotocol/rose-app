@@ -2,12 +2,13 @@
 <style>
   @keyframes verticalMarquee {
     from { transform: translateY(0px); }
-    to { transform: translateY(22px); }
+    to { transform: translateY(26.844px); }
   }
   #blocks {
       animation-name: verticalMarquee;
       animation-duration: 1s;
       animation-iteration-count: infinite;
+      animation-timing-function: linear;
   }
 </style>
 
