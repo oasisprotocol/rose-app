@@ -5,7 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { WagmiProvider } from 'wagmi'
 
-import App from './App.tsx'
+import { App } from './App.tsx'
 import { config } from './wagmi.ts'
 
 import '@rainbow-me/rainbowkit/styles.css'

@@ -11,7 +11,7 @@ const beforeUnloadHandler = (event: BeforeUnloadEvent) => {
 export function useBlockNavigatingAway() {
   const [reactiveIsBlocking, setReactiveIsBlocking] = useState(globalIsBlocking)
   return {
-    isBlocking: reactiveIsBlocking,
+    isBlockingNavigatingAway: reactiveIsBlocking,
     blockNavigatingAway: () => {
       window.addEventListener('beforeunload', beforeUnloadHandler)
       setReactiveIsBlocking(true)
