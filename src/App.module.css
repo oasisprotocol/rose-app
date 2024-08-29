@@ -33,6 +33,87 @@
   }
 }
 
+.step3 {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+
+  max-width: 700px;
+  text-align: center;
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  .addressWrapper {
+    display: flex;
+    align-items: stretch;
+
+    font-size: 18px;
+    font-weight: 700;
+    border: 2px solid var(--white);
+    border-radius: 12px;
+
+    & > * {
+      align-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .startAdornment {
+      padding: 23px;
+
+      font-weight: normal;
+      background-color: var(--white);
+      color: var(--brand-extra-dark);
+      border-top-left-radius: 8px;
+      border-bottom-left-radius: 8px;
+    }
+    .address {
+      display: flex;
+      padding: 23px;
+      gap: 8px;
+    }
+    .endAdornment {
+      display: flex;
+      padding-right: 12px;
+      gap: 6px;
+    }
+    .addressButton {
+      border-radius: 4px;
+    }
+  }
+
+  progress {
+    width: 100%;
+    max-width: 590px;
+    height: 32px;
+  }
+
+  .doNotClose {
+    max-width: 620px;
+    display: flex;
+    gap: 16px;
+    padding: 16px;
+
+    border-radius: 4px;
+    background: var(--orange-bg);
+    color: var(--brand-extra-dark);
+    border: 1px solid var(--orange);
+
+    font-size: 14px;
+    font-weight: 500;
+    line-height: 150%;
+    text-align: start;
+
+    img {
+      margin: 0 16px;
+    }
+  }
+}
+
 .card {
   width: 100%;
 

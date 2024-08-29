@@ -76,48 +76,70 @@ export function App() {
     )
   }
   return (
-    <div>
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <ConnectButton />
-        </div>
-
-        <h2>Address created and awaiting your transfer</h2>
-        <p style={{ maxWidth: '670px' }}>
-          Use the generated address below to initiate the transfer on your centralized exchange. The dApp automatically
-          recognizes your transfer form the centralized exchange and will track it.
-        </p>
-
+    <Layout
+      header={
+        <>
+          <img src="/logo-rose-on-ramp.svg" alt="ROSE on-ramp" />
+          <Hint
+            title={(() => {
+              if (progress.percentage === undefined) return ''
+              if (progress.percentage <= 0.5) return 'Your funds will be sent to this address.'
+              if (progress.percentage >= 1) return 'ROSE tokens received at this address'
+              return ''
+            })()}
+          >
+            <ConnectButton />
+          </Hint>
+        </>
+      }
+    >
+      <div className={classes.step3}>
         <div>
-          Your address &nbsp;
-          <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
-          {consensusAccount.address}
-          &nbsp;
-          <button type="button" onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}>
-            Copy address &#x2398;
-          </button>
-          &nbsp;
-          <button type="button" onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}>
-            Copy private key &#x2398;
-          </button>
+          <h1>Address created and awaiting your transfer</h1>
+          <p>
+            Use the generated address below to initiate the transfer on your centralized exchange. The dApp
+            automatically recognizes your transfer form the centralized exchange and will track it.
+          </p>
         </div>
-        <br />
-        <br />
-        {progress.message}
-        <br />
-        <progress id="file" value={progress.percentage} max={1} style={{ width: '30vw', height: '32px' }} />
-        <br />
-        <br />
-        <br />
-        <br />
+
+        <div className={classes.addressWrapper}>
+          <div className={classes.startAdornment}>Your address</div>
+          <div className={classes.address}>
+            <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
+            {consensusAccount.address}
+          </div>
+          <div className={classes.endAdornment}>
+            <Button
+              className={classes.addressButton}
+              onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+            >
+              Copy address &#x2398;
+            </Button>
+            <Button
+              className={classes.addressButton}
+              onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
+            >
+              Copy private key &#x2398;
+            </Button>
+          </div>
+        </div>
+
+        <h2 style={{ marginBottom: '-20px' }}>{progress.message}</h2>
+        <progress value={progress.percentage} max={1} />
 
         {isBlockingNavigatingAway && (
-          <p style={{ maxWidth: '670px' }}>
-            Please do not close this window in order to complete the process. If the window is closed you can always
-            recover from the last step and your funds won't be lost.
-          </p>
+          <>
+            <img src="/loader-blocks.svg" alt="" style={{ marginTop: '-20px' }} />
+            <div className={classes.doNotClose}>
+              <img src="/symbol-warning.svg" alt="Warning" width="24" />
+              <p>
+                Please do not close this window in order to complete the process. If the window is closed you can always
+                recover from the last step and your funds won't be lost.
+              </p>
+            </div>
+          </>
         )}
       </div>
-    </div>
+    </Layout>
   )
 }
