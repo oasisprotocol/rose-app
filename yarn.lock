@@ -521,6 +521,16 @@
     ethereum-cryptography "^2.0.0"
     micro-ftch "^0.3.1"
 
+"@fontsource-variable/figtree@^5.0.22":
+  version "5.0.22"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/figtree/-/figtree-5.0.22.tgz#af960e97ebf1727b1d68b870554e0df6cd9ad1e3"
+  integrity sha512-Kr4qYuE0mL0lcJV1IUS/qxzfQCiElUzxX9/v4GScwXBxl7LyvLz2lPhmUam+FmyPYcHQcX6IxjACjJ6/LJivow==
+
+"@fontsource-variable/roboto-mono@^5.0.20":
+  version "5.0.20"
+  resolved "https://registry.yarnpkg.com/@fontsource-variable/roboto-mono/-/roboto-mono-5.0.20.tgz#eb5ac0e5bfacbcb219cf72bd64d86524d4058e66"
+  integrity sha512-c0lS38hfgGdhUZ2WQIwMxmdzaSz706iF3nOoAIYMTIZBYAFjP8QlHGGJNS/fPshSGMob4+/MfICsynFclQ9mDg==
+
 "@jridgewell/gen-mapping@^0.3.5":
   version "0.3.5"
   resolved "https://registry.yarnpkg.com/@jridgewell/gen-mapping/-/gen-mapping-0.3.5.tgz#dcce6aff74bdf6dad1a95802b69b04a2fcb1fb36"
