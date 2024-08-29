@@ -83,7 +83,7 @@ export function App() {
           <Hint
             title={(() => {
               if (progress.percentage === undefined) return ''
-              if (progress.percentage <= 0.5) return 'Your funds will be sent to this address.'
+              if (progress.percentage <= 0.05) return 'Your funds will be sent to this address.'
               if (progress.percentage >= 1) return 'ROSE tokens received at this address'
               return ''
             })()}

@@ -48,7 +48,7 @@ export function useDeposit() {
         consensusAddress: consensusAccount.address,
         sapphireAddress: sapphireAddress,
       })
-      setProgress({ percentage: 0.5, message: `${amountToDeposit.formatted} ROSE detected (updated allowance)` })
+      setProgress({ percentage: 0.5, message: `Depositing ${amountToDeposit.formatted} ROSE` })
       const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
       await depositToSapphireStep2({
         amountToDeposit: amountToDeposit.raw,
@@ -56,12 +56,12 @@ export function useDeposit() {
         consensusAddress: consensusAccount.address,
         sapphireAddress: sapphireAddress,
       })
-      setProgress({ percentage: 0.75, message: `${amountToDeposit.formatted} ROSE detected (sent deposit)` })
+      setProgress({ percentage: 0.75, message: `Depositing ${amountToDeposit.formatted} ROSE` })
       await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of depositing
       setProgress({
         percentage: 1.0,
-        message: `${amountToDeposit.formatted} deposited (balance changed)`,
+        message: `${amountToDeposit.formatted} ROSE deposited`,
       })
       allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
