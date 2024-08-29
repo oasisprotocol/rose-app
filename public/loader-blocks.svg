@@ -1,16 +1,32 @@
 <svg width="106" height="106" viewBox="0 0 106 106" fill="none" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<style>
+  @keyframes verticalMarquee {
+    from { transform: translateY(0px); }
+    to { transform: translateY(22px); }
+  }
+  #blocks {
+      animation-name: verticalMarquee;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+  }
+</style>
+
 <circle cx="53" cy="53" r="53" fill="#000062"/>
 <g clip-path="url(#clip0_13015_420479)">
 <mask id="mask0_13015_420479" style="mask-type:alpha" maskUnits="userSpaceOnUse" x="19" y="19" width="68" height="68">
 <rect x="19.9604" y="19.9611" width="66.0779" height="66.0779" fill="url(#paint0_radial_13015_420479)"/>
 </mask>
 <g mask="url(#mask0_13015_420479)">
+<g id="blocks">
 <path opacity="0.5" d="M48.8691,90.1689v-16.52l-6.195,-6.194v16.519l6.195,6.195z" fill="white"/>
 <path d="M48.8691,73.649h16.519m-16.519,0v16.52m0,-16.52l-6.195,-6.195m22.714,6.195v16.52h-16.519m16.519,-16.52l-6.194,-6.195h-16.52m6.195,22.715l-6.195,-6.195v-16.52" stroke="white" stroke-width="3" stroke-linejoin="round"/>
 <path opacity="0.5" d="M48.8691,63.3247v-16.52l-6.195,-6.194v16.519l6.195,6.195z" fill="white"/>
 <path d="M48.8691,46.805h16.519m-16.519,0v16.52m0,-16.52l-6.195,-6.195m22.714,6.195v16.52h-16.519m16.519,-16.52l-6.194,-6.195h-16.52m6.195,22.715l-6.195,-6.195v-16.52" stroke="white" stroke-width="3" stroke-linejoin="round"/>
 <path opacity="0.5" d="M48.8691,36.4805v-16.52l-6.195,-6.194v16.519l6.195,6.195z" fill="white"/>
 <path d="M48.8691,19.961h16.519m-16.519,0v16.52m0,-16.52l-6.195,-6.195m22.714,6.195v16.52h-16.519m16.519,-16.52l-6.194,-6.195h-16.52m6.195,22.715l-6.195,-6.195v-16.52" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+<path opacity="0.5" d="M48.8691,33.7961v-16.52l-6.195,-6.194v16.519l6.195,6.195z" fill="white"/>
+<path d="M48.8691,-6.883h16.519m-16.519,0v16.52m0,-16.52l-6.195,-6.195m22.714,6.195v16.52h-16.519m16.519,-16.52l-6.194,-6.195h-16.52m6.195,22.715l-6.195,-6.195v-16.52" stroke="white" stroke-width="3" stroke-linejoin="round"/>
+</g>
 </g>
 </g>
 <defs>
