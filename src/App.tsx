@@ -8,7 +8,7 @@ import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
 export function App() {
-  const { sapphireAddress, consensusAccount, step2, progress, isBlockingNavigatingAway } = useDeposit()
+  const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
 
   if (!sapphireAddress) {
     return (
@@ -136,7 +136,7 @@ export function App() {
 
         {isBlockingNavigatingAway && (
           <>
-            <img src="/loader-blocks.svg" alt="" style={{ marginTop: '-20px' }} />
+            <img src="/loader-blocks.svg" alt="" style={{ marginTop: '-20px', width: '106px' }} />
             <div className={classes.doNotClose}>
               <img src="/symbol-warning.svg" alt="Warning" width="24" />
               <p>
@@ -144,6 +144,13 @@ export function App() {
                 recover from the last step and your funds won't be lost.
               </p>
             </div>
+          </>
+        )}
+
+        {progress.percentage && progress.percentage >= 1 && (
+          <>
+            <img src="/symbol-check-circle.svg" alt="" style={{ marginTop: '-20px', width: '106px' }} />
+            <Button onClick={transferMore}>Transfer more</Button>
           </>
         )}
       </div>

@@ -81,10 +81,17 @@ export function useDeposit() {
     await step3(consensusAccount, sapphireAddress)
   }
 
+  function transferMore() {
+    // Just pretends to be on that step. In reality process is still stuck at
+    // waitForConsensusBalance, but if user makes a transfer, it becomes real.
+    setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+  }
+
   return {
     sapphireAddress,
     consensusAccount,
     step2,
+    transferMore,
     progress,
     isBlockingNavigatingAway,
   }
