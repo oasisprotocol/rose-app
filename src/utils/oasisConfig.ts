@@ -26,3 +26,11 @@ export const consensusConfig = {
 }
 
 export const multiplyConsensusToSapphire = 10n ** BigInt(sapphireConfig.decimals - consensusConfig.decimals)
+
+declare global {
+  interface Window {
+    mock: boolean
+  }
+}
+// Continue the depositing flow with 0 ROSE. Can be switched on anytime.
+window.mock = false

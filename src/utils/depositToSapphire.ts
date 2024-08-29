@@ -47,6 +47,7 @@ export async function depositToSapphireStep2(props: {
   consensusSigner: oasis.signature.NaclSigner
   sapphireAddress: `0x${string}`
 }) {
+  if (props.amountToDeposit <= 0n) return
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const chainContext = await nic.consensusGetChainContext()
   const rtw = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))

@@ -16,6 +16,7 @@ export async function waitForConsensusBalance(consensusAddress: `oasis1${string}
     console.log('waitForConsensusBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
+    if (window.mock) return balance
   }
 }
 
@@ -26,6 +27,7 @@ export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, mor
     console.log('waitForSapphireBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
     await new Promise((r) => setTimeout(r, 6000))
+    if (window.mock) return balance
   }
 }
 
