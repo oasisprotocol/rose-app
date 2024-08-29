@@ -2,7 +2,7 @@ import { useAccount, useSignMessage } from 'wagmi'
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useEffect, useState } from 'react';
 import { bytesToHex, hexToBytes } from 'viem';
-import { OasisClient, OasisSigner, getOasisNic } from './oasisstuff';
+import { OasisClient, getAccountBalance, getAccountFromSecret, getOasisNic } from './oasisstuff';
 
 function toBase64(u8: Uint8Array) {
   return btoa(String.fromCharCode(...u8));
@@ -68,7 +68,8 @@ function App() {
   const account = useAccount()
   const { signMessageAsync } = useSignMessage();
   const chainId = account.chainId;
-  const [ signer, setSigner ] = useState<OasisSigner>();
+  const [ stakingSecret, setConsensusSecret ] = useState<Uint8Array>();
+  const [ stakingAddress, setStakingAddress ] = useState<string>();
   const [ stakingBalance, setStakingBalance ] = useState<bigint>();
   const [ nic ] = useState<OasisClient>(getOasisNic('testnet'));
 
@@ -79,19 +80,27 @@ function App() {
       const accounts = loadAccountKeys();
       if( accounts && account.address && accounts.has(account.address) ) {
         const key = accounts.get(account.address);
+        setConsensusSecret(key);
         if( key ) {
-          const s = new OasisSigner(nic, key);
-          setSigner(s)
-          setStakingBalance((await s.niceBalance()).balance);
+          const a = await getAccountFromSecret(key)
+          setStakingAddress(a.addressBech32);
+          const info = await getAccountBalance(nic, a.address);
+          console.log('Acct Balance', a.addressBech32, info);
+          setStakingBalance(info.balance);
         }
       }
-      setSigner(undefined)
+      else {
+        setConsensusSecret(undefined)
+      }
     })();
   }, [account.address]);
 
   async function submitWithdrawTx ()
   {
-
+    if( ! stakingSecret ) {
+      return;
+    }
+    const a = await getAccountFromSecret(stakingSecret);
   }
 
   // When 'Generate' button is pressed, do SIWE then derive Consensus key
@@ -106,25 +115,24 @@ function App() {
       console.log('Digest', digest);
       const secret = new Uint8Array(digest);
       saveAccountKey(account.address, secret);
-      if( ! signer || bytesToHex(secret) != bytesToHex(signer.secret) ) {
-        const s = new OasisSigner(nic, secret);
-        setSigner(s)
+      if( ! stakingSecret || bytesToHex(secret) != bytesToHex(stakingSecret) ) {
+        setConsensusSecret(secret);
         // TODO: load account details
       }
     }
   }
 
   function CopyStakingSecret() {
-    if( signer ) {
-      navigator.clipboard.writeText(toBase64(signer.secret));
+    if( stakingSecret ) {
+      navigator.clipboard.writeText(toBase64(stakingSecret));
     }
   }
 
   function GenerateButton() {
-    if( signer ) {
+    if( stakingSecret ) {
       return <div>
-        Address: <code>{signer.addressBech32}</code><br />
-        Secret: <input type="text" readOnly value={toBase64(signer.secret)}></input>
+        Address: <code>{stakingAddress}</code><br />
+        Secret: <input type="text" readOnly value={toBase64(stakingSecret)}></input>
         <button onClick={CopyStakingSecret}>&#x2398;</button><br />
         Balance: {stakingBalance?.toString()} wei
       </div>

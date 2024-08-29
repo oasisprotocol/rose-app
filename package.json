@@ -10,7 +10,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@oasisprotocol/client-rt": "file:../oasis-sdk/client-sdk/ts-web/rt/oasisprotocol-client-rt-1.1.0.tgz",
     "@tanstack/react-query": "5.0.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -18,7 +17,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.1.2",
-    "@oasisprotocol/client": "file:../oasis-sdk/client-sdk/ts-web/core/oasisprotocol-client-1.1.0.tgz",
+    "@oasisprotocol/client": "^1.1.0",
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@types/react": "^18.2.23",
     "@types/react-dom": "^18.2.8",
