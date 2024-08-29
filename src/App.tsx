@@ -1,5 +1,7 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import classes from './App.module.css'
 import { AccountAvatar } from './components/AccountAvatar'
+import { Layout } from './components/Layout'
 import { useDeposit } from './useDeposit'
 
 export function App() {
@@ -7,15 +9,19 @@ export function App() {
 
   if (!sapphireAddress) {
     return (
-      <div>
-        <p style={{ maxWidth: '670px' }}>
-          The Rose (on)ramp dApp has been built by Oasis to offer users an easy to use service of moving your Rose from
-          any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect below and
-          follow the steps to complete your transfer.
-        </p>
-        {/* step1 */}
-        <ConnectButton />
-      </div>
+      <Layout header={<img src="/logo-oasis-network.svg" alt="Oasis Network" />}>
+        <div className={classes.step1}>
+          <div>
+            <img src="/logo-rose-on-ramp.svg" alt="ROSE on-ramp" />
+            <p>
+              The Rose (on)ramp dApp has been built by Oasis to offer users an easy to use service of moving your Rose
+              from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
+              below and follow the steps to complete your transfer.
+            </p>
+          </div>
+          <ConnectButton />
+        </div>
+      </Layout>
     )
   }
   if (!consensusAccount) {
