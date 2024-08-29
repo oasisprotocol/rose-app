@@ -97,3 +97,24 @@ h3 {
 img {
   max-width: 100%;
 }
+
+progress {
+  appearance: none;
+  border: none;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--white); /* Firefox */
+  &::-webkit-progress-bar {
+    background-color: var(--white); /* Chrome */
+  }
+
+  color: var(--brand-extra-dark);
+  &::-webkit-progress-value {
+    background-color: var(--brand-extra-dark);
+    border-radius: 999px;
+  }
+  &::-moz-progress-bar { /* -moz must appear after -webkit otherwise Chrome displays green bar */
+    background-color: var(--brand-extra-dark);
+    border-radius: 999px;
+  }
+}
