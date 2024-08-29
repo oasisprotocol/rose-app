@@ -76,17 +76,24 @@ span {
   }
 }
 
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
 h2 {
-  font-size: 26px;
-  font-weight: 600;
-  line-height: 33.8px;
-  letter-spacing: -0.03em;
-  color: var(--brand-blue);
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 140%;
 }
 
 h3 {
   font-size: 18px;
   font-weight: 700;
   line-height: 25.2px;
-  color: var(--brand-extra-dark);
+}
+
+img {
+  max-width: 100%;
 }

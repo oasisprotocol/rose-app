@@ -7,3 +7,75 @@
 
   max-width: 670px;
 }
+
+.step2 {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+
+  max-width: 670px;
+
+  h1 {
+    margin-bottom: 10px;
+  }
+  .cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    gap: 24px;
+  }
+
+  .cardContent button {
+    margin-top: 8px;
+  }
+}
+
+.card {
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+
+  border-radius: 4px;
+  border: 1px solid var(--brand-extra-dark);
+  background-color: var(--white);
+  color: var(--brand-extra-dark);
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 8px;
+  padding: 16px;
+
+  button {
+    border: none;
+
+    height: 40px;
+    padding: 0px 24px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 700;
+    border-radius: 999px;
+
+    &:enabled {
+      cursor: pointer;
+      background-color: var(--brand-extra-dark);
+      color: var(--white);
+    }
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+.cardImage {
+  width: 100%;
+}
+
+.opacity50 {
+  opacity: 0.5;
+}
