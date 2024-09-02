@@ -49,7 +49,6 @@ export const UnstakePage: FC = () => {
     state: { account },
     undelegate,
     undelegateStart,
-    getTransaction,
     getUndelegationReceiptId,
   } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.UndelegateInputAmount)
@@ -125,9 +124,8 @@ export const UnstakePage: FC = () => {
     setError('')
 
     try {
-      const txResponse = await undelegate(amountShares, to)
       setStep(Steps.UndelegateInProgress)
-      await getTransaction(txResponse.hash)
+      await undelegate(amountShares, to)
 
       const receiptId = await getUndelegationReceiptId({
         from: to,

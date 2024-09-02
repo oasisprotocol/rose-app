@@ -1,4 +1,4 @@
-import { FC, Fragment, memo } from 'react'
+import { FC, Fragment, memo, useEffect, useState } from 'react'
 import { Delegations, PendingDelegations } from '../../types'
 import { Table } from '../Table'
 import { Validator } from '../Validator'
@@ -42,7 +42,11 @@ interface Props {
 
 const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
   const navigate = useNavigate()
-  const { delegateDone } = useWeb3()
+  const {
+    state: { isInteractingWithChain },
+    delegateDone,
+  } = useWeb3()
+  const [inlineErrors, setInlineErrors] = useState<Record<string, string>>({})
 
   const pendingDelegationsNormalized: StakedItem[] = pendingDelegations.receiptIds.map((receiptId, i) => {
     const { amount, from, to } = pendingDelegations.pendings[i]
@@ -66,6 +70,16 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
     } satisfies StakedItem
   })
   const stakedItems = [...pendingDelegationsNormalized, ...delegationsNormalized]
+
+  useEffect(() => {
+    setInlineErrors(
+      stakedItems.reduce((acc, curr) => {
+        acc[curr.key] = acc[curr.key] ?? ''
+        return acc
+      }, inlineErrors)
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [stakedItems])
 
   return (
     <div className={classes.stakedTab}>
@@ -130,6 +144,7 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                               <Button
                                 onClick={() => navigate(`/unstake/${entry.to}`)}
                                 className={classes.unstakeBtn}
+                                disabled={isInteractingWithChain}
                               >
                                 Unstake
                               </Button>
@@ -141,11 +156,26 @@ const StakedTabCmp: FC<Props> = ({ pendingDelegations, delegations }) => {
                                 You are not staking as you have not confirmed the stake yet.
                               </p>
                               <Button
-                                onClick={() => delegateDone(entry.receiptId)}
+                                onClick={async () => {
+                                  setInlineErrors(prevState => ({ ...prevState, [entry.key]: '' }))
+                                  try {
+                                    await delegateDone(entry.receiptId)
+                                  } catch (e) {
+                                    setInlineErrors(prevState => ({
+                                      ...prevState,
+                                      [entry.key]: (e as Error).message,
+                                    }))
+                                  }
+                                }}
                                 className={classes.confirmStakeBtn}
+                                disabled={isInteractingWithChain}
                               >
                                 Confirm stake
                               </Button>
+
+                              {inlineErrors[entry.key] && (
+                                <p className="body error">{inlineErrors[entry.key]}</p>
+                              )}
                             </div>
                           )}
                         </div>

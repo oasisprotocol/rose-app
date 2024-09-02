@@ -36,7 +36,6 @@ export const StakingAmountPage: FC = () => {
     state: { nativeCurrency },
     delegate,
     delegateDone,
-    getTransaction,
   } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.DelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
@@ -85,9 +84,8 @@ export const StakingAmountPage: FC = () => {
     setError('')
 
     try {
-      const txResponse = await delegateDone(receiptId)
       setStep(Steps.DelegateDoneInProgress)
-      await getTransaction(txResponse.hash)
+      await delegateDone(receiptId)
       setStep(Steps.DelegateDoneSuccessful)
     } catch (e) {
       setError(toErrorString(e as Error))

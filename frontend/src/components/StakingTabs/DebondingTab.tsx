@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import classes from './index.module.css'
 import { Undelegations } from '../../types'
 import { Table } from '../Table'
@@ -58,6 +58,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
     state: { consensusStatus },
   } = useGrpc()
   const { fetchUndelegations, setAppError } = useAppState()
+  const [inlineErrors, setInlineErrors] = useState<Record<string, string>>({})
 
   const debondingItems: DebondingItem[] = undelegations.receiptIds.map((receiptId, i) => {
     const { from, to, shares, costBasis, endReceiptId, epoch } = undelegations.undelegations[i]
@@ -73,6 +74,16 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
       status: getDebondingItemStatus(epoch, consensusStatus?.latest_epoch),
     } satisfies DebondingItem
   })
+
+  useEffect(() => {
+    setInlineErrors(
+      debondingItems.reduce((acc, curr) => {
+        acc[curr.receiptId.toString()] = acc[curr.receiptId.toString()] ?? ''
+        return acc
+      }, inlineErrors)
+    )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debondingItems])
 
   const handleDebondingDone = async (receiptId: bigint) => {
     try {
@@ -140,11 +151,27 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                             </div>
                             <div>
                               <Button
-                                onClick={() => handleDebondingDone(entry.receiptId)}
+                                onClick={async () => {
+                                  setInlineErrors(prevState => ({
+                                    ...prevState,
+                                    [entry.receiptId.toString()]: '',
+                                  }))
+                                  try {
+                                    await handleDebondingDone(entry.receiptId)
+                                  } catch (e) {
+                                    setInlineErrors(prevState => ({
+                                      ...prevState,
+                                      [entry.receiptId.toString()]: (e as Error).message,
+                                    }))
+                                  }
+                                }}
                                 className={classes.claimNowBtn}
                               >
                                 Claim now
                               </Button>
+                              {inlineErrors[entry.receiptId.toString()] && (
+                                <p className="body error">{inlineErrors[entry.receiptId.toString()]}</p>
+                              )}
                             </div>
                           </div>
                         )}
@@ -175,13 +202,28 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                             <Button
                               size="small"
                               variant="text"
-                              onClick={() => {
-                                undelegateStart(entry.receiptId)
+                              onClick={async () => {
+                                setInlineErrors(prevState => ({
+                                  ...prevState,
+                                  [entry.receiptId.toString()]: '',
+                                }))
+                                try {
+                                  await undelegateStart(entry.receiptId)
+                                } catch (e) {
+                                  setInlineErrors(prevState => ({
+                                    ...prevState,
+                                    [entry.receiptId.toString()]: (e as Error).message,
+                                  }))
+                                }
                               }}
                               className={classes.checkEstimatedTimeBtn}
                             >
                               Check estimated time
                             </Button>
+
+                            {inlineErrors[entry.receiptId.toString()] && (
+                              <p className="body error">{inlineErrors[entry.receiptId.toString()]}</p>
+                            )}
                           </div>
                         )}
                       </div>

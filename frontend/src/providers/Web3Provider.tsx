@@ -1,4 +1,4 @@
-import { FC, PropsWithChildren, useCallback, useState } from 'react'
+import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import * as sapphire from '@oasisprotocol/sapphire-paratime'
 import {
   CHAINS,
@@ -7,13 +7,14 @@ import {
   VITE_STAKING_CONTRACT_ADDRESS,
   VITE_WEB3_GATEWAY,
 } from '../constants/config'
-import { UnknownNetworkError } from '../utils/errors'
+import { handleKnownErrors, handleKnownEthersErrors, UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
-import { BrowserProvider, EventLog, JsonRpcProvider } from 'ethers'
+import { BrowserProvider, EthersError, EventLog, JsonRpcProvider } from 'ethers'
 import { Staking, Staking__factory } from '@oasisprotocol/dapp-staker-backend'
 import * as oasis from '@oasisprotocol/client'
 import { FormattingUtils } from '../utils/formatting.utils'
+import { DefaultReturnType, Delegations, PendingDelegations, Undelegations } from '../types'
 
 let EVENT_LISTENERS_INITIALIZED = false
 
@@ -26,6 +27,7 @@ const web3ProviderInitialState: Web3ProviderState = {
   chainName: null,
   stakingWithoutSigner: null,
   nativeCurrency: null,
+  isInteractingWithChain: false,
 }
 
 export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
@@ -38,6 +40,28 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const [state, setState] = useState<Web3ProviderState>({
     ...web3ProviderInitialState,
   })
+
+  useEffect(() => {
+    setState(prevState => ({ ...prevState, isInteractingWithChain: false }))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state.account])
+
+  const interactingWithChainWrapper = useCallback(
+    <Args extends unknown[], R>(fn: (...args: Args) => Promise<R>) =>
+      async (...args: Args): Promise<R> => {
+        setState(prevState => ({ ...prevState, isInteractingWithChain: true }))
+        try {
+          return await fn(...args)
+        } catch (e) {
+          handleKnownEthersErrors(e as EthersError)
+          throw e
+        } finally {
+          setState(prevState => ({ ...prevState, isInteractingWithChain: false }))
+        }
+      },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    []
+  )
 
   const _connectionChanged = (isConnected: boolean) => {
     setState(prevState => ({
@@ -229,7 +253,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return receiptId satisfies bigint
   }
 
-  const getPendingDelegations = async () => {
+  const getPendingDelegations = async (): Promise<DefaultReturnType<[PendingDelegations]>> => {
     const { stakingWithoutSigner, account } = state
 
     if (!stakingWithoutSigner) {
@@ -240,7 +264,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new Error('[account] not connected!')
     }
 
-    return await stakingWithoutSigner.GetPendingDelegations(account)
+    return await stakingWithoutSigner.GetPendingDelegations(account).catch(handleKnownErrors)
   }
 
   const delegateDone = async (receiptId: bigint) => {
@@ -253,10 +277,12 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
-    return await staking.DelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT })
+    const txResponse = await staking.DelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT })
+
+    return getTransaction(txResponse.hash)
   }
 
-  const getDelegations = async () => {
+  const getDelegations = async (): Promise<DefaultReturnType<[Delegations]>> => {
     const { stakingWithoutSigner, account } = state
 
     if (!stakingWithoutSigner) {
@@ -268,7 +294,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     }
 
     const delegationsCount = await stakingWithoutSigner.GetDelegationsCount(account)
-    return await stakingWithoutSigner.GetDelegations(account, 0n, delegationsCount)
+    return await stakingWithoutSigner.GetDelegations(account, 0n, delegationsCount).catch(handleKnownErrors)
   }
 
   const undelegate = async (shares: bigint, from: string) => {
@@ -282,12 +308,14 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const fromBech32 = await FormattingUtils.toUint8Array(from)
-    return await staking.Undelegate(fromBech32, shares, {
+    const txResponse = await staking.Undelegate(fromBech32, shares, {
       gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT,
     })
+
+    return getTransaction(txResponse.hash)
   }
 
-  const getUndelegations = async () => {
+  const getUndelegations = async (): Promise<DefaultReturnType<[Undelegations]>> => {
     const { stakingWithoutSigner, account } = state
 
     if (!stakingWithoutSigner) {
@@ -298,7 +326,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new Error('[account] not connected!')
     }
 
-    return await stakingWithoutSigner.GetUndelegations(account)
+    return await stakingWithoutSigner.GetUndelegations(account).catch(handleKnownErrors)
   }
 
   const getUndelegationReceiptId = async (filterBy?: Partial<Staking.PendingUndelegationStruct>) => {
@@ -377,7 +405,9 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
-    return await staking.UndelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+    const txResponse = await staking.UndelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
+
+    return getTransaction(txResponse.hash)
   }
 
   const providerState: Web3ProviderContext = {
@@ -388,15 +418,15 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     getTransaction,
     getGasPrice,
     getAccountBalance,
-    delegate,
+    delegate: interactingWithChainWrapper(delegate),
     getPendingDelegations,
-    delegateDone,
+    delegateDone: interactingWithChainWrapper(delegateDone),
     getDelegations,
-    undelegate,
+    undelegate: interactingWithChainWrapper(undelegate),
     getUndelegations,
     getUndelegationReceiptId,
-    undelegateStart,
-    undelegateDone,
+    undelegateStart: interactingWithChainWrapper(undelegateStart),
+    undelegateDone: interactingWithChainWrapper(undelegateDone),
   }
 
   return <Web3Context.Provider value={providerState}>{children}</Web3Context.Provider>

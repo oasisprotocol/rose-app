@@ -17,6 +17,7 @@ export interface Web3ProviderState {
     symbol: string
     decimals: number
   } | null
+  isInteractingWithChain: boolean
 }
 
 export interface Web3ProviderContext {
@@ -29,13 +30,13 @@ export interface Web3ProviderContext {
   getAccountBalance: () => Promise<bigint>
   delegate: (value: bigint, to: string, txSubmittedCb?: () => void) => Promise<bigint>
   getPendingDelegations: () => Promise<DefaultReturnType<[PendingDelegations]>>
-  delegateDone: (receiptId: bigint) => Promise<TransactionResponse>
+  delegateDone: (receiptId: bigint) => Promise<TransactionResponse | null>
   getDelegations: () => Promise<DefaultReturnType<[Delegations]>>
-  undelegate: (shares: bigint, from: string) => Promise<TransactionResponse>
+  undelegate: (shares: bigint, from: string) => Promise<TransactionResponse | null>
   getUndelegations: () => Promise<DefaultReturnType<[Undelegations]>>
   getUndelegationReceiptId: (filterBy: Partial<Staking.PendingUndelegationStruct>) => Promise<bigint | null>
   undelegateStart: (receiptId: bigint, txSubmittedCb?: () => void) => Promise<bigint>
-  undelegateDone: (receiptId: bigint) => Promise<TransactionResponse>
+  undelegateDone: (receiptId: bigint) => Promise<TransactionResponse | null>
 }
 
 export const Web3Context = createContext<Web3ProviderContext>({} as Web3ProviderContext)
