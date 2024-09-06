@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren } from 'react'
 import { BrowserProvider, type Eip1193Provider, toBeHex } from 'ethers'
-import * as sapphire from '@oasisprotocol/sapphire-paratime'
 import { EIP1193Error } from '../utils/errors'
 import detectEthereumProvider from '@metamask/detect-provider'
 import { EIP1193Context, EIP1193ProviderContext } from './EIP1193Context'
@@ -9,7 +8,7 @@ import { CHAINS } from '../constants/config'
 
 declare global {
   interface Window {
-    ethereum?: BrowserProvider & Eip1193Provider & sapphire.SapphireAnnex
+    ethereum?: BrowserProvider & Eip1193Provider
   }
 }
 
@@ -48,9 +47,8 @@ export const EIP1193ContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const switchNetwork = async (toChainId = VITE_NETWORK) => {
     const ethProvider = new BrowserProvider(window.ethereum!)
-    const sapphireEthProvider = sapphire.wrap(ethProvider) as BrowserProvider & sapphire.SapphireAnnex
 
-    const network = await sapphireEthProvider.getNetwork()
+    const network = await ethProvider.getNetwork()
 
     if (network.chainId === BigInt(toChainId)) return
 

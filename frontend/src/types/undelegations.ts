@@ -1,6 +1,7 @@
-import { Staking } from '@oasisprotocol/dapp-staker-backend'
-
-export type Undelegations = [bigint[], Staking.PendingUndelegationStructOutput[]] & {
-  receiptIds: bigint[]
-  undelegations: Staking.PendingUndelegationStructOutput[]
+export type Undelegation = {
+  from: string
+  shares: bigint
+  epoch: bigint
 }
+
+export type Undelegations = Undelegation[]

@@ -1,0 +1,27 @@
+{
+  "name": "@oasisprotocol/dapp-staker-subcall",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && vite build",
+    "watch": "nodemon -e ts --watch 'src/**/*' --exec 'pnpm run build'"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4",
+    "typescript": "^5.5.3",
+    "vite": "^5.4.1",
+    "vite-plugin-dts": "^4.1.0"
+  },
+  "dependencies": {
+    "@oasisprotocol/client": "^1.1.0",
+    "@oasisprotocol/client-rt": "^1.1.0",
+    "cborg": "^4.2.3",
+    "ethers": "6.10.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    }
+  }
+}

@@ -138,11 +138,6 @@
     }
 
     td:nth-child(2) {
-      width: 120px;
-      text-align: left;
-    }
-
-    td:nth-child(3) {
       width: 180px;
       text-align: right;
     }

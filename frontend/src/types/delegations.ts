@@ -1,6 +1,6 @@
-import { Staking } from '@oasisprotocol/dapp-staker-backend'
-
-export type Delegations = [string[], Staking.DelegationStructOutput[]] & {
-  out_delegates: string[]
-  out_delegations: Staking.DelegationStructOutput[]
+export type Delegation = {
+  to: string
+  shares: bigint
 }
+
+export type Delegations = Delegation[]

@@ -14,8 +14,6 @@ export abstract class StringUtils {
     return `${start}\u2026${end}`
   }
 
-  static getTransactionUrl = (baseUrl: string, txHash: string) => `${baseUrl}/tx/${txHash}`
-
   static getAccountUrl = (baseUrl: string, address: string) => `${baseUrl}/address/${address}`
 
   static clsx = (...classNames: (string | undefined)[]) => {
