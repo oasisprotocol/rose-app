@@ -10,7 +10,7 @@ export default defineConfig({
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString()),
     BUILD_DATETIME: JSON.stringify(new Date().getTime()),
-    GITHUB_REPOSITORY_URL: JSON.stringify('https://github.com/oasisprotocol/dapp-onramp'),
+    GITHUB_REPOSITORY_URL: JSON.stringify('https://github.com/oasisprotocol/dapp-onramp/'),
     OASIS_HOME_PAGE_URL: JSON.stringify('https://oasisprotocol.org/'),
   },
 })
