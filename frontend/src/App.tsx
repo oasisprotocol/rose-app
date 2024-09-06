@@ -7,7 +7,6 @@ import { Web3ContextProvider } from './providers/Web3Provider'
 import { AppStateContextProvider } from './providers/AppStateProvider'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { RouterErrorBoundary } from './components/RouterErrorBoundary'
-import { TestPage } from './pages/TestPage'
 import { ApiContextProvider } from './providers/ApiProvider'
 import { GrpcContextProvider } from './providers/GrpcProvider'
 import { DashboardPage } from './pages/DashboardPage'
@@ -40,10 +39,6 @@ const router = createHashRouter([
       {
         path: 'unstake/:address',
         element: <UnstakePage />,
-      },
-      {
-        path: 'test',
-        element: <TestPage />,
       },
     ],
   },
