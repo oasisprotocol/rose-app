@@ -16,6 +16,7 @@ import { GasPrice } from '../../components/GasPrice'
 import { Alert } from '../../components/Alert'
 import { toErrorString } from '../../utils/errors'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
+import { Delegations } from '../../types'
 
 enum Steps {
   DelegateInputAmount,
@@ -23,28 +24,26 @@ enum Steps {
   DelegateInProgress,
   DelegateSuccessful,
   DelegateFailed,
-  DelegateDoneInProgress,
-  DelegateDoneSuccessful,
-  DelegateDoneFailed,
 }
 
 export const StakingAmountPage: FC = () => {
   const navigate = useNavigate()
   const { address } = useParams<{ address: string }>()
-  const { getValidatorByAddress } = useAppState()
+  const {
+    state: { delegations },
+    getValidatorByAddress,
+    fetchDelegations,
+  } = useAppState()
   const {
     state: { nativeCurrency },
     delegate,
-    delegateDone,
   } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.DelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [amount, setAmount] = useState<bigint>(0n)
   const [error, setError] = useState('')
-  const [delegationReceiptId, setDelegationReceiptId] = useState(0n)
 
   const navigateToStake = () => navigate('/stake')
-  const navigateToDashboard = () => navigate('/dashboard')
 
   useEffect(() => {
     if (!address) {
@@ -64,32 +63,27 @@ export const StakingAmountPage: FC = () => {
     init()
   }, [getValidatorByAddress, address])
 
-  const handleDelegate = async (value: bigint, to: string) => {
+  const handleDelegate = async (prevDelegations: Delegations, value: bigint, to: string) => {
     setError('')
 
     try {
-      const receiptId = await delegate(value, to, () => {
+      await delegate(value, to, () => {
         setStep(Steps.DelegateInProgress)
       })
-      setDelegationReceiptId(receiptId)
+
+      const delegations = await fetchDelegations()
+
+      // This should work in 99% of cases!
+      const [diff] = delegations.filter(d => !prevDelegations.includes(d))
+
+      if (!diff) {
+        throw new Error('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
+      }
 
       setStep(Steps.DelegateSuccessful)
     } catch (e) {
       setError(toErrorString(e as Error))
       setStep(Steps.DelegateFailed)
-    }
-  }
-
-  const handleDelegateDone = async (receiptId: bigint = delegationReceiptId) => {
-    setError('')
-
-    try {
-      setStep(Steps.DelegateDoneInProgress)
-      await delegateDone(receiptId)
-      setStep(Steps.DelegateDoneSuccessful)
-    } catch (e) {
-      setError(toErrorString(e as Error))
-      setStep(Steps.DelegateDoneFailed)
     }
   }
 
@@ -170,7 +164,9 @@ export const StakingAmountPage: FC = () => {
             ]}
           />
           <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => handleDelegate(amount, validator?.entity_address)}>Confirm</Button>
+            <Button onClick={() => handleDelegate(delegations!, amount, validator?.entity_address)}>
+              Confirm
+            </Button>
             <Button
               variant="text"
               onClick={() => setStep(prevValue => prevValue - 1)}
@@ -185,25 +181,10 @@ export const StakingAmountPage: FC = () => {
         <Alert
           type="success"
           headerText="Staking successful"
-          actions={
-            <div className={classes.stakingSuccessfulAlertActions}>
-              <p className="body">
-                To conclude the staking procedure, it is necessary to claim a receipt for the stake you have
-                just submitted.
-              </p>
-              <Button onClick={() => handleDelegateDone()}>Continue</Button>
-            </div>
-          }
+          actions={<Button onClick={() => {}}>Continue</Button>}
         />
       )}
-      {step === Steps.DelegateDoneSuccessful && (
-        <Alert
-          type="success"
-          headerText="Staking successful"
-          actions={<Button onClick={navigateToDashboard}>Go to dashboard</Button>}
-        />
-      )}
-      {[Steps.DelegateFailed, Steps.DelegateDoneFailed].includes(step) && (
+      {step === Steps.DelegateFailed && (
         <Alert
           type="error"
           headerText="Staking failed"
@@ -212,14 +193,7 @@ export const StakingAmountPage: FC = () => {
               <Button
                 variant="text"
                 onClick={() => {
-                  switch (step) {
-                    case Steps.DelegateFailed:
-                      setStep(Steps.DelegatePreviewTransaction)
-                      return
-                    case Steps.DelegateDoneFailed:
-                      setStep(Steps.DelegateSuccessful)
-                      return
-                  }
+                  setStep(Steps.DelegatePreviewTransaction)
                 }}
                 startSlot={<ArrowLeftIcon />}
               >
@@ -231,19 +205,10 @@ export const StakingAmountPage: FC = () => {
           {StringUtils.truncate(error)}
         </Alert>
       )}
-      {[Steps.DelegateInProgress, Steps.DelegateDoneInProgress].includes(step) && (
+      {step === Steps.DelegateInProgress && (
         <Alert
           type="loading"
-          headerText={(() => {
-            switch (step) {
-              case Steps.DelegateInProgress:
-                return 'Staking initiated'
-              case Steps.DelegateDoneInProgress:
-                return 'Claiming staking receipt'
-              default:
-                return 'In progress...'
-            }
-          })()}
+          headerText="Staking in progress..."
           actions={<span className="body">Submitting transaction...</span>}
         />
       )}

@@ -1,13 +1,11 @@
 import { createContext } from 'react'
-import * as sapphire from '@oasisprotocol/sapphire-paratime'
 import { BrowserProvider, TransactionResponse } from 'ethers'
 import { Staking } from '@oasisprotocol/dapp-staker-backend'
-import { DefaultReturnType, Delegations, PendingDelegations, Undelegations } from '../types'
+import { DefaultReturnType, PendingDelegations, Undelegations } from '../types'
 
 export interface Web3ProviderState {
   isConnected: boolean
-  ethProvider: BrowserProvider | null
-  sapphireEthProvider: (BrowserProvider & sapphire.SapphireAnnex) | null
+  browserProvider: BrowserProvider | null
   account: string | null
   explorerBaseUrl: string | null
   chainName: string | null
@@ -28,11 +26,14 @@ export interface Web3ProviderContext {
   getGasPrice: () => Promise<bigint>
   isProviderAvailable: () => Promise<boolean>
   getAccountBalance: () => Promise<bigint>
-  delegate: (value: bigint, to: string, txSubmittedCb?: () => void) => Promise<bigint>
+  delegate: (value: bigint, to: string, txSubmittedCb?: () => void) => Promise<TransactionResponse | null>
   getPendingDelegations: () => Promise<DefaultReturnType<[PendingDelegations]>>
   delegateDone: (receiptId: bigint) => Promise<TransactionResponse | null>
-  getDelegations: () => Promise<DefaultReturnType<[Delegations]>>
-  undelegate: (shares: bigint, from: string) => Promise<TransactionResponse | null>
+  undelegate: (
+    shares: bigint,
+    from: string,
+    txSubmittedCb?: () => void
+  ) => Promise<TransactionResponse | null>
   getUndelegations: () => Promise<DefaultReturnType<[Undelegations]>>
   getUndelegationReceiptId: (filterBy: Partial<Staking.PendingUndelegationStruct>) => Promise<bigint | null>
   undelegateStart: (receiptId: bigint, txSubmittedCb?: () => void) => Promise<bigint>

@@ -53,15 +53,15 @@ export const App: FC = () => {
   return (
     <ErrorBoundary>
       <ApiContextProvider>
-        <GrpcContextProvider>
-          <EIP1193ContextProvider>
-            <Web3ContextProvider>
+        <EIP1193ContextProvider>
+          <Web3ContextProvider>
+            <GrpcContextProvider>
               <AppStateContextProvider>
                 <RouterProvider router={router} />
               </AppStateContextProvider>
-            </Web3ContextProvider>
-          </EIP1193ContextProvider>
-        </GrpcContextProvider>
+            </GrpcContextProvider>
+          </Web3ContextProvider>
+        </EIP1193ContextProvider>
       </ApiContextProvider>
     </ErrorBoundary>
   )

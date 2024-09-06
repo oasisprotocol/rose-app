@@ -18,12 +18,7 @@ import { toErrorString } from '../../utils/errors'
 import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { SharesAmount } from '../../components/SharesAmount'
-
-interface Delegation {
-  to: string
-  amount: bigint
-  shares: bigint
-}
+import { Delegation, Undelegations } from '../../types'
 
 enum Steps {
   UndelegateInputAmount,
@@ -31,48 +26,39 @@ enum Steps {
   UndelegateInProgress,
   UndelegateSuccessful,
   UndelegateFailed,
-  UndelegateStartInProgress,
-  UndelegateStartSuccessful,
-  UndelegateStartFailed,
 }
 
 export const UnstakePage: FC = () => {
-  const { address: hexAddress } = useParams<{ address: string }>()
+  const { address } = useParams<{ address: string }>()
   const navigate = useNavigate()
   const {
-    state: { delegations },
+    state: { delegations, undelegations },
     getValidatorByAddress,
     fetchDelegations,
     fetchUndelegations,
   } = useAppState()
-  const {
-    state: { account },
-    undelegate,
-    undelegateStart,
-    getUndelegationReceiptId,
-  } = useWeb3()
+  const { undelegate } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.UndelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [sharePerRoseRatio, setSharePerRoseRatio] = useState<BigNumber>(BigNumber(0))
   const [rosePerShareRatio, setRosePerShareRatio] = useState<BigNumber>(BigNumber(0))
   const [shares, setShares] = useState<BigNumber>(BigNumber(0))
   const [error, setError] = useState('')
-  const [undelegationReceiptId, setUndelegationReceiptId] = useState(0n)
   const [undelegationEpoch, setUndelegationEpoch] = useState(0n)
   const delegation = useRef<Delegation | null | undefined>()
 
   const navigateToDashboard = () => navigate('/dashboard')
 
   useEffect(() => {
-    if (!hexAddress) {
+    if (!address) {
       throw new Error("Validator address can't be empty!")
     }
 
     const init = async () => {
-      const _validator = await getValidatorByAddress({ hexAddress })
+      const _validator = await getValidatorByAddress({ address })
 
       if (!_validator) {
-        console.warn(`Validator with address "${hexAddress}" not found!`)
+        console.warn(`Validator with address "${address}" not found!`)
       } else {
         setValidator(_validator)
 
@@ -90,76 +76,52 @@ export const UnstakePage: FC = () => {
     }
 
     init()
-  }, [getValidatorByAddress, hexAddress])
+  }, [getValidatorByAddress, address])
 
   useEffect(() => {
     if (delegation.current || !delegations) {
       return
     }
 
-    const delagationIndex = delegations.out_delegates.findIndex(
-      validatorAddress => validatorAddress === hexAddress
-    )
+    const foundDelagation = delegations.find(({ to }) => to === address)
 
-    if (delagationIndex >= 0) {
-      const to = delegations.out_delegates[delagationIndex]
-      const { shares: _shares, amount } = delegations.out_delegations[delagationIndex]
-
-      setShares(BigNumber(_shares.toString()))
-
-      delegation.current = {
-        to,
-        shares: _shares,
-        amount,
-      }
-    } else {
+    if (!foundDelagation) {
       delegation.current = null
+      return
     }
-  }, [hexAddress, delegations])
+
+    delegation.current = {
+      ...foundDelagation,
+    }
+  }, [address, delegations])
 
   const handleUndelegate = async (
+    prevUndelegations: Undelegations,
     amountShares: bigint = BigInt(shares.integerValue(BigNumber.ROUND_DOWN).toString()),
     to = delegation.current!.to
   ) => {
     setError('')
 
     try {
-      setStep(Steps.UndelegateInProgress)
-      await undelegate(amountShares, to)
-
-      const receiptId = await getUndelegationReceiptId({
-        from: to,
-        to: account!,
+      await undelegate(amountShares, to, () => {
+        setStep(Steps.UndelegateInProgress)
       })
 
-      if (!receiptId) {
-        throw new Error('Unable to retrieve receiptId! Navigate to dashboard, and continue from there.')
+      const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations()])
+
+      // This should work in 99% of cases!
+      const [diff] = undelegations.filter(und => !prevUndelegations.includes(und))
+
+      if (!diff) {
+        throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
       }
 
-      setUndelegationReceiptId(receiptId)
+      setUndelegationEpoch(diff.epoch)
 
       setStep(Steps.UndelegateSuccessful)
-
-      Promise.all([fetchDelegations(), fetchUndelegations()])
     } catch (e) {
       setError(toErrorString(e as Error))
       setStep(Steps.UndelegateFailed)
-    }
-  }
-
-  const handleUndelegateStart = async (receiptId: bigint = undelegationReceiptId) => {
-    setError('')
-
-    try {
-      const epoch = await undelegateStart(receiptId, () => {
-        setStep(Steps.UndelegateStartInProgress)
-      })
-
-      setUndelegationEpoch(epoch)
-      setStep(Steps.UndelegateStartSuccessful)
-    } catch (e) {
-      setError(toErrorString(e as Error))
-      setStep(Steps.UndelegateStartFailed)
     }
   }
 
@@ -270,7 +232,7 @@ export const UnstakePage: FC = () => {
             ]}
           />
           <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => handleUndelegate()}>Confirm</Button>
+            <Button onClick={() => handleUndelegate(undelegations!)}>Confirm</Button>
             <Button
               variant="text"
               onClick={() => setStep(Steps.UndelegateInputAmount)}
@@ -286,26 +248,13 @@ export const UnstakePage: FC = () => {
           type="success"
           headerText="Unstaking successful"
           actions={
-            <div className={classes.undelegateSuccessfulAlertActions}>
-              <p className="body">
-                To conclude the unstaking procedure, it is necessary to claim a receipt for the unstake you
-                have just submitted.
-              </p>
-              <Button onClick={() => handleUndelegateStart()}>Continue</Button>
-            </div>
-          }
-        />
-      )}
-      {step === Steps.UndelegateStartSuccessful && (
-        <Alert
-          type="success"
-          headerText="Unstaking successful"
-          actions={
             <div className={classes.undelegateStartSuccessfulAlertActions}>
               <p className="body">
-                The debonding process has successfully started. Your funds will be available to claim in this
-                app in <EpochTimeEstimate epoch={undelegationEpoch} distance /> (on{' '}
-                <EpochTimeEstimate epoch={undelegationEpoch} />
+                The debonding process has successfully started. <br />
+                Your funds will be available in <EpochTimeEstimate
+                  epoch={undelegationEpoch}
+                  distance
+                /> (on <EpochTimeEstimate epoch={undelegationEpoch} />
                 ).
               </p>
               <Button onClick={navigateToDashboard}>Go to dashboard</Button>
@@ -313,7 +262,7 @@ export const UnstakePage: FC = () => {
           }
         />
       )}
-      {[Steps.UndelegateFailed, Steps.UndelegateStartFailed].includes(step) && (
+      {step === Steps.UndelegateFailed && (
         <Alert
           type="error"
           headerText="Unstaking failed"
@@ -322,14 +271,7 @@ export const UnstakePage: FC = () => {
               <Button
                 variant="text"
                 onClick={() => {
-                  switch (step) {
-                    case Steps.UndelegateFailed:
-                      setStep(Steps.UndelegatePreviewTransaction)
-                      return
-                    case Steps.UndelegateStartFailed:
-                      setStep(Steps.UndelegateSuccessful)
-                      return
-                  }
+                  setStep(Steps.UndelegatePreviewTransaction)
                 }}
                 startSlot={<ArrowLeftIcon />}
               >
@@ -341,19 +283,10 @@ export const UnstakePage: FC = () => {
           {StringUtils.truncate(error)}
         </Alert>
       )}
-      {[Steps.UndelegateInProgress, Steps.UndelegateStartInProgress].includes(step) && (
+      {step === Steps.UndelegateInProgress && (
         <Alert
           type="loading"
-          headerText={(() => {
-            switch (step) {
-              case Steps.UndelegateInProgress:
-                return 'Unstaking initiated'
-              case Steps.UndelegateStartInProgress:
-                return 'Claiming unstaking receipt'
-              default:
-                return 'In progress...'
-            }
-          })()}
+          headerText="Unstaking initiated"
           actions={<span className="body">Submitting transaction...</span>}
         />
       )}

@@ -1,31 +1,20 @@
-import { FC, memo, useEffect, useState } from 'react'
+import { FC, memo } from 'react'
 import classes from './index.module.css'
-import { Undelegations } from '../../types'
+import { Undelegation, Undelegations } from '../../types'
 import { Table } from '../Table'
 import { Validator } from '../Validator'
 import { StringUtils } from '../../utils/string.utils'
 import { Button } from '../Button'
-import { useWeb3 } from '../../hooks/useWeb3'
 import { useGrpc } from '../../hooks/useGrpc'
 import { EpochTimeEstimate } from '../EpochTimeEstimate'
 import { HourglassIcon } from '../icons/HourglassIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
-import { Notification } from '../Notification'
 import { ToggleButton } from '../ToggleButton'
 import { SharesAmount } from '../SharesAmount'
-import { useAppState } from '../../hooks/useAppState'
-import { toErrorString } from '../../utils/errors'
 
-type DebondingItemStatus = 'ready' | 'waiting' | 'pending' | null
+type DebondingItemStatus = 'ready' | 'waiting' | null
 
-type DebondingItem = {
-  receiptId: bigint
-  from: string
-  to: string
-  shares: bigint
-  costBasis: bigint
-  endReceiptId: bigint
-  epoch: bigint
+type DebondingItem = Undelegation & {
   status: DebondingItemStatus
 }
 
@@ -41,10 +30,6 @@ const getDebondingItemStatus = (
     return null
   }
 
-  if (epoch === 0n) {
-    return 'pending'
-  }
-
   if (epoch <= latestEpoch) {
     return 'ready'
   }
@@ -53,65 +38,34 @@ const getDebondingItemStatus = (
 }
 
 const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
-  const { undelegateStart, undelegateDone } = useWeb3()
   const {
     state: { consensusStatus },
   } = useGrpc()
-  const { fetchUndelegations, setAppError } = useAppState()
-  const [inlineErrors, setInlineErrors] = useState<Record<string, string>>({})
 
-  const debondingItems: DebondingItem[] = undelegations.receiptIds.map((receiptId, i) => {
-    const { from, to, shares, costBasis, endReceiptId, epoch } = undelegations.undelegations[i]
-
+  const debondingItems: DebondingItem[] = undelegations.map(({ from, shares, epoch }) => {
     return {
-      receiptId,
       from,
-      to,
       shares,
-      costBasis,
-      endReceiptId,
       epoch,
       status: getDebondingItemStatus(epoch, consensusStatus?.latest_epoch),
     } satisfies DebondingItem
   })
 
-  useEffect(() => {
-    setInlineErrors(
-      debondingItems.reduce((acc, curr) => {
-        acc[curr.receiptId.toString()] = acc[curr.receiptId.toString()] ?? ''
-        return acc
-      }, inlineErrors)
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debondingItems])
-
-  const handleDebondingDone = async (receiptId: bigint) => {
-    try {
-      await undelegateDone(receiptId)
-      fetchUndelegations()
-    } catch (e) {
-      setAppError(toErrorString(e as Error))
-    }
-  }
-
   return (
     <div className={classes.debondingTab}>
       <Table data={debondingItems} isExpandable>
         {({ entry, isExpanded, toggleRow }) => (
-          <Validator key={entry.receiptId} hexAddress={entry.from} fallback={<tr />}>
+          <Validator key={entry.from + entry.epoch} address={entry.from} fallback={<tr />}>
             {validator => (
               <>
                 <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
                   <td>
-                    <p className="body">
-                      {StringUtils.getValidatorFriendlyName(validator)}
-                      {['pending', 'ready'].includes(entry.status!) && <Notification small />}
-                    </p>
+                    <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
                   </td>
                   <td>
                     {!isExpanded && (
                       <>
-                        {['pending', 'waiting'].includes(entry.status!) && (
+                        {entry.status === 'waiting' && (
                           <div className={classes.rowStatusWaiting}>
                             <HourglassIcon />
                           </div>
@@ -132,7 +86,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                 {isExpanded && (
                   <tr className={classes.expandedRow}>
                     <td colSpan={4}>
-                      {['pending', 'waiting'].includes(entry.status!) && (
+                      {entry.status === 'waiting' && (
                         <div className={classes.debondingRowExpanded}>
                           <p className="body">
                             <span>Expected amount:</span>
@@ -145,33 +99,9 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                           <div className={classes.debondingReady}>
                             <div className={StringUtils.clsx(classes.infoBox, classes.infoBoxSuccess)}>
                               <p className="body">
-                                Your <SharesAmount shares={entry.shares} validator={validator} /> is available
-                                to be claimed.
+                                Your <SharesAmount shares={entry.shares} validator={validator} /> is
+                                available.
                               </p>
-                            </div>
-                            <div>
-                              <Button
-                                onClick={async () => {
-                                  setInlineErrors(prevState => ({
-                                    ...prevState,
-                                    [entry.receiptId.toString()]: '',
-                                  }))
-                                  try {
-                                    await handleDebondingDone(entry.receiptId)
-                                  } catch (e) {
-                                    setInlineErrors(prevState => ({
-                                      ...prevState,
-                                      [entry.receiptId.toString()]: (e as Error).message,
-                                    }))
-                                  }
-                                }}
-                                className={classes.claimNowBtn}
-                              >
-                                Claim now
-                              </Button>
-                              {inlineErrors[entry.receiptId.toString()] && (
-                                <p className="body error">{inlineErrors[entry.receiptId.toString()]}</p>
-                              )}
                             </div>
                           </div>
                         )}
@@ -192,38 +122,6 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                             >
                               Remind me
                             </Button>
-                          </div>
-                        )}
-                        {entry.status === 'pending' && (
-                          <div className={classes.infoBox}>
-                            <HourglassIcon />
-                            <p>Sign to verify arrival estimate</p>
-
-                            <Button
-                              size="small"
-                              variant="text"
-                              onClick={async () => {
-                                setInlineErrors(prevState => ({
-                                  ...prevState,
-                                  [entry.receiptId.toString()]: '',
-                                }))
-                                try {
-                                  await undelegateStart(entry.receiptId)
-                                } catch (e) {
-                                  setInlineErrors(prevState => ({
-                                    ...prevState,
-                                    [entry.receiptId.toString()]: (e as Error).message,
-                                  }))
-                                }
-                              }}
-                              className={classes.checkEstimatedTimeBtn}
-                            >
-                              Check estimated time
-                            </Button>
-
-                            {inlineErrors[entry.receiptId.toString()] && (
-                              <p className="body error">{inlineErrors[entry.receiptId.toString()]}</p>
-                            )}
                           </div>
                         )}
                       </div>

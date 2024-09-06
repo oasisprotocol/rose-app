@@ -18,7 +18,7 @@ import { NumberUtils } from '../../utils/number.utils'
 export const StakingTabsCmp: FC = () => {
   const navigate = useNavigate()
   const {
-    state: { stats, pendingDelegations, delegations, undelegations },
+    state: { stats, delegations, undelegations },
   } = useAppState()
   const [activeIndex] = useContext(TabsContext)
 
@@ -84,11 +84,7 @@ export const StakingTabsCmp: FC = () => {
             />
           )}
         </Panel>
-        <Panel>
-          {!!pendingDelegations && !!delegations && (
-            <StakedTab pendingDelegations={pendingDelegations} delegations={delegations} />
-          )}
-        </Panel>
+        <Panel>{!!delegations && <StakedTab delegations={delegations} />}</Panel>
         <Panel>{!!undelegations && <DebondingTab undelegations={undelegations} />}</Panel>
       </div>
       {activeIndex === 0 && (

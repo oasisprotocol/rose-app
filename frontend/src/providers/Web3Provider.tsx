@@ -1,5 +1,4 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
-import * as sapphire from '@oasisprotocol/sapphire-paratime'
 import {
   CHAINS,
   MAX_GAS_LIMIT,
@@ -12,16 +11,14 @@ import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Conte
 import { useEIP1193 } from '../hooks/useEIP1193'
 import { BrowserProvider, EthersError, EventLog, JsonRpcProvider } from 'ethers'
 import { Staking, Staking__factory } from '@oasisprotocol/dapp-staker-backend'
-import * as oasis from '@oasisprotocol/client'
-import { FormattingUtils } from '../utils/formatting.utils'
-import { DefaultReturnType, Delegations, PendingDelegations, Undelegations } from '../types'
+import { DefaultReturnType, PendingDelegations, Undelegations } from '../types'
+import { consensusDelegate, consensusUndelegate } from '@oasisprotocol/dapp-staker-subcall'
 
 let EVENT_LISTENERS_INITIALIZED = false
 
 const web3ProviderInitialState: Web3ProviderState = {
   isConnected: false,
-  ethProvider: null,
-  sapphireEthProvider: null,
+  browserProvider: null,
   account: null,
   explorerBaseUrl: null,
   chainName: null,
@@ -83,11 +80,8 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     }))
   }, [])
 
-  const _setNetworkSpecificVars = (
-    chainId: bigint,
-    sapphireEthProvider = state.sapphireEthProvider!
-  ): void => {
-    if (!sapphireEthProvider) {
+  const _setNetworkSpecificVars = (chainId: bigint, browserProvider = state.browserProvider!): void => {
+    if (!browserProvider) {
       throw new Error('[Web3Context] Sapphire provider is required!')
     }
 
@@ -133,11 +127,10 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
 
   const _init = async (account: string, provider: typeof window.ethereum) => {
     try {
-      const ethProvider = new BrowserProvider(provider!)
-      const sapphireEthProvider = sapphire.wrap(ethProvider) as BrowserProvider & sapphire.SapphireAnnex
+      const browserProvider = new BrowserProvider(provider!)
 
-      const network = await sapphireEthProvider.getNetwork()
-      _setNetworkSpecificVars(network.chainId, sapphireEthProvider)
+      const network = await browserProvider.getNetwork()
+      _setNetworkSpecificVars(network.chainId, browserProvider)
 
       const stakingWithoutSigner = Staking__factory.connect(
         VITE_STAKING_CONTRACT_ADDRESS,
@@ -149,8 +142,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       setState(prevState => ({
         ...prevState,
         isConnected: true,
-        ethProvider,
-        sapphireEthProvider,
+        browserProvider,
         account,
         stakingWithoutSigner,
       }))
@@ -192,65 +184,52 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new Error('[txHash] is required!')
     }
 
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    const txReceipt = await sapphireEthProvider.waitForTransaction(txHash)
+    const txReceipt = await browserProvider.waitForTransaction(txHash)
     if (txReceipt?.status === 0) throw new Error('Transaction failed')
 
-    return await sapphireEthProvider.getTransaction(txHash)
+    return await browserProvider.getTransaction(txHash)
   }
 
   const getGasPrice = async () => {
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
+    if (!browserProvider) {
       return 0n
     }
 
-    return (await sapphireEthProvider.getFeeData()).gasPrice ?? 0n
+    return (await browserProvider.getFeeData()).gasPrice ?? 0n
   }
 
   const getAccountBalance = async () => {
-    const { account, sapphireEthProvider } = state
+    const { account, browserProvider } = state
 
-    if (!account || !sapphireEthProvider) {
+    if (!account || !browserProvider) {
       throw new Error('[Web3Context] Unable to fetch balance!')
     }
 
-    return await sapphireEthProvider.getBalance(account)
+    return await browserProvider.getBalance(account)
   }
 
   const delegate = async (value: bigint, to: string, txSubmittedCb?: () => void) => {
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
-    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
+    const signer = await browserProvider.getSigner()
 
-    const toBech32 = oasis.staking.addressFromBech32(to)
-    const txResponse = await staking.Delegate(toBech32, { value, gasLimit: MAX_GAS_LIMIT })
+    const preparedTx = consensusDelegate(to, value)
+    const tx = await signer.populateTransaction(preparedTx)
+    const txResponse = await signer.sendTransaction(tx)
     txSubmittedCb?.()
-
-    const txReciept = await txResponse.wait()
-
-    const log = txReciept!.logs.find(log => {
-      const {
-        fragment: { name },
-      } = log as EventLog
-
-      return name === staking.filters.OnDelegateStart.name
-    })! as EventLog
-
-    const [, , , receiptId] = log.args
-
-    return receiptId satisfies bigint
+    return getTransaction(txResponse.hash)
   }
 
   const getPendingDelegations = async (): Promise<DefaultReturnType<[PendingDelegations]>> => {
@@ -268,13 +247,13 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const delegateDone = async (receiptId: bigint) => {
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const signer = await browserProvider.getSigner()
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const txResponse = await staking.DelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT })
@@ -282,36 +261,19 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return getTransaction(txResponse.hash)
   }
 
-  const getDelegations = async (): Promise<DefaultReturnType<[Delegations]>> => {
-    const { stakingWithoutSigner, account } = state
+  const undelegate = async (shares: bigint, from: string, txSubmittedCb?: () => void) => {
+    const { browserProvider } = state
 
-    if (!stakingWithoutSigner) {
-      throw new Error('[stakingWithoutSigner] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    if (!account) {
-      throw new Error('[account] not connected!')
-    }
+    const signer = await browserProvider.getSigner()
 
-    const delegationsCount = await stakingWithoutSigner.GetDelegationsCount(account)
-    return await stakingWithoutSigner.GetDelegations(account, 0n, delegationsCount).catch(handleKnownErrors)
-  }
-
-  const undelegate = async (shares: bigint, from: string) => {
-    const { sapphireEthProvider } = state
-
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
-    }
-
-    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
-    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
-
-    const fromBech32 = await FormattingUtils.toUint8Array(from)
-    const txResponse = await staking.Undelegate(fromBech32, shares, {
-      gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT,
-    })
-
+    const preparedTx = consensusUndelegate(from, shares)
+    const tx = await signer.populateTransaction(preparedTx)
+    const txResponse = await signer.sendTransaction(tx)
+    txSubmittedCb?.()
     return getTransaction(txResponse.hash)
   }
 
@@ -368,13 +330,13 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const undelegateStart = async (receiptId: bigint, txSubmittedCb?: () => void) => {
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const signer = await browserProvider.getSigner()
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const txResponse = await staking.UndelegateStart(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
@@ -396,13 +358,13 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const undelegateDone = async (receiptId: bigint) => {
-    const { sapphireEthProvider } = state
+    const { browserProvider } = state
 
-    if (!sapphireEthProvider) {
-      throw new Error('[sapphireEthProvider] not initialized!')
+    if (!browserProvider) {
+      throw new Error('[browserProvider] not initialized!')
     }
 
-    const signer = sapphire.wrapEthersSigner(await sapphireEthProvider.getSigner())
+    const signer = await browserProvider.getSigner()
     const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
 
     const txResponse = await staking.UndelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
@@ -421,7 +383,6 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     delegate: interactingWithChainWrapper(delegate),
     getPendingDelegations,
     delegateDone: interactingWithChainWrapper(delegateDone),
-    getDelegations,
     undelegate: interactingWithChainWrapper(undelegate),
     getUndelegations,
     getUndelegationReceiptId,

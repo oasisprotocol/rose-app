@@ -33,8 +33,8 @@ export interface AppStateProviderContext {
   setAppError: (error: Error | object | string) => void
   clearAppError: () => void
   getValidatorByAddress: (opts: { hexAddress?: string; address?: string }) => Promise<Validator | null>
-  fetchDelegations: () => Promise<void>
-  fetchUndelegations: () => Promise<void>
+  fetchDelegations: () => Promise<Delegations>
+  fetchUndelegations: () => Promise<Undelegations>
 }
 
 export const AppStateContext = createContext<AppStateProviderContext>({} as AppStateProviderContext)
