@@ -58,6 +58,10 @@ body {
   min-height: 100dvh;
 }
 
+button {
+  font-family: inherit;
+}
+
 h1,
 h2,
 h3,
