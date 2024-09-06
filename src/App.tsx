@@ -7,15 +7,23 @@ import { Layout } from './components/Layout'
 import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
+import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
+import loader_blocks_svg from '/loader_blocks.svg?url'
+import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
+import logo_rose_on_ramp_svg from '/logo_rose_on_ramp.svg?url'
+import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
+import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
+import symbol_warning_svg from '/symbol_warning.svg?url'
+
 export function App() {
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
 
   if (!sapphireAddress) {
     return (
-      <Layout header={<img src="/logo-oasis-network.svg" alt="Oasis Network" />}>
+      <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
         <div className={classes.step1}>
           <div>
-            <img src="/logo-rose-on-ramp.svg" alt="ROSE on-ramp" />
+            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
             <p>
               The Rose (on)ramp dApp has been built by Oasis to offer users an easy to use service of moving your Rose
               from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
@@ -32,7 +40,7 @@ export function App() {
       <Layout
         header={
           <>
-            <img src="/logo-rose-on-ramp.svg" alt="ROSE on-ramp" />
+            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
             <Hint title="Your funds will be sent to this address.">
               <ConnectButton />
             </Hint>
@@ -46,7 +54,7 @@ export function App() {
           </div>
           <div className={classes.cards}>
             <div className={classes.card}>
-              <img className={classes.cardImage} src="/consensus-to-sapphire.svg" alt="" />
+              <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt="" />
               <div className={classes.cardContent}>
                 <h2>Consensus to Sapphire</h2>
                 <p>Move ROSE from your Consensus account (e.g. centralized exchange) to Sapphire.</p>
@@ -55,7 +63,7 @@ export function App() {
             </div>
 
             <div className={classes.card}>
-              <img className={`${classes.cardImage} ${classes.opacity50}`} src="/sapphire-to-consensus.svg" alt="" />
+              <img className={`${classes.cardImage} ${classes.opacity50}`} src={sapphire_to_consensus_svg} alt="" />
               <div className={classes.cardContent}>
                 <h2>Sapphire to Consensus</h2>
                 <p>Move ROSE from Sapphire to your Consensus account (e.g. centralized exchange).</p>
@@ -80,7 +88,7 @@ export function App() {
     <Layout
       header={
         <>
-          <img src="/logo-rose-on-ramp.svg" alt="ROSE on-ramp" />
+          <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
           <Hint
             title={(() => {
               if (progress.percentage === undefined) return ''
@@ -136,9 +144,9 @@ export function App() {
 
         {isBlockingNavigatingAway && (
           <>
-            <img src="/loader-blocks.svg" alt="" style={{ marginTop: '-20px', width: '106px' }} />
+            <img src={loader_blocks_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
             <div className={classes.doNotClose}>
-              <img src="/symbol-warning.svg" alt="Warning" width="24" />
+              <img src={symbol_warning_svg} alt="Warning" width="24" />
               <p>
                 Please do not close this window in order to complete the process. If the window is closed you can always
                 recover from the last step and your funds won't be lost.
@@ -149,7 +157,7 @@ export function App() {
 
         {progress.percentage && progress.percentage >= 1 && (
           <>
-            <img src="/symbol-check-circle.svg" alt="" style={{ marginTop: '-20px', width: '106px' }} />
+            <img src={symbol_check_circle_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
             <Button onClick={transferMore}>Transfer more</Button>
           </>
         )}
