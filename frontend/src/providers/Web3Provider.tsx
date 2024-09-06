@@ -1,17 +1,9 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
-import {
-  CHAINS,
-  MAX_GAS_LIMIT,
-  VITE_NETWORK,
-  VITE_STAKING_CONTRACT_ADDRESS,
-  VITE_WEB3_GATEWAY,
-} from '../constants/config'
+import { CHAINS, VITE_NETWORK } from '../constants/config'
 import { handleKnownErrors, handleKnownEthersErrors, UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
-import { BrowserProvider, EthersError, EventLog, JsonRpcProvider } from 'ethers'
-import { Staking, Staking__factory } from '@oasisprotocol/dapp-staker-backend'
-import { DefaultReturnType, PendingDelegations, Undelegations } from '../types'
+import { BrowserProvider, EthersError } from 'ethers'
 import { consensusDelegate, consensusUndelegate } from '@oasisprotocol/dapp-staker-subcall'
 
 let EVENT_LISTENERS_INITIALIZED = false
@@ -22,7 +14,6 @@ const web3ProviderInitialState: Web3ProviderState = {
   account: null,
   explorerBaseUrl: null,
   chainName: null,
-  stakingWithoutSigner: null,
   nativeCurrency: null,
   isInteractingWithChain: false,
 }
@@ -51,6 +42,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
           return await fn(...args)
         } catch (e) {
           handleKnownEthersErrors(e as EthersError)
+          handleKnownErrors(e as Error)
           throw e
         } finally {
           setState(prevState => ({ ...prevState, isInteractingWithChain: false }))
@@ -132,19 +124,11 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const network = await browserProvider.getNetwork()
       _setNetworkSpecificVars(network.chainId, browserProvider)
 
-      const stakingWithoutSigner = Staking__factory.connect(
-        VITE_STAKING_CONTRACT_ADDRESS,
-        new JsonRpcProvider(VITE_WEB3_GATEWAY, undefined, {
-          staticNetwork: true,
-        })
-      )
-
       setState(prevState => ({
         ...prevState,
         isConnected: true,
         browserProvider,
         account,
-        stakingWithoutSigner,
       }))
     } catch (ex) {
       setState(prevState => ({
@@ -232,35 +216,6 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return getTransaction(txResponse.hash)
   }
 
-  const getPendingDelegations = async (): Promise<DefaultReturnType<[PendingDelegations]>> => {
-    const { stakingWithoutSigner, account } = state
-
-    if (!stakingWithoutSigner) {
-      throw new Error('[stakingWithoutSigner] not initialized!')
-    }
-
-    if (!account) {
-      throw new Error('[account] not connected!')
-    }
-
-    return await stakingWithoutSigner.GetPendingDelegations(account).catch(handleKnownErrors)
-  }
-
-  const delegateDone = async (receiptId: bigint) => {
-    const { browserProvider } = state
-
-    if (!browserProvider) {
-      throw new Error('[browserProvider] not initialized!')
-    }
-
-    const signer = await browserProvider.getSigner()
-    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
-
-    const txResponse = await staking.DelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT })
-
-    return getTransaction(txResponse.hash)
-  }
-
   const undelegate = async (shares: bigint, from: string, txSubmittedCb?: () => void) => {
     const { browserProvider } = state
 
@@ -277,101 +232,6 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return getTransaction(txResponse.hash)
   }
 
-  const getUndelegations = async (): Promise<DefaultReturnType<[Undelegations]>> => {
-    const { stakingWithoutSigner, account } = state
-
-    if (!stakingWithoutSigner) {
-      throw new Error('[stakingWithoutSigner] not initialized!')
-    }
-
-    if (!account) {
-      throw new Error('[account] not connected!')
-    }
-
-    return await stakingWithoutSigner.GetUndelegations(account).catch(handleKnownErrors)
-  }
-
-  const getUndelegationReceiptId = async (filterBy?: Partial<Staking.PendingUndelegationStruct>) => {
-    const undelegations = await getUndelegations()
-
-    if (!filterBy) return null
-
-    const foundUndelegation = undelegations.undelegations
-      .map(({ from, to, shares, costBasis, endReceiptId, epoch }, i) => {
-        const receiptId = undelegations.receiptIds[i]
-        return {
-          from,
-          to,
-          shares,
-          costBasis,
-          endReceiptId,
-          epoch,
-          receiptId,
-        }
-      })
-      .filter(({ endReceiptId }) => endReceiptId === 0n)
-      .sort(({ receiptId: receiptIdA, receiptId: receiptIdB }) => {
-        if (receiptIdA > receiptIdB) {
-          return -1
-        } else if (receiptIdA < receiptIdB) {
-          return 1
-        } else {
-          return 0
-        }
-      })
-      .find(undelegation =>
-        Object.keys(filterBy).every(k => {
-          const key = k as keyof Staking.PendingUndelegationStruct
-          return filterBy[key]?.toString().toLowerCase() == undelegation[key].toString().toLowerCase()
-        })
-      )
-
-    return foundUndelegation?.receiptId ?? null
-  }
-
-  const undelegateStart = async (receiptId: bigint, txSubmittedCb?: () => void) => {
-    const { browserProvider } = state
-
-    if (!browserProvider) {
-      throw new Error('[browserProvider] not initialized!')
-    }
-
-    const signer = await browserProvider.getSigner()
-    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
-
-    const txResponse = await staking.UndelegateStart(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
-    txSubmittedCb?.()
-
-    const txReciept = await txResponse.wait()
-
-    const log = txReciept!.logs.find(log => {
-      const {
-        fragment: { name },
-      } = log as EventLog
-
-      return name === staking.filters.OnUndelegateStart.name
-    })! as EventLog
-
-    const [, , epoch] = log.args
-
-    return epoch satisfies bigint
-  }
-
-  const undelegateDone = async (receiptId: bigint) => {
-    const { browserProvider } = state
-
-    if (!browserProvider) {
-      throw new Error('[browserProvider] not initialized!')
-    }
-
-    const signer = await browserProvider.getSigner()
-    const staking = Staking__factory.connect(VITE_STAKING_CONTRACT_ADDRESS, signer)
-
-    const txResponse = await staking.UndelegateDone(receiptId, { gasLimit: MAX_GAS_LIMIT + MAX_GAS_LIMIT })
-
-    return getTransaction(txResponse.hash)
-  }
-
   const providerState: Web3ProviderContext = {
     state,
     isProviderAvailable,
@@ -381,13 +241,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     getGasPrice,
     getAccountBalance,
     delegate: interactingWithChainWrapper(delegate),
-    getPendingDelegations,
-    delegateDone: interactingWithChainWrapper(delegateDone),
     undelegate: interactingWithChainWrapper(undelegate),
-    getUndelegations,
-    getUndelegationReceiptId,
-    undelegateStart: interactingWithChainWrapper(undelegateStart),
-    undelegateDone: interactingWithChainWrapper(undelegateDone),
   }
 
   return <Web3Context.Provider value={providerState}>{children}</Web3Context.Provider>

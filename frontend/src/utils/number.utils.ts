@@ -9,10 +9,6 @@ export abstract class NumberUtils {
     return parseInt(addr, 16)
   }
 
-  static uniqueId = (counter => {
-    return (str = '') => `${str}${++counter}`
-  })(0)
-
   static getAmountFromShares(
     shares: BigNumber.Value,
     validator: Validator,

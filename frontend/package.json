@@ -25,7 +25,6 @@
     "@oasisprotocol/client-rt": "^1.1.0",
     "@oasisprotocol/dapp-staker-subcall": "workspace:*",
     "@oasisprotocol/nexus-api": "workspace:*",
-    "@oasisprotocol/sapphire-paratime": "^1.3.2",
     "axios": "^1.7.2",
     "bignumber.js": "^9.1.2",
     "date-fns": "^3.6.0",

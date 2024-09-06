@@ -6,9 +6,7 @@ import { Amount } from '../Amount'
 interface Props {
   totalAmount: bigint
   availableAmount: bigint
-  pendingStakedAmount: bigint
   stakedAmount: bigint
-  pendingDebondingAmount: bigint
   debondingAmount: bigint
 }
 

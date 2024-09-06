@@ -8,7 +8,6 @@ import { StakedTab } from './StakedTab'
 import { useAppState } from '../../hooks/useAppState'
 import { DebondingTab } from './DebondingTab'
 import { StringUtils } from '../../utils/string.utils'
-import { Notification } from '../Notification'
 import classes from './index.module.css'
 import { TabsContext } from '../Tabs/TabsContext'
 import { Button } from '../Button'
@@ -22,12 +21,8 @@ export const StakingTabsCmp: FC = () => {
   } = useAppState()
   const [activeIndex] = useContext(TabsContext)
 
-  const numOfTotalStakes =
-    NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingStakes) +
-    NumberUtils.orZeroNumber(stats?.numOfItems.numOfStakes)
-  const numOfTotalDebondings =
-    NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
-    NumberUtils.orZeroNumber(stats?.numOfItems.numOfDebondings)
+  const numOfTotalStakes = NumberUtils.orZeroNumber(stats?.numOfItems.numOfStakes)
+  const numOfTotalDebondings = NumberUtils.orZeroNumber(stats?.numOfItems.numOfDebondings)
 
   const navigateToStake = () => navigate('/stake')
 
@@ -44,9 +39,6 @@ export const StakingTabsCmp: FC = () => {
               {numOfTotalStakes > 0 && (
                 <span className={StringUtils.clsx(classes.mute)}>&nbsp;({numOfTotalStakes})</span>
               )}
-              {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingStakes) > 0 && (
-                <Notification>{stats?.numOfItems.numOfPendingStakes}</Notification>
-              )}
             </p>
           </Tab>
           <Tab>
@@ -54,14 +46,6 @@ export const StakingTabsCmp: FC = () => {
               Debonding
               {numOfTotalDebondings > 0 && (
                 <span className={classes.mute}>&nbsp;({numOfTotalDebondings})</span>
-              )}
-              {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
-                NumberUtils.orZeroNumber(stats?.numOfItems.numOfAvailableToClaimDebondings) >
-                0 && (
-                <Notification>
-                  {NumberUtils.orZeroNumber(stats?.numOfItems.numOfPendingDebondings) +
-                    NumberUtils.orZeroNumber(stats?.numOfItems.numOfAvailableToClaimDebondings)}
-                </Notification>
               )}
             </p>
           </Tab>
@@ -71,15 +55,11 @@ export const StakingTabsCmp: FC = () => {
             <OverviewTab
               totalAmount={
                 NumberUtils.orZeroBigInt(stats.balances.accountBalance) +
-                NumberUtils.orZeroBigInt(stats.balances.totalPendingStake) +
                 NumberUtils.orZeroBigInt(stats.balances.totalStaked) +
-                NumberUtils.orZeroBigInt(stats.balances.totalPendingDebondings) +
                 NumberUtils.orZeroBigInt(stats.balances.totalDebonding)
               }
               availableAmount={NumberUtils.orZeroBigInt(stats.balances.accountBalance)}
-              pendingStakedAmount={NumberUtils.orZeroBigInt(stats.balances.totalPendingStake)}
               stakedAmount={NumberUtils.orZeroBigInt(stats.balances.totalStaked)}
-              pendingDebondingAmount={NumberUtils.orZeroBigInt(stats.balances.totalPendingDebondings)}
               debondingAmount={NumberUtils.orZeroBigInt(stats.balances.totalDebonding)}
             />
           )}

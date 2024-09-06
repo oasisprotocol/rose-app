@@ -1,7 +1,5 @@
 export * from './icon-size'
 export * from './icon-props'
-export * from './default-return-type'
-export * from './pending-delegations'
 export * from './delegations'
 export * from './undelegations'
 export * from './helpers'

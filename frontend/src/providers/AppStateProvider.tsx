@@ -15,7 +15,6 @@ const appStateProviderInitialState: AppStateProviderState = {
   appError: '',
   isMobileScreen: false,
   isDesktopScreen: false,
-  pendingDelegations: null,
   delegations: null,
   undelegations: null,
   validatorsList: null,
@@ -25,7 +24,7 @@ const appStateProviderInitialState: AppStateProviderState = {
 export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const { getValidators } = useApi()
   const {
-    state: { account, stakingWithoutSigner },
+    state: { account },
     getAccountBalance,
   } = useWeb3()
   const { fetchDelegations: grpcFetchDelegations, fetchUndelegations: grpcFetchUndelegations } = useGrpc()
@@ -112,11 +111,6 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         delegations: null,
         undelegations: null,
       }))
-
-      if (stakingWithoutSigner) {
-        stakingWithoutSigner.removeAllListeners()
-        return
-      }
     }
 
     const fetchAccountData = async () => {
@@ -252,8 +246,6 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state.undelegations, state.validatorsList])
-
-  console.log('state', state)
 
   const providerState: AppStateProviderContext = {
     state,
