@@ -22,7 +22,6 @@
     "@metamask/detect-provider": "^2.0.0",
     "@metamask/jazzicon": "^2.0.0",
     "@oasisprotocol/client": "^1.1.0",
-    "@oasisprotocol/client-rt": "^1.1.0",
     "@oasisprotocol/dapp-staker-subcall": "workspace:*",
     "@oasisprotocol/nexus-api": "workspace:*",
     "axios": "^1.7.2",
