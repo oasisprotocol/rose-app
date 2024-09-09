@@ -59,9 +59,6 @@ importers:
       '@oasisprotocol/client':
         specifier: ^1.1.0
         version: 1.1.0
-      '@oasisprotocol/client-rt':
-        specifier: ^1.1.0
-        version: 1.1.0
       '@oasisprotocol/dapp-staker-subcall':
         specifier: workspace:*
         version: link:../subcall
