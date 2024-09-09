@@ -1,3 +1,9 @@
+if (import.meta.env.BASE_URL !== window.location.pathname) {
+  // Don't allow typos in pathname like https://oasisprotocol.github.io/dapp-onramp/abc or https://oasisprotocol.github.io/dapp-onramp//
+  // (it would derive a different account that is hard to reproduce)
+  throw new Error('Wrong URL')
+}
+
 /**
  * https://docs.metamask.io/wallet/how-to/sign-data/siwe/
  * https://eips.ethereum.org/EIPS/eip-4361
