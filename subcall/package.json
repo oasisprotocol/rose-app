@@ -5,13 +5,16 @@
   "type": "module",
   "scripts": {
     "build": "tsc && vite build",
-    "watch": "nodemon -e ts --watch 'src/**/*' --exec 'pnpm run build'"
+    "watch": "nodemon -e ts --watch 'src/**/*' --exec 'pnpm run build'",
+    "test": "vitest"
   },
   "devDependencies": {
     "nodemon": "^3.1.4",
     "typescript": "^5.5.3",
     "vite": "^5.4.1",
-    "vite-plugin-dts": "^4.1.0"
+    "vite-plugin-dts": "^4.1.0",
+    "vitest": "^2.0.5",
+    "xhr2": "^0.2.1"
   },
   "dependencies": {
     "@oasisprotocol/client": "^1.1.0",
