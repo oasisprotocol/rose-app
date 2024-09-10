@@ -1,6 +1,6 @@
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
-import { CONSENSUS_DECIMALS } from '../constants/config'
+import { CONSENSUS_DECIMALS, NEXUS_COMMISSION_RATE_DECIMALS } from '../constants/config'
 import { SharesType } from '../types/shares-type'
 
 export abstract class NumberUtils {
@@ -40,5 +40,11 @@ export abstract class NumberUtils {
 
   static orZeroNumber(value: undefined | null | number) {
     return value ?? 0
+  }
+
+  static formatValidatorRate(rate: number, dp = 2) {
+    return BigNumber(rate)
+      .dividedBy(10 ** (NEXUS_COMMISSION_RATE_DECIMALS - dp))
+      .toFormat(dp, BigNumber.ROUND_DOWN)
   }
 }

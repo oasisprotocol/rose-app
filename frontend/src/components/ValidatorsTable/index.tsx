@@ -5,10 +5,10 @@ import { useAppState } from '../../hooks/useAppState'
 import { Table } from '../Table'
 import { StringUtils } from '../../utils/string.utils'
 import { ToggleButton } from '../ToggleButton'
-import { formatUnits } from 'ethers'
 import { ActiveIcon } from '../icons/ActiveIcon'
 import { InactiveIcon } from '../icons/InactiveIcon'
 import { Amount } from '../Amount'
+import { NumberUtils } from '../../utils/number.utils'
 
 interface Props {
   value: Validator | null
@@ -43,7 +43,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                   </td>
                   <td>
                     <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>
-                      {formatUnits(entry.current_rate * 100, 2)}&nbsp;%
+                      {NumberUtils.formatValidatorRate(entry.current_rate)}&nbsp;%
                     </p>
                   </td>
                   <td>
