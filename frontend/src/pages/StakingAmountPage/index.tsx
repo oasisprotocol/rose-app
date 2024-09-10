@@ -17,6 +17,7 @@ import { Alert } from '../../components/Alert'
 import { toErrorString } from '../../utils/errors'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { Delegations } from '../../types'
+import { FormattingUtils } from '../../utils/formatting.utils'
 
 enum Steps {
   DelegateInputAmount,
@@ -44,6 +45,7 @@ export const StakingAmountPage: FC = () => {
   const [error, setError] = useState('')
 
   const navigateToStake = () => navigate('/stake')
+  const navigateToDashboard = () => navigate('/dashboard')
 
   useEffect(() => {
     if (!address) {
@@ -74,7 +76,12 @@ export const StakingAmountPage: FC = () => {
       const delegations = await fetchDelegations()
 
       // This should work in 99% of cases!
-      const [diff] = delegations.filter(d => !prevDelegations.includes(d))
+      const [diff] = delegations.filter(
+        d =>
+          !prevDelegations.some(prevD => {
+            return FormattingUtils.serializeObj(prevD) === FormattingUtils.serializeObj(d)
+          })
+      )
 
       if (!diff) {
         throw new Error('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
@@ -181,7 +188,7 @@ export const StakingAmountPage: FC = () => {
         <Alert
           type="success"
           headerText="Staking successful"
-          actions={<Button onClick={() => {}}>Continue</Button>}
+          actions={<Button onClick={navigateToDashboard}>Go to dashboard</Button>}
         />
       )}
       {step === Steps.DelegateFailed && (

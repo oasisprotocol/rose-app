@@ -19,6 +19,7 @@ import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
+import { FormattingUtils } from '../../utils/formatting.utils'
 
 enum Steps {
   UndelegateInputAmount,
@@ -110,7 +111,12 @@ export const UnstakePage: FC = () => {
       const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations()])
 
       // This should work in 99% of cases!
-      const [diff] = undelegations.filter(und => !prevUndelegations.includes(und))
+      const [diff] = undelegations.filter(
+        und =>
+          !prevUndelegations.some(prevUnd => {
+            return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
+          })
+      )
 
       if (!diff) {
         throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
@@ -286,7 +292,7 @@ export const UnstakePage: FC = () => {
       {step === Steps.UndelegateInProgress && (
         <Alert
           type="loading"
-          headerText="Unstaking initiated"
+          headerText="Unstaking in progress..."
           actions={<span className="body">Submitting transaction...</span>}
         />
       )}

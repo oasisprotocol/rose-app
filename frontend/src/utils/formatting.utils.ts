@@ -12,4 +12,16 @@ export abstract class FormattingUtils {
     const bech32Uint8Array = await FormattingUtils.toUint8Array(hexAddress)
     return oasis.staking.addressToBech32(bech32Uint8Array)
   }
+
+  static serializeObj(o: Record<string, unknown>): string {
+    return JSON.stringify(
+      Object.keys(o).reduce(
+        (acc, key) => ({
+          ...acc,
+          [key]: (o[key] as string).toString(),
+        }),
+        {}
+      )
+    )
+  }
 }
