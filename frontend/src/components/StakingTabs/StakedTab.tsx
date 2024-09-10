@@ -35,7 +35,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
                     <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
                   </td>
                   <td>
-                    <SharesAmount shares={entry.shares} validator={validator} />
+                    <SharesAmount shares={entry.shares} validator={validator} type="staking" />
                   </td>
                   <td>
                     <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />

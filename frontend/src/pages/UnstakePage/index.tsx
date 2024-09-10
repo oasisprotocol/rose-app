@@ -202,7 +202,7 @@ export const UnstakePage: FC = () => {
               [
                 <p className="body">Amount:</p>,
                 <p className="body">
-                  <SharesAmount shares={shares} validator={validator} />
+                  <SharesAmount shares={shares} validator={validator} type="unstaking" />
                 </p>,
               ],
               [

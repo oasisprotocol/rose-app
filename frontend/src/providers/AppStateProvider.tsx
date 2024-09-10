@@ -189,7 +189,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         .reduce((acc, validator, i) => {
           const { shares } = delegations[i]
 
-          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!))
+          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'staking'))
         }, BigNumber(0))
         .toString(10)
 
@@ -224,7 +224,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         .reduce((acc, validator, i) => {
           const { shares } = undelegations[i]
 
-          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!))
+          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'unstaking'))
         }, BigNumber(0))
         .toString(10)
 
