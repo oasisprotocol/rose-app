@@ -77,7 +77,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                     )}
                   </td>
                   <td>
-                    <SharesAmount shares={entry.shares} validator={validator} />
+                    <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
                   </td>
                   <td>
                     <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
@@ -90,7 +90,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                         <div className={classes.debondingRowExpanded}>
                           <p className="body">
                             <span>Expected amount:</span>
-                            <SharesAmount shares={entry.shares} validator={validator} />
+                            <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
                           </p>
                         </div>
                       )}
@@ -99,8 +99,9 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                           <div className={classes.debondingReady}>
                             <div className={StringUtils.clsx(classes.infoBox, classes.infoBoxSuccess)}>
                               <p className="body">
-                                Your <SharesAmount shares={entry.shares} validator={validator} /> is
-                                available.
+                                Your{' '}
+                                <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />{' '}
+                                is available.
                               </p>
                             </div>
                           </div>
