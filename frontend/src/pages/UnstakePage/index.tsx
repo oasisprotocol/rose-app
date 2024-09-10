@@ -9,7 +9,7 @@ import { Button } from '../../components/Button'
 import { AmountInput } from '../../components/AmountInput'
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
-import { CONSENSUS_DECIMALS, MAX_GAS_LIMIT } from '../../constants/config'
+import { CONSENSUS_DECIMALS, GAS_LIMIT_UNSTAKE } from '../../constants/config'
 import { PreviewTable } from '../../components/PreviewTable'
 import { FeeAmount } from '../../components/FeeAmount'
 import { GasPrice } from '../../components/GasPrice'
@@ -19,6 +19,7 @@ import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
+import { FormattingUtils } from '../../utils/formatting.utils'
 
 enum Steps {
   UndelegateInputAmount,
@@ -110,7 +111,12 @@ export const UnstakePage: FC = () => {
       const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations()])
 
       // This should work in 99% of cases!
-      const [diff] = undelegations.filter(und => !prevUndelegations.includes(und))
+      const [diff] = undelegations.filter(
+        und =>
+          !prevUndelegations.some(prevUnd => {
+            return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
+          })
+      )
 
       if (!diff) {
         throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
@@ -220,7 +226,7 @@ export const UnstakePage: FC = () => {
               [
                 <p className="body">Max fee:</p>,
                 <p className="body">
-                  <FeeAmount gasLimit={MAX_GAS_LIMIT + MAX_GAS_LIMIT} />
+                  <FeeAmount gasLimit={GAS_LIMIT_UNSTAKE} />
                 </p>,
               ],
               [
@@ -286,7 +292,7 @@ export const UnstakePage: FC = () => {
       {step === Steps.UndelegateInProgress && (
         <Alert
           type="loading"
-          headerText="Unstaking initiated"
+          headerText="Unstaking in progress..."
           actions={<span className="body">Submitting transaction...</span>}
         />
       )}

@@ -1,5 +1,5 @@
 import { FC, PropsWithChildren, useCallback, useEffect, useState } from 'react'
-import { CHAINS, VITE_NETWORK } from '../constants/config'
+import { CHAINS, GAS_LIMIT_STAKE, GAS_LIMIT_UNSTAKE, VITE_NETWORK } from '../constants/config'
 import { handleKnownErrors, handleKnownEthersErrors, UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
@@ -210,7 +210,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const signer = await browserProvider.getSigner()
 
     const preparedTx = consensusDelegate(to, value)
-    const tx = await signer.populateTransaction(preparedTx)
+    const tx = await signer.populateTransaction({ ...preparedTx, gasLimit: GAS_LIMIT_STAKE })
     const txResponse = await signer.sendTransaction(tx)
     txSubmittedCb?.()
     return getTransaction(txResponse.hash)
@@ -226,7 +226,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     const signer = await browserProvider.getSigner()
 
     const preparedTx = consensusUndelegate(from, shares)
-    const tx = await signer.populateTransaction(preparedTx)
+    const tx = await signer.populateTransaction({ ...preparedTx, gasLimit: GAS_LIMIT_UNSTAKE })
     const txResponse = await signer.sendTransaction(tx)
     txSubmittedCb?.()
     return getTransaction(txResponse.hash)
