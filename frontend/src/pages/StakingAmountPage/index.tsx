@@ -18,6 +18,7 @@ import { toErrorString } from '../../utils/errors'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { Delegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
+import { GAS_LIMIT_STAKE } from '../../constants/config'
 
 enum Steps {
   DelegateInputAmount,
@@ -159,7 +160,7 @@ export const StakingAmountPage: FC = () => {
               [
                 <p className="body">Max fee:</p>,
                 <p className="body">
-                  <FeeAmount />
+                  <FeeAmount gasLimit={GAS_LIMIT_STAKE} />
                 </p>,
               ],
               [
@@ -176,7 +177,7 @@ export const StakingAmountPage: FC = () => {
             </Button>
             <Button
               variant="text"
-              onClick={() => setStep(prevValue => prevValue - 1)}
+              onClick={() => setStep(Steps.DelegateInputAmount)}
               startSlot={<ArrowLeftIcon />}
             >
               Back

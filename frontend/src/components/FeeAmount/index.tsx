@@ -1,7 +1,6 @@
 import { FC, memo, Suspense } from 'react'
 import { PromiseUtils } from '../../utils/promise.utils'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { MAX_GAS_LIMIT } from '../../constants/config'
 import { Amount } from '../Amount'
 
 interface FeeEstimateProps {
@@ -18,11 +17,11 @@ const FeeEstimate: FC<FeeEstimateProps> = ({ getGasPrice, gasLimit }) => {
 }
 
 interface Props {
-  gasLimit?: bigint
+  gasLimit: bigint
   gasPrice?: bigint
 }
 
-const FeeAmountCmp: FC<Props> = ({ gasLimit = MAX_GAS_LIMIT, gasPrice }) => {
+const FeeAmountCmp: FC<Props> = ({ gasLimit, gasPrice }) => {
   const { getGasPrice } = useWeb3()
   const wGasPrice = PromiseUtils.wrapPromise(
     !!gasPrice && gasPrice >= 0n ? Promise.resolve(gasPrice) : getGasPrice()

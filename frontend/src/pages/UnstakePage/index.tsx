@@ -9,7 +9,7 @@ import { Button } from '../../components/Button'
 import { AmountInput } from '../../components/AmountInput'
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
-import { CONSENSUS_DECIMALS, MAX_GAS_LIMIT } from '../../constants/config'
+import { CONSENSUS_DECIMALS, GAS_LIMIT_UNSTAKE } from '../../constants/config'
 import { PreviewTable } from '../../components/PreviewTable'
 import { FeeAmount } from '../../components/FeeAmount'
 import { GasPrice } from '../../components/GasPrice'
@@ -226,7 +226,7 @@ export const UnstakePage: FC = () => {
               [
                 <p className="body">Max fee:</p>,
                 <p className="body">
-                  <FeeAmount gasLimit={MAX_GAS_LIMIT + MAX_GAS_LIMIT} />
+                  <FeeAmount gasLimit={GAS_LIMIT_UNSTAKE} />
                 </p>,
               ],
               [
