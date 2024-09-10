@@ -12,14 +12,19 @@ import {
   OASIS_HOME_PAGE_TOKENOMICS_URL,
 } from '../../constants/config'
 import { InfoCard } from '../../components/InfoCard'
+import { useWeb3 } from '../../hooks/useWeb3'
 
 export const HomePage: FC = () => {
+  const {
+    state: { nativeCurrency },
+  } = useWeb3()
+
   return (
     <div className={classes.homePage}>
       <LogoIcon className={classes.logo} size="large" />
       <p className={StringUtils.clsx('body', classes.description)}>
-        Easily stake ROSE tokens on Sapphire using our (un)staker dApp and help the network. By staking you
-        help the ecosystem’s network security and earn rewards at the same time.
+        Easily stake {nativeCurrency?.symbol} tokens on Sapphire using our (un)staker dApp and help the
+        network. By staking you help the ecosystem’s network security and earn rewards at the same time.
       </p>
       <div className={classes.connectWallet}>
         <ConnectWallet />

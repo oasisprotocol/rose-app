@@ -3,7 +3,6 @@ import { Delegations } from '../../types'
 import { Table } from '../Table'
 import { Validator } from '../Validator'
 import { StringUtils } from '../../utils/string.utils'
-import { formatUnits } from 'ethers'
 import { Button } from '../Button'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { ActiveIcon } from '../icons/ActiveIcon'
@@ -12,6 +11,7 @@ import { InactiveIcon } from '../icons/InactiveIcon'
 import { ToggleButton } from '../ToggleButton'
 import { useNavigate } from 'react-router-dom'
 import { SharesAmount } from '../SharesAmount'
+import { NumberUtils } from '../../utils/number.utils'
 
 interface Props {
   delegations: Delegations
@@ -67,7 +67,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
                         </p>
                         <p className="body">
                           <span>Commission:</span>
-                          <span>{formatUnits(validator.current_rate * 100, 2)}&nbsp;%</span>
+                          <span>{NumberUtils.formatValidatorRate(validator.current_rate)}&nbsp;%</span>
                         </p>
                       </div>
                       <div className={classes.stakedRowActions}>
