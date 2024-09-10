@@ -4,6 +4,7 @@ import { StringUtils } from '../../utils/string.utils'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { formatUnits } from 'ethers'
 import { CONSENSUS_DECIMALS } from '../../constants/config'
+import BigNumber from 'bignumber.js'
 
 const supportedUnits = {
   nano: {
@@ -32,7 +33,10 @@ export const Amount: FC<Props> = ({ amount, className, unit }) => {
 
   return (
     <span className={StringUtils.clsx('body', classes.amount, className)}>
-      {formatUnits(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}&nbsp;{unitPrefix}
+      {BigNumber(formatUnits(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18))
+        .dp(2, BigNumber.ROUND_DOWN)
+        .toFormat(2)}
+      &nbsp;{unitPrefix}
       {nativeCurrency?.symbol}
     </span>
   )
