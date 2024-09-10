@@ -107,7 +107,7 @@ export const StakingAmountPage: FC = () => {
             Enter the amount you want to stake with{' '}
             <span className={classes.validatorName}>{StringUtils.getValidatorFriendlyName(validator)}</span>.
             <br />
-            There is a minimum of 100 ROSE.
+            There is a minimum of 100 {nativeCurrency?.symbol}.
           </p>
           <AmountInput
             label="Amount"
