@@ -1,6 +1,6 @@
 import { FC, useEffect, useRef, useState } from 'react'
 import { Card } from '../../components/Card'
-import { StringUtils } from '../../utils/string.utils'
+import { amountPattern, StringUtils } from '../../utils/string.utils'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppState } from '../../hooks/useAppState'
 import classes from './index.module.css'
@@ -20,6 +20,7 @@ import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
+import { formatUnits } from 'ethers'
 
 enum Steps {
   UndelegateInputAmount,
@@ -38,7 +39,10 @@ export const UnstakePage: FC = () => {
     fetchDelegations,
     fetchUndelegations,
   } = useAppState()
-  const { undelegate } = useWeb3()
+  const {
+    state: { nativeCurrency },
+    undelegate,
+  } = useWeb3()
   const [step, setStep] = useState<Steps>(Steps.UndelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [sharePerRoseRatio, setSharePerRoseRatio] = useState<BigNumber>(BigNumber(0))
@@ -46,6 +50,8 @@ export const UnstakePage: FC = () => {
   const [shares, setShares] = useState<BigNumber>(BigNumber(0))
   const [error, setError] = useState('')
   const [undelegationEpoch, setUndelegationEpoch] = useState(0n)
+  const [amountError, setAmountError] = useState<string | null>(null)
+  const amountInputRef = useRef<HTMLInputElement | null>(null)
   const delegation = useRef<Delegation | null | undefined>()
 
   const navigateToDashboard = () => navigate('/dashboard')
@@ -131,6 +137,48 @@ export const UnstakePage: FC = () => {
     }
   }
 
+  const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
+    setAmountError('')
+    let shares = BigNumber(0)
+    const delegationShares = BigNumber(delegation.current?.shares.toString() ?? 0)
+
+    if (!percentage && !new RegExp(amountPattern).test(value!)) {
+      setAmountError(
+        'The field contains an invalid value. The accepted format includes a decimal, with a maximum of nine decimal places.'
+      )
+
+      return
+    }
+
+    if (value) {
+      shares = BigNumber(value.toString())
+        .multipliedBy(10 ** CONSENSUS_DECIMALS)
+        .multipliedBy(sharePerRoseRatio)
+    } else if (percentage) {
+      shares = delegationShares.multipliedBy(percentage)
+
+      const amount = BigNumber(shares.toString() ?? 0)
+        .multipliedBy(rosePerShareRatio)
+        .integerValue(BigNumber.ROUND_DOWN)
+
+      if (amountInputRef.current) {
+        amountInputRef.current.value = formatUnits(amount.toString(), CONSENSUS_DECIMALS)
+      }
+    }
+
+    setShares(shares)
+
+    if (shares.lte(0)) {
+      setAmountError('Amount is required!')
+    } else if (shares.gt(delegationShares)) {
+      const maxAmount = delegationShares.multipliedBy(rosePerShareRatio).integerValue(BigNumber.ROUND_DOWN)
+
+      setAmountError(
+        `Maximum amount you can unstake is ${formatUnits(maxAmount.toString(), CONSENSUS_DECIMALS)} ${nativeCurrency?.symbol} !`
+      )
+    }
+  }
+
   if (delegation === undefined) {
     return <Alert type="loading" />
   }
@@ -164,27 +212,15 @@ export const UnstakePage: FC = () => {
             <span className={classes.validatorName}>{StringUtils.getValidatorFriendlyName(validator)}</span>.
           </p>
           <AmountInput
+            ref={amountInputRef}
+            error={amountError ?? ''}
             label="Amount"
-            value={BigNumber(shares.toString() ?? 0)
-              .multipliedBy(rosePerShareRatio)
-              .integerValue(BigNumber.ROUND_DOWN)}
-            onChange={({ value, percentage }) => {
-              if (value) {
-                setShares(
-                  BigNumber(value.toString())
-                    .multipliedBy(10 ** CONSENSUS_DECIMALS)
-                    .multipliedBy(sharePerRoseRatio)
-                )
-              } else if (percentage) {
-                setShares(BigNumber(delegation.current?.shares.toString() ?? 0).multipliedBy(percentage))
-              } else {
-                setShares(BigNumber(0))
-              }
-            }}
-            decimals={CONSENSUS_DECIMALS}
+            onChange={handleAmountInputChange}
           />
           <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>Unstake</Button>
+            <Button disabled={amountError !== ''} onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>
+              Unstake
+            </Button>
             <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
               Back
             </Button>

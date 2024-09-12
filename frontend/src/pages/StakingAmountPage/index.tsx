@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useRef, useState } from 'react'
 import { Card } from '../../components/Card'
 import { StringUtils } from '../../utils/string.utils'
 import { Validator } from '@oasisprotocol/nexus-api'
@@ -8,7 +8,7 @@ import classes from './index.module.css'
 import { useAppState } from '../../hooks/useAppState'
 import { AmountInput } from '../../components/AmountInput'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { parseUnits } from 'ethers'
+import { formatUnits, parseUnits } from 'ethers'
 import { PreviewTable } from '../../components/PreviewTable'
 import { Amount } from '../../components/Amount'
 import { FeeAmount } from '../../components/FeeAmount'
@@ -18,7 +18,9 @@ import { toErrorString } from '../../utils/errors'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { Delegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
-import { GAS_LIMIT_STAKE } from '../../constants/config'
+import { CONSENSUS_DECIMALS, GAS_LIMIT_STAKE, MIN_STAKE_AMOUNT } from '../../constants/config'
+import BigNumber from 'bignumber.js'
+import { NumberUtils } from '../../utils/number.utils'
 
 enum Steps {
   DelegateInputAmount,
@@ -32,7 +34,7 @@ export const StakingAmountPage: FC = () => {
   const navigate = useNavigate()
   const { address } = useParams<{ address: string }>()
   const {
-    state: { delegations },
+    state: { delegations, stats },
     getValidatorByAddress,
     fetchDelegations,
   } = useAppState()
@@ -40,10 +42,12 @@ export const StakingAmountPage: FC = () => {
     state: { nativeCurrency },
     delegate,
   } = useWeb3()
+  const amountInputRef = useRef<HTMLInputElement | null>(null)
   const [step, setStep] = useState<Steps>(Steps.DelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [amount, setAmount] = useState<bigint>(0n)
   const [error, setError] = useState('')
+  const [amountError, setAmountError] = useState<string | null>(null)
 
   const navigateToStake = () => navigate('/stake')
   const navigateToDashboard = () => navigate('/dashboard')
@@ -68,9 +72,10 @@ export const StakingAmountPage: FC = () => {
 
   const handleDelegate = async (prevDelegations: Delegations, value: bigint, to: string) => {
     setError('')
+    const sapphireAmount = NumberUtils.consensusAmountToSapphireAmount(value)
 
     try {
-      await delegate(value, to, () => {
+      await delegate(sapphireAmount, to, () => {
         setStep(Steps.DelegateInProgress)
       })
 
@@ -95,6 +100,46 @@ export const StakingAmountPage: FC = () => {
     }
   }
 
+  const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
+    setAmountError('')
+
+    let parsedAmount = -1n
+    const accountBalance = BigNumber(stats?.balances.accountBalance?.toString() ?? '0').div(
+      10 ** CONSENSUS_DECIMALS
+    )
+
+    if (value) {
+      try {
+        parsedAmount = value ? parseUnits(value.toString(), CONSENSUS_DECIMALS) : -1n
+      } catch (ex) {
+        console.warn('Unable to parse', value.toString())
+        setAmountError(
+          'The field contains an invalid value. The accepted format includes a decimal, with a maximum of nine decimal places.'
+        )
+
+        return
+      }
+    } else if (percentage) {
+      parsedAmount = BigInt(
+        BigNumber(accountBalance).multipliedBy(percentage).integerValue(BigNumber.ROUND_DOWN).toString(10)
+      )
+
+      if (amountInputRef.current) {
+        amountInputRef.current.value = formatUnits(parsedAmount, CONSENSUS_DECIMALS)
+      }
+    }
+
+    if (parsedAmount !== -1n) {
+      setAmount(parsedAmount)
+    }
+
+    if (parsedAmount < MIN_STAKE_AMOUNT) {
+      setAmountError(`Minimum amount to stake is 100 ${nativeCurrency?.symbol}`)
+    } else if (accountBalance.gt(0) && accountBalance.lt(parsedAmount.toString())) {
+      setAmountError('Account balance is too low!')
+    }
+  }
+
   if (!validator) {
     return <Alert type="loading" />
   }
@@ -107,18 +152,18 @@ export const StakingAmountPage: FC = () => {
             Enter the amount you want to stake with{' '}
             <span className={classes.validatorName}>{StringUtils.getValidatorFriendlyName(validator)}</span>.
             <br />
-            There is a minimum of 100 {nativeCurrency?.symbol}.
+            There is a minimum of 100 {nativeCurrency?.symbol} stake amount.
           </p>
           <AmountInput
+            ref={amountInputRef}
             label="Amount"
-            value={amount}
-            onChange={({ value }) => {
-              setAmount(value ? parseUnits(value.toString(), nativeCurrency?.decimals) : 0n)
-            }}
-            decimals={nativeCurrency?.decimals}
+            error={amountError ?? ''}
+            onChange={handleAmountInputChange}
           />
           <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => setStep(Steps.DelegatePreviewTransaction)}>Delegate</Button>
+            <Button disabled={amountError !== ''} onClick={() => setStep(Steps.DelegatePreviewTransaction)}>
+              Delegate
+            </Button>
             <Button variant="text" onClick={() => navigateToStake()} startSlot={<ArrowLeftIcon />}>
               Back
             </Button>
@@ -136,7 +181,7 @@ export const StakingAmountPage: FC = () => {
               [
                 <p className="body">Amount:</p>,
                 <p className="body">
-                  <Amount amount={amount} />
+                  <Amount amount={amount} unit="consensus" />
                 </p>,
               ],
               [

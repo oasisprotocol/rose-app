@@ -47,4 +47,8 @@ export abstract class NumberUtils {
       .dividedBy(10 ** (NEXUS_COMMISSION_RATE_DECIMALS - dp))
       .toFormat(dp, BigNumber.ROUND_DOWN)
   }
+
+  static consensusAmountToSapphireAmount(amount: bigint) {
+    return amount * 10n ** BigInt(CONSENSUS_DECIMALS)
+  }
 }
