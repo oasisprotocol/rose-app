@@ -1,10 +1,8 @@
-import { FC, useId } from 'react'
+import { ChangeEventHandler, forwardRef, ForwardRefRenderFunction, useId } from 'react'
 import classes from './index.module.css'
 import { Button } from '../Button'
-import { formatUnits } from 'ethers'
-import { amountPattern } from '../../utils/string.utils'
-import BigNumber from 'bignumber.js'
-import { CONSENSUS_DECIMALS } from '../../constants/config'
+import { amountPattern, StringUtils } from '../../utils/string.utils'
+import { FunctionUtils } from '../../utils/function.utils'
 
 interface PercentageEntry {
   label: string
@@ -31,23 +29,17 @@ const percentageList: PercentageEntry[] = [
 ]
 
 interface Props {
-  value?: string | bigint | BigNumber
   required?: boolean
   label?: string
-  decimals?: number
-  onChange?: (opts: { value?: Props['value']; percentage?: number }) => void
+  error?: string
+  onChange?: (opts: { value?: string; percentage?: number }) => void
 }
 
-export const AmountInput: FC<Props> = ({
-  value,
-  required,
-  label,
-  decimals = CONSENSUS_DECIMALS,
-  onChange,
-}) => {
+const AmountInputCmp: ForwardRefRenderFunction<HTMLInputElement, Props> = (
+  { required, label, error, onChange },
+  ref
+) => {
   const id = useId()
-
-  const amount = value ? formatUnits(value.toString(), decimals) : ''
 
   return (
     <div>
@@ -66,18 +58,25 @@ export const AmountInput: FC<Props> = ({
       </div>
       <div className={classes.amountInput}>
         <input
+          ref={ref}
           placeholder=" "
           id={id}
           required={required}
-          value={amount}
-          onChange={({ target: { value: targetValue } }) => {
-            onChange?.({ value: targetValue })
-          }}
+          onChange={FunctionUtils.debounce(
+            (({ target: { value } }) => {
+              onChange?.({ value })
+            }) as ChangeEventHandler<HTMLInputElement>,
+            100
+          )}
           pattern={amountPattern}
           inputMode="decimal"
+          autoComplete="off"
         />
         <label htmlFor={id}>{label}</label>
       </div>
+      {error && <p className={StringUtils.clsx('error', classes.amountInputError)}>{error}</p>}
     </div>
   )
 }
+
+export const AmountInput = forwardRef<HTMLInputElement, Props>(AmountInputCmp)
