@@ -9,6 +9,8 @@ import { ActiveIcon } from '../icons/ActiveIcon'
 import { InactiveIcon } from '../icons/InactiveIcon'
 import { Amount } from '../Amount'
 import { NumberUtils } from '../../utils/number.utils'
+import { LoadingTableData } from '../LoadingTableData'
+import { EmptyTableData } from '../EmptyTableData'
 
 interface Props {
   value: Validator | null
@@ -22,6 +24,12 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
 
   return (
     <div className={classes.validatorsTable}>
+      {validatorsList === null && <LoadingTableData />}
+      {validatorsList?.validators.length === 0 && (
+        <EmptyTableData>
+          <p>There are no validators available.</p>
+        </EmptyTableData>
+      )}
       {!!validatorsList?.validators.length && (
         <Table data={validatorsList.validators} isExpandable>
           {({ entry, isExpanded, toggleRow }) => {
