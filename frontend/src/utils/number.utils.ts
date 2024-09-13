@@ -2,6 +2,7 @@ import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
 import { CONSENSUS_DECIMALS, NEXUS_COMMISSION_RATE_DECIMALS } from '../constants/config'
 import { SharesType } from '../types/shares-type'
+import { formatUnits, Numeric } from 'ethers'
 
 export abstract class NumberUtils {
   // Compatible with https://github.com/MetaMask/metamask-extension/blob/v10.7.0/ui/helpers/utils/icon-factory.js#L84-L88
@@ -50,5 +51,9 @@ export abstract class NumberUtils {
 
   static consensusAmountToSapphireAmount(amount: bigint) {
     return amount * 10n ** BigInt(CONSENSUS_DECIMALS)
+  }
+
+  static formatAmount(amount: bigint | string, dp: Numeric | string): string {
+    return BigNumber(formatUnits(amount, dp)).dp(2, BigNumber.ROUND_DOWN).toFormat(2)
   }
 }

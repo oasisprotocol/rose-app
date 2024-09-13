@@ -21,4 +21,11 @@ export abstract class DateUtils {
   static unixFormatToDate(unixFormat: BigNumberish) {
     return new Date(Number(unixFormat) * 1000)
   }
+
+  static toBasicISO8601 = (date: Date) => {
+    // Ignore timezone
+    return new Date(date.getTime() - date.getTimezoneOffset() * 60000)
+      .toISOString()
+      .replace(/-|:|\.\d\d\d/g, '')
+  }
 }
