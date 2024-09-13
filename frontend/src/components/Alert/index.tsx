@@ -2,9 +2,9 @@ import { FC, PropsWithChildren, ReactElement } from 'react'
 import classes from './index.module.css'
 import { Card } from '../Card'
 import { StringUtils } from '../../utils/string.utils'
-import { LoadingIcon } from '../icons/LoadingIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
 import { ErrorIcon } from '../icons/ErrorIcon'
+import { BlockchainLoadingIcon } from '../icons/BlockchainLoadingIcon'
 
 type AlertType = 'error' | 'success' | 'loading'
 
@@ -24,7 +24,7 @@ const alertTypeValuesMap: Record<AlertType, AlertTypeValues> = {
   },
   loading: {
     header: 'Loading',
-    icon: <LoadingIcon />,
+    icon: <BlockchainLoadingIcon width={106} height={106} />,
   },
 }
 
