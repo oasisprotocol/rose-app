@@ -5,8 +5,9 @@ import { Card } from '../../components/Card'
 import { StakingTabs } from '../../components/StakingTabs'
 import { StringUtils } from '../../utils/string.utils'
 import classes from './index.module.css'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
-export const DashboardPage: FC = () => {
+const DashboardPageCmp: FC = () => {
   const navigate = useNavigate()
   const {
     state: { isConnected, nativeCurrency },
@@ -28,3 +29,5 @@ export const DashboardPage: FC = () => {
     </Card>
   )
 }
+
+export const DashboardPage = withDisconnectedWallet(DashboardPageCmp)

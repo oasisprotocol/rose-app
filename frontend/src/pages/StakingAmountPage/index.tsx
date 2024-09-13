@@ -21,6 +21,7 @@ import { FormattingUtils } from '../../utils/formatting.utils'
 import { CONSENSUS_DECIMALS, GAS_LIMIT_STAKE, MIN_STAKE_AMOUNT } from '../../constants/config'
 import BigNumber from 'bignumber.js'
 import { NumberUtils } from '../../utils/number.utils'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
 enum Steps {
   DelegateInputAmount,
@@ -30,7 +31,7 @@ enum Steps {
   DelegateFailed,
 }
 
-export const StakingAmountPage: FC = () => {
+const StakingAmountPageCmp: FC = () => {
   const navigate = useNavigate()
   const { address } = useParams<{ address: string }>()
   const {
@@ -268,3 +269,5 @@ export const StakingAmountPage: FC = () => {
     </>
   )
 }
+
+export const StakingAmountPage = withDisconnectedWallet(StakingAmountPageCmp)
