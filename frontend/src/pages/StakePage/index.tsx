@@ -7,8 +7,9 @@ import { Button } from '../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import classes from './index.module.css'
 import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
-export const StakePage: FC = () => {
+const StakePageCmp: FC = () => {
   const navigate = useNavigate()
   const [selectedValidator, setSelectedValidator] = useState<Validator | null>(null)
 
@@ -30,3 +31,5 @@ export const StakePage: FC = () => {
     </Card>
   )
 }
+
+export const StakePage = withDisconnectedWallet(StakePageCmp)

@@ -21,6 +21,7 @@ import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
 import { formatUnits } from 'ethers'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
 enum Steps {
   UndelegateInputAmount,
@@ -30,7 +31,7 @@ enum Steps {
   UndelegateFailed,
 }
 
-export const UnstakePage: FC = () => {
+const UnstakePageCmp: FC = () => {
   const { address } = useParams<{ address: string }>()
   const navigate = useNavigate()
   const {
@@ -335,3 +336,5 @@ export const UnstakePage: FC = () => {
     </>
   )
 }
+
+export const UnstakePage = withDisconnectedWallet(UnstakePageCmp)

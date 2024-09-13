@@ -13,8 +13,9 @@ import {
 } from '../../constants/config'
 import { InfoCard } from '../../components/InfoCard'
 import { useWeb3 } from '../../hooks/useWeb3'
+import { withConnectedWallet } from '../../hoc/withConnectedWallet'
 
-export const HomePage: FC = () => {
+const HomePageCmp: FC = () => {
   const {
     state: { nativeCurrency },
   } = useWeb3()
@@ -59,3 +60,5 @@ export const HomePage: FC = () => {
     </div>
   )
 }
+
+export const HomePage = withConnectedWallet(HomePageCmp)
