@@ -12,6 +12,11 @@ import { SuccessIcon } from '../icons/SuccessIcon'
 import { ToggleButton } from '../ToggleButton'
 import { SharesAmount } from '../SharesAmount'
 import { EmptyTableData } from '../EmptyTableData'
+import { CalendarUtils } from '../../utils/calendar.utils'
+import { NumberUtils } from '../../utils/number.utils'
+import { startOfDay } from 'date-fns/startOfDay'
+import { endOfDay } from 'date-fns/endOfDay'
+import { useWeb3 } from '../../hooks/useWeb3'
 
 type DebondingItemStatus = 'ready' | 'waiting' | null
 
@@ -42,6 +47,9 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
   const {
     state: { consensusStatus },
   } = useGrpc()
+  const {
+    state: { nativeCurrency },
+  } = useWeb3()
 
   const debondingItems: DebondingItem[] = undelegations.map(({ from, shares, epoch }) => {
     return {
@@ -124,16 +132,35 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                                 Estimated to be available on <EpochTimeEstimate epoch={entry.epoch} />
                               </p>
 
-                              <Button
-                                size="small"
-                                variant="text"
-                                onClick={() => {
-                                  throw new Error('Not implemented')
-                                }}
-                                className={classes.scheduleBtn}
-                              >
-                                Remind me
-                              </Button>
+                              <SharesAmount shares={entry.shares} validator={validator} type="unstaking">
+                                {amount => (
+                                  <EpochTimeEstimate epoch={entry.epoch}>
+                                    {estimatedDate => {
+                                      const formattedAmount = `${NumberUtils.formatAmount(amount.toString(), 18)} ${nativeCurrency?.symbol}`
+                                      const validatorFriendlyName =
+                                        StringUtils.getValidatorFriendlyName(validator)
+
+                                      return (
+                                        <a
+                                          href={CalendarUtils.addGoogleCalendarEventLink(
+                                            `Unstake from ${validatorFriendlyName} in amount ${formattedAmount} available`,
+                                            startOfDay(estimatedDate!),
+                                            endOfDay(estimatedDate!),
+                                            window.location.href,
+                                            `Your stake in amount of ${formattedAmount} will be automatically withdrawn from validator ${validatorFriendlyName}.`
+                                          )}
+                                          target="_blank"
+                                          rel="nofollow"
+                                        >
+                                          <Button size="small" variant="text" className={classes.scheduleBtn}>
+                                            Remind me
+                                          </Button>
+                                        </a>
+                                      )
+                                    }}
+                                  </EpochTimeEstimate>
+                                )}
+                              </SharesAmount>
                             </div>
                           )}
                         </div>

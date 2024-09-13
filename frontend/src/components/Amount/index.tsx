@@ -2,9 +2,8 @@ import { FC } from 'react'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { formatUnits } from 'ethers'
 import { CONSENSUS_DECIMALS } from '../../constants/config'
-import BigNumber from 'bignumber.js'
+import { NumberUtils } from '../../utils/number.utils'
 
 const supportedUnits = {
   nano: {
@@ -33,9 +32,7 @@ export const Amount: FC<Props> = ({ amount, className, unit }) => {
 
   return (
     <span className={StringUtils.clsx('body', classes.amount, className)}>
-      {BigNumber(formatUnits(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18))
-        .dp(2, BigNumber.ROUND_DOWN)
-        .toFormat(2)}
+      {NumberUtils.formatAmount(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}
       &nbsp;{unitPrefix}
       {nativeCurrency?.symbol}
     </span>
