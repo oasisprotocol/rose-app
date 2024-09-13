@@ -13,6 +13,7 @@ import { TabsContext } from '../Tabs/TabsContext'
 import { Button } from '../Button'
 import { useNavigate } from 'react-router-dom'
 import { NumberUtils } from '../../utils/number.utils'
+import { LoadingTableData } from '../LoadingTableData'
 
 export const StakingTabsCmp: FC = () => {
   const navigate = useNavigate()
@@ -64,8 +65,8 @@ export const StakingTabsCmp: FC = () => {
             />
           )}
         </Panel>
-        <Panel>{!!delegations && <StakedTab delegations={delegations} />}</Panel>
-        <Panel>{!!undelegations && <DebondingTab undelegations={undelegations} />}</Panel>
+        <Panel>{delegations ? <StakedTab delegations={delegations} /> : <LoadingTableData />}</Panel>
+        <Panel>{undelegations ? <DebondingTab undelegations={undelegations} /> : <LoadingTableData />}</Panel>
       </div>
       {activeIndex === 0 && (
         <div className={classes.stakeBtnContainer}>

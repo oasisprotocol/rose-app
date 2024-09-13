@@ -11,6 +11,7 @@ import { HourglassIcon } from '../icons/HourglassIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
 import { ToggleButton } from '../ToggleButton'
 import { SharesAmount } from '../SharesAmount'
+import { EmptyTableData } from '../EmptyTableData'
 
 type DebondingItemStatus = 'ready' | 'waiting' | null
 
@@ -53,87 +54,98 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
 
   return (
     <div className={classes.debondingTab}>
-      <Table data={debondingItems} isExpandable>
-        {({ entry, isExpanded, toggleRow }) => (
-          <Validator key={entry.from + entry.epoch} address={entry.from} fallback={<tr />}>
-            {validator => (
-              <>
-                <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
-                  <td>
-                    <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
-                  </td>
-                  <td>
-                    {!isExpanded && (
-                      <>
-                        {entry.status === 'waiting' && (
-                          <div className={classes.rowStatusWaiting}>
-                            <HourglassIcon />
-                          </div>
-                        )}
-                        {entry.status === 'ready' && (
-                          <SuccessIcon className={classes.successIcon} label="Available to claim" />
-                        )}
-                      </>
-                    )}
-                  </td>
-                  <td>
-                    <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
-                  </td>
-                  <td>
-                    <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
-                  </td>
-                </tr>
-                {isExpanded && (
-                  <tr className={classes.expandedRow}>
-                    <td colSpan={4}>
-                      {entry.status === 'waiting' && (
-                        <div className={classes.debondingRowExpanded}>
-                          <p className="body">
-                            <span>Expected amount:</span>
-                            <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
-                          </p>
-                        </div>
-                      )}
-                      <div className={classes.debondingRowActions}>
-                        {entry.status === 'ready' && (
-                          <div className={classes.debondingReady}>
-                            <div className={StringUtils.clsx(classes.infoBox, classes.infoBoxSuccess)}>
-                              <p className="body">
-                                Your{' '}
-                                <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />{' '}
-                                is available.
-                              </p>
+      {debondingItems.length === 0 && (
+        <EmptyTableData>
+          <p>There are no debonding records.</p>
+        </EmptyTableData>
+      )}
+      {debondingItems.length > 0 && (
+        <Table data={debondingItems} isExpandable>
+          {({ entry, isExpanded, toggleRow }) => (
+            <Validator key={entry.from + entry.epoch} address={entry.from} fallback={<tr />}>
+              {validator => (
+                <>
+                  <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
+                    <td>
+                      <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
+                    </td>
+                    <td>
+                      {!isExpanded && (
+                        <>
+                          {entry.status === 'waiting' && (
+                            <div className={classes.rowStatusWaiting}>
+                              <HourglassIcon />
                             </div>
-                          </div>
-                        )}
-                        {entry.status === 'waiting' && (
-                          <div className={classes.infoBox}>
-                            <HourglassIcon />
-                            <p>
-                              Estimated to be available on <EpochTimeEstimate epoch={entry.epoch} />
-                            </p>
-
-                            <Button
-                              size="small"
-                              variant="text"
-                              onClick={() => {
-                                throw new Error('Not implemented')
-                              }}
-                              className={classes.scheduleBtn}
-                            >
-                              Remind me
-                            </Button>
-                          </div>
-                        )}
-                      </div>
+                          )}
+                          {entry.status === 'ready' && (
+                            <SuccessIcon className={classes.successIcon} label="Available to claim" />
+                          )}
+                        </>
+                      )}
+                    </td>
+                    <td>
+                      <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
+                    </td>
+                    <td>
+                      <ToggleButton isExpanded={!!isExpanded} toggleRow={toggleRow} />
                     </td>
                   </tr>
-                )}
-              </>
-            )}
-          </Validator>
-        )}
-      </Table>
+                  {isExpanded && (
+                    <tr className={classes.expandedRow}>
+                      <td colSpan={4}>
+                        {entry.status === 'waiting' && (
+                          <div className={classes.debondingRowExpanded}>
+                            <p className="body">
+                              <span>Expected amount:</span>
+                              <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
+                            </p>
+                          </div>
+                        )}
+                        <div className={classes.debondingRowActions}>
+                          {entry.status === 'ready' && (
+                            <div className={classes.debondingReady}>
+                              <div className={StringUtils.clsx(classes.infoBox, classes.infoBoxSuccess)}>
+                                <p className="body">
+                                  Your{' '}
+                                  <SharesAmount
+                                    shares={entry.shares}
+                                    validator={validator}
+                                    type="unstaking"
+                                  />{' '}
+                                  is available.
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                          {entry.status === 'waiting' && (
+                            <div className={classes.infoBox}>
+                              <HourglassIcon />
+                              <p>
+                                Estimated to be available on <EpochTimeEstimate epoch={entry.epoch} />
+                              </p>
+
+                              <Button
+                                size="small"
+                                variant="text"
+                                onClick={() => {
+                                  throw new Error('Not implemented')
+                                }}
+                                className={classes.scheduleBtn}
+                              >
+                                Remind me
+                              </Button>
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  )}
+                </>
+              )}
+            </Validator>
+          )}
+        </Table>
+      )}
     </div>
   )
 }
