@@ -158,11 +158,11 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                                       return (
                                         <a
                                           href={CalendarUtils.addGoogleCalendarEventLink(
-                                            `Unstake from ${validatorFriendlyName} in amount ${formattedAmount} available`,
-                                            startOfDay(estimatedDate!),
-                                            endOfDay(estimatedDate!),
+                                            `Unstaking of ${formattedAmount} from ${validatorFriendlyName} completed`,
+                                            startOfDay(estimatedDate),
+                                            endOfDay(estimatedDate),
                                             window.location.href,
-                                            `Your stake in amount of ${formattedAmount} will be automatically withdrawn from validator ${validatorFriendlyName}.`
+                                            `Your stake in amount of ${formattedAmount} will be automatically withdrawn from validator ${validatorFriendlyName} today.`
                                           )}
                                           target="_blank"
                                           rel="nofollow"
