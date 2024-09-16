@@ -17,6 +17,8 @@ import { NumberUtils } from '../../utils/number.utils'
 import { startOfDay } from 'date-fns/startOfDay'
 import { endOfDay } from 'date-fns/endOfDay'
 import { useWeb3 } from '../../hooks/useWeb3'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip'
+import { DateUtils } from '../../utils/date.utils'
 
 type DebondingItemStatus = 'ready' | 'waiting' | null
 
@@ -82,12 +84,23 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                         <>
                           {entry.status === 'waiting' && (
                             <div className={classes.rowStatusWaiting}>
-                              <HourglassIcon />
+                              <EpochTimeEstimate epoch={entry.epoch}>
+                                {estimatedDate => (
+                                  <Tooltip>
+                                    <TooltipTrigger>
+                                      <HourglassIcon />
+                                    </TooltipTrigger>
+                                    <TooltipContent>
+                                      Expected to be available on
+                                      <br />
+                                      {DateUtils.intlDateFormat(estimatedDate, { format: 'short' })}
+                                    </TooltipContent>
+                                  </Tooltip>
+                                )}
+                              </EpochTimeEstimate>
                             </div>
                           )}
-                          {entry.status === 'ready' && (
-                            <SuccessIcon className={classes.successIcon} label="Available to claim" />
-                          )}
+                          {entry.status === 'ready' && <SuccessIcon label="Available to claim" />}
                         </>
                       )}
                     </td>
