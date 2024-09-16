@@ -7,17 +7,17 @@ import { formatDistance } from 'date-fns'
 interface TimeEstimateProps {
   distance?: boolean
   getTimeEstimate: () => Date | null
-  children?: (estimatedDate: Date | null) => ReactNode
+  children?: (estimatedDate: Date) => ReactNode
 }
 
 const TimeEstimate: FC<TimeEstimateProps> = ({ children, getTimeEstimate, distance }) => {
   const timeEstimate = getTimeEstimate()
 
+  if (!timeEstimate) return null
+
   if (children) {
     return children(timeEstimate)
   }
-
-  if (!timeEstimate) return null
 
   if (distance) return formatDistance(new Date(), timeEstimate)
 

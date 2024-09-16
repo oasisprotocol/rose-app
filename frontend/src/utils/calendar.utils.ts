@@ -10,10 +10,10 @@ export abstract class CalendarUtils {
   ) {
     return [
       'https://www.google.com/calendar/render?action=TEMPLATE',
-      `&text=${title}`,
+      `&text=${encodeURIComponent(title)}`,
       `&dates=${DateUtils.toBasicISO8601(start)}/${DateUtils.toBasicISO8601(end)}`,
-      `&location=${location}`,
-      `&details=${description}`,
+      `&location=${encodeURIComponent(location)}`,
+      `&details=${encodeURIComponent(description)}`,
     ].join('')
   }
 }
