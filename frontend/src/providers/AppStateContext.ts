@@ -29,6 +29,7 @@ export interface AppStateProviderContext {
   getValidatorByAddress: (opts: { hexAddress?: string; address?: string }) => Promise<Validator | null>
   fetchDelegations: () => Promise<Delegations>
   fetchUndelegations: () => Promise<Undelegations>
+  fetchValidators: () => Promise<void>
 }
 
 export const AppStateContext = createContext<AppStateProviderContext>({} as AppStateProviderContext)

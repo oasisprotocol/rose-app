@@ -127,13 +127,13 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [account])
 
+  const fetchValidators = async () => {
+    const validatorsList = await getValidators()
+
+    setState(prevState => ({ ...prevState, validatorsList }))
+  }
+
   useEffect(() => {
-    const fetchValidators = async () => {
-      const validatorsList = await getValidators()
-
-      setState(prevState => ({ ...prevState, validatorsList }))
-    }
-
     fetchValidators()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
@@ -189,7 +189,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         .reduce((acc, validator, i) => {
           const { shares } = delegations[i]
 
-          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'staking'))
+          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'staking') ?? 0)
         }, BigNumber(0))
         .toString(10)
 
@@ -224,7 +224,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         .reduce((acc, validator, i) => {
           const { shares } = undelegations[i]
 
-          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'unstaking'))
+          return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'unstaking') ?? 0)
         }, BigNumber(0))
         .toString(10)
 
@@ -254,6 +254,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     getValidatorByAddress,
     fetchDelegations,
     fetchUndelegations,
+    fetchValidators,
   }
 
   return <AppStateContext.Provider value={providerState}>{children}</AppStateContext.Provider>

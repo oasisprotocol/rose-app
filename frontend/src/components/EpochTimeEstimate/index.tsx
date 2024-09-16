@@ -1,4 +1,4 @@
-import { FC, memo, ReactElement, Suspense } from 'react'
+import { FC, memo, ReactNode, Suspense } from 'react'
 import { useGrpc } from '../../hooks/useGrpc'
 import { DateUtils } from '../../utils/date.utils'
 import { PromiseUtils } from '../../utils/promise.utils'
@@ -7,7 +7,7 @@ import { formatDistance } from 'date-fns'
 interface TimeEstimateProps {
   distance?: boolean
   getTimeEstimate: () => Date | null
-  children?: (estimatedDate: Date | null) => ReactElement
+  children?: (estimatedDate: Date | null) => ReactNode
 }
 
 const TimeEstimate: FC<TimeEstimateProps> = ({ children, getTimeEstimate, distance }) => {
