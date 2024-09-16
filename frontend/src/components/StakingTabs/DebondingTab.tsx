@@ -1,4 +1,4 @@
-import { FC, memo } from 'react'
+import { FC, memo, useEffect, useState } from 'react'
 import classes from './index.module.css'
 import { Undelegation, Undelegations } from '../../types'
 import { Table } from '../Table'
@@ -6,7 +6,6 @@ import { Validator } from '../Validator'
 import { StringUtils } from '../../utils/string.utils'
 import { Button } from '../Button'
 import { useGrpc } from '../../hooks/useGrpc'
-import { EpochTimeEstimate } from '../EpochTimeEstimate'
 import { HourglassIcon } from '../icons/HourglassIcon'
 import { SuccessIcon } from '../icons/SuccessIcon'
 import { ToggleButton } from '../ToggleButton'
@@ -24,6 +23,7 @@ type DebondingItemStatus = 'ready' | 'waiting' | null
 
 type DebondingItem = Undelegation & {
   status: DebondingItemStatus
+  debondTimeEstimate: Date | null
 }
 
 interface Props {
@@ -48,19 +48,38 @@ const getDebondingItemStatus = (
 const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
   const {
     state: { consensusStatus },
+    getTimeEstimateForFutureEpoch,
   } = useGrpc()
   const {
     state: { nativeCurrency },
   } = useWeb3()
+  const [debondingItems, setDebondingItems] = useState<DebondingItem[] | null>(null)
 
-  const debondingItems: DebondingItem[] = undelegations.map(({ from, shares, epoch }) => {
-    return {
-      from,
-      shares,
-      epoch,
-      status: getDebondingItemStatus(epoch, consensusStatus?.latest_epoch),
-    } satisfies DebondingItem
-  })
+  useEffect(() => {
+    const init = async () => {
+      const debondTimeEstimates = await Promise.all(
+        undelegations.map(({ epoch }) => getTimeEstimateForFutureEpoch(epoch))
+      )
+
+      setDebondingItems(
+        undelegations.map(({ from, shares, epoch }, i) => {
+          return {
+            from,
+            shares,
+            epoch,
+            status: getDebondingItemStatus(epoch, consensusStatus?.latest_epoch),
+            debondTimeEstimate: debondTimeEstimates[i],
+          } satisfies DebondingItem
+        })
+      )
+    }
+
+    init()
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [undelegations, consensusStatus?.latest_epoch])
+
+  if (debondingItems === null) return null
 
   return (
     <div className={classes.debondingTab}>
@@ -84,20 +103,18 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                         <>
                           {entry.status === 'waiting' && (
                             <div className={classes.rowStatusWaiting}>
-                              <EpochTimeEstimate epoch={entry.epoch}>
-                                {estimatedDate => (
-                                  <Tooltip>
-                                    <TooltipTrigger>
-                                      <HourglassIcon />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      Expected to be available on
-                                      <br />
-                                      {DateUtils.intlDateFormat(estimatedDate, { format: 'short' })}
-                                    </TooltipContent>
-                                  </Tooltip>
-                                )}
-                              </EpochTimeEstimate>
+                              {entry.debondTimeEstimate && (
+                                <Tooltip>
+                                  <TooltipTrigger>
+                                    <HourglassIcon />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    Expected to be available on
+                                    <br />
+                                    {DateUtils.intlDateFormat(entry.debondTimeEstimate, { format: 'short' })}
+                                  </TooltipContent>
+                                </Tooltip>
+                              )}
                             </div>
                           )}
                           {entry.status === 'ready' && <SuccessIcon label="Available to claim" />}
@@ -140,41 +157,43 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                           )}
                           {entry.status === 'waiting' && (
                             <div className={classes.infoBox}>
-                              <HourglassIcon />
-                              <p>
-                                Estimated to be available on <EpochTimeEstimate epoch={entry.epoch} />
-                              </p>
+                              {entry.debondTimeEstimate && (
+                                <>
+                                  <HourglassIcon />
+                                  <p>
+                                    Estimated to be available on{' '}
+                                    {DateUtils.intlDateFormat(entry.debondTimeEstimate, { format: 'short' })}
+                                  </p>
+                                </>
+                              )}
 
                               <SharesAmount shares={entry.shares} validator={validator} type="unstaking">
-                                {amount => (
-                                  <EpochTimeEstimate epoch={entry.epoch}>
-                                    {estimatedDate => {
-                                      if (amount === null) return amount
+                                {amount => {
+                                  if (amount === null) return null
+                                  if (entry.debondTimeEstimate === null) return null
 
-                                      const formattedAmount = `${NumberUtils.formatAmount(amount.toString(), 18)} ${nativeCurrency?.symbol}`
-                                      const validatorFriendlyName =
-                                        StringUtils.getValidatorFriendlyName(validator)
+                                  const formattedAmount = `${NumberUtils.formatAmount(amount.toString(), 18)} ${nativeCurrency?.symbol}`
+                                  const validatorFriendlyName =
+                                    StringUtils.getValidatorFriendlyName(validator)
 
-                                      return (
-                                        <a
-                                          href={CalendarUtils.addGoogleCalendarEventLink(
-                                            `Unstaking of ${formattedAmount} from ${validatorFriendlyName} completed`,
-                                            startOfDay(estimatedDate),
-                                            endOfDay(estimatedDate),
-                                            window.location.href,
-                                            `Your stake in amount of ${formattedAmount} will be automatically withdrawn from validator ${validatorFriendlyName} today.`
-                                          )}
-                                          target="_blank"
-                                          rel="nofollow"
-                                        >
-                                          <Button size="small" variant="text" className={classes.scheduleBtn}>
-                                            Remind me
-                                          </Button>
-                                        </a>
-                                      )
-                                    }}
-                                  </EpochTimeEstimate>
-                                )}
+                                  return (
+                                    <a
+                                      href={CalendarUtils.addGoogleCalendarEventLink(
+                                        `Unstaking of ${formattedAmount} from ${validatorFriendlyName} completed`,
+                                        startOfDay(entry.debondTimeEstimate),
+                                        endOfDay(entry.debondTimeEstimate),
+                                        window.location.href,
+                                        `Your stake in amount of ${formattedAmount} will be automatically withdrawn from validator ${validatorFriendlyName} today.`
+                                      )}
+                                      target="_blank"
+                                      rel="nofollow"
+                                    >
+                                      <Button size="small" variant="text" className={classes.scheduleBtn}>
+                                        Remind me
+                                      </Button>
+                                    </a>
+                                  )
+                                }}
                               </SharesAmount>
                             </div>
                           )}
