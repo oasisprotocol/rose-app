@@ -16,6 +16,7 @@
     "node": ">=20"
   },
   "dependencies": {
+    "@floating-ui/react": "^0.26.24",
     "@fontsource-variable/figtree": "^5.0.20",
     "@fontsource-variable/roboto-mono": "^5.0.18",
     "@material-design-icons/svg": "^0.14.13",
