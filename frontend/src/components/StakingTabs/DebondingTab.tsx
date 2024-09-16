@@ -136,6 +136,8 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                                 {amount => (
                                   <EpochTimeEstimate epoch={entry.epoch}>
                                     {estimatedDate => {
+                                      if (amount === null) return amount
+
                                       const formattedAmount = `${NumberUtils.formatAmount(amount.toString(), 18)} ${nativeCurrency?.symbol}`
                                       const validatorFriendlyName =
                                         StringUtils.getValidatorFriendlyName(validator)

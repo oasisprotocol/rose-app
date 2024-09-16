@@ -39,6 +39,7 @@ const UnstakePageCmp: FC = () => {
     getValidatorByAddress,
     fetchDelegations,
     fetchUndelegations,
+    fetchValidators,
   } = useAppState()
   const {
     state: { nativeCurrency },
@@ -115,7 +116,7 @@ const UnstakePageCmp: FC = () => {
         setStep(Steps.UndelegateInProgress)
       })
 
-      const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations()])
+      const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations(), fetchValidators()])
 
       // This should work in 99% of cases!
       const [diff] = undelegations.filter(
@@ -239,7 +240,7 @@ const UnstakePageCmp: FC = () => {
               [
                 <p className="body">Amount:</p>,
                 <p className="body">
-                  <SharesAmount shares={shares} validator={validator} type="unstaking" />
+                  <SharesAmount shares={shares} validator={validator} type="staking" />
                 </p>,
               ],
               [

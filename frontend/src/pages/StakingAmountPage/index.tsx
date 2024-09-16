@@ -38,6 +38,7 @@ const StakingAmountPageCmp: FC = () => {
     state: { delegations, stats },
     getValidatorByAddress,
     fetchDelegations,
+    fetchValidators,
   } = useAppState()
   const {
     state: { nativeCurrency },
@@ -80,7 +81,7 @@ const StakingAmountPageCmp: FC = () => {
         setStep(Steps.DelegateInProgress)
       })
 
-      const delegations = await fetchDelegations()
+      const [delegations] = await Promise.all([fetchDelegations(), fetchValidators()])
 
       // This should work in 99% of cases!
       const [diff] = delegations.filter(

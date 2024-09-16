@@ -17,7 +17,7 @@ const supportedUnits = {
 }
 
 interface Props {
-  amount: bigint | string
+  amount: bigint | string | null
   className?: string
   unit?: 'nano' | 'consensus'
 }
@@ -32,9 +32,14 @@ export const Amount: FC<Props> = ({ amount, className, unit }) => {
 
   return (
     <span className={StringUtils.clsx('body', classes.amount, className)}>
-      {NumberUtils.formatAmount(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}
-      &nbsp;{unitPrefix}
-      {nativeCurrency?.symbol}
+      {amount === null && <>Invalid amount</>}
+      {amount !== null && (
+        <>
+          {NumberUtils.formatAmount(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}
+          &nbsp;{unitPrefix}
+          {nativeCurrency?.symbol}
+        </>
+      )}
     </span>
   )
 }

@@ -1,4 +1,4 @@
-import { FC, memo, ReactElement } from 'react'
+import { FC, memo, ReactNode } from 'react'
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
 import { NumberUtils } from '../../utils/number.utils'
@@ -9,7 +9,7 @@ interface Props {
   shares: BigNumber.Value | bigint
   validator: Validator
   type: SharesType
-  children?: (amount: BigNumber) => ReactElement
+  children?: (amount: BigNumber | null) => ReactNode
 }
 
 export const SharesAmountCmp: FC<Props> = ({ children, shares, validator, type }) => {
@@ -19,7 +19,7 @@ export const SharesAmountCmp: FC<Props> = ({ children, shares, validator, type }
     return children(amount)
   }
 
-  return <Amount amount={amount.toString()} />
+  return <Amount amount={amount?.toString() ?? null} />
 }
 
 export const SharesAmount = memo(SharesAmountCmp)

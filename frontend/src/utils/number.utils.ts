@@ -11,22 +11,39 @@ export abstract class NumberUtils {
     return parseInt(addr, 16)
   }
 
+  /**
+   * Calculates the amount of currency from given shares.
+   *
+   * @param {BigNumber.Value} shares - The number of shares.
+   * @param {Validator} validator - The validator object.
+   * @param {SharesType} type - The type of shares ('staking' or 'unstaking').
+   * @param {number} [denomination=CONSENSUS_DECIMALS] - The denomination of the currency.
+   * @returns {BigNumber | null} - The calculated amount of currency or null if shares/validator data are invalid.
+   */
   static getAmountFromShares(
     shares: BigNumber.Value,
     validator: Validator,
     type: SharesType,
     denomination = CONSENSUS_DECIMALS
-  ) {
+  ): BigNumber | null {
     let rosePerShareRatio = BigNumber(0)
 
     if (type === 'staking') {
-      rosePerShareRatio = BigNumber(validator.escrow.active_balance ?? 0).div(
-        BigNumber(validator.escrow.active_shares ?? 0)
-      )
+      const activeShares = BigNumber(validator.escrow.active_shares ?? 0)
+
+      if (activeShares.eq(0)) {
+        return null
+      }
+
+      rosePerShareRatio = BigNumber(validator.escrow.active_balance ?? 0).div(activeShares)
     } else if (type === 'unstaking') {
-      rosePerShareRatio = BigNumber(validator.escrow.debonding_balance ?? 0).div(
-        BigNumber(validator.escrow.debonding_shares ?? 0)
-      )
+      const debondingShares = BigNumber(validator.escrow.debonding_shares ?? 0)
+
+      if (debondingShares.eq(0)) {
+        return null
+      }
+
+      rosePerShareRatio = BigNumber(validator.escrow.debonding_balance ?? 0).div(debondingShares)
     }
 
     return BigNumber(shares.toString())
