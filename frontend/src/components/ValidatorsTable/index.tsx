@@ -31,7 +31,13 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
         </EmptyTableData>
       )}
       {!!validatorsList?.validators.length && (
-        <Table data={validatorsList.validators} isExpandable>
+        <Table
+          className={classes.table}
+          headers={['', 'Name', 'Fee', '']}
+          data={validatorsList.validators}
+          isExpandable
+          maxHeight={404}
+        >
           {({ entry, isExpanded, toggleRow }) => {
             const isSelected = value?.entity_address === entry.entity_address
             return (
@@ -51,7 +57,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                   </td>
                   <td>
                     <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>
-                      {NumberUtils.formatValidatorRate(entry.current_rate)}&nbsp;%
+                      {NumberUtils.formatValidatorRate(entry.current_rate)}%
                     </p>
                   </td>
                   <td>

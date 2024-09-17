@@ -74,7 +74,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
                           </p>
                           <p className="body">
                             <span>Commission:</span>
-                            <span>{NumberUtils.formatValidatorRate(validator.current_rate)}&nbsp;%</span>
+                            <span>{NumberUtils.formatValidatorRate(validator.current_rate)}%</span>
                           </p>
                         </div>
                         <div className={classes.stakedRowActions}>

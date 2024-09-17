@@ -14,6 +14,7 @@ interface Props<T> {
     isExpanded?: boolean | null
   }) => ReactElement
   isExpandable?: boolean
+  maxHeight?: number | string
 }
 
 export const Table = <T extends object>({
@@ -22,6 +23,7 @@ export const Table = <T extends object>({
   className,
   children,
   isExpandable,
+  maxHeight,
 }: Props<T>): ReactElement => {
   const [isExpandedByIndex, setIsExpandedByIndex] = useState(() => {
     if (isExpandable) {
@@ -46,13 +48,17 @@ export const Table = <T extends object>({
       {!!headers?.length && (
         <thead>
           <tr>
-            {headers.map(headerName => (
-              <th key={headerName}>{headerName}</th>
+            {headers.map((headerName, index) => (
+              <th key={`${index}${headerName}`}>{headerName !== '' && <h3>{headerName}</h3>}</th>
             ))}
           </tr>
         </thead>
       )}
-      <tbody>
+      <tbody
+        style={{
+          maxHeight: maxHeight ?? 'auto',
+        }}
+      >
         {data.map((entry, index, entries) =>
           children({
             entry,
