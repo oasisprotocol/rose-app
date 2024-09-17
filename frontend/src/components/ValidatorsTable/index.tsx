@@ -52,7 +52,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                   </td>
                   <td>
                     <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>
-                      {StringUtils.getValidatorFriendlyName(entry)}
+                      <span className="mono">{StringUtils.getValidatorFriendlyName(entry)}</span>
                       {!entry.active && (
                         <>
                           &nbsp;<span className={classes.validatorInactiveText}>(inactive)</span>

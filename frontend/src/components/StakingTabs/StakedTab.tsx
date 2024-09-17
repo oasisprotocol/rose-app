@@ -39,7 +39,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
                 <Fragment>
                   <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.stakedRow)}>
                     <td>
-                      <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
+                      <p className="body mono">{StringUtils.getValidatorFriendlyName(validator)}</p>
                     </td>
                     <td>
                       <SharesAmount shares={entry.shares} validator={validator} type="staking" />

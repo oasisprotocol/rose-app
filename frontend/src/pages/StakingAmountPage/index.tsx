@@ -152,7 +152,10 @@ const StakingAmountPageCmp: FC = () => {
         <Card header={<h2>Staking amount</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
             Enter the amount you want to stake with{' '}
-            <span className={classes.validatorName}>{StringUtils.getValidatorFriendlyName(validator)}</span>.
+            <span className={StringUtils.clsx('mono', classes.validatorName)}>
+              {StringUtils.getValidatorFriendlyName(validator)}
+            </span>
+            .
             <br />
             There is a minimum of 100 {nativeCurrency?.symbol} stake amount.
           </p>
@@ -188,7 +191,7 @@ const StakingAmountPageCmp: FC = () => {
               ],
               [
                 <p className="body">Validator:</p>,
-                <p className="body">
+                <p className="body mono">
                   {(() => {
                     const validatorName = StringUtils.getValidatorName(validator)
 

@@ -33,7 +33,7 @@ export const ConnectedAccount: FC<Props> = ({ className, address, chainName }) =
       {isDesktopScreen && (
         <p className={classes.connectedAccountDetails}>
           <span className={classes.network}>{networkName}</span>
-          <abbr title={address} className={classes.connectedAccountAddress}>
+          <abbr title={address} className={StringUtils.clsx('mono', classes.connectedAccountAddress)}>
             {StringUtils.truncateAddress(address)}
           </abbr>
         </p>
