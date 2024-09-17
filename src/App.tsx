@@ -104,7 +104,7 @@ export function App() {
     >
       <div className={classes.step3}>
         <div>
-          <h1>Address created and awaiting your transfer</h1>
+          <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
           <p>
             Use the generated address below to initiate the transfer on your centralized exchange. The dApp
             automatically recognizes your transfer form the centralized exchange and will track it.

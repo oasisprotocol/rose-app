@@ -35,10 +35,12 @@ export async function getConsensusBalance(oasisAddress: `oasis1${string}`) {
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const owner = oasis.staking.addressFromBech32(oasisAddress)
   const account = await nic.stakingAccount({ height: oasis.consensus.HEIGHT_LATEST, owner: owner })
+  const isFresh = !account.general?.nonce // undefined || <=0 || <=0n
   const balance = oasis.quantity.toBigInt(account.general?.balance ?? new Uint8Array([0]))
   return {
     raw: balance,
     formatted: fromBaseUnits(balance, consensusConfig.decimals),
+    isFresh: isFresh,
   }
 }
 

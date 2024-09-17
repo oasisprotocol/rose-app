@@ -2,12 +2,14 @@ import * as oasis from '@oasisprotocol/client'
 import { useState } from 'react'
 import { hexToBytes } from 'viem'
 import { useSignMessage } from 'wagmi'
+import { getConsensusBalance } from './getBalances'
 import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire'
 
 export interface ConsensusAccount {
   address: `oasis1${string}`
   privateKey: string
   signer: oasis.signature.NaclSigner
+  isFresh: boolean
 }
 
 export function useGenerateConsensusAccount() {
@@ -27,8 +29,9 @@ export function useGenerateConsensusAccount() {
       const signer = oasis.signature.NaclSigner.fromSeed(seed32bytes, 'this key is not important')
       const privateKey = oasis.misc.toBase64(signer.key.secretKey)
       const address = await oasisPublicKeyToAddress(signer.public())
+      const { isFresh } = await getConsensusBalance(address)
 
-      const consensusAccount = { address, privateKey, signer }
+      const consensusAccount = { address, privateKey, signer, isFresh }
       setConsensusAccount(consensusAccount)
       return consensusAccount
       // Ignore errors
