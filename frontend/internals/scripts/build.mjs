@@ -8,7 +8,7 @@ const buildSha = execSync('git rev-parse HEAD').toString().trim()
 const buildDatetime = Date.now().toString()
 
 execSync(
-  `REACT_APP_BUILD_SHA="${buildSha}" REACT_APP_BUILD_DATETIME="${buildDatetime}" vite build --mode staging --base /dapp-staker/`,
+  `REACT_APP_BUILD_SHA="${buildSha}" REACT_APP_BUILD_DATETIME="${buildDatetime}" vite build --mode staging`,
   {
     stdio: 'inherit',
   }
