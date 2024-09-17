@@ -47,6 +47,12 @@
     margin-bottom: 10px;
   }
 
+  .overrideMaxWidth {
+    width: 940px;
+    max-width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
   .addressWrapper {
     display: flex;
     align-items: stretch;
@@ -72,17 +78,23 @@
       border-bottom-left-radius: 8px;
     }
     .address {
+      flex-grow: 1;
       display: flex;
       padding: 23px;
       gap: 8px;
     }
     .endAdornment {
       display: flex;
-      padding-right: 12px;
       gap: 6px;
+
+      border-left: 2px solid var(--white);
     }
     .addressButton {
       border-radius: 4px;
+      margin-right: 12px;
+    }
+    .plainButton {
+      background-color: transparent;
     }
   }
 

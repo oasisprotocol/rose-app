@@ -111,31 +111,47 @@ export function App() {
           </p>
         </div>
 
-        <div className={classes.addressWrapper}>
-          <div className={classes.startAdornment}>Your address</div>
-          <div className={classes.address}>
-            <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
+        <div className={classes.overrideMaxWidth}>
+          <div className={classes.addressWrapper}>
+            <div className={classes.startAdornment}>Your address</div>
+            <div className={classes.address}>
+              <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
+              {progress.percentage && progress.percentage <= 0.05 ? (
+                <span>{consensusAccount.address}</span>
+              ) : (
+                <ShortAddress address={consensusAccount.address} />
+              )}
+            </div>
+            <div>
+              <Button
+                title="Show your private key"
+                className={classes.plainButton}
+                onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
+              >
+                🔐️
+              </Button>
+            </div>
             {progress.percentage && progress.percentage <= 0.05 ? (
-              <span>{consensusAccount.address}</span>
+              <div>
+                <Button
+                  title="Copy address"
+                  className={classes.addressButton}
+                  onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+                >
+                  Copy address &nbsp; 📋️
+                </Button>
+              </div>
             ) : (
-              <ShortAddress address={consensusAccount.address} />
+              <div className={classes.endAdornment}>
+                <Button
+                  title="Copy address"
+                  className={classes.plainButton}
+                  onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+                >
+                  📋️
+                </Button>
+              </div>
             )}
-          </div>
-          <div className={classes.endAdornment}>
-            <Button
-              title="Copy address"
-              className={classes.addressButton}
-              onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
-            >
-              {progress.percentage && progress.percentage <= 0.05 ? <span>Copy address 📋️</span> : <span>📋️</span>}
-            </Button>
-            <Button
-              title="Copy private key"
-              className={classes.addressButton}
-              onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
-            >
-              {progress.percentage && progress.percentage <= 0.05 ? <span>Copy private key 🔐️</span> : <span>🔐️</span>}
-            </Button>
           </div>
         </div>
 
