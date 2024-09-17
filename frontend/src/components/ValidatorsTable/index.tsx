@@ -42,7 +42,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
             const isSelected = value?.entity_address === entry.entity_address
             return (
               <Fragment key={entry.entity_address}>
-                <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.stakedRow)}>
+                <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined)}>
                   <td>
                     <label className={classes.radioFormItem}>
                       &nbsp;
@@ -53,6 +53,11 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                   <td>
                     <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>
                       {StringUtils.getValidatorFriendlyName(entry)}
+                      {!entry.active && (
+                        <>
+                          &nbsp;<span className={classes.validatorInactiveText}>(inactive)</span>
+                        </>
+                      )}
                     </p>
                   </td>
                   <td>
