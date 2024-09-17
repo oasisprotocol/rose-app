@@ -17,8 +17,8 @@
     "node": ">=20"
   },
   "lint-staged": {
-    "*.{js,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
-    "*.{js,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
+    "*.{js,mjs,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
+    "*.{js,mjs,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.1.0",
