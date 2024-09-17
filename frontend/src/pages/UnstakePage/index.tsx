@@ -211,7 +211,10 @@ const UnstakePageCmp: FC = () => {
         <Card header={<h2>Unstaking amount</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
             Enter the amount you want to unstake from{' '}
-            <span className={classes.validatorName}>{StringUtils.getValidatorFriendlyName(validator)}</span>.
+            <span className={StringUtils.clsx('mono', classes.validatorName)}>
+              {StringUtils.getValidatorFriendlyName(validator)}
+            </span>
+            .
           </p>
           <AmountInput
             ref={amountInputRef}
@@ -245,7 +248,7 @@ const UnstakePageCmp: FC = () => {
               ],
               [
                 <p className="body">Validator:</p>,
-                <p className="body">
+                <p className="body mono">
                   {(() => {
                     const validatorName = StringUtils.getValidatorName(validator)
 

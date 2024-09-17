@@ -96,7 +96,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                 <>
                   <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
                     <td>
-                      <p className="body">{StringUtils.getValidatorFriendlyName(validator)}</p>
+                      <p className="body mono">{StringUtils.getValidatorFriendlyName(validator)}</p>
                     </td>
                     <td>
                       {!isExpanded && (

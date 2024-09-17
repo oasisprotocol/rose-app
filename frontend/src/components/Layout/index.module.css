@@ -8,6 +8,7 @@
 }
 
 .mainSection {
+  display: grid;
   width: 100%;
 }
 

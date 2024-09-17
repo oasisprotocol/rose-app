@@ -25,7 +25,6 @@
 
 .connectedAccountAddress {
   flex: 1 1 60%;
-  font-family: 'Roboto Mono Variable', monospace;
   text-decoration: none;
   font-size: 22px;
   font-weight: 700;
