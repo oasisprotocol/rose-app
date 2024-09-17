@@ -7,6 +7,9 @@ import { Layout } from './components/Layout'
 import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
+import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
+import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
+import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
@@ -75,7 +78,8 @@ export function App() {
                     marginTop: -50,
                   }}
                 >
-                  Instead use our ROSE Wallet &nbsp;&nbsp;&nbsp;&nbsp; ↗
+                  Instead use our ROSE Wallet &nbsp;&nbsp;&nbsp;&nbsp;
+                  <img src={open_in_new_svg} alt="" width="24" style={{ filter: 'invert(1)' }} />
                 </Button>
               </div>
             </div>
@@ -128,7 +132,7 @@ export function App() {
                 className={classes.plainButton}
                 onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
               >
-                🔐️
+                <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
               </Button>
             </div>
             {progress.percentage && progress.percentage <= 0.05 ? (
@@ -138,7 +142,8 @@ export function App() {
                   className={classes.addressButton}
                   onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
                 >
-                  Copy address &nbsp; 📋️
+                  Copy address &nbsp;
+                  <img src={file_copy_svg} alt="" width="24" style={{ filter: 'invert(1)' }} />
                 </Button>
               </div>
             ) : (
@@ -148,7 +153,7 @@ export function App() {
                   className={classes.plainButton}
                   onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
                 >
-                  📋️
+                  <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
                 </Button>
               </div>
             )}

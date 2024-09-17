@@ -16,4 +16,7 @@
   &:disabled {
     cursor: not-allowed;
   }
+  img {
+    vertical-align: middle;
+  }
 }
