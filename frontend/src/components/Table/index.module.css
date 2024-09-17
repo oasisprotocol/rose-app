@@ -4,11 +4,33 @@
   background-color: transparent;
   border-collapse: collapse;
 
+  thead {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+    background: var(--brand-blue);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+
+    h3 {
+      color: var(--white);
+    }
+
+    th {
+      padding: 1.125rem 0;
+    }
+  }
+
   tbody {
-    max-height: 200px;
-    overflow-y: scroll;
+    display: block;
+    width: 100%;
+    overflow-y: auto;
 
     tr {
+      width: 100%;
+      display: table;
+      table-layout: fixed;
+
       &:not(:last-child) {
         border-bottom: 2px solid var(--brand-extra-dark-21);
 
@@ -25,6 +47,17 @@
       font-weight: 400;
       line-height: 150%;
       letter-spacing: -0.03em;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: var(--gray-extra-light);
+      border: 4px solid transparent;
+      border-radius: 8px;
+      background-clip: padding-box;
+    }
+
+    &::-webkit-scrollbar {
+      width: 16px;
     }
   }
 }

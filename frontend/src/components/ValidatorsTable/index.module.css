@@ -4,8 +4,14 @@
 
   table {
     tr {
+      th,
+      td {
+        &:first-child {
+          width: 40px;
+        }
+      }
+
       td:first-child {
-        width: 40px;
         text-align: center;
         padding: 1rem 1rem 1rem 1.5rem;
       }
@@ -15,8 +21,18 @@
         color: var(--brand-blue);
       }
 
+      th,
+      td {
+        &:nth-child(3) {
+          width: 80px;
+        }
+      }
+
+      th:nth-child(3) {
+        text-align: right;
+      }
+
       td:nth-child(3) {
-        width: 80px;
         text-align: right;
         color: var(--brand-extra-dark);
 
@@ -25,9 +41,19 @@
         }
       }
 
+      th,
+      td {
+        &:last-child {
+          width: 40px;
+        }
+      }
+
+      th:last-child {
+        width: 56px;
+      }
+
       td:last-child {
         text-align: center;
-        width: 40px;
         vertical-align: middle;
         line-height: 0;
       }
