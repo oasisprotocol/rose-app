@@ -77,7 +77,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new Error('[Web3Context] Sapphire provider is required!')
     }
 
-    if (!CHAINS.has(chainId) || VITE_NETWORK !== chainId) {
+    if (!CHAINS.has(chainId)) {
       throw new UnknownNetworkError('Unknown network!')
     }
 
