@@ -135,28 +135,15 @@ export function App() {
                 <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
               </Button>
             </div>
-            {progress.percentage && progress.percentage <= 0.05 ? (
-              <div>
-                <Button
-                  title="Copy address"
-                  className={classes.addressButton}
-                  onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
-                >
-                  Copy address &nbsp;
-                  <img src={file_copy_svg} alt="" width="24" style={{ filter: 'invert(1)' }} />
-                </Button>
-              </div>
-            ) : (
-              <div className={classes.endAdornment}>
-                <Button
-                  title="Copy address"
-                  className={classes.plainButton}
-                  onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
-                >
-                  <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
-                </Button>
-              </div>
-            )}
+            <div className={classes.endAdornment}>
+              <Button
+                title="Copy address"
+                className={classes.plainButton}
+                onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+              >
+                <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
+              </Button>
+            </div>
           </div>
         </div>
 
