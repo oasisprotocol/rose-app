@@ -15,7 +15,8 @@
 
 .footer {
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
+  justify-content: start;
   align-items: center;
   padding: 3rem 2rem 20px;
   color: var(--white);
@@ -25,6 +26,7 @@
   margin: 0 auto;
   width: 100%;
   max-width: 1076px;
+  gap: 0.5rem;
 
   :is(a) {
     color: var(--white);
@@ -36,18 +38,12 @@
   }
 }
 
-.footerColumn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
 @media screen and (max-width: 1000px) {
   .layout {
     padding: 0 1.5rem 0.25rem;
   }
 
   .footer {
-    padding: 2rem 0;
+    padding: 2.5rem 0 0.5rem 0;
   }
 }

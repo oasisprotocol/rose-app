@@ -25,28 +25,26 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
       )}
       <main className={classes.main}>{children}</main>
       <footer className={classes.footer}>
-        <div className={classes.footerColumn}>
-          <span>
-            <div>
-              Version: {APP_VERSION} (commit:{' '}
-              <a href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`} rel="noopener noreferrer" target="_blank">
-                {BUILD_COMMIT.substring(0, 7)}
-              </a>
-              ) built at {dateFormatLong.format(BUILD_DATETIME)}
-            </div>
-          </span>
-          <span>|</span>
-          <span>
-            <a href={GITHUB_REPOSITORY_URL} rel="noopener noreferrer" target="_blank">
-              GitHub
+        <span>
+          <div>
+            Version: {APP_VERSION} (commit:{' '}
+            <a href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`} rel="noopener noreferrer" target="_blank">
+              {BUILD_COMMIT.substring(0, 7)}
             </a>
-          </span>
-        </div>
-        <div className={classes.footerColumn}>
+            ) built at {dateFormatLong.format(BUILD_DATETIME)}
+          </div>
+        </span>
+        <span>|</span>
+        <span style={{ flexGrow: 1 }}>
+          <a href={GITHUB_REPOSITORY_URL} rel="noopener noreferrer" target="_blank">
+            GitHub
+          </a>
+        </span>
+        <span>
           <a href={OASIS_HOME_PAGE_URL} rel="noopener noreferrer" target="_blank">
             Oasis Protocol Foundation | 2024
           </a>
-        </div>
+        </span>
       </footer>
     </div>
   )

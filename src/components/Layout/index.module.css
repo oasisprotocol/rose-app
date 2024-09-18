@@ -5,6 +5,10 @@
   align-items: center;
   padding: 3.125rem 3.125rem 2.5rem;
   background: transparent;
+
+  img {
+    max-width: 50vw;
+  }
 }
 
 .mainSection {
@@ -13,6 +17,7 @@
 
 @media screen and (max-width: 1000px) {
   .header {
-    padding: 1rem;
+    padding: 1rem 0 2rem 0;
+    margin-left: -10px;
   }
 }

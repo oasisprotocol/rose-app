@@ -26,7 +26,7 @@ export function App() {
       <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
         <div className={classes.step1}>
           <div>
-            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
+            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" style={{ maxWidth: '70vw' }} />
             <p>
               The Rose (on)ramp dApp has been built by Oasis to offer users an easy to use service of moving your Rose
               from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
