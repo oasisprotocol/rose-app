@@ -2,13 +2,12 @@
   display: flex;
   white-space: nowrap;
   user-select: all;
+  max-width: 14.9ch;
 
   > :first-child {
     text-overflow: ellipsis;
     overflow: hidden;
     min-width: 5ch;
-    max-width: 9.4ch;
-    margin-right: -0.5ch;
   }
 
   > :last-child {

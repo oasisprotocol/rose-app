@@ -83,6 +83,9 @@
       padding: 23px;
       gap: 8px;
     }
+    .addressLonger > * {
+      max-width: 50ch;
+    }
     .endAdornment {
       display: flex;
       gap: 6px;
@@ -91,6 +94,12 @@
     }
     .plainButton {
       background-color: transparent;
+    }
+
+    @media screen and (min-width: 701px) and (max-width: 1000px) {
+      .addressLonger > * {
+        max-width: calc(100vw - 525px);
+      }
     }
   }
 

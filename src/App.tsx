@@ -121,7 +121,9 @@ export function App() {
             <div className={classes.address}>
               <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
               {progress.percentage && progress.percentage <= 0.05 ? (
-                <span>{consensusAccount.address}</span>
+                <div className={classes.addressLonger}>
+                  <ShortAddress address={consensusAccount.address} />
+                </div>
               ) : (
                 <ShortAddress address={consensusAccount.address} />
               )}
