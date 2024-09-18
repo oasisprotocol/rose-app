@@ -3,7 +3,6 @@ import * as oasis from '@oasisprotocol/client'
 import { Delegations, Undelegations } from '../types'
 
 export interface GrpcProviderState {
-  node: oasis.client.NodeInternal
   consensusStatus: oasis.types.ConsensusStatus | null
 }
 

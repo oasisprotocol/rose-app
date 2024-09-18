@@ -4,7 +4,6 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "build:staging": "tsc && vite build --mode staging",
     "build": "tsc && vite build",
     "watch": "nodemon -e ts --watch 'src/**/*' --exec 'pnpm run build'",
     "test": "vitest"

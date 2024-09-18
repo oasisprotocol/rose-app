@@ -24,7 +24,7 @@ const appStateProviderInitialState: AppStateProviderState = {
 export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const { getValidators } = useApi()
   const {
-    state: { account },
+    state: { account, chainId },
     getAccountBalance,
   } = useWeb3()
   const { fetchDelegations: grpcFetchDelegations, fetchUndelegations: grpcFetchUndelegations } = useGrpc()
@@ -134,9 +134,11 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   }
 
   useEffect(() => {
-    fetchValidators()
+    if (chainId) {
+      fetchValidators()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [chainId])
 
   const setAppError = (error: Error | object | string) => {
     if (error === undefined || error === null) return

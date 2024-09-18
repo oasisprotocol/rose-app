@@ -47,17 +47,17 @@ const router = createHashRouter([
 export const App: FC = () => {
   return (
     <ErrorBoundary>
-      <ApiContextProvider>
-        <EIP1193ContextProvider>
-          <Web3ContextProvider>
+      <EIP1193ContextProvider>
+        <Web3ContextProvider>
+          <ApiContextProvider>
             <GrpcContextProvider>
               <AppStateContextProvider>
                 <RouterProvider router={router} />
               </AppStateContextProvider>
             </GrpcContextProvider>
-          </Web3ContextProvider>
-        </EIP1193ContextProvider>
-      </ApiContextProvider>
+          </ApiContextProvider>
+        </Web3ContextProvider>
+      </EIP1193ContextProvider>
     </ErrorBoundary>
   )
 }

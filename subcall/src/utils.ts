@@ -1,6 +1,8 @@
 import { AbiCoder } from 'ethers'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
+import { PARATIMES_CONFIG } from './config.ts'
+import { ParaTimeChainId } from './types.ts'
 
 const ABI_CODER = AbiCoder.defaultAbiCoder()
 
@@ -12,4 +14,16 @@ const toSecp256k1eth = async (hexAddress: string) => {
   )
 }
 
-export { ABI_CODER, toSecp256k1eth }
+const getParaTimeConfig = (chainId: ParaTimeChainId) => {
+  const _chainId = Number(chainId)
+
+  if (!PARATIMES_CONFIG.has(_chainId)) {
+    throw new Error(
+      `Invalid [chainId], supported chain ids are: ${Array.from(PARATIMES_CONFIG.keys()).join(', ')}`
+    )
+  }
+
+  return PARATIMES_CONFIG.get(_chainId)
+}
+
+export { ABI_CODER, toSecp256k1eth, getParaTimeConfig }
