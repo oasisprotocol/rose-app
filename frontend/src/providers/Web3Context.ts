@@ -13,6 +13,7 @@ export interface Web3ProviderState {
     decimals: number
   } | null
   isInteractingWithChain: boolean
+  chainId: bigint | null
 }
 
 export interface Web3ProviderContext {

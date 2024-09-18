@@ -1,28 +1,33 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { GrpcContext, GrpcProviderContext, GrpcProviderState } from './GrpcContext'
-import { AVERAGE_BLOCK_TIME_IN_SEC, AVERAGE_BLOCKS_PER_EPOCH, VITE_GRPC_URL } from '../constants/config'
-import * as oasis from '@oasisprotocol/client'
+import { AVERAGE_BLOCK_TIME_IN_SEC, AVERAGE_BLOCKS_PER_EPOCH, GRPC_URL_CONFIG } from '../constants/config'
 import { DateUtils } from '../utils/date.utils'
 import { useWeb3 } from '../hooks/useWeb3'
 import { getDelegations, getUndelegations } from '@oasisprotocol/dapp-staker-subcall'
+import * as oasis from '@oasisprotocol/client'
 
 const grpcProviderInitialState: GrpcProviderState = {
-  node: new oasis.client.NodeInternal(VITE_GRPC_URL),
   consensusStatus: null,
 }
 
 export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const {
-    state: { account },
+    state: { account, chainId },
   } = useWeb3()
 
   const [state, setState] = useState<GrpcProviderState>({
     ...grpcProviderInitialState,
   })
 
-  const fetchConsensusStatus = async () => {
-    const { node } = state
+  const getNode = () => {
+    if (!GRPC_URL_CONFIG.has(chainId!)) {
+      throw new Error('Invalid [chainId]')
+    }
 
+    return new oasis.client.NodeInternal(GRPC_URL_CONFIG.get(chainId!)!)
+  }
+
+  const fetchConsensusStatus = async (node = getNode()) => {
     if (state.consensusStatus) return state.consensusStatus
 
     const consensusStatus = await node.consensusGetStatus()
@@ -32,13 +37,13 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return consensusStatus
   }
 
-  const getTimeEstimateForFutureEpoch = async (futureEpoch: bigint) => {
+  const getTimeEstimateForFutureEpoch = async (futureEpoch: bigint, node = getNode()) => {
     // Skip in case futureEpoch unset(= 0n) UndelegateStart not called yet
     if (futureEpoch === 0n) {
       return null
     }
 
-    const { node, consensusStatus } = state
+    const { consensusStatus } = state
 
     if (consensusStatus === null) {
       console.warn('[consensusStatus] unset, skipping...')
@@ -63,16 +68,18 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => {
-    fetchConsensusStatus()
+    if (chainId) {
+      fetchConsensusStatus()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [chainId])
 
   const providerState: GrpcProviderContext = {
     state,
     fetchConsensusStatus,
     getTimeEstimateForFutureEpoch,
-    fetchDelegations: () => getDelegations(account!),
-    fetchUndelegations: () => getUndelegations(account!),
+    fetchDelegations: () => getDelegations(chainId!, account!),
+    fetchUndelegations: () => getUndelegations(chainId!, account!),
   }
 
   return <GrpcContext.Provider value={providerState}>{children}</GrpcContext.Provider>

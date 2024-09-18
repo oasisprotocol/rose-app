@@ -39,6 +39,16 @@ export const CHAINS: Map<bigint, AddEthereumChainParameter> = new Map([
   ],
 ])
 
+export const NEXUS_BASE_URL_CONFIG: Map<bigint, string> = new Map([
+  [23294n, 'https://nexus.oasis.io/v1/'],
+  [23295n, 'https://testnet.nexus.oasis.io/v1/'],
+])
+
+export const GRPC_URL_CONFIG: Map<bigint, string> = new Map([
+  [23294n, 'https://grpc.oasis.io'],
+  [23295n, 'https://testnet.grpc.oasis.io'],
+])
+
 export const NETWORK_NAMES: Record<string, string> = {
   'Oasis Sapphire': 'Sapphire',
   'Oasis Sapphire Testnet': 'Sapphire Testnet',
@@ -64,19 +74,10 @@ const {
   VITE_NETWORK: ENV_VITE_NETWORK,
   VITE_REACT_APP_BUILD_VERSION,
   VITE_REACT_APP_BUILD_DATETIME: ENV_VITE_REACT_APP_BUILD_DATETIME,
-  VITE_NEXUS_BASE_URL,
-  VITE_GRPC_URL,
   VITE_APP_VERSION,
 } = import.meta.env
 
 const VITE_NETWORK = BigInt(ENV_VITE_NETWORK) ?? 0n
 const VITE_REACT_APP_BUILD_DATETIME = Number(ENV_VITE_REACT_APP_BUILD_DATETIME) ?? 0
 
-export {
-  VITE_NETWORK,
-  VITE_REACT_APP_BUILD_VERSION,
-  VITE_REACT_APP_BUILD_DATETIME,
-  VITE_NEXUS_BASE_URL,
-  VITE_GRPC_URL,
-  VITE_APP_VERSION,
-}
+export { VITE_NETWORK, VITE_REACT_APP_BUILD_VERSION, VITE_REACT_APP_BUILD_DATETIME, VITE_APP_VERSION }

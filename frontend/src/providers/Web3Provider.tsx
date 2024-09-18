@@ -14,6 +14,7 @@ const web3ProviderInitialState: Web3ProviderState = {
   account: null,
   explorerBaseUrl: null,
   chainName: null,
+  chainId: null,
   nativeCurrency: null,
   isInteractingWithChain: false,
 }
@@ -92,11 +93,16 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     }))
   }
 
-  const _chainChanged = useCallback(() => {
-    if (state.isConnected) {
-      window.location.reload()
-    }
-  }, [state.isConnected])
+  const _chainChanged = useCallback((chainId: number) => {
+    // Dirty workaround to access state
+    setState(prevState => {
+      if (prevState.isConnected && prevState.chainId !== BigInt(chainId)) {
+        window.location.reload()
+      }
+
+      return prevState
+    })
+  }, [])
 
   const _connect = useCallback(() => _connectionChanged(true), [])
   const _disconnect = useCallback(() => _connectionChanged(false), [])
@@ -122,14 +128,18 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       const browserProvider = new BrowserProvider(provider!)
 
       const network = await browserProvider.getNetwork()
-      _setNetworkSpecificVars(network.chainId, browserProvider)
+      const chainId = network.chainId
+      _setNetworkSpecificVars(chainId, browserProvider)
 
       setState(prevState => ({
         ...prevState,
         isConnected: true,
         browserProvider,
         account,
+        chainId,
       }))
+
+      _addEventListenersOnce(window.ethereum)
     } catch (ex) {
       setState(prevState => ({
         ...prevState,
@@ -156,11 +166,10 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     }
 
     await _init(account, window.ethereum)
-    _addEventListenersOnce(window.ethereum)
   }
 
   const switchNetwork = async (chainId = VITE_NETWORK) => {
-    return switchNetworkEIP1193(chainId)
+    return await switchNetworkEIP1193(chainId)
   }
 
   const getTransaction = async (txHash: string) => {
@@ -201,15 +210,19 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const delegate = async (value: bigint, to: string, txSubmittedCb?: () => void) => {
-    const { browserProvider } = state
+    const { browserProvider, chainId } = state
 
     if (!browserProvider) {
       throw new Error('[browserProvider] not initialized!')
     }
 
+    if (!chainId) {
+      throw new Error('[chainId] not set!')
+    }
+
     const signer = await browserProvider.getSigner()
 
-    const preparedTx = consensusDelegate(to, value)
+    const preparedTx = consensusDelegate(chainId, to, value)
     const tx = await signer.populateTransaction({ ...preparedTx, gasLimit: GAS_LIMIT_STAKE })
     const txResponse = await signer.sendTransaction(tx)
     txSubmittedCb?.()
@@ -217,15 +230,19 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const undelegate = async (shares: bigint, from: string, txSubmittedCb?: () => void) => {
-    const { browserProvider } = state
+    const { browserProvider, chainId } = state
 
     if (!browserProvider) {
       throw new Error('[browserProvider] not initialized!')
     }
 
+    if (!chainId) {
+      throw new Error('[chainId] not set!')
+    }
+
     const signer = await browserProvider.getSigner()
 
-    const preparedTx = consensusUndelegate(from, shares)
+    const preparedTx = consensusUndelegate(chainId, from, shares)
     const tx = await signer.populateTransaction({ ...preparedTx, gasLimit: GAS_LIMIT_UNSTAKE })
     const txResponse = await signer.sendTransaction(tx)
     txSubmittedCb?.()
