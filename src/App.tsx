@@ -45,7 +45,9 @@ export function App() {
           <>
             <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
             <Hint title="Your funds will be sent to this address.">
-              <ConnectButton />
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
+              </div>
             </Hint>
           </>
         }
@@ -101,7 +103,9 @@ export function App() {
               return ''
             })()}
           >
-            <ConnectButton />
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
+            </div>
           </Hint>
         </>
       }

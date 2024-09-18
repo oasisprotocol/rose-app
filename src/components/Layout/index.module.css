@@ -2,9 +2,10 @@
   display: flex;
   justify-content: space-between;
   vertical-align: middle;
-  align-items: center;
+  align-items: start;
   padding: 3.125rem 3.125rem 2.5rem;
   background: transparent;
+  gap: 20px;
 
   img {
     max-width: 50vw;
