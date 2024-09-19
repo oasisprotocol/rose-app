@@ -9,12 +9,12 @@ const logoSizeMap: Record<LogoSize, { width: number; height: number }> = {
     height: 75.25,
   },
   medium: {
-    width: 241,
-    height: 46,
+    width: 320,
+    height: 66.49,
   },
   small: {
-    width: 120.5,
-    height: 23,
+    width: 180.75,
+    height: 34,
   },
 }
 

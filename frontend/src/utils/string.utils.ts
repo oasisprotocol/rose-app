@@ -31,7 +31,7 @@ export abstract class StringUtils {
     return s.slice(0, sliceIndex)
   }
 
-  static getValidatorFriendlyName = (validator?: Validator) => {
+  static getValidatorFriendlyName = (validator?: Validator, { truncate } = { truncate: true }) => {
     if (!validator) {
       return 'Unknown'
     }
@@ -40,7 +40,9 @@ export abstract class StringUtils {
       return validator.media.name
     }
 
-    return StringUtils.truncateAddress(validator.entity_address, 'oasis')
+    if (truncate) return StringUtils.truncateAddress(validator.entity_address, 'oasis')
+
+    return validator.entity_address
   }
 
   static getValidatorName = (validator?: Validator) => {

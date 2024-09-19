@@ -18,6 +18,7 @@ import { endOfDay } from 'date-fns/endOfDay'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip'
 import { DateUtils } from '../../utils/date.utils'
+import { useAppState } from '../../hooks/useAppState'
 
 type DebondingItemStatus = 'ready' | 'waiting' | null
 
@@ -53,6 +54,9 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
   const {
     state: { nativeCurrency },
   } = useWeb3()
+  const {
+    state: { isMobileScreen, isDesktopScreen },
+  } = useAppState()
   const [debondingItems, setDebondingItems] = useState<DebondingItem[] | null>(null)
 
   useEffect(() => {
@@ -96,7 +100,27 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                 <>
                   <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.debondingRow)}>
                     <td>
-                      <p className="body mono">{StringUtils.getValidatorFriendlyName(validator)}</p>
+                      <p className={StringUtils.clsx('body', 'ellipsis')}>
+                        {isMobileScreen && (
+                          <span className="mono">
+                            {StringUtils.getValidatorFriendlyName(validator, { truncate: false })}
+                          </span>
+                        )}
+                        {isDesktopScreen && (
+                          <span className="mono">{StringUtils.getValidatorFriendlyName(validator)}</span>
+                        )}
+                        {isDesktopScreen && !validator.active && (
+                          <>
+                            &nbsp;
+                            <span className="body mute">(inactive)</span>
+                          </>
+                        )}
+                      </p>
+                      {isMobileScreen && !validator.active && (
+                        <p className="body mute">
+                          <span>(inactive)</span>
+                        </p>
+                      )}
                     </td>
                     <td>
                       {!isExpanded && (
@@ -135,7 +159,12 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                           <div className={classes.debondingRowExpanded}>
                             <p className="body">
                               <span>Expected amount:</span>
-                              <SharesAmount shares={entry.shares} validator={validator} type="unstaking" />
+                              <SharesAmount
+                                className={classes.debondingRowExpandedAmount}
+                                shares={entry.shares}
+                                validator={validator}
+                                type="unstaking"
+                              />
                             </p>
                           </div>
                         )}
@@ -161,7 +190,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                                 <>
                                   <HourglassIcon />
                                   <p>
-                                    Estimated to be available on{' '}
+                                    Estimated to be available on {isMobileScreen && <br />}
                                     {DateUtils.intlDateFormat(entry.debondTimeEstimate, { format: 'short' })}
                                   </p>
                                 </>

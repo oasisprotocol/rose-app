@@ -71,3 +71,13 @@
 .amountInputError {
   margin-top: 0.5rem;
 }
+
+@media screen and (max-width: 1000px) {
+  .percentageInputs {
+    margin-bottom: 1.5rem;
+
+    button {
+      min-width: 75px;
+    }
+  }
+}

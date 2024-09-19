@@ -35,7 +35,7 @@ const StakingAmountPageCmp: FC = () => {
   const navigate = useNavigate()
   const { address } = useParams<{ address: string }>()
   const {
-    state: { delegations, stats },
+    state: { delegations, stats, isMobileScreen, isDesktopScreen },
     getValidatorByAddress,
     fetchDelegations,
     fetchValidators,
@@ -136,9 +136,9 @@ const StakingAmountPageCmp: FC = () => {
     }
 
     if (parsedAmount < MIN_STAKE_AMOUNT) {
-      setAmountError(`Minimum amount to stake is 100 ${nativeCurrency?.symbol}`)
+      setAmountError(`The minimum amount to stake is 100 ${nativeCurrency?.symbol}`)
     } else if (accountBalance.gt(0) && accountBalance.lt(parsedAmount.toString())) {
-      setAmountError('Account balance is too low!')
+      setAmountError('Your account balance is too low.')
     }
   }
 
@@ -160,23 +160,32 @@ const StakingAmountPageCmp: FC = () => {
             There is a minimum of 100 {nativeCurrency?.symbol} stake amount.
           </p>
           <AmountInput
+            className={classes.amountInput}
             ref={amountInputRef}
             label="Amount"
             error={amountError ?? ''}
             onChange={handleAmountInputChange}
           />
+          {!validator.active && (
+            <p className={StringUtils.clsx('body', classes.inactiveAmountInputWarning)}>
+              <b>Please note:</b> You have selected an inactive validator which means you do not receive
+              commission over your staked amount.
+            </p>
+          )}
           <div className={classes.actionButtonsContainer}>
             <Button disabled={amountError !== ''} onClick={() => setStep(Steps.DelegatePreviewTransaction)}>
               Delegate
             </Button>
-            <Button variant="text" onClick={() => navigateToStake()} startSlot={<ArrowLeftIcon />}>
-              Back
-            </Button>
+            {isDesktopScreen && (
+              <Button variant="text" onClick={() => navigateToStake()} startSlot={<ArrowLeftIcon />}>
+                Back
+              </Button>
+            )}
           </div>
         </Card>
       )}
       {step === Steps.DelegatePreviewTransaction && (
-        <Card header={<h2>Preview</h2>}>
+        <Card className={classes.previewTxCard} header={<h2>Preview</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
             Check the details of the transaction below.
           </p>
@@ -225,13 +234,15 @@ const StakingAmountPageCmp: FC = () => {
             <Button onClick={() => handleDelegate(delegations!, amount, validator?.entity_address)}>
               Confirm
             </Button>
-            <Button
-              variant="text"
-              onClick={() => setStep(Steps.DelegateInputAmount)}
-              startSlot={<ArrowLeftIcon />}
-            >
-              Back
-            </Button>
+            {isDesktopScreen && (
+              <Button
+                variant="text"
+                onClick={() => setStep(Steps.DelegateInputAmount)}
+                startSlot={<ArrowLeftIcon />}
+              >
+                Back
+              </Button>
+            )}
           </div>
         </Card>
       )}
@@ -239,7 +250,12 @@ const StakingAmountPageCmp: FC = () => {
         <Alert
           type="success"
           headerText="Staking successful"
-          actions={<Button onClick={navigateToDashboard}>Go to dashboard</Button>}
+          actions={
+            <Button onClick={navigateToDashboard}>
+              {isMobileScreen && <>Continue</>}
+              {isDesktopScreen && <>Go to dashboard</>}
+            </Button>
+          }
         />
       )}
       {step === Steps.DelegateFailed && (

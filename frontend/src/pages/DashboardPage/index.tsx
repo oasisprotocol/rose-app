@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { useNavigate } from 'react-router-dom'
 import { Card } from '../../components/Card'
@@ -12,6 +12,8 @@ const DashboardPageCmp: FC = () => {
   const {
     state: { isConnected, nativeCurrency },
   } = useWeb3()
+  const tabIndex = useState<number>(0)
+  const [activeIndex] = tabIndex
 
   useEffect(() => {
     if (!isConnected) {
@@ -21,11 +23,16 @@ const DashboardPageCmp: FC = () => {
 
   return (
     <Card header={<h2>Dashboard</h2>}>
-      <h3 className={classes.subHeader}>Your balances</h3>
+      <h3 className={classes.subHeader}>
+        {activeIndex === 0 && <>Your balances</>}
+        {(activeIndex === 1 || activeIndex === 2) && <>Your active delegations</>}
+      </h3>
       <p className={StringUtils.clsx('body', classes.description)}>
-        Overview of your current {nativeCurrency?.symbol} balances.
+        {activeIndex === 0 && <>Overview of your current {nativeCurrency?.symbol} balances.</>}
+        {activeIndex === 1 && <>Overview of your currently staked ROSE.</>}
+        {activeIndex === 2 && <>Overview of your ROSE (being) debonded.</>}
       </p>
-      <StakingTabs />
+      <StakingTabs tabIndex={tabIndex} />
     </Card>
   )
 }

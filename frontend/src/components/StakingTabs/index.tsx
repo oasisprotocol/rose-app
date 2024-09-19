@@ -77,8 +77,12 @@ export const StakingTabsCmp: FC = () => {
   )
 }
 
-export const StakingTabs = () => (
-  <TabsContextProvider>
+interface Props {
+  tabIndex: [number, (state: number) => void]
+}
+
+export const StakingTabs: FC<Props> = ({ tabIndex }) => (
+  <TabsContextProvider state={tabIndex}>
     <StakingTabsCmp />
   </TabsContextProvider>
 )

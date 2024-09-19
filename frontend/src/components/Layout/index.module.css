@@ -3,8 +3,12 @@
   justify-content: space-between;
   vertical-align: middle;
   align-items: center;
-  padding: 3.125rem 3.125rem 2.5rem;
   background: transparent;
+  padding: 3.125rem 3.125rem 2.5rem;
+}
+
+.headerLink {
+  line-height: 1rem;
 }
 
 .mainSection {
@@ -14,6 +18,11 @@
 
 @media screen and (max-width: 1000px) {
   .header {
-    padding: 1rem;
+    padding: 0;
+    margin-bottom: 2.375rem;
+  }
+
+  .mainSection {
+    display: block;
   }
 }

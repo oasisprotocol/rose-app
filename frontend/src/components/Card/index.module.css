@@ -23,8 +23,16 @@
 
 @media screen and (max-width: 1000px) {
   .card {
-    padding: 1.375rem;
+    padding: 1.375rem 1.375rem 3.125rem;
     max-width: unset;
+    min-height: unset;
     margin-bottom: 1.25rem;
+  }
+
+  .cardHeader {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: -1.375rem -1.375rem 2rem;
   }
 }

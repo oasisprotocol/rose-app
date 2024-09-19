@@ -230,3 +230,82 @@
   justify-content: center;
   margin-top: 8.625rem;
 }
+
+@media screen and (max-width: 1000px) {
+  .overviewTab {
+    padding: 1rem;
+  }
+
+  .stakeBtnContainer {
+    margin-top: 2.875rem;
+  }
+
+  .stakedTab {
+    .stakedRow {
+      td:nth-child(2) {
+        width: 120px;
+        text-align: right;
+      }
+    }
+
+    .expandedRow {
+      td {
+        padding: 0;
+      }
+    }
+
+    .stakedRowValidatorDetails {
+      padding: 0 1.25rem;
+
+      p {
+        max-width: unset;
+      }
+    }
+
+    .stakedRowActions {
+      .unstakeBtn {
+        margin: 1.75rem auto 1.25rem;
+      }
+    }
+  }
+
+  .debondingTab {
+    .debondingRow {
+      td:nth-child(2) {
+        width: 40px;
+      }
+
+      td:nth-child(3) {
+        width: 100px;
+      }
+    }
+
+    .debondingRowExpanded {
+      padding: 0 1.25rem;
+
+      p {
+        max-width: unset;
+        flex-direction: column;
+        justify-content: flex-start;
+        line-height: 24px;
+      }
+
+      .debondingRowExpandedAmount.debondingRowExpandedAmount {
+        justify-content: flex-start;
+        line-height: 16px;
+        span {
+          line-height: 16px;
+        }
+      }
+    }
+
+    .infoBox {
+      margin: 0 0.5625rem 0.625rem;
+      width: calc(100% - 1.125rem);
+
+      p {
+        text-align: center;
+      }
+    }
+  }
+}

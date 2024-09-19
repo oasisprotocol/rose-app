@@ -28,7 +28,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     getAccountBalance,
   } = useWeb3()
   const { fetchDelegations: grpcFetchDelegations, fetchUndelegations: grpcFetchUndelegations } = useGrpc()
-  const isDesktopScreen = useMediaQuery({ query: '(min-width: 1000px)' })
+  const isMobileScreen = useMediaQuery({ query: '(max-width: 1000px)' })
 
   const [state, setState] = useState<AppStateProviderState>({
     ...appStateProviderInitialState,
@@ -38,10 +38,10 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   useEffect(() => {
     setState(prevState => ({
       ...prevState,
-      isDesktopScreen,
-      isMobileScreen: !isDesktopScreen,
+      isDesktopScreen: !isMobileScreen,
+      isMobileScreen,
     }))
-  }, [isDesktopScreen])
+  }, [isMobileScreen])
 
   const fetchDelegations = async () => {
     const delegations = await grpcFetchDelegations()

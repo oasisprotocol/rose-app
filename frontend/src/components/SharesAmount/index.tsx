@@ -9,17 +9,18 @@ interface Props {
   shares: BigNumber.Value | bigint
   validator: Validator
   type: SharesType
+  className?: string
   children?: (amount: BigNumber | null) => ReactNode
 }
 
-export const SharesAmountCmp: FC<Props> = ({ children, shares, validator, type }) => {
+export const SharesAmountCmp: FC<Props> = ({ children, shares, validator, type, className }) => {
   const amount = NumberUtils.getAmountFromShares(shares.toString(), validator, type)
 
   if (typeof children === 'function') {
     return children(amount)
   }
 
-  return <Amount amount={amount?.toString() ?? null} />
+  return <Amount className={className} amount={amount?.toString() ?? null} />
 }
 
 export const SharesAmount = memo(SharesAmountCmp)
