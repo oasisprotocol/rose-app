@@ -13,6 +13,15 @@
     "indentStyle": "space",
     "lineWidth": 120
   },
+  "css": {
+    "formatter": {
+      "enabled": true,
+      "quoteStyle": "single"
+    },
+    "linter": {
+      "enabled": true
+    }
+  },
   "javascript": {
     "formatter": {
       "quoteStyle": "single",
