@@ -12,6 +12,13 @@
     cursor: pointer;
     background-color: var(--brand-extra-dark);
     color: var(--white);
+
+    &:hover, &:focus-visible {
+      filter: contrast(0.9);
+    }
+    &:active {
+      filter: contrast(0.7);
+    }
   }
   &:disabled {
     cursor: not-allowed;
