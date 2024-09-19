@@ -29,8 +29,8 @@ const DashboardPageCmp: FC = () => {
       </h3>
       <p className={StringUtils.clsx('body', classes.description)}>
         {activeIndex === 0 && <>Overview of your current {nativeCurrency?.symbol} balances.</>}
-        {activeIndex === 1 && <>Overview of your currently staked ROSE.</>}
-        {activeIndex === 2 && <>Overview of your ROSE (being) debonded.</>}
+        {activeIndex === 1 && <>Overview of your currently staked {nativeCurrency?.symbol}.</>}
+        {activeIndex === 2 && <>Overview of your {nativeCurrency?.symbol} (being) debonded.</>}
       </p>
       <StakingTabs tabIndex={tabIndex} />
     </Card>
