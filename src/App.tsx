@@ -136,7 +136,13 @@ export function App() {
               <Button
                 title="Show your private key"
                 className={classes.plainButton}
-                onClick={() => window.navigator.clipboard.writeText(consensusAccount.privateKey)}
+                onClick={() =>
+                  window.prompt(
+                    'Your private key\n\n' +
+                      'Below the private key of your Consensus address is shown. Copy the private key and paste it into web wallet and gain full control. To keep full access to your wallet we highly recommend you store the full private key, in the right order, in a secure location.',
+                    consensusAccount.privateKey,
+                  )
+                }
               >
                 <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
               </Button>
