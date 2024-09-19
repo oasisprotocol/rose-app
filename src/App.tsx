@@ -20,6 +20,7 @@ import logo_rose_on_ramp_svg from '/logo_rose_on_ramp.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
+import { ButtonWithClickedIndicator } from './components/Button/ButtonWithClickedIndicator'
 
 export function App() {
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
@@ -168,13 +169,14 @@ export function App() {
               </Button>
             </div>
             <div className={classes.endAdornment}>
-              <Button
+              <ButtonWithClickedIndicator
                 title="Copy address"
                 className={classes.plainButton}
                 onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+                clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24" />}
               >
                 <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
-              </Button>
+              </ButtonWithClickedIndicator>
             </div>
           </div>
         </div>
