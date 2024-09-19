@@ -139,7 +139,9 @@ export function App() {
                 onClick={() =>
                   window.prompt(
                     'Your private key\n\n' +
-                      'Below the private key of your Consensus address is shown. Copy the private key and paste it into web wallet and gain full control. To keep full access to your wallet we highly recommend you store the full private key, in the right order, in a secure location.',
+                      'Below the private key of your Consensus address is shown. Copy the private key and paste it ' +
+                      'into web wallet and gain full control. To keep full access to your wallet we highly recommend ' +
+                      'you store the full private key, in the right order, in a secure location.',
                     consensusAccount.privateKey,
                   )
                 }
