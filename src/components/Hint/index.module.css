@@ -1,0 +1,50 @@
+.hint {
+  background-color: #1B0F33;
+  display: flex;
+  width: 288px;
+  padding: 12px 16px;
+  text-align: center;
+  color: white;
+  margin-top: 16px;
+  border-radius: 4px;
+  position: relative;
+  &::before{
+    content: '';
+    border-radius: 2px;
+    background-color: #1B0F33;
+    transform: rotate(45deg);
+    position: absolute;
+    top: -6px;
+    left: 136px;
+    width: 16px;
+    height: 16px;
+  }
+}
+
+@media screen and (max-width: 767px) {
+  .hint {
+    &::before{
+      right: 24px;
+      left: auto;
+    }
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .hintWrapper{
+    padding-right: 110px;
+    padding-left: 12px;
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 0;
+    .hint {
+      width: 100%;
+      &::before{
+        right: -8px;
+        left: auto;
+        top: 16px;
+      }
+    }
+  }
+}
