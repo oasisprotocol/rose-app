@@ -97,10 +97,10 @@ export function App() {
           <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
           <Hint
             title={(() => {
-              if (progress.percentage === undefined) return ''
+              if (progress.percentage === undefined) return
               if (progress.percentage <= 0.05) return 'Your funds will be sent to this address.'
               if (progress.percentage >= 1) return 'ROSE tokens received at this address'
-              return ''
+              return
             })()}
           >
             <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
