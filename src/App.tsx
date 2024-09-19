@@ -8,9 +8,12 @@ import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
 import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
+import help_outline_svg from '@material-design-icons/svg/filled/help_outline.svg'
 import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
+import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
+import help_html from '/help.html?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
 import logo_rose_on_ramp_svg from '/logo_rose_on_ramp.svg?url'
@@ -34,6 +37,18 @@ export function App() {
             </p>
           </div>
           <ConnectButton />
+
+          <div></div>
+          <div>Discover more info below</div>
+          <div className={classes.helpLinks}>
+            <a href={help_html} target="_blank" rel="noopener noreferrer">
+              <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
+              <div>
+                <h3>Need help? Watch the walkthrough</h3>
+                <div>Watch the video on how to use the dApp</div>
+              </div>
+            </a>
+          </div>
         </div>
       </Layout>
     )
@@ -115,7 +130,10 @@ export function App() {
           <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
           <p>
             Use the generated address below to initiate the transfer on your centralized exchange. The dApp
-            automatically recognizes your transfer form the centralized exchange and will track it.
+            automatically recognizes your transfer form the centralized exchange and will track it.{' '}
+            <a href={help_html} target="_blank" rel="noopener noreferrer">
+              <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
+            </a>
           </p>
         </div>
 
