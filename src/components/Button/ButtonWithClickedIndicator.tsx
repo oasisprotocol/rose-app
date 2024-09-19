@@ -1,9 +1,10 @@
 import { ButtonHTMLAttributes, useState } from 'react'
 import { Button } from '.'
 
-export function ButtonWithClickedIndicator(
-  props: ButtonHTMLAttributes<HTMLButtonElement> & { clickedIndicator: React.ReactNode },
-) {
+export function ButtonWithClickedIndicator({
+  clickedIndicator,
+  ...props
+}: ButtonHTMLAttributes<HTMLButtonElement> & { clickedIndicator: React.ReactNode }) {
   const [wasClicked, setWasClicked] = useState(false)
   return (
     <Button
@@ -15,7 +16,7 @@ export function ButtonWithClickedIndicator(
         setTimeout(() => setWasClicked(false), 500)
       }}
     >
-      {wasClicked ? props.clickedIndicator : props.children}
+      {wasClicked ? clickedIndicator : props.children}
     </Button>
   )
 }
