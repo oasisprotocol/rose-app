@@ -32,17 +32,18 @@ interface Props {
   required?: boolean
   label?: string
   error?: string
+  className?: string
   onChange?: (opts: { value?: string; percentage?: number }) => void
 }
 
 const AmountInputCmp: ForwardRefRenderFunction<HTMLInputElement, Props> = (
-  { required, label, error, onChange },
+  { required, label, error, className, onChange },
   ref
 ) => {
   const id = useId()
 
   return (
-    <div>
+    <div className={className}>
       <div className={classes.percentageInputs}>
         {percentageList.map(({ label, percentage }) => (
           <Button

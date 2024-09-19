@@ -19,7 +19,7 @@ interface Props {
 
 export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
   const {
-    state: { validatorsList },
+    state: { validatorsList, isMobileScreen, isDesktopScreen },
   } = useAppState()
 
   return (
@@ -51,14 +51,27 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                     </label>
                   </td>
                   <td>
-                    <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>
-                      <span className="mono">{StringUtils.getValidatorFriendlyName(entry)}</span>
-                      {!entry.active && (
+                    <p
+                      className={StringUtils.clsx('body', 'ellipsis', isSelected ? classes.bold : undefined)}
+                    >
+                      {isMobileScreen && (
+                        <span className="mono">{StringUtils.getValidatorFriendlyName(entry)}</span>
+                      )}
+                      {isDesktopScreen && (
+                        <span className="mono">{StringUtils.getValidatorFriendlyName(entry)}</span>
+                      )}
+                      {isDesktopScreen && !entry.active && (
                         <>
-                          &nbsp;<span className={classes.validatorInactiveText}>(inactive)</span>
+                          &nbsp;
+                          <span className="body mute">(inactive)</span>
                         </>
                       )}
                     </p>
+                    {isMobileScreen && !entry.active && (
+                      <p className="body mute">
+                        <span>(inactive)</span>
+                      </p>
+                    )}
                   </td>
                   <td>
                     <p className={StringUtils.clsx('body', isSelected ? classes.bold : undefined)}>

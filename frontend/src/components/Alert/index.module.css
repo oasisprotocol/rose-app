@@ -49,3 +49,9 @@
     color: var(--white);
   }
 }
+
+@media screen and (max-width: 1000px) {
+  .card.card {
+    margin-top: 2.375rem;
+  }
+}

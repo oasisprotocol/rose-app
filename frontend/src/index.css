@@ -13,6 +13,7 @@
   --gray-blue-border: #2c3bd533;
   --brand-extra-dark-75: #000062bf;
   --brand-extra-dark-21: #00006236;
+  --brand-extra-dark-50: #00006280;
   --gray-dark-box-shadow: #222f3f3d;
   --gray-extra-dark: #242629;
   --gray-dark: #eae6f0;
@@ -53,7 +54,7 @@ body {
   background-color: var(--brand-blue);
   background-image: url('/background.webp');
   background-size: 100vw auto;
-  background-position: top center;
+  background-position: center left;
   background-repeat: no-repeat;
   min-height: 100dvh;
 }
@@ -74,6 +75,26 @@ span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+  }
+
+  &.small {
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+
+  &.ellipsis {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    height: 24px;
+  }
+
+  &.mute {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+    color: var(--gray-medium-dark);
   }
 
   &.error.error {
@@ -99,4 +120,10 @@ h3 {
   font-weight: 700;
   line-height: 25.2px;
   color: var(--brand-extra-dark);
+}
+
+@media screen and (max-width: 1000px) {
+  body {
+    background-image: url('/background-mobile.webp');
+  }
 }

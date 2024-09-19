@@ -21,7 +21,9 @@ export const Layout: FC = () => {
     <LayoutBase
       header={
         <header className={classes.header}>
-          <NavLink to="/dashboard">{isHomePage ? <OasisIcon /> : <LogoIcon />}</NavLink>
+          <NavLink className={classes.headerLink} to="/dashboard">
+            {isHomePage ? <OasisIcon /> : <LogoIcon />}
+          </NavLink>
           {!isHomePage && <ConnectWallet />}
         </header>
       }

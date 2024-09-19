@@ -35,7 +35,7 @@ const UnstakePageCmp: FC = () => {
   const { address } = useParams<{ address: string }>()
   const navigate = useNavigate()
   const {
-    state: { delegations, undelegations },
+    state: { delegations, undelegations, isMobileScreen, isDesktopScreen },
     getValidatorByAddress,
     fetchDelegations,
     fetchUndelegations,
@@ -217,6 +217,7 @@ const UnstakePageCmp: FC = () => {
             .
           </p>
           <AmountInput
+            className={classes.amountInput}
             ref={amountInputRef}
             error={amountError ?? ''}
             label="Amount"
@@ -226,14 +227,16 @@ const UnstakePageCmp: FC = () => {
             <Button disabled={amountError !== ''} onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>
               Unstake
             </Button>
-            <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
-              Back
-            </Button>
+            {isDesktopScreen && (
+              <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>
+                Back
+              </Button>
+            )}
           </div>
         </Card>
       )}
       {step === Steps.UndelegatePreviewTransaction && (
-        <Card header={<h2>Preview</h2>}>
+        <Card className={classes.previewTxCard} header={<h2>Preview</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
             Check the details of the transaction below.
           </p>
@@ -280,13 +283,15 @@ const UnstakePageCmp: FC = () => {
           />
           <div className={classes.actionButtonsContainer}>
             <Button onClick={() => handleUndelegate(undelegations!)}>Confirm</Button>
-            <Button
-              variant="text"
-              onClick={() => setStep(Steps.UndelegateInputAmount)}
-              startSlot={<ArrowLeftIcon />}
-            >
-              Back
-            </Button>
+            {isDesktopScreen && (
+              <Button
+                variant="text"
+                onClick={() => setStep(Steps.UndelegateInputAmount)}
+                startSlot={<ArrowLeftIcon />}
+              >
+                Back
+              </Button>
+            )}
           </div>
         </Card>
       )}
@@ -298,13 +303,15 @@ const UnstakePageCmp: FC = () => {
             <div className={classes.undelegateStartSuccessfulAlertActions}>
               <p className="body">
                 The debonding process has successfully started. <br />
-                Your funds will be available in <EpochTimeEstimate
-                  epoch={undelegationEpoch}
-                  distance
-                /> (on <EpochTimeEstimate epoch={undelegationEpoch} />
+                Your funds will be available {isMobileScreen && <br />} in{' '}
+                <EpochTimeEstimate epoch={undelegationEpoch} distance /> (on{' '}
+                <EpochTimeEstimate epoch={undelegationEpoch} />
                 ).
               </p>
-              <Button onClick={navigateToDashboard}>Go to dashboard</Button>
+              <Button onClick={navigateToDashboard}>
+                {isMobileScreen && <>Continue</>}
+                {isDesktopScreen && <>Go to dashboard</>}
+              </Button>
             </div>
           }
         />

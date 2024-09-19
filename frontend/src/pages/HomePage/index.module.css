@@ -2,7 +2,6 @@
   display: flex;
   flex-direction: column;
   max-width: 671px;
-  padding-top: 4.5rem;
   margin: 0 auto;
 
   .logo {
@@ -27,5 +26,22 @@
     flex-direction: column;
     gap: 0.625rem;
     max-width: 375px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .homePage {
+    padding: 0 0.75rem;
+
+    .logo {
+      margin-bottom: 10px;
+    }
+
+    p {
+      &.discoverMore {
+        margin-bottom: 1.375rem;
+        max-width: 75%;
+      }
+    }
   }
 }

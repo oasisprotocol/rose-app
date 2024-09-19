@@ -1,15 +1,35 @@
 import { FC } from 'react'
+import { useAppState } from '../../hooks/useAppState'
+
+type LogoSize = 'small' | 'large'
+
+const logoSizeMap: Record<LogoSize, { width: number; height: number }> = {
+  large: {
+    width: 241,
+    height: 51,
+  },
+  small: {
+    width: 180.75,
+    height: 37.56,
+  },
+}
 
 interface Props {
   className?: string
 }
 
 export const OasisIcon: FC<Props> = ({ className }) => {
+  const {
+    state: { isDesktopScreen },
+  } = useAppState()
+  const defaultSize = isDesktopScreen ? 'large' : 'small'
+  const { width, height } = logoSizeMap[defaultSize]
+
   return (
     <svg
       className={className}
-      width="241"
-      height="51"
+      width={width}
+      height={height}
       viewBox="0 0 241 51"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

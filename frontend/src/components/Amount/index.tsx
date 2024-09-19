@@ -35,7 +35,9 @@ export const Amount: FC<Props> = ({ amount, className, unit }) => {
       {amount === null && <>Invalid amount</>}
       {amount !== null && (
         <>
-          {NumberUtils.formatAmount(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}
+          <span className="ellipsis">
+            {NumberUtils.formatAmount(amount, unitDecimals ?? nativeCurrency?.decimals ?? 18)}
+          </span>
           &nbsp;{unitPrefix}
           {nativeCurrency?.symbol}
         </>

@@ -14,3 +14,13 @@
     margin: 0 auto;
   }
 }
+
+@media screen and (max-width: 1000px) {
+  .actionButtonsContainer {
+    padding-bottom: 0;
+  }
+
+  .validatorsCard {
+    padding-bottom: 1rem;
+  }
+}

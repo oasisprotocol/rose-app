@@ -7,8 +7,13 @@ import { ConnectedAccount } from '../ConnectedAccount'
 import { useAppState } from '../../hooks/useAppState'
 import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
+import { StringUtils } from '../../utils/string.utils'
 
-export const ConnectWallet: FC = () => {
+interface Props {
+  inline?: boolean
+}
+
+export const ConnectWallet: FC<Props> = ({ inline }) => {
   const navigate = useNavigate()
   const { setAppError } = useAppState()
 
@@ -74,14 +79,18 @@ export const ConnectWallet: FC = () => {
     <>
       {!isConnected && !providerAvailable && (
         <a href={METAMASK_HOME_PAGE_URL} target={'_blank'} rel={'noopener noreferrer'}>
-          <Button className={classes.connectWalletBtn} color="primary" disabled={isLoading}>
+          <Button
+            className={StringUtils.clsx(classes.connectWalletBtn, inline ? classes.inline : undefined)}
+            color="primary"
+            disabled={isLoading}
+          >
             Install MetaMask
           </Button>
         </a>
       )}
       {!isConnected && providerAvailable && isUnknownNetwork && (
         <Button
-          className={classes.connectWalletBtn}
+          className={StringUtils.clsx(classes.connectWalletBtn, inline ? classes.inline : undefined)}
           color="primary"
           disabled={isLoading}
           onClick={handleSwitchNetwork}
@@ -91,7 +100,7 @@ export const ConnectWallet: FC = () => {
       )}
       {!isConnected && providerAvailable && !isUnknownNetwork && (
         <Button
-          className={classes.connectWalletBtn}
+          className={StringUtils.clsx(classes.connectWalletBtn, inline ? classes.inline : undefined)}
           color="primary"
           disabled={isLoading}
           onClick={handleConnectWallet}

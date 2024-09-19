@@ -11,6 +11,7 @@
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
+  padding: 0 0.75rem;
 }
 
 .footer {
@@ -44,10 +45,20 @@
 
 @media screen and (max-width: 1000px) {
   .layout {
-    padding: 0 1.5rem 0.25rem;
+    padding: 1.5rem 0.75rem 0;
   }
 
-  .footer {
-    padding: 2rem 0;
+  .main {
+    padding: 0;
+  }
+
+  .mobileFooter {
+    color: var(--white);
+    padding: 0.625rem 0.1875rem;
+  }
+
+  .mobileLink {
+    color: var(--white);
+    text-decoration: none;
   }
 }

@@ -13,6 +13,7 @@ import { useNavigate } from 'react-router-dom'
 import { SharesAmount } from '../SharesAmount'
 import { NumberUtils } from '../../utils/number.utils'
 import { EmptyTableData } from '../EmptyTableData'
+import { useAppState } from '../../hooks/useAppState'
 
 interface Props {
   delegations: Delegations
@@ -23,6 +24,9 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
   const {
     state: { isInteractingWithChain },
   } = useWeb3()
+  const {
+    state: { isMobileScreen, isDesktopScreen },
+  } = useAppState()
 
   return (
     <div className={classes.stakedTab}>
@@ -39,7 +43,25 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
                 <Fragment>
                   <tr className={StringUtils.clsx(isExpanded ? 'expanded' : undefined, classes.stakedRow)}>
                     <td>
-                      <p className="body mono">{StringUtils.getValidatorFriendlyName(validator)}</p>
+                      <p className={StringUtils.clsx('body', 'ellipsis')}>
+                        {isMobileScreen && (
+                          <span className="mono">{StringUtils.getValidatorFriendlyName(validator)}</span>
+                        )}
+                        {isDesktopScreen && (
+                          <span className="mono">{StringUtils.getValidatorFriendlyName(validator)}</span>
+                        )}
+                        {isDesktopScreen && !validator.active && (
+                          <>
+                            &nbsp;
+                            <span className="body mute">(inactive)</span>
+                          </>
+                        )}
+                      </p>
+                      {isMobileScreen && !validator.active && (
+                        <p className="body mute">
+                          <span>(inactive)</span>
+                        </p>
+                      )}
                     </td>
                     <td>
                       <SharesAmount shares={entry.shares} validator={validator} type="staking" />
