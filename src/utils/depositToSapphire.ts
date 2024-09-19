@@ -88,7 +88,7 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
 }
 
 async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal('https://grpc.oasis.io')
+  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const nonce =
     (await nic.consensusGetSignerNonce({
       account_address: oasis.staking.addressFromBech32(oasisAddress),
@@ -98,7 +98,7 @@ async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
 }
 
 async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal('https://grpc.oasis.io')
+  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const accountsWrapper = new oasisRT.accounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
   const nonce = await accountsWrapper
     .queryNonce()
