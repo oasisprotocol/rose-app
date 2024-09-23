@@ -12,6 +12,7 @@ import help_outline_svg from '@material-design-icons/svg/filled/help_outline.svg
 import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
 import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
+import compromised_html from '/compromised.html?url'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import help_html from '/help.html?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
@@ -74,6 +75,13 @@ export function App() {
               <div>
                 <h3>Need help? Watch the walkthrough</h3>
                 <div>Watch the video on how to use the dApp</div>
+              </div>
+            </a>
+            <a href={compromised_html} target="_blank" rel="noopener noreferrer">
+              <img src={vpn_key_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
+              <div>
+                <h3>Lost your private key?</h3>
+                <div>What to do if you lost your private key</div>
               </div>
             </a>
           </div>
