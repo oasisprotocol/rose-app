@@ -37,7 +37,9 @@ export function App() {
               below and follow the steps to complete your transfer.
             </p>
           </div>
-          <ConnectButton />
+          <div className={classes.roundConnectButton}>
+            <ConnectButton />
+          </div>
 
           <div></div>
           <div>Discover more info below</div>

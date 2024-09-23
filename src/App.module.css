@@ -7,6 +7,11 @@
 
   max-width: 670px;
 
+  .roundConnectButton button {
+    padding: 0 32px;
+    border-radius: 999px;
+  }
+
   .helpLinks {
     display: flex;
     max-width: 400px;
