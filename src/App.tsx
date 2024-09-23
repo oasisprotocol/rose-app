@@ -21,13 +21,34 @@ import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
 import { ButtonWithClickedIndicator } from './components/Button/ButtonWithClickedIndicator'
+import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
 export function App() {
+  const isRpcResponding = useIsRpcResponding()
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
 
   if (!sapphireAddress) {
     return (
-      <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
+      <Layout
+        header={
+          <>
+            <img src={logo_oasis_network_svg} alt="Oasis Network" />
+            {!isRpcResponding && (
+              <div className={classes.warningNotification}>
+                <img src={symbol_warning_svg} alt="Warning" width="24" />
+                <p>
+                  Services are currently interrupted.{' '}
+                  <a href="https://status.oasis.io/" target="_blank" rel="noopener noreferrer">
+                    Click here
+                  </a>{' '}
+                  for more details.
+                </p>
+              </div>
+            )}
+            <div></div>
+          </>
+        }
+      >
         <div className={classes.step1}>
           <div>
             <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" style={{ maxWidth: '70vw' }} />
@@ -37,9 +58,13 @@ export function App() {
               below and follow the steps to complete your transfer.
             </p>
           </div>
-          <div className={classes.roundConnectButton}>
-            <ConnectButton />
-          </div>
+          {isRpcResponding ? (
+            <div className={classes.roundConnectButton}>
+              <ConnectButton />
+            </div>
+          ) : (
+            <Button disabled>Connect Wallet</Button>
+          )}
 
           <div></div>
           <div>Discover more info below</div>
@@ -189,7 +214,7 @@ export function App() {
         {isBlockingNavigatingAway && (
           <>
             <img src={loader_blocks_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
-            <div className={classes.doNotClose}>
+            <div className={classes.warningNotification}>
               <img src={symbol_warning_svg} alt="Warning" width="24" />
               <p>
                 Please do not close this window in order to complete the process. If the window is closed you can always
