@@ -3,6 +3,7 @@
   white-space: nowrap;
   user-select: all;
   max-width: 14.9ch;
+  transition: max-width 600ms ease-out;
 
   > :first-child {
     text-overflow: ellipsis;

@@ -178,13 +178,9 @@ export function App() {
             <div className={classes.startAdornment}>Your address</div>
             <div className={classes.address}>
               <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
-              {progress.percentage && progress.percentage <= 0.05 ? (
-                <div className={classes.addressLonger}>
-                  <ShortAddress address={consensusAccount.address} />
-                </div>
-              ) : (
+              <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
                 <ShortAddress address={consensusAccount.address} />
-              )}
+              </div>
             </div>
             <div>
               <Button
