@@ -226,3 +226,13 @@
     margin: 0 16px;
   }
 }
+
+.collapsible {
+  max-height: 30em;
+  overflow: hidden;
+  transition: max-height 600ms ease-out;
+
+  &.collapsed {
+    max-height: 0em;
+  }
+}
