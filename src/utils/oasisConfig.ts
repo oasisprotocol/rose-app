@@ -16,8 +16,6 @@ export const sapphireConfig = {
     address: 'oasis1qqczuf3x6glkgjuf0xgtcpjjw95r3crf7y2323xd',
     runtimeId: '000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c',
   },
-  gasPrice: 100n,
-  feeGas: 70_000n, // hardcoded. TODO: update each time sapphire is upgraded or estimate
   decimals: 18,
 }
 

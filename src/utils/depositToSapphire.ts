@@ -60,8 +60,7 @@ export async function depositToSapphireStep2(props: {
       // No need for intermediate account to transfer from when depositing to an account user has control over.
       to: oasis.staking.addressFromBech32(await getEvmBech32Address(props.sapphireAddress)),
     })
-    .setFeeAmount([oasis.quantity.fromBigInt(0n), oasisRT.token.NATIVE_DENOMINATION]) // TODO: assumes consensus txs are free
-    .setFeeGas(sapphireConfig.feeGas) // hardcoded. TODO: update each time sapphire is upgraded or estimate
+    .setFeeAmount([oasis.quantity.fromBigInt(0n), oasisRT.token.NATIVE_DENOMINATION]) // TODO: assumes consensus txs are free and deposits full amount
     .setFeeConsensusMessages(1)
     .setSignerInfo([
       {
@@ -71,6 +70,13 @@ export async function depositToSapphireStep2(props: {
         nonce: await getSapphireNonce(props.consensusAddress),
       },
     ])
+
+  rtw.setFeeGas(
+    await new oasisRT.core.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+      .queryEstimateGas()
+      .setArgs({ tx: rtw.transaction })
+      .query(nic),
+  )
   await rtw.sign([new oasis.signature.BlindContextSigner(props.consensusSigner)], chainContext)
   console.log('depositToSapphireStep2', props.amountToDeposit)
   await rtw.submit(nic)
