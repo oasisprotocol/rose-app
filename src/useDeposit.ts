@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
-import { depositToSapphireStep1, depositToSapphireStep2 } from './utils/depositToSapphire'
+import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
+import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
-import { ConsensusAccount, useGenerateConsensusAccount } from './utils/useGenerateConsensusAccount'
 
 export function useDeposit() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()

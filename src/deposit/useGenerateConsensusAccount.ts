@@ -2,7 +2,7 @@ import * as oasis from '@oasisprotocol/client'
 import { useState } from 'react'
 import { hexToBytes } from 'viem'
 import { useSignMessage } from 'wagmi'
-import { getConsensusBalance } from './getBalances'
+import { getConsensusBalance } from '../utils/getBalances'
 import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire'
 
 export interface ConsensusAccount {

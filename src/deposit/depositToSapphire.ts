@@ -1,6 +1,6 @@
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from './oasisConfig'
+import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../utils/oasisConfig'
 
 /**
  * Set allowance from consensusAddress to sapphireConfig.mainnet.address (step 1 of depositing)
