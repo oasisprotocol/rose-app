@@ -162,16 +162,18 @@ export function App() {
       }
     >
       <div className={classes.step3}>
-        <div>
-          <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
-          <p>
-            Use the generated address below to initiate the transfer on your centralized exchange. The dApp
-            automatically recognizes your transfer form the centralized exchange and will track it.{' '}
-            <a href={help_html} target="_blank" rel="noopener noreferrer">
-              <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
-            </a>
-          </p>
-        </div>
+        {progress.percentage && progress.percentage <= 0.05 && (
+          <div>
+            <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
+            <p>
+              Use the generated address below to initiate the transfer on your centralized exchange. The dApp
+              automatically recognizes your transfer form the centralized exchange and will track it.{' '}
+              <a href={help_html} target="_blank" rel="noopener noreferrer">
+                <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
+              </a>
+            </p>
+          </div>
+        )}
 
         <div className={classes.overrideMaxWidth}>
           <div className={classes.addressWrapper}>
