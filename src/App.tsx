@@ -238,6 +238,18 @@ export function App() {
             <Button onClick={transferMore}>Transfer more</Button>
           </>
         )}
+
+        {!consensusAccount.isFresh && (
+          <div style={{ flexGrow: 1, alignContent: 'end' }}>
+            <a
+              href={`https://explorer.dev.oasis.io/mainnet/consensus/address/${consensusAccount.address}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Show previous transactions
+            </a>
+          </div>
+        )}
       </div>
     </Layout>
   )

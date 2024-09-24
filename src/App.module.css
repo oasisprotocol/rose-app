@@ -173,6 +173,10 @@
     max-width: 590px;
     height: 32px;
   }
+
+  a {
+    color: var(--white);
+  }
 }
 
 .card {

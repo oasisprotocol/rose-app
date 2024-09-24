@@ -28,7 +28,7 @@
   max-width: 1076px;
   gap: 0.5rem;
 
-  :is(a) {
+  a {
     color: var(--white);
     text-decoration: none;
 
