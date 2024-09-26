@@ -30,26 +30,7 @@ export function App() {
 
   if (!sapphireAddress) {
     return (
-      <Layout
-        header={
-          <>
-            <img src={logo_oasis_network_svg} alt="Oasis Network" />
-            {!isRpcResponding && (
-              <div className={classes.warningNotification}>
-                <img src={symbol_warning_svg} alt="Warning" width="24" />
-                <p>
-                  Services are currently interrupted.{' '}
-                  <a href="https://status.oasis.io/" target="_blank" rel="noopener noreferrer">
-                    Click here
-                  </a>{' '}
-                  for more details.
-                </p>
-              </div>
-            )}
-            <div></div>
-          </>
-        }
-      >
+      <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
         <div className={classes.step1}>
           <div>
             <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" style={{ maxWidth: '70vw' }} />
@@ -224,7 +205,7 @@ export function App() {
         {isBlockingNavigatingAway && (
           <>
             <img src={loader_blocks_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
-            <div className={classes.warningNotification}>
+            <div className="warningNotification">
               <img src={symbol_warning_svg} alt="Warning" width="24" />
               <p>
                 Please do not close this window in order to complete the process. If the window is closed you can always

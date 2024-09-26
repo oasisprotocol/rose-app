@@ -206,27 +206,6 @@
   opacity: 0.5;
 }
 
-.warningNotification {
-  max-width: 620px;
-  display: flex;
-  gap: 16px;
-  padding: 16px;
-
-  border-radius: 4px;
-  background: var(--orange-bg);
-  color: var(--brand-extra-dark);
-  border: 1px solid var(--orange);
-
-  font-size: 14px;
-  font-weight: 500;
-  line-height: 150%;
-  text-align: start;
-
-  img {
-    margin: 0 16px;
-  }
-}
-
 .collapsible {
   max-height: 30em;
   overflow: hidden;
