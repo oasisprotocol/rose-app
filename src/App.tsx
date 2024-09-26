@@ -223,7 +223,7 @@ export function App() {
         )}
 
         {!consensusAccount.isFresh && (
-          <div style={{ flexGrow: 1, alignContent: 'end' }}>
+          <div style={{ marginTop: '40px' }}>
             <a
               href={`https://explorer.dev.oasis.io/mainnet/consensus/address/${consensusAccount.address}`}
               target="_blank"
