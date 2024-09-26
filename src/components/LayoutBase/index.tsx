@@ -18,11 +18,6 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
   return (
     <div className={classes.layout}>
       {header}
-      {window.location.origin !== 'https://onramp.oasis.io' && (
-        <p style={{ textAlign: 'center', color: 'orange' }}>
-          Please note this is not production deploy. Final version will generate different accounts.
-        </p>
-      )}
       <main className={classes.main}>{children}</main>
       <footer className={classes.footer}>
         <span>

@@ -10,6 +10,12 @@ export function Layout(props: { header: React.ReactNode; children: React.ReactNo
     <LayoutBase
       header={
         <>
+          {window.location.origin !== 'https://onramp.oasis.io' && (
+            <div className="warningNotification" style={{ margin: '0 auto' }}>
+              <img src={symbol_warning_svg} alt="Warning" width="24" />
+              <p>Please note this is not production deploy. Final version will generate different accounts.</p>
+            </div>
+          )}
           {!isRpcResponding && (
             <div
               className="warningNotification"
