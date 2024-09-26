@@ -1,3 +1,8 @@
+.hintWrapper {
+  position: absolute;
+  right: 24px;
+}
+
 .hint {
   background-color: #1b0f33;
   display: flex;
@@ -34,10 +39,9 @@
   .hintWrapper {
     padding-right: 110px;
     padding-left: 12px;
-    position: absolute;
     width: 100%;
     left: 0;
-    top: 0;
+    margin-top: -60px;
     .hint {
       width: 100%;
       &::before {
