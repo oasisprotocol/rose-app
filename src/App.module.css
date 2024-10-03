@@ -113,6 +113,7 @@
       border-radius: 8px 0 0 8px;
     }
     .address {
+      font-family: Roboto Mono Variable, monospace;
       flex-grow: 1;
       display: flex;
       padding: 23px;
