@@ -15,6 +15,7 @@ import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import compromised_html from '/compromised.html?url'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import help_html from '/help.html?url'
+import help2_html from '/help2.html?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
 import logo_rose_on_ramp_svg from '/logo_rose_on_ramp.svg?url'
@@ -154,7 +155,7 @@ export function App() {
           <p>
             Use the generated address below to initiate the transfer on your centralized exchange. The dApp
             automatically recognizes your transfer form the centralized exchange and will track it.{' '}
-            <a href={help_html} target="_blank" rel="noopener noreferrer">
+            <a href={help2_html} target="_blank" rel="noopener noreferrer">
               <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
             </a>
           </p>
