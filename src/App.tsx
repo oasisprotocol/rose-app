@@ -4,6 +4,7 @@ import { AccountAvatar } from './components/AccountAvatar'
 import { Button } from './components/Button'
 import { Hint } from './components/Hint'
 import { Layout } from './components/Layout'
+import ProgressBar from './components/ProgressBar'
 import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
 
@@ -28,6 +29,8 @@ import { useIsRpcResponding } from './utils/useIsRpcResponding'
 export function App() {
   const isRpcResponding = useIsRpcResponding()
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
+
+  const isError = progress.message === 'Error. Retrying'
 
   if (!sapphireAddress) {
     return (
@@ -201,7 +204,7 @@ export function App() {
         </div>
 
         <h2 style={{ marginBottom: '-20px' }}>{progress.message}</h2>
-        <progress value={progress.percentage} max={1} />
+        <ProgressBar percentage={progress.percentage || 0} isError={isError} />
 
         {isBlockingNavigatingAway && (
           <>
