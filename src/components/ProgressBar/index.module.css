@@ -17,6 +17,8 @@
     border: 1px solid #f44336;
     .progressbarFill {
       background-color: #f44336;
+      margin-left: 50%;
+      width: 3% !important;
     }
   }
 
