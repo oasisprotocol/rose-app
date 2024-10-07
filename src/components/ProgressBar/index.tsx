@@ -2,23 +2,15 @@ import classes from './index.module.css'
 
 interface ProgressBarProps {
   percentage: number
-  error?: boolean
+  isError?: boolean
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, error = false }) => {
-  let progressColor = error ? '#f44336' : '#000062'
-  const progressBorder = error ? '1px solid #f44336' : 'none'
-
-  if (!error && percentage >= 1) {
-    progressColor = '#21B062'
-  }
+const ProgressBar: React.FC<ProgressBarProps> = ({ percentage, isError = false }) => {
+  const isSuccess = !isError && percentage >= 1
 
   return (
-    <div className={classes.progressbar} style={{ border: progressBorder }}>
-      <div
-        className={classes.progressbarfill}
-        style={{ width: `${percentage * 100}%`, backgroundColor: progressColor }}
-      />
+    <div className={`${classes.progressbar} ${isError ? classes.isError : ''} ${isSuccess ? classes.isSuccess : ''}`}>
+      <div className={classes.progressbarFill} style={{ width: `${percentage * 100}%` }} />
     </div>
   )
 }

@@ -204,7 +204,7 @@ export function App() {
         </div>
 
         <h2 style={{ marginBottom: '-20px' }}>{progress.message}</h2>
-        <ProgressBar percentage={progress.percentage || 0} error={isError} />
+        <ProgressBar percentage={progress.percentage || 0} isError={isError} />
 
         {isBlockingNavigatingAway && (
           <>
