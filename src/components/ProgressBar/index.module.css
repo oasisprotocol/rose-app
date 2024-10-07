@@ -1,0 +1,15 @@
+.progressbar {
+  width: 100%;
+  max-width: 590px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 16px;
+}
+
+.progressbarfill {
+  height: 100%;
+  background-color: #000062;
+  transition: width 0.4s ease;
+  border-radius: inherit;
+}

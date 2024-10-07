@@ -6,6 +6,7 @@ import { Hint } from './components/Hint'
 import { Layout } from './components/Layout'
 import { ShortAddress } from './components/ShortAddress'
 import { useDeposit } from './useDeposit'
+import ProgressBar from './components/ProgressBar';
 
 import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
 import help_outline_svg from '@material-design-icons/svg/filled/help_outline.svg'
@@ -28,6 +29,8 @@ import { useIsRpcResponding } from './utils/useIsRpcResponding'
 export function App() {
   const isRpcResponding = useIsRpcResponding()
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
+
+  const isError = progress.message === "Error. Retrying"; 
 
   if (!sapphireAddress) {
     return (
@@ -201,7 +204,7 @@ export function App() {
         </div>
 
         <h2 style={{ marginBottom: '-20px' }}>{progress.message}</h2>
-        <progress value={progress.percentage} max={1} />
+        <ProgressBar percentage={progress.percentage || 0}  error={isError}/>
 
         {isBlockingNavigatingAway && (
           <>
