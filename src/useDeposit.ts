@@ -69,6 +69,7 @@ export function useDeposit() {
       await new Promise((r) => setTimeout(r, 6000))
       // Stay on "Deposited" screen unless new transfer comes in
       await waitForConsensusBalance(consensusAccount.address, 0n)
+      if (window.mock) throw 'mock error'
     } catch (err) {
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
