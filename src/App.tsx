@@ -30,7 +30,7 @@ export function App() {
   const isRpcResponding = useIsRpcResponding()
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
 
-  const isError = progress.message === 'Error. Retrying'
+  const isError = progress.percentage === undefined
 
   if (!sapphireAddress) {
     return (

@@ -71,7 +71,7 @@ export function useDeposit() {
       await waitForConsensusBalance(consensusAccount.address, 0n)
     } catch (err) {
       console.error(err)
-      setProgress({ percentage: undefined, message: `Error. Retrying` })
+      setProgress({ percentage: undefined, message: `Error. Retrying…` })
       await new Promise((r) => setTimeout(r, 6000))
     } finally {
       allowNavigatingAway()
