@@ -15,6 +15,7 @@
 
   position: sticky;
   top: 0;
+  background: var(--background-background, #0d0d0f);
 
   .logo {
     flex-shrink: 0;
@@ -28,7 +29,6 @@
     align-items: flex-start;
     flex: 1 0 0;
     align-self: stretch;
-    background: var(--background-background, #0d0d0f);
 
     .links {
       display: flex;
