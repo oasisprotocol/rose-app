@@ -16,8 +16,9 @@
   position: sticky;
   top: 0;
 
-  > svg {
+  .logo {
     flex-shrink: 0;
+    line-height: 0;
   }
 
   .linksWrapper {
