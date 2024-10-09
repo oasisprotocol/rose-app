@@ -8,6 +8,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [svgr(), react(), visualizer() as PluginOption, nodePolyfills()],
+  base: '/stake/',
   build: {
     sourcemap: true,
     rollupOptions: {

@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/dapp-onramp/',
+  base: '/move/',
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),
     BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString()),
