@@ -51,8 +51,9 @@
   }
 
   &.buttonSecondary {
-    background-color: var(--white);
-    color: var(--brand-blue);
+    background-color: var(--brand-blue);
+    color: var(--white);
+    border: 2px var(--brand-blue) solid;
   }
 
   &.buttonSuccess {

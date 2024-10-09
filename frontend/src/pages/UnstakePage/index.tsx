@@ -53,7 +53,6 @@ const UnstakePageCmp: FC = () => {
   const [error, setError] = useState('')
   const [undelegationEpoch, setUndelegationEpoch] = useState(0n)
   const [amountError, setAmountError] = useState<string | null>(null)
-  const amountInputRef = useRef<HTMLInputElement | null>(null)
   const delegation = useRef<Delegation | null | undefined>()
 
   const navigateToDashboard = () => navigate('/dashboard')
@@ -139,6 +138,20 @@ const UnstakePageCmp: FC = () => {
     }
   }
 
+  const getAmountFromPercentage = (delegationShares => (percentage: number) => {
+    if (delegationShares === undefined) {
+      return ''
+    }
+
+    const shares = delegationShares.multipliedBy(percentage)
+
+    const amount = BigNumber(shares.toString() ?? 0)
+      .multipliedBy(rosePerShareRatio)
+      .integerValue(BigNumber.ROUND_DOWN)
+
+    return formatUnits(amount.toString(), CONSENSUS_DECIMALS)
+  })(BigNumber(delegation.current?.shares.toString() ?? 0))
+
   const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
     setAmountError('')
     let shares = BigNumber(0)
@@ -156,16 +169,6 @@ const UnstakePageCmp: FC = () => {
       shares = BigNumber(value.toString())
         .multipliedBy(10 ** CONSENSUS_DECIMALS)
         .multipliedBy(sharePerRoseRatio)
-    } else if (percentage) {
-      shares = delegationShares.multipliedBy(percentage)
-
-      const amount = BigNumber(shares.toString() ?? 0)
-        .multipliedBy(rosePerShareRatio)
-        .integerValue(BigNumber.ROUND_DOWN)
-
-      if (amountInputRef.current) {
-        amountInputRef.current.value = formatUnits(amount.toString(), CONSENSUS_DECIMALS)
-      }
     }
 
     setShares(shares)
@@ -218,10 +221,10 @@ const UnstakePageCmp: FC = () => {
           </p>
           <AmountInput
             className={classes.amountInput}
-            ref={amountInputRef}
             error={amountError ?? ''}
             label="Amount"
             onChange={handleAmountInputChange}
+            calcAmountFromPercentage={getAmountFromPercentage}
           />
           <div className={classes.actionButtonsContainer}>
             <Button disabled={amountError !== ''} onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>

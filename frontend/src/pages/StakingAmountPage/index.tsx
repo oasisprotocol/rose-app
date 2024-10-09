@@ -1,4 +1,4 @@
-import { FC, useEffect, useRef, useState } from 'react'
+import { FC, useEffect, useState } from 'react'
 import { Card } from '../../components/Card'
 import { StringUtils } from '../../utils/string.utils'
 import { Validator } from '@oasisprotocol/nexus-api'
@@ -44,7 +44,6 @@ const StakingAmountPageCmp: FC = () => {
     state: { nativeCurrency },
     delegate,
   } = useWeb3()
-  const amountInputRef = useRef<HTMLInputElement | null>(null)
   const [step, setStep] = useState<Steps>(Steps.DelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [amount, setAmount] = useState<bigint>(0n)
@@ -102,7 +101,21 @@ const StakingAmountPageCmp: FC = () => {
     }
   }
 
-  const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
+  const getAmountFromPercentage = (accountBalance => (percentage: number) => {
+    if (accountBalance === undefined) {
+      return ''
+    }
+
+    const balance = BigNumber(stats?.balances.accountBalance?.toString() ?? '0').div(10 ** CONSENSUS_DECIMALS)
+
+    const parsedAmount = BigInt(
+      BigNumber(balance).multipliedBy(percentage).integerValue(BigNumber.ROUND_DOWN).toString(10)
+    )
+
+    return formatUnits(parsedAmount, CONSENSUS_DECIMALS)
+  })(stats?.balances.accountBalance)
+
+  const handleAmountInputChange = ({ value }: { value?: string }) => {
     setAmountError('')
 
     let parsedAmount = -1n
@@ -120,14 +133,6 @@ const StakingAmountPageCmp: FC = () => {
         )
 
         return
-      }
-    } else if (percentage) {
-      parsedAmount = BigInt(
-        BigNumber(accountBalance).multipliedBy(percentage).integerValue(BigNumber.ROUND_DOWN).toString(10)
-      )
-
-      if (amountInputRef.current) {
-        amountInputRef.current.value = formatUnits(parsedAmount, CONSENSUS_DECIMALS)
       }
     }
 
@@ -161,10 +166,10 @@ const StakingAmountPageCmp: FC = () => {
           </p>
           <AmountInput
             className={classes.amountInput}
-            ref={amountInputRef}
             label="Amount"
             error={amountError ?? ''}
             onChange={handleAmountInputChange}
+            calcAmountFromPercentage={getAmountFromPercentage}
           />
           {!validator.active && (
             <p className={StringUtils.clsx('body', classes.inactiveAmountInputWarning)}>

@@ -1,4 +1,4 @@
-import { ChangeEventHandler, forwardRef, ForwardRefRenderFunction, useId } from 'react'
+import { ChangeEventHandler, FC, useId, useMemo, useRef, useState } from 'react'
 import classes from './index.module.css'
 import { Button } from '../Button'
 import { amountPattern, StringUtils } from '../../utils/string.utils'
@@ -34,23 +34,42 @@ interface Props {
   error?: string
   className?: string
   onChange?: (opts: { value?: string; percentage?: number }) => void
+  calcAmountFromPercentage: (percentage: number) => string
 }
 
-const AmountInputCmp: ForwardRefRenderFunction<HTMLInputElement, Props> = (
-  { required, label, error, className, onChange },
-  ref
-) => {
+export const AmountInput: FC<Props> = ({
+  required,
+  label,
+  error,
+  className,
+  onChange,
+  calcAmountFromPercentage,
+}) => {
   const id = useId()
+  const ref = useRef<HTMLInputElement | null>(null)
+  const [inputValue, setInputValue] = useState('')
+
+  const percentageValues = useMemo(
+    () => percentageList.map(({ percentage }) => calcAmountFromPercentage(percentage)),
+    [calcAmountFromPercentage]
+  )
 
   return (
     <div className={className}>
       <div className={classes.percentageInputs}>
-        {percentageList.map(({ label, percentage }) => (
+        {percentageList.map(({ label }, i) => (
           <Button
             color="secondary"
-            variant="outline"
+            variant={inputValue === percentageValues[i] ? 'solid' : 'outline'}
             size="small"
-            onClick={() => onChange?.({ percentage })}
+            onClick={() => {
+              setInputValue(percentageValues[i])
+              onChange?.({ value: percentageValues[i] })
+
+              if (ref.current) {
+                ref.current.value = percentageValues[i]
+              }
+            }}
             key={label}
           >
             {label}
@@ -65,6 +84,7 @@ const AmountInputCmp: ForwardRefRenderFunction<HTMLInputElement, Props> = (
           required={required}
           onChange={FunctionUtils.debounce(
             (({ target: { value } }) => {
+              setInputValue(value)
               onChange?.({ value })
             }) as ChangeEventHandler<HTMLInputElement>,
             100
@@ -79,5 +99,3 @@ const AmountInputCmp: ForwardRefRenderFunction<HTMLInputElement, Props> = (
     </div>
   )
 }
-
-export const AmountInput = forwardRef<HTMLInputElement, Props>(AmountInputCmp)
