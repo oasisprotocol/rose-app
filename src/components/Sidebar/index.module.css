@@ -59,3 +59,30 @@
     }
   }
 }
+
+.sidebarToggle {
+  display: none;
+}
+
+@media screen and (max-width: 1023px) {
+  .sidebarToggle {
+    display: block;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+
+    background-color: #0d0d0f;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+  }
+  .sidebar {
+    margin-left: -280px;
+    transition: margin-left 0.2s ease-out;
+  }
+  .sidebarToggle:focus + .sidebar,
+  .sidebar:focus,
+  .sidebar:focus-within {
+    margin-left: 0px;
+  }
+}

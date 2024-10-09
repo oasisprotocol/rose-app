@@ -1,8 +1,12 @@
+import menu_svg from '@material-design-icons/svg/filled/menu.svg'
 import classes from './index.module.css'
 
 export function Sidebar(props: { children: React.ReactNode }) {
   return (
     <div className={classes.sidebarLayout}>
+      <button title="Show sidebar" className={classes.sidebarToggle} type="button">
+        <img src={menu_svg} alt="Show sidebar" width="24" style={{ filter: 'invert(1)' }} />
+      </button>
       <nav className={classes.sidebar}>
         <svg xmlns="http://www.w3.org/2000/svg" width="280" height="112" fill="none">
           <title>Oasis Rose Logo</title>
