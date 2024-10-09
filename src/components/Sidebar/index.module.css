@@ -13,6 +13,9 @@
   align-items: flex-start;
   flex-shrink: 0;
 
+  position: sticky;
+  top: 0;
+
   > svg {
     flex-shrink: 0;
   }
