@@ -1,0 +1,58 @@
+.sidebarLayout {
+  display: flex;
+  .main {
+    width: 100%;
+  }
+}
+
+.sidebar {
+  display: flex;
+  width: 280px;
+  height: 100dvh;
+  flex-direction: column;
+  align-items: flex-start;
+  flex-shrink: 0;
+
+  > svg {
+    flex-shrink: 0;
+  }
+
+  .linksWrapper {
+    display: flex;
+    padding: var(--spacing-6, 24px) var(--spacing-4, 16px) var(--spacing-8, 32px) var(--spacing-4, 16px);
+    flex-direction: column;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    background: var(--background-background, #0d0d0f);
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--spacing-2, 8px);
+      align-self: stretch;
+
+      a {
+        display: flex;
+        padding: var(--spacing-2, 8px) var(--spacing-4, 16px);
+        align-items: center;
+        gap: var(--spacing-2, 8px);
+        align-self: stretch;
+
+        color: var(--interactive-elements-idle, #fafafa);
+        /* desktop/body/semibold/m */
+        font-family: Inter;
+        font-size: 15px;
+        font-style: normal;
+        font-weight: 600;
+        line-height: 24px; /* 160% */
+        text-decoration: none;
+
+        &.activeLink {
+          background: #202020;
+        }
+      }
+    }
+  }
+}
