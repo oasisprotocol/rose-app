@@ -1,0 +1,27 @@
+.main {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 32px;
+  gap: 32px;
+
+  > a {
+    display: flex;
+    flex-direction: column;
+    flex: 1 0 350px;
+    min-height: 400px;
+    padding: 32px;
+    gap: 16px;
+
+    border-radius: 12px;
+    background-color: #1d1d21;
+    background-image: url('/background-card-5.png');
+    background-position: bottom right;
+    background-repeat: no-repeat;
+    color: var(--white);
+    text-decoration: none;
+
+    p {
+      flex-grow: 1;
+    }
+  }
+}
