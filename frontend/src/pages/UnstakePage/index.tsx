@@ -268,6 +268,7 @@ const UnstakePageCmp: FC = () => {
                     )
                   })()}
                   {StringUtils.getValidatorFriendlyAddress(validator)}
+                  {!validator.active && <p className="body mute">(inactive)</p>}
                 </p>,
               ],
               [
