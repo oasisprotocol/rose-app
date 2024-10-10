@@ -1,10 +1,11 @@
 /// <reference types="vite/client" />
 
+declare const APP_VERSION: string
+declare const BUILD_COMMIT: string
+declare const BUILD_DATETIME: number
+
 interface ImportMetaEnv {
   VITE_NETWORK: string
-  VITE_REACT_APP_BUILD_VERSION: string
-  VITE_REACT_APP_BUILD_DATETIME: string
-  VITE_APP_VERSION: string
 }
 
 interface ImportMeta {

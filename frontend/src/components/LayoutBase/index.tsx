@@ -1,13 +1,6 @@
 import { FC, PropsWithChildren, ReactNode } from 'react'
 import classes from './index.module.css'
-import {
-  GITHUB_REPOSITORY_URL,
-  OASIS_DOCS_PAGE_URL,
-  OASIS_HOME_PAGE_URL,
-  VITE_APP_VERSION,
-  VITE_REACT_APP_BUILD_DATETIME,
-  VITE_REACT_APP_BUILD_VERSION,
-} from '../../constants/config'
+import { GITHUB_REPOSITORY_URL, OASIS_DOCS_PAGE_URL, OASIS_HOME_PAGE_URL } from '../../constants/config'
 import { DateUtils } from '../../utils/date.utils'
 import { useMediaQuery } from 'react-responsive'
 
@@ -26,22 +19,20 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
         <footer className={classes.footer}>
           <div className={classes.footerColumn}>
             <span>
-              {VITE_REACT_APP_BUILD_VERSION && VITE_REACT_APP_BUILD_DATETIME && (
-                <div>
-                  Version: {VITE_APP_VERSION} (commit:{' '}
-                  <a
-                    href={`${GITHUB_REPOSITORY_URL}commit/${VITE_REACT_APP_BUILD_VERSION}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {VITE_REACT_APP_BUILD_VERSION.substring(0, 7)}
-                  </a>
-                  ) built at{' '}
-                  {DateUtils.intlDateFormat(VITE_REACT_APP_BUILD_DATETIME, {
-                    format: isMobileScreen ? 'short' : 'long',
-                  })}
-                </div>
-              )}
+              <div>
+                Version: {APP_VERSION} (commit:{' '}
+                <a
+                  href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {BUILD_COMMIT.substring(0, 7)}
+                </a>
+                ) built at{' '}
+                {DateUtils.intlDateFormat(BUILD_DATETIME, {
+                  format: isMobileScreen ? 'short' : 'long',
+                })}
+              </div>
             </span>
             <span>|</span>
             <span>
@@ -67,23 +58,21 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
         <footer className={classes.mobileFooter}>
           <div className={classes.footerRow}>
             <span className="small">
-              {VITE_REACT_APP_BUILD_VERSION && VITE_REACT_APP_BUILD_DATETIME && (
-                <div>
-                  Version: {VITE_APP_VERSION} (commit:{' '}
-                  <a
-                    className={classes.mobileLink}
-                    href={`${GITHUB_REPOSITORY_URL}commit/${VITE_REACT_APP_BUILD_VERSION}`}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                  >
-                    {VITE_REACT_APP_BUILD_VERSION.substring(0, 7)}
-                  </a>
-                  ) built at{' '}
-                  {DateUtils.intlDateFormat(VITE_REACT_APP_BUILD_DATETIME, {
-                    format: isMobileScreen ? 'short' : 'long',
-                  })}
-                </div>
-              )}
+              <div>
+                Version: {APP_VERSION} (commit:{' '}
+                <a
+                  className={classes.mobileLink}
+                  href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`}
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {BUILD_COMMIT.substring(0, 7)}
+                </a>
+                ) built at{' '}
+                {DateUtils.intlDateFormat(BUILD_DATETIME, {
+                  format: isMobileScreen ? 'short' : 'long',
+                })}
+              </div>
             </span>
           </div>
           <div className={classes.footerRow}>

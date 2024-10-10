@@ -7,7 +7,7 @@
   "scripts": {
     "checkTs": "tsc --noEmit",
     "dev": "vite",
-    "build": "tsc && node ./internals/scripts/build.mjs",
+    "build": "tsc && vite build",
     "preview": "vite preview",
     "visualize:bundle": "npx vite-bundle-visualizer"
   },
