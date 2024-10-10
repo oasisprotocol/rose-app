@@ -51,11 +51,6 @@ body {
   line-height: 150%;
   color: var(--black);
   text-align: left;
-  background-color: var(--brand-blue);
-  background-image: url('/background.webp');
-  background-size: 100vw auto;
-  background-position: center left;
-  background-repeat: no-repeat;
   min-height: 100dvh;
 }
 
