@@ -9,13 +9,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: yarn
 
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        with:
+          version: 8
+          run_install: false
+
       - run: yarn
+      - run: (cd move && yarn)
+      - run: (cd stake && pnpm install --frozen-lockfile --ignore-scripts && pnpm --filter @oasisprotocol/dapp-staker-subcall build)
+
+      - run: (cd move && yarn build)
+      - run: (cd stake && pnpm --filter @oasisprotocol/dapp-staker-frontend build)
+
       - run: yarn build
+
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./dist
