@@ -3,22 +3,21 @@
   flex-wrap: wrap;
   padding: 32px;
   gap: 32px;
-
+  width: 100%;
   > a {
     display: flex;
     flex-direction: column;
-    flex: 1 0 350px;
+    flex: 1 1 calc(25% - 16px);
     min-height: 400px;
     padding: 32px;
     gap: 16px;
-
     border-radius: 12px;
     background-color: #1d1d21;
-    /* background-image: url('/background-card-5.png'); */
     background-position: bottom right;
     background-repeat: no-repeat;
     color: var(--white);
     text-decoration: none;
+
     &.transfer {
       background-image: url('/transfer-card-background.png');
     }
@@ -33,9 +32,21 @@
     }
     &.buy {
       background-image: url('/buy-card-background.png');
+      flex: 2 1 50%;
     }
     p {
       flex-grow: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 1023px) {
+  .main {
+    > a {
+      flex: 1 1 100%;
+      &.buy {
+        flex: 1 1 100%;
+      }
     }
   }
 }
