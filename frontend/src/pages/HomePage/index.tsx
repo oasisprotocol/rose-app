@@ -28,7 +28,7 @@ const HomePageCmp: FC = () => {
     <div className={classes.homePage}>
       <LogoIcon className={classes.logo} size={isDesktopScreen ? 'large' : 'medium'} />
       <p className={StringUtils.clsx('body', classes.description)}>
-        Easily stake {nativeCurrency?.symbol} tokens on Sapphire using our (un)staker dApp and help the
+        Easily stake {nativeCurrency?.symbol} tokens on Sapphire using our ROSE stake dApp and help the
         network. By staking you help the ecosystem’s network security and earn rewards at the same time.
       </p>
       <div className={classes.connectWallet}>
