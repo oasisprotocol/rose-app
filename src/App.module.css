@@ -14,12 +14,26 @@
 
     border-radius: 12px;
     background-color: #1d1d21;
-    background-image: url('/background-card-5.png');
+    /* background-image: url('/background-card-5.png'); */
     background-position: bottom right;
     background-repeat: no-repeat;
     color: var(--white);
     text-decoration: none;
-
+    &.transfer {
+      background-image: url('/transfer-card-background.png');
+    }
+    &.stake {
+      background-image: url('/stake-card-background.png');
+    }
+    &.move {
+      background-image: url('/move-card-background.png');
+    }
+    &.wrap {
+      background-image: url('/wrap-card-background.png');
+    }
+    &.buy {
+      background-image: url('/buy-card-background.png');
+    }
     p {
       flex-grow: 1;
     }

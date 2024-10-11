@@ -4,7 +4,7 @@ import classes from './App.module.css'
 export function App() {
   return (
     <main className={classes.main}>
-      <a href="https://wallet.oasis.io/">
+      <a href="https://wallet.oasis.io/" className={classes.transfer}>
         <h2>Transfer</h2>
         <p>
           Cras turpis quam aliquam vestibulum lectus aenean tempor diam. Ultricies cras tincidunt sit hendrerit. Varius
@@ -12,7 +12,7 @@ export function App() {
         </p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
-      <a href="/stake/">
+      <a href="/stake/" className={classes.stake}>
         <h2>Stake</h2>
         <p>
           Sed cursus placerat quam eleifend. Ultricies eleifend tellus ut massa. Commodo elementum scelerisque iaculis
@@ -20,7 +20,7 @@ export function App() {
         </p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
-      <a href="/move/">
+      <a href="/move/" className={classes.move}>
         <h2>Move</h2>
         <p>
           Dui fringilla a dui nunc diam. Et elementum tincidunt neque tristique amet dictum. Pulvinar aenean nascetur
@@ -28,7 +28,7 @@ export function App() {
         </p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
-      <a href="https://wrose.oasis.io/">
+      <a href="https://wrose.oasis.io/" className={classes.wrap}>
         <h2>Wrap</h2>
         <p>
           Nunc eu pharetra sed ut. Vestibulum egestas ipsum mi mauris risus aenean eget faucibus. Porttitor risus risus
@@ -36,7 +36,10 @@ export function App() {
         </p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
-      <a href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100">
+      <a
+        href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100"
+        className={classes.buy}
+      >
         <h2>Buy</h2>
         <p>
           Aliquam sapien amet semper fermentum vel. Nec tincidunt in dolor id vitae. Ipsum mattis amet tristique
