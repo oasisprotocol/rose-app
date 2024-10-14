@@ -19,7 +19,7 @@ import help_html from '/help.html?url'
 import help2_html from '/help2.html?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
-import logo_rose_on_ramp_svg from '/logo_rose_on_ramp.svg?url'
+import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
@@ -37,9 +37,9 @@ export function App() {
       <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
         <div className={classes.step1}>
           <div>
-            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" style={{ maxWidth: '70vw' }} />
+            <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxWidth: '70vw', maxHeight: '75px' }} />
             <p>
-              The Rose (on)ramp dApp has been built by Oasis to offer users an easy to use service of moving your Rose
+              The Rose Move dApp has been built by Oasis to offer users an easy to use service of moving your Rose
               from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
               below and follow the steps to complete your transfer.
             </p>
@@ -79,7 +79,7 @@ export function App() {
       <Layout
         header={
           <>
-            <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
+            <img src={logo_rose_move_svg} alt="ROSE Move logo" />
             <Hint title="Your funds will be sent to this address.">
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
@@ -130,7 +130,7 @@ export function App() {
     <Layout
       header={
         <>
-          <img src={logo_rose_on_ramp_svg} alt="ROSE on-ramp" />
+          <img src={logo_rose_move_svg} alt="ROSE Move logo" />
           <Hint
             title={(() => {
               if (progress.percentage === undefined) return

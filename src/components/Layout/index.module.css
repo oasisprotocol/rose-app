@@ -9,6 +9,7 @@
 
   img {
     max-width: 50vw;
+    max-height: 61px;
   }
 }
 
@@ -20,5 +21,9 @@
   .header {
     padding: 1rem 0 2rem 0;
     margin-left: -10px;
+
+    img {
+      max-height: 34px;
+    }
   }
 }
