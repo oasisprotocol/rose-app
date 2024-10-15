@@ -8,7 +8,6 @@ import { useAppState } from '../../hooks/useAppState'
 import { Button } from '../Button'
 import { StringUtils } from '../../utils/string.utils'
 import { LayoutBase } from '../LayoutBase'
-import { OasisIcon } from '../icons/OasisIcon'
 
 export const Layout: FC = () => {
   const isHomePage = useMatch('/')
@@ -21,8 +20,12 @@ export const Layout: FC = () => {
     <LayoutBase
       header={
         <header className={classes.header}>
-          <NavLink className={classes.headerLink} to="/dashboard">
-            {isHomePage ? <OasisIcon /> : <LogoIcon />}
+          <NavLink
+            className={classes.headerLink}
+            to="/dashboard"
+            style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
+          >
+            <LogoIcon />
           </NavLink>
           {!isHomePage && <ConnectWallet />}
         </header>

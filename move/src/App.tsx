@@ -18,7 +18,6 @@ import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import help_html from '/help.html?url'
 import help2_html from '/help2.html?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
-import logo_oasis_network_svg from '/logo_oasis_network.svg?url'
 import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
@@ -34,7 +33,7 @@ export function App() {
 
   if (!sapphireAddress) {
     return (
-      <Layout header={<img src={logo_oasis_network_svg} alt="Oasis Network" />}>
+      <Layout header={<img src={logo_rose_move_svg} alt="" style={{ visibility: 'hidden' }} />}>
         <div className={classes.step1}>
           <div>
             <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxWidth: '70vw', maxHeight: '75px' }} />
