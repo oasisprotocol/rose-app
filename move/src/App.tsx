@@ -23,6 +23,7 @@ import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
 import { ButtonWithClickedIndicator } from './components/Button/ButtonWithClickedIndicator'
+import { OpenTransak } from './components/OpenTransak'
 import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
 export function App() {
@@ -224,6 +225,8 @@ export function App() {
             <Button onClick={transferMore}>Transfer more</Button>
           </>
         )}
+
+        <OpenTransak consensusAddress={consensusAccount.address} />
 
         {!consensusAccount.isFresh && (
           <div style={{ marginTop: '40px' }}>
