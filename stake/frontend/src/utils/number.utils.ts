@@ -1,6 +1,10 @@
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
-import { CONSENSUS_DECIMALS, NEXUS_COMMISSION_RATE_DECIMALS } from '../constants/config'
+import {
+  CONSENSUS_DECIMALS,
+  NEXUS_COMMISSION_RATE_DECIMALS,
+  FEE_DEDUCTION_MULTIPLIER,
+} from '../constants/config'
 import { SharesType } from '../types/shares-type'
 import { formatUnits, Numeric } from 'ethers'
 
@@ -70,7 +74,45 @@ export abstract class NumberUtils {
     return amount * 10n ** BigInt(CONSENSUS_DECIMALS)
   }
 
+  static sapphireAmountToConsensusAmount(amount: bigint) {
+    return BigNumber(amount.toString())
+      .div(10 ** CONSENSUS_DECIMALS)
+      .integerValue(BigNumber.ROUND_DOWN)
+  }
+
   static formatAmount(amount: bigint | string, dp: Numeric | string): string {
     return BigNumber(formatUnits(amount, dp)).dp(2, BigNumber.ROUND_DOWN).toFormat(2)
+  }
+
+  static shouldShowFeeWarningModal({
+    fee,
+    amount,
+    accountBalanceAmount,
+  }: {
+    fee: BigNumber | bigint
+    amount: BigNumber | bigint
+    accountBalanceAmount: BigNumber | bigint
+  }) {
+    const feeBN = BigNumber.isBigNumber(fee) ? fee : BigNumber(fee.toString())
+    const amountBN = BigNumber.isBigNumber(amount) ? amount : BigNumber(amount.toString())
+    const accountAmountBN = BigNumber.isBigNumber(accountBalanceAmount)
+      ? accountBalanceAmount
+      : BigNumber(accountBalanceAmount.toString())
+
+    const multiplierDeductionFee = feeBN.times(FEE_DEDUCTION_MULTIPLIER)
+
+    // Account balance should have enough amount left for fee retention to show modal
+    // Edge case 0.051 - would only convert 0.001 if user confirms - same goes for the case bellow
+    if (accountAmountBN.minus(multiplierDeductionFee).lte(0)) {
+      return false
+    }
+
+    // Amount should be greater than fee retention to show modal
+    if (amountBN.minus(multiplierDeductionFee).lte(0)) {
+      return false
+    }
+
+    // Account balance has NOT enough amount left for future transactions
+    return amountBN.plus(multiplierDeductionFee).gt(accountAmountBN)
   }
 }

@@ -22,6 +22,7 @@ import { CONSENSUS_DECIMALS, GAS_LIMIT_STAKE, MIN_STAKE_AMOUNT } from '../../con
 import BigNumber from 'bignumber.js'
 import { NumberUtils } from '../../utils/number.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
+import { FeeWarningModal } from '../../components/FeeWarningModal'
 
 enum Steps {
   DelegateInputAmount,
@@ -49,6 +50,10 @@ const StakingAmountPageCmp: FC = () => {
   const [amount, setAmount] = useState<bigint>(0n)
   const [error, setError] = useState('')
   const [amountError, setAmountError] = useState<string | null>(null)
+  const [isFeeWarningModalOpen, setIsFeeWarningModalOpen] = useState(false)
+  const [[feeWarningModalFee, feeWarningModalAmount], setFeeWarningModalOptions] = useState<[bigint, bigint]>(
+    [0n, 0n]
+  )
 
   const navigateToStake = () => navigate('/stake')
   const navigateToDashboard = () => navigate('/dashboard')
@@ -147,6 +152,34 @@ const StakingAmountPageCmp: FC = () => {
     }
   }
 
+  const handleConfirmAmount = (gasPrice: bigint) => {
+    const paratimeAmount = NumberUtils.consensusAmountToSapphireAmount(amount)
+    const accountBalanceAmount = stats?.balances.accountBalance ?? 0n
+    const fee = gasPrice * GAS_LIMIT_STAKE
+
+    if (
+      NumberUtils.shouldShowFeeWarningModal({
+        fee,
+        amount: paratimeAmount,
+        accountBalanceAmount,
+      })
+    ) {
+      setFeeWarningModalOptions([fee, paratimeAmount])
+      setIsFeeWarningModalOpen(true)
+
+      return
+    } else {
+      setStep(Steps.DelegatePreviewTransaction)
+    }
+  }
+
+  const handleFeeWarningModalNext = (amount: string) => {
+    setStep(Steps.DelegatePreviewTransaction)
+    setIsFeeWarningModalOpen(false)
+
+    setAmount(BigInt(amount))
+  }
+
   if (!validator) {
     return <Alert type="loading" />
   }
@@ -178,9 +211,16 @@ const StakingAmountPageCmp: FC = () => {
             </p>
           )}
           <div className={classes.actionButtonsContainer}>
-            <Button disabled={amountError !== ''} onClick={() => setStep(Steps.DelegatePreviewTransaction)}>
-              Delegate
-            </Button>
+            <GasPrice>
+              {gasPrice => (
+                <Button
+                  disabled={amountError !== '' || gasPrice === null}
+                  onClick={() => handleConfirmAmount(gasPrice!)}
+                >
+                  Delegate
+                </Button>
+              )}
+            </GasPrice>
             {isDesktopScreen && (
               <Button variant="text" onClick={() => navigateToStake()} startSlot={<ArrowLeftIcon />}>
                 Back
@@ -292,6 +332,13 @@ const StakingAmountPageCmp: FC = () => {
           actions={<span className="body">Submitting transaction...</span>}
         />
       )}
+      <FeeWarningModal
+        isOpen={isFeeWarningModalOpen}
+        closeModal={() => setIsFeeWarningModalOpen(false)}
+        next={handleFeeWarningModalNext}
+        fee={feeWarningModalFee}
+        amount={feeWarningModalAmount}
+      />
     </>
   )
 }

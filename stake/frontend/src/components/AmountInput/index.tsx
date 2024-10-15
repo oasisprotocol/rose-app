@@ -1,4 +1,4 @@
-import { ChangeEventHandler, FC, useId, useMemo, useRef, useState } from 'react'
+import { ChangeEventHandler, FC, useId, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import classes from './index.module.css'
 import { Button } from '../Button'
 import { amountPattern, StringUtils } from '../../utils/string.utils'
@@ -33,8 +33,9 @@ interface Props {
   label?: string
   error?: string
   className?: string
+  initialValue?: string
   onChange?: (opts: { value?: string; percentage?: number }) => void
-  calcAmountFromPercentage: (percentage: number) => string
+  calcAmountFromPercentage?: (percentage: number) => string
 }
 
 export const AmountInput: FC<Props> = ({
@@ -42,40 +43,50 @@ export const AmountInput: FC<Props> = ({
   label,
   error,
   className,
+  initialValue,
   onChange,
   calcAmountFromPercentage,
 }) => {
   const id = useId()
   const ref = useRef<HTMLInputElement | null>(null)
-  const [inputValue, setInputValue] = useState('')
+  const [inputValue, setInputValue] = useState(initialValue)
+
+  const hasPercentageValues = !!calcAmountFromPercentage
 
   const percentageValues = useMemo(
-    () => percentageList.map(({ percentage }) => calcAmountFromPercentage(percentage)),
-    [calcAmountFromPercentage]
+    () =>
+      percentageList.map(({ percentage }) =>
+        hasPercentageValues ? calcAmountFromPercentage?.(percentage) : '0'
+      ),
+    [hasPercentageValues, calcAmountFromPercentage]
   )
+
+  useLayoutEffect(() => {
+    if (ref.current) {
+      ref.current.value = inputValue ?? ''
+    }
+  }, [inputValue])
 
   return (
     <div className={className}>
-      <div className={classes.percentageInputs}>
-        {percentageList.map(({ label }, i) => (
-          <Button
-            color="secondary"
-            variant={inputValue === percentageValues[i] ? 'solid' : 'outline'}
-            size="small"
-            onClick={() => {
-              setInputValue(percentageValues[i])
-              onChange?.({ value: percentageValues[i] })
-
-              if (ref.current) {
-                ref.current.value = percentageValues[i]
-              }
-            }}
-            key={label}
-          >
-            {label}
-          </Button>
-        ))}
-      </div>
+      {hasPercentageValues && (
+        <div className={classes.percentageInputs}>
+          {percentageList.map(({ label }, i) => (
+            <Button
+              color="secondary"
+              variant={inputValue === percentageValues[i] ? 'solid' : 'outline'}
+              size="small"
+              onClick={() => {
+                setInputValue(percentageValues[i])
+                onChange?.({ value: percentageValues[i] })
+              }}
+              key={label}
+            >
+              {label}
+            </Button>
+          ))}
+        </div>
+      )}
       <div className={classes.amountInput}>
         <input
           ref={ref}
