@@ -1,0 +1,218 @@
+.step1 {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+
+  max-width: 670px;
+
+  .roundConnectButton button {
+    padding: 0 32px;
+    border-radius: 999px;
+  }
+
+  .helpLinks {
+    display: flex;
+    max-width: 400px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+
+    > a {
+      display: flex;
+      padding: 16px 32px 16px 16px;
+      align-items: center;
+      gap: 16px;
+
+      border-radius: 12px;
+      border: 2px solid var(--white);
+      color: var(--white);
+      text-decoration: none;
+
+      > div {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  }
+}
+
+.step2 {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+
+  max-width: 670px;
+
+  h1 {
+    margin-bottom: 10px;
+  }
+  .cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+
+  .cardContent button {
+    margin-top: 8px;
+  }
+}
+
+.step3 {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+
+  max-width: 700px;
+  text-align: center;
+
+  @media screen and (max-width: 1000px) {
+    text-align: left;
+  }
+
+  h1 {
+    margin-bottom: 10px;
+  }
+
+  .overrideMaxWidth {
+    width: 940px;
+    max-width: 100vw;
+    display: flex;
+    justify-content: center;
+  }
+  .addressWrapper {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
+    align-items: stretch;
+
+    font-size: 18px;
+    font-weight: 700;
+    border: 2px solid var(--white);
+    border-radius: 12px;
+
+    & > * {
+      align-content: center;
+      align-items: center;
+      flex-shrink: 0;
+    }
+
+    .startAdornment {
+      padding: 23px;
+
+      font-weight: normal;
+      background-color: var(--white);
+      color: var(--brand-extra-dark);
+      border-radius: 8px 0 0 8px;
+    }
+    .address {
+      font-family: Roboto Mono Variable, monospace;
+      flex-grow: 1;
+      display: flex;
+      padding: 23px;
+      gap: 8px;
+    }
+    .addressLonger > * {
+      max-width: 50ch;
+    }
+    .endAdornment {
+      display: flex;
+      gap: 6px;
+
+      border-left: 2px solid var(--white);
+    }
+    .plainButton {
+      background-color: transparent;
+    }
+
+    @media screen and (min-width: 701px) and (max-width: 1000px) {
+      .addressLonger > * {
+        max-width: calc(100vw - 525px);
+      }
+    }
+    @media screen and (max-width: 700px) {
+      grid-template-columns: auto auto auto;
+      font-weight: 400;
+      font-size: 12px;
+
+      .startAdornment {
+        grid-column-end: span 3;
+        padding: 10px;
+
+        border-radius: 8px 8px 0 0;
+        text-align: center;
+      }
+      .endAdornment {
+        border: none;
+      }
+      button {
+        padding: 0px 15px;
+      }
+      .address {
+        padding: 10px;
+      }
+      .addressLonger > * {
+        max-width: calc(100vw - 300px);
+      }
+    }
+    @media screen and (max-width: 450px) {
+      .addressLonger > * {
+        max-width: calc(100vw - 210px);
+      }
+    }
+  }
+
+  progress {
+    width: 100%;
+    max-width: 590px;
+    height: 32px;
+  }
+
+  a {
+    color: var(--white);
+  }
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex-basis: 215px;
+  flex-grow: 1;
+
+  border-radius: 4px;
+  border: 1px solid var(--brand-extra-dark);
+  background-color: var(--white);
+  color: var(--brand-extra-dark);
+}
+.cardContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  gap: 8px;
+  padding: 16px;
+}
+.cardImage {
+  width: 100%;
+}
+
+.opacity50 {
+  opacity: 0.5;
+}
+
+.collapsible {
+  max-height: 30em;
+  overflow: hidden;
+  transition: max-height 600ms ease-out;
+
+  &.collapsed {
+    max-height: 0em;
+  }
+}

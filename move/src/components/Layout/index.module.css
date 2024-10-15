@@ -1,0 +1,29 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  vertical-align: middle;
+  align-items: start;
+  padding: 3.125rem 3.125rem 2.5rem;
+  background: transparent;
+  gap: 20px;
+
+  img {
+    max-width: 50vw;
+    max-height: 61px;
+  }
+}
+
+.mainSection {
+  width: 100%;
+}
+
+@media screen and (max-width: 1000px) {
+  .header {
+    padding: 1rem 0 2rem 0;
+    margin-left: -10px;
+
+    img {
+      max-height: 34px;
+    }
+  }
+}

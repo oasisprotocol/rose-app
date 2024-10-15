@@ -1,0 +1,17 @@
+.middleEllipsis {
+  display: flex;
+  white-space: nowrap;
+  user-select: all;
+  max-width: 15.1ch;
+  transition: max-width 600ms ease-out;
+
+  > :first-child {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    min-width: 5ch;
+  }
+
+  > :last-child {
+    flex-shrink: 0;
+  }
+}
