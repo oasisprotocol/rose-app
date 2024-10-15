@@ -57,6 +57,12 @@
           background: #202020;
         }
       }
+
+      hr {
+        width: 85%;
+        border-top: 0; /* Make hr thinner - only keep 1px bottom border */
+        border-color: var(--outline-outline-1, #47474f);
+      }
     }
   }
 }

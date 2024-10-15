@@ -20,16 +20,25 @@ export function Sidebar(props: { children: React.ReactNode }) {
 
         <div className={classes.linksWrapper}>
           <div className={classes.links}>
-            <a href="https://wallet.oasis.io/">Transfer</a>
             <a href="/stake/" className={window.location.pathname.startsWith('/stake/') ? classes.activeLink : ''}>
               Stake
             </a>
             <a href="/move/" className={window.location.pathname.startsWith('/move/') ? classes.activeLink : ''}>
               Move
             </a>
-            <a href="https://wrose.oasis.io/">Wrap</a>
-            <a href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100">
-              Buy ↗
+            <hr />
+            <a target="_blank" rel="noopener noreferrer" href="https://wrose.oasis.io/">
+              Wrap ↗
+            </a>
+            <a target="_blank" rel="noopener noreferrer" href="https://wallet.oasis.io/">
+              Wallet ↗
+            </a>
+            <a
+              target="_blank"
+              rel="noopener noreferrer"
+              href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100"
+            >
+              Buy on Transak ↗
             </a>
           </div>
         </div>

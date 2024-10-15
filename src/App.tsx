@@ -5,7 +5,7 @@ export function App() {
   return (
     <main className={classes.main}>
       <a href="https://wallet.oasis.io/" className={classes.transfer}>
-        <h2>Transfer</h2>
+        <h2>Wallet</h2>
         <p>
           Cras turpis quam aliquam vestibulum lectus aenean tempor diam. Ultricies cras tincidunt sit hendrerit. Varius
           quisque pretium turpis lacus venenatis amet ac proin.
@@ -40,7 +40,7 @@ export function App() {
         href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100"
         className={classes.buy}
       >
-        <h2>Buy</h2>
+        <h2>Buy on Transak</h2>
         <p>
           Aliquam sapien amet semper fermentum vel. Nec tincidunt in dolor id vitae. Ipsum mattis amet tristique
           maecenas in in scelerisque quis.
