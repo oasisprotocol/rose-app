@@ -1,3 +1,7 @@
+## Getting started
+
+### Installing and running from source code
+
 ```sh
 yarn
 (cd move && yarn)

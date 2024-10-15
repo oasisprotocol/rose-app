@@ -38,15 +38,3 @@ flowchart TD
 
   g -..-> h
 ```
-
-## Getting started
-
-### Installing and running from source code
-
-```sh
-yarn
-yarn dev
-
-# to see all steps without transferring ROSE, type this into browser console
-mock = true
-```
