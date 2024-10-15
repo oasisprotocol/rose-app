@@ -1,0 +1,47 @@
+.homePage {
+  display: flex;
+  flex-direction: column;
+  max-width: 671px;
+  margin: 0 auto;
+
+  .logo {
+    margin-bottom: 4px;
+  }
+
+  p {
+    color: var(--white);
+
+    &.description,
+    &.discoverMore {
+      margin-bottom: 2.5rem;
+    }
+  }
+
+  .connectWallet {
+    margin-bottom: 2.5rem;
+  }
+
+  .infoBoxes {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+    max-width: 375px;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .homePage {
+    padding: 0 0.75rem;
+
+    .logo {
+      margin-bottom: 10px;
+    }
+
+    p {
+      &.discoverMore {
+        margin-bottom: 1.375rem;
+        max-width: 75%;
+      }
+    }
+  }
+}

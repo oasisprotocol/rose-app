@@ -1,0 +1,26 @@
+.description {
+  color: var(--brand-extra-dark-75);
+  margin-bottom: 1rem;
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0 2rem;
+  margin-top: auto;
+
+  button {
+    margin: 0 auto;
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .actionButtonsContainer {
+    padding-bottom: 0;
+  }
+
+  .validatorsCard {
+    padding-bottom: 1rem;
+  }
+}

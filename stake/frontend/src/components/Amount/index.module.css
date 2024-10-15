@@ -1,0 +1,6 @@
+.amount {
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  color: var(--brand-extra-dark);
+}

@@ -1,0 +1,15 @@
+.successIcon {
+  &:before {
+    color: var(--green);
+  }
+
+  &:after {
+    color: var(--brand-extra-dark);
+    background: var(--green-25);
+  }
+
+  svg {
+    color: var(--white);
+    padding-left: 1px;
+  }
+}

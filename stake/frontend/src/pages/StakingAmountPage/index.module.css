@@ -1,0 +1,86 @@
+.description {
+  color: var(--brand-extra-dark-75);
+  margin-bottom: 2rem;
+
+  .validatorName {
+    color: var(--brand-blue);
+  }
+}
+
+.actionButtonsContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem 0 2rem;
+  margin-top: auto;
+
+  button {
+    margin: 0 auto;
+  }
+}
+
+.delegatePreviewTransactionTable {
+  border: 2px solid var(--brand-blue);
+  border-radius: 12px;
+  padding: 2.25rem 2.625rem 3.125rem 3rem;
+
+  div {
+    div {
+      &:first-child {
+        color: var(--brand-blue);
+      }
+
+      &:last-child {
+        color: var(--brand-extra-dark);
+      }
+    }
+  }
+}
+
+.stakingSuccessfulAlertActions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+
+  p {
+    color: var(--brand-extra-dark);
+  }
+
+  button {
+    margin: 0 auto;
+  }
+}
+
+.stakingFailedActions {
+  display: flex;
+}
+
+.inactiveAmountInputWarning {
+  margin-top: 1.625rem;
+  color: var(--brand-extra-dark-75);
+}
+
+@media screen and (max-width: 1000px) {
+  .amountInput {
+    margin-bottom: 172px;
+  }
+
+  .actionButtonsContainer {
+    padding: 0;
+  }
+
+  .previewTxCard {
+    padding-bottom: 1.5rem;
+  }
+
+  .delegatePreviewTransactionTable {
+    padding: 2rem 1.5rem 1.5rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .inactiveAmountInputWarning {
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}

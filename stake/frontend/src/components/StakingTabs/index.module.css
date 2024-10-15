@@ -1,0 +1,311 @@
+.tabsContainer {
+  border: 2px solid var(--brand-blue);
+  border-radius: 12px;
+}
+
+.tabs {
+  > li {
+    justify-content: center;
+    background: var(--gray-light);
+    color: var(--brand-blue);
+    padding: 0.65625rem;
+    border-bottom: 3px solid var(--gray);
+    font-weight: 700;
+
+    &:first-child {
+      border-top-left-radius: 12px;
+    }
+
+    &:last-child {
+      border-top-right-radius: 12px;
+    }
+
+    &:not(:last-child) {
+      border-right: 1px solid var(--gray-blue-border);
+    }
+
+    span {
+      &.mute {
+        color: var(--brand-blue);
+        opacity: 0.5;
+      }
+    }
+
+    :global &.active {
+      background: var(--brand-blue);
+      color: var(--white);
+      border-right: 1px solid var(--brand-blue);
+      border-bottom: 3px solid var(--brand-blue);
+      border-color: var(--brand-blue);
+
+      span {
+        &.mute {
+          color: var(--white);
+          opacity: 0.75;
+        }
+      }
+    }
+
+    &:first-child {
+      :global &.active {
+        border-top-left-radius: 6px;
+      }
+    }
+
+    &:last-child {
+      :global &.active {
+        border-top-right-radius: 6px;
+        border-right: 0;
+      }
+    }
+  }
+}
+
+.expandedRow {
+  td {
+    & & {
+      padding: 0;
+    }
+  }
+}
+
+.infoBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  width: calc(100% - 2.75rem);
+  background: var(--gray-dark);
+  color: var(--brand-dark-blue);
+  padding: 0.875rem 0;
+  border-radius: 12px;
+  margin: 1.375rem 1.375rem 1.125rem;
+}
+
+.infoBoxSuccess {
+  background: var(--green-25);
+}
+
+.overviewTab {
+  padding: 1rem 2.9375rem 1rem 1.25rem;
+
+  p {
+    display: flex;
+    justify-content: space-between;
+    color: var(--brand-extra-dark);
+
+    &.total {
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    &:not(.total) {
+      padding-left: 1.25rem;
+      line-height: 35px;
+    }
+  }
+}
+
+.stakedTab,
+.debondingTab {
+  .stakedRowValidatorDetails,
+  .debondingRowExpanded {
+    p {
+      display: flex;
+      justify-content: space-between;
+      font-weight: 400;
+      line-height: 38px;
+
+      span {
+        &:first-child {
+          color: var(--brand-extra-dark);
+        }
+
+        &:last-child {
+          color: var(--gray-extra-dark);
+          line-height: 38px;
+        }
+      }
+    }
+  }
+}
+
+.stakedTab {
+  .stakedRow {
+    td:first-child {
+      color: var(--brand-blue);
+      padding: 1rem 1.25rem;
+    }
+
+    td:nth-child(2) {
+      width: 180px;
+      text-align: right;
+    }
+
+    td:last-child {
+      text-align: center;
+      width: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+  }
+
+  .stakedRowValidatorDetails {
+    padding: 0 4rem 0 3.625rem;
+
+    p {
+      max-width: 60%;
+    }
+  }
+
+  .stakedRowActions {
+    padding-bottom: 0.5rem;
+
+    p {
+      padding-top: 0.5rem;
+      padding-left: 3.625rem;
+      margin-top: 1rem;
+      margin-bottom: 0.625rem;
+      color: var(--brand-dark-blue);
+    }
+
+    .unstakeBtn,
+    .confirmStakeBtn {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .unstakeBtn {
+      margin-top: 2.875rem;
+    }
+  }
+}
+
+.debondingTab {
+  .debondingRow {
+    td:first-child {
+      color: var(--brand-blue);
+      padding: 1rem 1.25rem;
+    }
+
+    td:nth-child(2) {
+      width: 140px;
+      text-align: left;
+    }
+
+    td:nth-child(3) {
+      width: 180px;
+      text-align: right;
+    }
+
+    td:last-child {
+      text-align: center;
+      width: 40px;
+      vertical-align: middle;
+      line-height: 0;
+    }
+  }
+
+  .debondingRowExpanded {
+    padding: 0 2.5rem 0 1.25rem;
+
+    p {
+      line-height: 40px;
+    }
+  }
+
+  .debondingReady {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.rowStatusWaiting {
+  text-align: center;
+}
+
+.stakeBtnContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 8.625rem;
+}
+
+@media screen and (max-width: 1000px) {
+  .overviewTab {
+    padding: 1rem;
+  }
+
+  .stakeBtnContainer {
+    margin-top: 2.875rem;
+  }
+
+  .stakedTab {
+    .stakedRow {
+      td:nth-child(2) {
+        width: 120px;
+        text-align: right;
+      }
+    }
+
+    .expandedRow {
+      td {
+        padding: 0;
+      }
+    }
+
+    .stakedRowValidatorDetails {
+      padding: 0 1.25rem;
+
+      p {
+        max-width: unset;
+      }
+    }
+
+    .stakedRowActions {
+      .unstakeBtn {
+        margin: 1.75rem auto 1.25rem;
+      }
+    }
+  }
+
+  .debondingTab {
+    .debondingRow {
+      td:nth-child(2) {
+        width: 40px;
+      }
+
+      td:nth-child(3) {
+        width: 100px;
+      }
+    }
+
+    .debondingRowExpanded {
+      padding: 0 1.25rem;
+
+      p {
+        max-width: unset;
+        flex-direction: column;
+        justify-content: flex-start;
+        line-height: 24px;
+      }
+
+      .debondingRowExpandedAmount.debondingRowExpandedAmount {
+        justify-content: flex-start;
+        line-height: 16px;
+        span {
+          line-height: 16px;
+        }
+      }
+    }
+
+    .infoBox {
+      margin: 0 0.5625rem 0.625rem;
+      width: calc(100% - 1.125rem);
+
+      p {
+        text-align: center;
+      }
+    }
+  }
+}

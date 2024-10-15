@@ -1,0 +1,46 @@
+.icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+
+  svg {
+    fill: currentColor;
+  }
+
+  &:before {
+    content: ' ';
+    z-index: -1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: currentColor;
+  }
+
+  &:after {
+    content: attr(data-label);
+    z-index: -2;
+    position: absolute;
+    width: max-content;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    padding-left: 100%;
+    padding-right: 0.625rem;
+    border-radius: 0 6px 6px 0;
+    color: currentColor;
+    font-family: Figtree, system-ui, sans-serif;
+    font-size: 12px;
+    font-weight: 400;
+  }
+
+  &.hideAfter {
+    &:after {
+      content: none;
+    }
+  }
+}
