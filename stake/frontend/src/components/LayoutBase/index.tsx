@@ -9,13 +9,13 @@ interface Props {
 }
 
 export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) => {
-  const isMobileScreen = useMediaQuery({ query: '(max-width: 1000px)' })
+  const ltLargeScreen = useMediaQuery({ query: '(max-width: 1280px)' })
 
   return (
     <div className={classes.layout}>
       {header}
       <main className={classes.main}>{children}</main>
-      {!isMobileScreen && (
+      {!ltLargeScreen && (
         <footer className={classes.footer}>
           <div className={classes.footerColumn}>
             <span>
@@ -30,7 +30,7 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
                 </a>
                 ) built at{' '}
                 {DateUtils.intlDateFormat(BUILD_DATETIME, {
-                  format: isMobileScreen ? 'short' : 'long',
+                  format: ltLargeScreen ? 'short' : 'long',
                 })}
               </div>
             </span>
@@ -54,7 +54,7 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
         </footer>
       )}
 
-      {isMobileScreen && (
+      {ltLargeScreen && (
         <footer className={classes.mobileFooter}>
           <div className={classes.footerRow}>
             <span className="small">
@@ -70,7 +70,7 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
                 </a>
                 ) built at{' '}
                 {DateUtils.intlDateFormat(BUILD_DATETIME, {
-                  format: isMobileScreen ? 'short' : 'long',
+                  format: ltLargeScreen ? 'short' : 'long',
                 })}
               </div>
             </span>

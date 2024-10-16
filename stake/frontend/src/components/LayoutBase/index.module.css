@@ -49,15 +49,7 @@
   gap: 0.5rem;
 }
 
-@media screen and (max-width: 1000px) {
-  .layout {
-    padding: 1.5rem 0.75rem 0;
-  }
-
-  .main {
-    padding: 0;
-  }
-
+@media screen and (max-width: 1280px) {
   .mobileFooter {
     color: var(--white);
     padding: 0.625rem 0.1875rem;
@@ -66,5 +58,29 @@
   .mobileLink {
     color: var(--white);
     text-decoration: none;
+  }
+
+  .mobileFooter {
+    > div {
+      text-align: center;
+    }
+  }
+}
+
+@media screen and (max-width: 1000px) {
+  .layout {
+    padding: 1.5rem 0.75rem 0;
+  }
+
+  .main {
+    padding: 0;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .mobileFooter {
+    > div {
+      text-align: unset;
+    }
   }
 }
