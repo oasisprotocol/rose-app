@@ -15,8 +15,8 @@ export const CopyPrivateKeyModal: FC<Props> = ({ privateKey, ...modalOpts }) => 
         <h1>Your private key</h1>
         <p className="body">
           Below the private key of your Consensus address is shown. Copy the private key and paste it into web wallet
-          and gain full control. To keep full access to your wallet we highly recommend you store the full private key,
-          in the right order, in a secure location.
+          and gain full control. To keep full access to your wallet we highly recommend you store the full private key
+          in a secure location.
         </p>
         <textarea rows={2} value={privateKey} readOnly></textarea>
         <ButtonWithClickedIndicator
