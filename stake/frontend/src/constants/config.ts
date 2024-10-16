@@ -71,3 +71,6 @@ export const NEXUS_COMMISSION_RATE_DECIMALS = 5
 export const MIN_STAKE_AMOUNT = 100_000_000_000n
 
 export const VITE_NETWORK = BigInt(import.meta.env.VITE_NETWORK) ?? 0n
+
+// Specifies multiplier so wallet has enough fees for future transactions
+export const FEE_DEDUCTION_MULTIPLIER = 5

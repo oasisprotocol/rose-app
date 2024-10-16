@@ -1,0 +1,87 @@
+.feeWarningModalContent {
+  display: flex;
+  flex-direction: column;
+
+  h4 {
+    color: var(--gray-extra-dark);
+  }
+
+  p {
+    color: var(--gray-extra-dark);
+
+    &:first-of-type {
+      margin-bottom: 1rem;
+    }
+
+    &:last-of-type {
+      margin-bottom: 3.125rem;
+    }
+  }
+}
+
+.feeWarningModalLogo {
+  align-self: center;
+  margin-bottom: 3.125rem;
+}
+
+.feeWarningModalInput {
+  width: 75%;
+  margin: 0 auto;
+}
+
+.feeWarningModalActions {
+  display: flex;
+  flex-direction: column;
+  gap: 2.125rem;
+  margin: 2.5rem auto;
+  text-align: center;
+}
+
+.feeWarningModalButton {
+  min-width: 250px;
+}
+
+.feeWarningModalButtonText {
+  font-size: 13px;
+}
+
+.feeWarningModalFullAmount {
+  background: none;
+  border: none;
+  padding: 0;
+  font: inherit;
+  outline: inherit;
+  color: var(--orange);
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.feeWarningModalAmount {
+  display: inline;
+}
+
+@media screen and (max-width: 1000px) {
+  .feeWarningModalContent {
+    p {
+      &:last-of-type {
+        margin-bottom: 2.625rem;
+      }
+    }
+  }
+
+  .feeWarningModalLogo {
+    margin-bottom: 2rem;
+  }
+
+  .feeWarningModalInput {
+    width: 100%;
+  }
+
+  .feeWarningModalActions {
+    display: flex;
+    flex-direction: column;
+    gap: 1.625rem;
+    margin: 1.25rem auto;
+    text-align: center;
+  }
+}
