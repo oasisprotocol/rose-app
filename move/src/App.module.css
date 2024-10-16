@@ -28,7 +28,6 @@
       border-radius: 12px;
       border: 2px solid var(--white);
       color: var(--white);
-      text-decoration: none;
 
       > div {
         display: flex;
@@ -167,12 +166,6 @@
         max-width: calc(100vw - 210px);
       }
     }
-  }
-
-  progress {
-    width: 100%;
-    max-width: 590px;
-    height: 32px;
   }
 
   a {
