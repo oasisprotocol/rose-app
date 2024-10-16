@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react'
+import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import { Button } from '../Button'
 import { ButtonWithClickedIndicator } from '../Button/ButtonWithClickedIndicator'
 import { Modal, ModalProps } from '../Modal'
@@ -21,7 +22,12 @@ export const CopyPrivateKeyModal: FC<Props> = ({ privateKey, ...modalOpts }) => 
         <textarea rows={2} value={privateKey} readOnly></textarea>
         <ButtonWithClickedIndicator
           onClick={() => window.navigator.clipboard.writeText(privateKey)}
-          clickedIndicator="Copied successfully"
+          clickedIndicator={
+            <>
+              <img src={symbol_check_circle_svg} alt="Copied" width="24" />
+              &nbsp; Copied
+            </>
+          }
         >
           Copy private key
         </ButtonWithClickedIndicator>
