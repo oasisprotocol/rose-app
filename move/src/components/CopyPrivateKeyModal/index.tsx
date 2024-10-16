@@ -29,7 +29,7 @@ export const CopyPrivateKeyModal: FC<Props> = ({ privateKey, ...modalOpts }) => 
           and gain full control. To keep full access to your wallet we highly recommend you store the full private key,
           in the right order, in a secure location.
         </p>
-        <textarea rows={2} value={privateKey} disabled></textarea>
+        <textarea rows={2} value={privateKey} readOnly></textarea>
         <Button onClick={copyPrivateKey}>Copy private key</Button>
         {isCopied && <p className={classes.successfullyCopied}>Copied successfully</p>}
       </div>
