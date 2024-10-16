@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "license": "See License in ../LICENSE",
   "scripts": {
-    "start": "orval"
+    "start": "swagger-typescript-api -p https://raw.githubusercontent.com/oasisprotocol/nexus/main/api/spec/v1.yaml -o ./dist --axios --single-http-client && mv ./dist/Api.ts ./dist/index.ts"
   },
   "dependencies": {
     "axios": "^1.7.2",
-    "orval": "^6.30.2"
+    "swagger-typescript-api": "^13.0.22"
   },
   "exports": {
     ".": {
