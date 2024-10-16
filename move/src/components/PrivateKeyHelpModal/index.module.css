@@ -1,0 +1,11 @@
+.privateKeyHelpModal {
+  color: var(--brand-extra-dark);
+
+  h1 {
+    margin-bottom: 0.625rem;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+}

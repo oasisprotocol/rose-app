@@ -1,0 +1,30 @@
+.copyPrivateKeyModal {
+  color: var(--brand-extra-dark);
+  margin-bottom: 2rem;
+
+  h1 {
+    margin-bottom: 0.625rem;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+  }
+
+  textarea {
+    width: 100%;
+    resize: none;
+    color: var(--blue-dark-border);
+    border: 2px solid var(--blue-dark-border);
+    border-radius: 12px;
+    padding: 15px 16px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 21.6px;
+    margin-bottom: 2.25rem;
+  }
+
+  button {
+    display: block;
+    margin: 0 auto;
+  }
+}
