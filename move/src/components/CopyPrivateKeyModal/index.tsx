@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
 import { Button } from '../Button'
+import { ButtonWithClickedIndicator } from '../Button/ButtonWithClickedIndicator'
 import { Modal, ModalProps } from '../Modal'
 import classes from './index.module.css'
 
@@ -8,18 +9,6 @@ interface Props extends ModalProps {
 }
 
 export const CopyPrivateKeyModal: FC<Props> = ({ privateKey, ...modalOpts }) => {
-  const [isCopied, setIsCopied] = useState(false)
-
-  const copyPrivateKey = () => {
-    navigator.clipboard.writeText(privateKey)
-    setIsCopied(true)
-  }
-
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Reset state on isOpen
-  useEffect(() => {
-    setIsCopied(false)
-  }, [modalOpts.isOpen])
-
   return (
     <Modal {...modalOpts}>
       <div className={classes.copyPrivateKeyModal}>
@@ -30,8 +19,12 @@ export const CopyPrivateKeyModal: FC<Props> = ({ privateKey, ...modalOpts }) => 
           in the right order, in a secure location.
         </p>
         <textarea rows={2} value={privateKey} readOnly></textarea>
-        <Button onClick={copyPrivateKey}>Copy private key</Button>
-        {isCopied && <p className={classes.successfullyCopied}>Copied successfully</p>}
+        <ButtonWithClickedIndicator
+          onClick={() => window.navigator.clipboard.writeText(privateKey)}
+          clickedIndicator="Copied successfully"
+        >
+          Copy private key
+        </ButtonWithClickedIndicator>
       </div>
     </Modal>
   )
