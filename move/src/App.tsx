@@ -66,14 +66,14 @@ export function App() {
             <div></div>
             <div>Discover more info below</div>
             <div className={classes.helpLinks}>
-              <button type="button" className={classes.clearBtn} onClick={toggleMoveWalkthroughVideoModal}>
+              <button type="button" className={classes.plainButton2} onClick={toggleMoveWalkthroughVideoModal}>
                 <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
                   <h3>Need help? Watch the walkthrough</h3>
                   <div>Watch the video on how to use the dApp</div>
                 </div>
               </button>
-              <button type="button" className={classes.clearBtn} onClick={togglePrivateKeyHelpModal}>
+              <button type="button" className={classes.plainButton2} onClick={togglePrivateKeyHelpModal}>
                 <img src={vpn_key_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
                   <h3>Lost your private key?</h3>
@@ -183,7 +183,7 @@ export function App() {
             <p>
               Use the generated address below to initiate the transfer on your centralized exchange. The dApp
               automatically recognizes your transfer form the centralized exchange and will track it.{' '}
-              <button type="button" className={classes.clearBtn} onClick={toggleMoveTransferVideoModal}>
+              <button type="button" className={classes.plainButton2} onClick={toggleMoveTransferVideoModal}>
                 <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
               </button>
             </p>
