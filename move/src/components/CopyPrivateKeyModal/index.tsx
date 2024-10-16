@@ -1,6 +1,5 @@
-import { FC, useEffect, useState } from 'react'
+import { FC } from 'react'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
-import { Button } from '../Button'
 import { ButtonWithClickedIndicator } from '../Button/ButtonWithClickedIndicator'
 import { Modal, ModalProps } from '../Modal'
 import classes from './index.module.css'

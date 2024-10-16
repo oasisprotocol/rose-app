@@ -36,6 +36,9 @@
         "noNonNullAssertion": "off",
         "noUnusedTemplateLiteral": "off",
         "noUselessElse": "off"
+      },
+      "correctness": {
+        "noUnusedImports": "error"
       }
     }
   }
