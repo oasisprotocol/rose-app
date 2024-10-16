@@ -7,7 +7,7 @@
   background-color: var(--brand-blue);
   background-image: url('/background.webp');
   background-size: 100vw auto;
-  background-position: center left;
+  background-position: top left;
   background-repeat: no-repeat;
 }
 
