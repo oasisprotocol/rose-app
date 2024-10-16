@@ -90,7 +90,6 @@ export function App() {
         experience depending on the exchange you are using."
           isOpen={isMoveWalkthroughVideoModalOpen}
           closeModal={() => setIsMoveWalkthroughVideoModalOpen(false)}
-          disableBackdropClick
         />
         <PrivateKeyHelpModal
           isOpen={isPrivateKeyHelpModalOpen}
@@ -264,13 +263,11 @@ export function App() {
         body="Not sure how to tackle this step? Check out our example below."
         isOpen={isMoveTransferVideoModalOpen}
         closeModal={() => setIsMoveTransferVideoModalOpen(false)}
-        disableBackdropClick
       />
       <CopyPrivateKeyModal
         privateKey={consensusAccount.privateKey}
         isOpen={isCopyPrivateKeyModalOpen}
         closeModal={() => setIsCopyPrivateKeyModalOpen(false)}
-        disableBackdropClick
       />
     </>
   )
