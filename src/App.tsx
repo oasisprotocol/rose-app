@@ -1,4 +1,5 @@
 import east_svg from '@material-design-icons/svg/filled/east.svg'
+import launch_svg from '@material-design-icons/svg/filled/launch.svg'
 import classes from './App.module.css'
 
 export function App() {
@@ -10,7 +11,7 @@ export function App() {
           Cras turpis quam aliquam vestibulum lectus aenean tempor diam. Ultricies cras tincidunt sit hendrerit. Varius
           quisque pretium turpis lacus venenatis amet ac proin.
         </p>
-        <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
+        <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
       <a href="/stake/" className={classes.stake}>
         <h2>Stake</h2>
@@ -34,7 +35,7 @@ export function App() {
           Nunc eu pharetra sed ut. Vestibulum egestas ipsum mi mauris risus aenean eget faucibus. Porttitor risus risus
           mattis quis.
         </p>
-        <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
+        <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
       <a
         href="https://global.transak.com/?apiKey=4b66a274-d663-42a8-a495-e1f0e88ce023&productsAvailed=BUY&cryptoCurrencyCode=ROSE&disableWalletAddressForm=false&isFeeCalculationHidden=false&exchangeScreenTitle=Purchase+ROSE+to+your+wallet&themeColor=%2318213c&defaultFiatAmount=100"
@@ -45,7 +46,7 @@ export function App() {
           Aliquam sapien amet semper fermentum vel. Nec tincidunt in dolor id vitae. Ipsum mattis amet tristique
           maecenas in in scelerisque quis.
         </p>
-        <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
+        <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
     </main>
   )
