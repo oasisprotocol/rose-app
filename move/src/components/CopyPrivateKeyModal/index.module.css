@@ -20,11 +20,11 @@
     font-size: 18px;
     font-weight: 500;
     line-height: 21.6px;
-    margin-bottom: 2.25rem;
   }
 
-  button {
+  .copyBtn {
     display: block;
     margin: 0 auto;
+    margin-top: 2.25rem;
   }
 }
