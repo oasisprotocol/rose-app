@@ -7,33 +7,27 @@ export function App() {
     <main className={classes.main}>
       <a href="https://wallet.oasis.io/" className={classes.transfer} target="_blank" rel="noopener noreferrer">
         <h2>Wallet</h2>
-        <p>
-          Cras turpis quam aliquam vestibulum lectus aenean tempor diam. Ultricies cras tincidunt sit hendrerit. Varius
-          quisque pretium turpis lacus venenatis amet ac proin.
-        </p>
+        <p>Official non-custodial wallet for the Oasis Consensus layer.</p>
         <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
       <a href="/stake/" className={classes.stake}>
         <h2>Stake</h2>
-        <p>
-          Sed cursus placerat quam eleifend. Ultricies eleifend tellus ut massa. Commodo elementum scelerisque iaculis
-          id.
-        </p>
+        <p>A dApp that let's you stake ROSE on the Oasis Sapphire ParaTime.</p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
       <a href="/move/" className={classes.move}>
         <h2>Move</h2>
         <p>
-          Dui fringilla a dui nunc diam. Et elementum tincidunt neque tristique amet dictum. Pulvinar aenean nascetur
-          lobortis aenean mauris semper pretium elementum risus.
+          Makes it easy to move ROSE tokens into Sapphire. It generates a Consensus account (oasis1*) that automatically
+          forwards any received ROSE into your Sapphire account.
         </p>
         <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
       <a href="https://wrose.oasis.io/" className={classes.wrap} target="_blank" rel="noopener noreferrer">
         <h2>Wrap</h2>
         <p>
-          Nunc eu pharetra sed ut. Vestibulum egestas ipsum mi mauris risus aenean eget faucibus. Porttitor risus risus
-          mattis quis.
+          Quickly wrap your ROSE into wROSE (ERC&#8209;20) to use in supporting dApps. Also lets you unwrap so you can
+          use it again on most exchanges.
         </p>
         <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
@@ -44,10 +38,7 @@ export function App() {
         rel="noopener noreferrer"
       >
         <h2>Buy on Transak</h2>
-        <p>
-          Aliquam sapien amet semper fermentum vel. Nec tincidunt in dolor id vitae. Ipsum mattis amet tristique
-          maecenas in in scelerisque quis.
-        </p>
+        <p>Convert your fiat currency into ROSE. This service is provided by Transak - an external party.</p>
         <img src={launch_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
       </a>
     </main>
