@@ -85,7 +85,7 @@ export function App() {
         </Layout>
         <VideoModal
           src="./ROSE Move Walkthrough.mp4"
-          header="How do I use ROSE (on)ramp?"
+          header="How do I use ROSE move?"
           body="Our walkthrough below shows you what the process would look like. The exact process might differ from your
         experience depending on the exchange you are using."
           isOpen={isMoveWalkthroughVideoModalOpen}
