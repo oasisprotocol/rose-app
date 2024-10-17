@@ -48,7 +48,7 @@ export function App() {
         <Layout header={<img src={logo_rose_move_svg} alt="" style={{ visibility: 'hidden' }} />}>
           <div className={classes.step1}>
             <div>
-              <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxWidth: '70vw', maxHeight: '75px' }} />
+              <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxWidth: '70cqw', maxHeight: '75px' }} />
               <p>
                 The Rose Move dApp has been built by Oasis to offer users an easy to use service of moving your Rose
                 from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
