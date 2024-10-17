@@ -1,6 +1,4 @@
 .layout {
-  container-type: inline-size; /* To replace media queries with container queries, excluding sidebar */
-
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
