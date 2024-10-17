@@ -10,6 +10,7 @@
   img {
     max-width: 50cqw;
     max-height: 61px;
+    transition: max-height 0.2s ease-out;
   }
 }
 
