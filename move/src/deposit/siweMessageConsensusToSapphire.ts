@@ -4,8 +4,8 @@
  */
 export function siweMessageConsensusToSapphire(address: `0x${string}`) {
   const statement =
-    'Signing this message will generate an Oasis Consensus account, ' +
-    "please don't sign this message on any other site"
+    'Signing this message will generate your unique Oasis Consensus account. ' +
+    "Please, don't sign this message on any other site."
   const issuedAt = '2000-01-01T00:00:01Z'
   return (
     // biome-ignore lint/style/useTemplate: more readable than single line template string
