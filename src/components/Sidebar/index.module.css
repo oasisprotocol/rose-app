@@ -1,6 +1,8 @@
 .sidebarLayout {
   display: flex;
   .main {
+    container-type: inline-size; /* To replace media queries with container queries, excluding sidebar */
+    container-name: dapp;
     width: 100%;
   }
 }
