@@ -48,6 +48,7 @@ export function Sidebar(props: { children: React.ReactNode }) {
         </div>
       </nav>
       <div className={classes.main}>{props.children}</div>
+      <div className={classes.backdrop}></div>
     </div>
   )
 }

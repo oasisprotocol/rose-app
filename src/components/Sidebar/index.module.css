@@ -95,5 +95,13 @@
   .sidebar:focus,
   .sidebar:focus-within {
     transform: translate(0%);
+
+    & ~ .backdrop {
+      position: fixed;
+      z-index: 1;
+      inset: 0;
+      background-color: black;
+      opacity: 0.5;
+    }
   }
 }
