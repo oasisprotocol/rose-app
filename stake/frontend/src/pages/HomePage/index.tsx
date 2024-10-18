@@ -14,19 +14,15 @@ import {
 import { InfoCard } from '../../components/InfoCard'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { withConnectedWallet } from '../../hoc/withConnectedWallet'
-import { useAppState } from '../../hooks/useAppState'
 
 const HomePageCmp: FC = () => {
   const {
     state: { nativeCurrency },
   } = useWeb3()
-  const {
-    state: { isDesktopScreen },
-  } = useAppState()
 
   return (
     <div className={classes.homePage}>
-      <LogoIcon className={classes.logo} size={isDesktopScreen ? 'large' : 'medium'} />
+      <LogoIcon className={classes.logo} />
       <p className={StringUtils.clsx('body', classes.description)}>
         Easily stake {nativeCurrency?.symbol} tokens on Sapphire using our ROSE stake dApp and help the
         network. By staking you help the ecosystem’s network security and earn rewards at the same time.
