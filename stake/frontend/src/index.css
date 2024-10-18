@@ -116,9 +116,3 @@ h3 {
   line-height: 25.2px;
   color: var(--brand-extra-dark);
 }
-
-@media screen and (max-width: 1000px) {
-  body {
-    background-image: url('/background-mobile.webp');
-  }
-}
