@@ -263,6 +263,12 @@ const StakingAmountPageCmp: FC = () => {
                 </p>,
               ],
               [
+                <p className="body">Commission:</p>,
+                <p className="body">
+                  <span>{NumberUtils.formatValidatorRate(validator.current_rate)}%</span>
+                </p>,
+              ],
+              [
                 <p className="body">Max fee:</p>,
                 <p className="body">
                   <FeeAmount gasLimit={GAS_LIMIT_STAKE} />

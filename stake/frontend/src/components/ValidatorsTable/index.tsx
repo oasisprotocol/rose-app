@@ -113,6 +113,10 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                             <Amount unit="consensus" amount={entry.escrow.active_balance ?? 0n} />
                           </span>
                         </p>
+                        <p className="body">
+                          <span>Commission:</span>
+                          <span>{NumberUtils.formatValidatorRate(entry.current_rate)}%</span>
+                        </p>
                       </div>
                     </td>
                   </tr>
