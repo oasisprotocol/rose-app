@@ -1,7 +1,13 @@
 .main {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.row {
   display: flex;
   flex-wrap: wrap;
-  padding: 32px;
   gap: 32px;
   width: 100%;
   > a {
@@ -34,7 +40,6 @@
     }
     &.buy {
       background-image: url('/buy-card-background.png');
-      flex: 2 1 50%;
     }
     p {
       flex-grow: 1;
