@@ -37,10 +37,8 @@
 
 @container (max-width: 480px) {
   .hintWrapper {
-    padding-right: 110px;
-    padding-left: 12px;
-    width: 100%;
-    left: 0;
+    left: 50px; /* Extra space so hint doesn't cover sidebar toggle */
+    right: 110px;
     margin-top: -60px;
     .hint {
       width: 100%;
