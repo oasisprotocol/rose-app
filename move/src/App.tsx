@@ -50,9 +50,8 @@ export function App() {
             <div>
               <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
               <p>
-                The Rose Move dApp has been built by Oasis to offer users an easy to use service of moving your Rose
-                from any centralized exchange to Sapphire (Metamask), without having to handle a Rose Wallet. Connect
-                below and follow the steps to complete your transfer.
+                Easily move your ROSE tokens from your Consensus account (e.g. on a crypto exchange) to your Sapphire
+                account (e.g. in Metamask), or vice versa. Connect your wallet and follow the next steps.
               </p>
             </div>
             {isRpcResponding ? (
@@ -64,7 +63,7 @@ export function App() {
             )}
 
             <div></div>
-            <div>Discover more info below</div>
+            <div>Discover more info below:</div>
             <div className={classes.helpLinks}>
               <button type="button" className={classes.plainButton2} onClick={toggleMoveWalkthroughVideoModal}>
                 <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
@@ -115,14 +114,20 @@ export function App() {
         <div className={classes.step2}>
           <div>
             <h1>Where do you want to move your ROSE?</h1>
-            <p>Choose where you want to move your ROSE for the dApp to create a unique wallet address for you.</p>
+            <p>
+              Choose the destination network where you want to move your ROSE tokens to. You will be asked to sign a
+              message from which your unique Consensus account will be derived.
+            </p>
           </div>
           <div className={classes.cards}>
             <div className={classes.card}>
               <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt="" />
               <div className={classes.cardContent}>
                 <h2>Consensus to Sapphire</h2>
-                <p>Move ROSE from your Consensus account (e.g. centralized exchange) to Sapphire.</p>
+                <p>
+                  Move ROSE from your Consensus account (e.g. on an exchange) to your Sapphire account (e.g. in
+                  MetaMask).
+                </p>
                 <Button onClick={step2}>Select and sign-in</Button>
               </div>
             </div>
@@ -131,7 +136,9 @@ export function App() {
               <img className={`${classes.cardImage} ${classes.opacity50}`} src={sapphire_to_consensus_svg} alt="" />
               <div className={classes.cardContent}>
                 <h2>Sapphire to Consensus</h2>
-                <p>Move ROSE from Sapphire to your Consensus account (e.g. centralized exchange).</p>
+                <p>
+                  Move ROSE from your Sapphire account (e.g. in MetaMask) to your Consensus account (e.g. an exchange).
+                </p>
                 <Button disabled>Coming soon</Button>
                 <Button
                   onClick={() => open('https://wallet.oasis.io/')}
@@ -181,8 +188,8 @@ export function App() {
           >
             <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
             <p>
-              Use the generated address below to initiate the transfer on your centralized exchange. The dApp
-              automatically recognizes your transfer form the centralized exchange and will track it.{' '}
+              Send ROSE to your unique Consensus address shown below to initiate the move to Sapphire. The ROSE tokens
+              you’ve sent will be automatically detected and moved to Sapphire.{' '}
               <button type="button" className={classes.plainButton2} onClick={toggleMoveTransferVideoModal}>
                 <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
               </button>
