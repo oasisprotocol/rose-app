@@ -9,7 +9,7 @@
 
   img {
     max-width: 50cqw;
-    max-height: 61px;
+    max-height: 67px;
     transition: max-height 0.2s ease-out;
   }
 }
@@ -22,9 +22,5 @@
   .header {
     padding: 1rem 0 2rem 0;
     margin-left: -10px;
-
-    img {
-      max-height: 34px;
-    }
   }
 }
