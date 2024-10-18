@@ -69,6 +69,15 @@
   }
 }
 
+.sidebarCheckbox {
+  /* based on https://daisyui.com/components/drawer/ */
+  position: fixed;
+  height: 0;
+  width: 0;
+  appearance: none;
+  opacity: 0;
+}
+
 .sidebarToggle {
   display: none;
 }
@@ -91,9 +100,7 @@
     transform: translate(-100%);
     transition: transform 0.2s ease-out;
   }
-  .sidebarToggle:focus + .sidebar,
-  .sidebar:focus,
-  .sidebar:focus-within {
+  .sidebarCheckbox:checked ~ .sidebar {
     transform: translate(0%);
 
     & ~ .backdrop {
