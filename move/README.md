@@ -20,7 +20,7 @@ flowchart TD
   g --> a
 ```
 
-- TODO: Withdraw
+- TODO: Withdraw https://github.com/oasisprotocol/rose/issues/67
 
 ```mermaid
 flowchart TD
