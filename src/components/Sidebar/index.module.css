@@ -69,6 +69,15 @@
   }
 }
 
+.sidebarCheckbox {
+  /* based on https://daisyui.com/components/drawer/ */
+  position: fixed;
+  height: 0;
+  width: 0;
+  appearance: none;
+  opacity: 0;
+}
+
 .sidebarToggle {
   display: none;
 }
@@ -86,12 +95,20 @@
     cursor: pointer;
   }
   .sidebar {
-    margin-left: -280px;
-    transition: margin-left 0.2s ease-out;
+    position: fixed;
+    z-index: 2;
+    transform: translate(-100%);
+    transition: transform 0.2s ease-out;
   }
-  .sidebarToggle:focus + .sidebar,
-  .sidebar:focus,
-  .sidebar:focus-within {
-    margin-left: 0px;
+  .sidebarCheckbox:checked ~ .sidebar {
+    transform: translate(0%);
+
+    & ~ .backdrop {
+      position: fixed;
+      z-index: 1;
+      inset: 0;
+      background-color: black;
+      opacity: 0.5;
+    }
   }
 }

@@ -5,9 +5,10 @@ import classes from './index.module.css'
 export function Sidebar(props: { children: React.ReactNode }) {
   return (
     <div className={classes.sidebarLayout}>
-      <button title="Show sidebar" className={classes.sidebarToggle} type="button">
+      <input type="checkbox" id="sidebarCheckbox" className={classes.sidebarCheckbox} />
+      <label title="Show sidebar" className={classes.sidebarToggle} htmlFor="sidebarCheckbox">
         <img src={menu_svg} alt="Show sidebar" width="24" style={{ filter: 'invert(1)' }} />
-      </button>
+      </label>
       <nav className={classes.sidebar}>
         <a href="/" className={classes.logo}>
           <svg xmlns="http://www.w3.org/2000/svg" width="280" height="112" fill="none">
@@ -48,6 +49,7 @@ export function Sidebar(props: { children: React.ReactNode }) {
         </div>
       </nav>
       <div className={classes.main}>{props.children}</div>
+      <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>
   )
 }
