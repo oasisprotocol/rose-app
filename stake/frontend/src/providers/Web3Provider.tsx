@@ -3,7 +3,7 @@ import { CHAINS, GAS_LIMIT_STAKE, GAS_LIMIT_UNSTAKE, VITE_NETWORK } from '../con
 import { handleKnownErrors, handleKnownEthersErrors, UnknownNetworkError } from '../utils/errors'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useEIP1193 } from '../hooks/useEIP1193'
-import { BrowserProvider, EthersError } from 'ethers'
+import { BrowserProvider, EthersError, getAddress } from 'ethers'
 import { consensusDelegate, consensusUndelegate } from '@oasisprotocol/dapp-staker-subcall'
 
 let EVENT_LISTENERS_INITIALIZED = false
@@ -135,7 +135,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
         ...prevState,
         isConnected: true,
         browserProvider,
-        account,
+        account: getAddress(account), // toChecksumAddress
         chainId,
       }))
 
