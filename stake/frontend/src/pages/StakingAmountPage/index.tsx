@@ -217,7 +217,7 @@ const StakingAmountPageCmp: FC = () => {
                   disabled={amountError !== '' || gasPrice === null}
                   onClick={() => handleConfirmAmount(gasPrice!)}
                 >
-                  Delegate
+                  Stake
                 </Button>
               )}
             </GasPrice>
