@@ -19,6 +19,8 @@ import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
 import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import { useState } from 'react'
+import ROSE_Move_Transfer_mp4 from '/ROSE Move Transfer.mp4?url'
+import ROSE_Move_Walkthrough_mp4 from '/ROSE Move Walkthrough.mp4?url'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_rose_move_svg from '/logo_rose_move.svg?url'
@@ -82,7 +84,7 @@ export function App() {
           </div>
         </Layout>
         <VideoModal
-          src="./ROSE Move Walkthrough.mp4"
+          src={ROSE_Move_Walkthrough_mp4}
           header="How do I use ROSE move?"
           body="Our walkthrough below shows you what the process would look like. The exact process might differ from your
         experience depending on the exchange you are using."
@@ -268,7 +270,7 @@ export function App() {
         </div>
       </Layout>
       <VideoModal
-        src="./ROSE Move Transfer.mp4"
+        src={ROSE_Move_Transfer_mp4}
         header="How do I start the transfer?"
         body="Not sure how to tackle this step? Check out our example below."
         isOpen={isMoveTransferVideoModalOpen}
