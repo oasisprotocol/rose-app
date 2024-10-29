@@ -21,7 +21,7 @@ import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
 
-export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
+export function Withdraw(props: { deposit: ReturnType<typeof useDeposit> }) {
   const { consensusAccount, transferMore, progress, isBlockingNavigatingAway } = props.deposit // Parent useDeposit
 
   const isError = progress.percentage === undefined

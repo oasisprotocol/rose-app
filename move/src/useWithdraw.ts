@@ -5,7 +5,7 @@ import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGene
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 
-export function useDeposit() {
+export function useWithdraw() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()

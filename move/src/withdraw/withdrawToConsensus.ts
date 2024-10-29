@@ -5,7 +5,7 @@ import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../uti
 /**
  * Set allowance from consensusAddress to sapphireConfig.mainnet.address (step 1 of depositing)
  */
-export async function depositToSapphireStep1(props: {
+export async function withdrawToConsensusStep1(props: {
   amountToDeposit: bigint
   consensusAddress: `oasis1${string}`
   consensusSigner: oasis.signature.NaclSigner
@@ -41,7 +41,7 @@ export async function depositToSapphireStep1(props: {
 /**
  * Deposit from consensusAddress into sapphireAddress (step 2 of depositing)
  */
-export async function depositToSapphireStep2(props: {
+export async function withdrawToConsensusStep2(props: {
   amountToDeposit: bigint
   consensusAddress: `oasis1${string}`
   consensusSigner: oasis.signature.NaclSigner

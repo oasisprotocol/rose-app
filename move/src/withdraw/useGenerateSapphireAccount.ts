@@ -3,7 +3,7 @@ import { useState } from 'react'
 import { hexToBytes } from 'viem'
 import { useSignMessage } from 'wagmi'
 import { getConsensusBalance } from '../utils/getBalances'
-import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire'
+import { siweMessageSapphireToConsensus } from './siweMessageSapphireToConsensus'
 
 export interface ConsensusAccount {
   address: `oasis1${string}`
@@ -12,7 +12,7 @@ export interface ConsensusAccount {
   isFresh: boolean
 }
 
-export function useGenerateConsensusAccount() {
+export function useGenerateSapphireAccount() {
   const { signMessageAsync } = useSignMessage()
   const [consensusAccount, setConsensusAccount] = useState<ConsensusAccount>()
 
@@ -20,7 +20,7 @@ export function useGenerateConsensusAccount() {
     consensusAccount,
     generateConsensusAccount: async (sapphireAddress: `0x${string}`) => {
       const signature = await signMessageAsync({
-        message: siweMessageConsensusToSapphire(sapphireAddress),
+        message: siweMessageSapphireToConsensus(sapphireAddress),
       })
       const hashedSignature = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature))
       // Only take half

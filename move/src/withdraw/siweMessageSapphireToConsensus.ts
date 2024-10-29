@@ -2,9 +2,9 @@
  * https://docs.metamask.io/wallet/how-to/sign-data/siwe/
  * https://eips.ethereum.org/EIPS/eip-4361
  */
-export function siweMessageConsensusToSapphire(address: `0x${string}`) {
+export function siweMessageSapphireToConsensus(address: `0x${string}`) {
   const statement =
-    'Signing this message will generate your unique Oasis Consensus account. ' +
+    'Signing this message will generate your unique Oasis Sapphire and Consensus accounts. ' +
     "Please, don't sign this message on any other site."
   const issuedAt = '2000-01-01T00:00:01Z'
   return (
