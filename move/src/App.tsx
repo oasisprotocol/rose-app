@@ -37,11 +37,6 @@ export function App() {
   const [isMoveTransferVideoModalOpen, setIsMoveTransferVideoModalOpen] = useState(false)
   const [isCopyPrivateKeyModalOpen, setIsCopyPrivateKeyModalOpen] = useState(false)
 
-  const toggleMoveWalkthroughVideoModal = () => setIsMoveWalkthroughVideoModalOpen(!isMoveWalkthroughVideoModalOpen)
-  const togglePrivateKeyHelpModal = () => setIsPrivateKeyHelpModalOpen(!isPrivateKeyHelpModalOpen)
-  const toggleMoveTransferVideoModal = () => setIsMoveTransferVideoModalOpen(!isMoveTransferVideoModalOpen)
-  const toggleCopyPrivateKeyModal = () => setIsCopyPrivateKeyModalOpen(!isCopyPrivateKeyModalOpen)
-
   if (!sapphireAddress) {
     return (
       <>
@@ -65,14 +60,18 @@ export function App() {
             <div></div>
             <div>Discover more info below:</div>
             <div className={classes.helpLinks}>
-              <button type="button" className={classes.plainButton2} onClick={toggleMoveWalkthroughVideoModal}>
+              <button
+                type="button"
+                className={classes.plainButton2}
+                onClick={() => setIsMoveWalkthroughVideoModalOpen(true)}
+              >
                 <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
                   <h3>Need help? Watch the walkthrough</h3>
                   <div>Watch the video on how to use the dApp</div>
                 </div>
               </button>
-              <button type="button" className={classes.plainButton2} onClick={togglePrivateKeyHelpModal}>
+              <button type="button" className={classes.plainButton2} onClick={() => setIsPrivateKeyHelpModalOpen(true)}>
                 <img src={vpn_key_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
                   <h3>Lost your private key?</h3>
@@ -190,7 +189,11 @@ export function App() {
             <p>
               Send ROSE to your unique Consensus address shown below to initiate the move to Sapphire. The ROSE tokens
               you’ve sent will be automatically detected and moved to Sapphire.{' '}
-              <button type="button" className={classes.plainButton2} onClick={toggleMoveTransferVideoModal}>
+              <button
+                type="button"
+                className={classes.plainButton2}
+                onClick={() => setIsMoveTransferVideoModalOpen(true)}
+              >
                 <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
               </button>
             </p>
@@ -209,7 +212,7 @@ export function App() {
                 <Button
                   title="Show your private key"
                   className={classes.plainButton}
-                  onClick={toggleCopyPrivateKeyModal}
+                  onClick={() => setIsCopyPrivateKeyModalOpen(true)}
                 >
                   <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
                 </Button>
