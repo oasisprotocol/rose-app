@@ -27,8 +27,10 @@ import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
+import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 
 export function App() {
+  useReloadIfAccountSwitched()
   const isRpcResponding = useIsRpcResponding()
   const { sapphireAddress, consensusAccount, step2, transferMore, progress, isBlockingNavigatingAway } = useDeposit()
 
