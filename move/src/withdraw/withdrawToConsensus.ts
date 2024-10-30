@@ -3,14 +3,21 @@ import * as oasisRT from '@oasisprotocol/client-rt'
 import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../utils/oasisConfig'
 import { SapphireAccount } from './useGenerateSapphireAccount'
 
+const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
+const minimalRepresentableAmount = 1n * multiplyConsensusToSapphire
+// min 0.007 ROSE for fees
+// and <0.000000000999999999 can't be withdrawn; amount not representable
+// = 0.007000001000000000
+export const minimalWithdrawableAmount = withdrawFeeAmount + minimalRepresentableAmount
+
 export async function withdrawToConsensus(props: {
   availableAmountToWithdraw: bigint
   sapphireAccount: SapphireAccount
   consensusAddress: `oasis1${string}`
 }) {
-  if (props.availableAmountToWithdraw <= 0n) return
   const feeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
   const amountToWithdraw = roundTo9Decimals(props.availableAmountToWithdraw - feeAmount)
+  if (amountToWithdraw <= 0n) return // should be equal to (props.availableAmountToWithdraw <= minimalWithdrawableAmount)
 
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const chainContext = await nic.consensusGetChainContext()

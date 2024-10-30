@@ -5,7 +5,7 @@ import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } 
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
-import { withdrawToConsensus } from './withdraw/withdrawToConsensus'
+import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
@@ -34,7 +34,10 @@ export function useWithdraw() {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
       if (foundStuckRoseTokens.raw <= 0n) {
         setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-        const availableAmountToWithdraw = await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
+        const availableAmountToWithdraw = await waitForSapphireBalance(
+          generatedSapphireAccount.address,
+          minimalWithdrawableAmount,
+        )
         setProgress({ percentage: 0.25, message: `${availableAmountToWithdraw.formatted} ROSE detected` })
         blockNavigatingAway()
         await updateBalanceInsideConnectButton()
