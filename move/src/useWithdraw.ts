@@ -5,7 +5,7 @@ import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } 
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
-import { withdrawToConsensus } from './withdraw/withdrawToConsensus'
+import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
@@ -34,16 +34,19 @@ export function useWithdraw() {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
       if (foundStuckRoseTokens.raw <= 0n) {
         setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-        const amountToWithdraw = await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
-        setProgress({ percentage: 0.25, message: `${amountToWithdraw.formatted} ROSE detected` })
+        const availableAmountToWithdraw = await waitForSapphireBalance(
+          generatedSapphireAccount.address,
+          minimalWithdrawableAmount,
+        )
+        setProgress({ percentage: 0.25, message: `${availableAmountToWithdraw.formatted} ROSE detected` })
         blockNavigatingAway()
         await updateBalanceInsideConnectButton()
         await withdrawToConsensus({
-          amountToWithdraw: amountToWithdraw.raw,
+          availableAmountToWithdraw: availableAmountToWithdraw.raw,
           sapphireAccount: generatedSapphireAccount,
           consensusAddress: generatedConsensusAccount.address,
         })
-        setProgress({ percentage: 0.5, message: `Withdrawing ${amountToWithdraw.formatted} ROSE` })
+        setProgress({ percentage: 0.5, message: `Withdrawing ${availableAmountToWithdraw.formatted} ROSE` })
       } else {
         setProgress({ percentage: 0.25, message: `${foundStuckRoseTokens.formatted} ROSE detected` })
       }

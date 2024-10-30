@@ -3,20 +3,28 @@ import * as oasisRT from '@oasisprotocol/client-rt'
 import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../utils/oasisConfig'
 import { SapphireAccount } from './useGenerateSapphireAccount'
 
+const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
+const minimalRepresentableAmount = 1n * multiplyConsensusToSapphire
+// min 0.007 ROSE for fees
+// and <0.000000000999999999 can't be withdrawn; amount not representable
+// = 0.007000001000000000
+export const minimalWithdrawableAmount = withdrawFeeAmount + minimalRepresentableAmount
+
 export async function withdrawToConsensus(props: {
-  amountToWithdraw: bigint
+  availableAmountToWithdraw: bigint
   sapphireAccount: SapphireAccount
   consensusAddress: `oasis1${string}`
 }) {
-  if (props.amountToWithdraw <= 0n) return
   const feeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
+  const amountToWithdraw = roundTo9Decimals(props.availableAmountToWithdraw - feeAmount)
+  if (amountToWithdraw <= 0n) return // should be equal to (props.availableAmountToWithdraw <= minimalWithdrawableAmount)
 
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const chainContext = await nic.consensusGetChainContext()
   const rtw = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
     .callWithdraw()
     .setBody({
-      amount: [oasis.quantity.fromBigInt(props.amountToWithdraw - feeAmount), oasisRT.token.NATIVE_DENOMINATION],
+      amount: [oasis.quantity.fromBigInt(amountToWithdraw), oasisRT.token.NATIVE_DENOMINATION],
       to: oasis.staking.addressFromBech32(props.consensusAddress),
     })
     .setFeeAmount([oasis.quantity.fromBigInt(feeAmount), oasisRT.token.NATIVE_DENOMINATION])
@@ -31,8 +39,16 @@ export async function withdrawToConsensus(props: {
       },
     ])
   await rtw.sign([new oasis.signature.BlindContextSigner(props.sapphireAccount.signer)], chainContext)
-  console.log('withdrawToConsensus', props.amountToWithdraw)
+  console.log('withdrawToConsensus', props.availableAmountToWithdraw)
   await rtw.submit(nic)
+}
+
+/**
+ * If you try to withdraw 1.234567891234567891 ROSE it throws "amount not representable".
+ * Round to 1.234567891000000000 ROSE
+ */
+function roundTo9Decimals(amount: bigint) {
+  return (amount / multiplyConsensusToSapphire) * multiplyConsensusToSapphire
 }
 
 async function getEvmBech32Address(evmAddress: `0x${string}`) {
