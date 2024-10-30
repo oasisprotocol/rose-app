@@ -31,17 +31,22 @@ export function useWithdraw() {
     if (!generatedConsensusAccount) return
     if (!consensusAddress) return
     try {
-      setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-      const amountToWithdraw = await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
-      setProgress({ percentage: 0.25, message: `${amountToWithdraw.formatted} ROSE detected` })
-      blockNavigatingAway()
-      await updateBalanceInsideConnectButton()
-      await withdrawToConsensus({
-        amountToWithdraw: amountToWithdraw.raw,
-        sapphireAccount: generatedSapphireAccount,
-        consensusAddress: generatedConsensusAccount.address,
-      })
-      setProgress({ percentage: 0.5, message: `Withdrawing ${amountToWithdraw.formatted} ROSE` })
+      const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
+      if (foundStuckRoseTokens.raw <= 0n) {
+        setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+        const amountToWithdraw = await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
+        setProgress({ percentage: 0.25, message: `${amountToWithdraw.formatted} ROSE detected` })
+        blockNavigatingAway()
+        await updateBalanceInsideConnectButton()
+        await withdrawToConsensus({
+          amountToWithdraw: amountToWithdraw.raw,
+          sapphireAccount: generatedSapphireAccount,
+          consensusAddress: generatedConsensusAccount.address,
+        })
+        setProgress({ percentage: 0.5, message: `Withdrawing ${amountToWithdraw.formatted} ROSE` })
+      } else {
+        setProgress({ percentage: 0.25, message: `${foundStuckRoseTokens.formatted} ROSE detected` })
+      }
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
       const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
