@@ -88,7 +88,7 @@ export function App() {
       </>
     )
   }
-  if (!deposit.consensusAccount) {
+  if (!deposit.generatedConsensusAccount) {
     return (
       <Layout
         header={

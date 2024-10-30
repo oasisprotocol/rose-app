@@ -22,14 +22,14 @@ import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
 
 export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
-  const { consensusAccount, transferMore, progress, isBlockingNavigatingAway } = props.deposit // Parent useDeposit
+  const { generatedConsensusAccount, transferMore, progress, isBlockingNavigatingAway } = props.deposit // Parent useDeposit
 
   const isError = progress.percentage === undefined
 
   const [isMoveTransferVideoModalOpen, setIsMoveTransferVideoModalOpen] = useState(false)
   const [isCopyPrivateKeyModalOpen, setIsCopyPrivateKeyModalOpen] = useState(false)
 
-  if (!consensusAccount) throw new Error('<Deposit> used before SIWE')
+  if (!generatedConsensusAccount) throw new Error('<Deposit> used before SIWE')
   return (
     <>
       <Layout
@@ -59,7 +59,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 : `${classes.collapsible} ${classes.collapsed}`
             }
           >
-            <h1>Address created and awaiting your transfer {consensusAccount.isFresh && '✨'}</h1>
+            <h1>Address created and awaiting your transfer {generatedConsensusAccount.isFresh && '✨'}</h1>
             <p>
               Send ROSE to your unique Consensus address shown below to initiate the move to Sapphire. The ROSE tokens
               you’ve sent will be automatically detected and moved to Sapphire.{' '}
@@ -77,9 +77,9 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
             <div className={classes.addressWrapper}>
               <div className={classes.startAdornment}>Your address</div>
               <div className={classes.address}>
-                <AccountAvatar diameter={24} account={{ address: consensusAccount.address }} />
+                <AccountAvatar diameter={24} account={{ address: generatedConsensusAccount.address }} />
                 <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
-                  <ShortAddress address={consensusAccount.address} />
+                  <ShortAddress address={generatedConsensusAccount.address} />
                 </div>
               </div>
               <div>
@@ -95,7 +95,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 <ButtonWithClickedIndicator
                   title="Copy address"
                   className={classes.plainButton}
-                  onClick={() => window.navigator.clipboard.writeText(consensusAccount.address)}
+                  onClick={() => window.navigator.clipboard.writeText(generatedConsensusAccount.address)}
                   clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24" />}
                 >
                   <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
@@ -120,18 +120,18 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
             </>
           )}
 
-          {progress.percentage && progress.percentage >= 1 && (
+          {!!progress.percentage && progress.percentage >= 1 && (
             <>
               <img src={symbol_check_circle_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
               <Button onClick={transferMore}>Transfer more</Button>
             </>
           )}
 
-          {!consensusAccount.isFresh && (
+          {!generatedConsensusAccount.isFresh && (
             <div style={{ marginTop: '40px' }}>
               <a
                 // TODO: update when production supports Consensus
-                href={`https://explorer.dev.oasis.io/mainnet/consensus/address/${consensusAccount.address}`}
+                href={`https://explorer.dev.oasis.io/mainnet/consensus/address/${generatedConsensusAccount.address}`}
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -149,7 +149,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
         closeModal={() => setIsMoveTransferVideoModalOpen(false)}
       />
       <CopyPrivateKeyModal
-        privateKey={consensusAccount.privateKey}
+        privateKey={generatedConsensusAccount.privateKey}
         isOpen={isCopyPrivateKeyModalOpen}
         closeModal={() => setIsCopyPrivateKeyModalOpen(false)}
       />

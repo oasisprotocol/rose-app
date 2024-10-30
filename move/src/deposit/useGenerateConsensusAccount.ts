@@ -14,10 +14,10 @@ export interface ConsensusAccount {
 
 export function useGenerateConsensusAccount() {
   const { signMessageAsync } = useSignMessage()
-  const [consensusAccount, setConsensusAccount] = useState<ConsensusAccount>()
+  const [generatedConsensusAccount, setGeneratedConsensusAccount] = useState<ConsensusAccount>()
 
   return {
-    consensusAccount,
+    generatedConsensusAccount,
     generateConsensusAccount: async (sapphireAddress: `0x${string}`) => {
       const signature = await signMessageAsync({
         message: siweMessageConsensusToSapphire(sapphireAddress),
@@ -32,7 +32,7 @@ export function useGenerateConsensusAccount() {
       const { isFresh } = await getConsensusBalance(address)
 
       const consensusAccount = { address, privateKey, signer, isFresh }
-      setConsensusAccount(consensusAccount)
+      setGeneratedConsensusAccount(consensusAccount)
       return consensusAccount
       // Ignore errors
     },
