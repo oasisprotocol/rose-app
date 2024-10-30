@@ -17,6 +17,8 @@ export const sapphireConfig = {
     runtimeId: '000000000000000000000000000000000000000000000000a6d1e3ebf60dff6c',
   },
   decimals: 18,
+  gasPrice: 100n,
+  feeGas: 70_000n, // hardcoded. TODO: update when sapphire is upgraded
 }
 
 export const consensusConfig = {

@@ -5,19 +5,20 @@ import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGene
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 
+/** any consensus -> generatedConsensusAccount -> sapphireAddress */
 export function useDeposit() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
-  const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
+  const { generatedConsensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
 
   // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
     if (!sapphireAddress) return
-    const consensusAccount = await generateConsensusAccount(sapphireAddress)
+    const generatedConsensusAccount = await generateConsensusAccount(sapphireAddress)
     blockNavigatingAway() // Start blocking early for the first transfer
-    await step3(consensusAccount, sapphireAddress)
+    await step3(generatedConsensusAccount, sapphireAddress)
   }
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
@@ -74,7 +75,7 @@ export function useDeposit() {
 
   return {
     sapphireAddress,
-    consensusAccount,
+    generatedConsensusAccount,
     step2,
     transferMore,
     progress,
