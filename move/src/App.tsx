@@ -6,6 +6,7 @@ import { Layout } from './components/Layout'
 import { PrivateKeyHelpModal } from './components/PrivateKeyHelpModal'
 import { VideoModal } from './components/VideoModal'
 import { useDeposit } from './useDeposit'
+import { useWithdraw } from './useWithdraw'
 import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
 import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
@@ -19,12 +20,14 @@ import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
+import { Withdraw } from './withdraw/Withdraw'
 
 export function App() {
   useReloadIfAccountSwitched()
   const isRpcResponding = useIsRpcResponding()
   const sapphireAddress = useAccount().address
   const deposit = useDeposit()
+  const withdraw = useWithdraw()
 
   const [isMoveWalkthroughVideoModalOpen, setIsMoveWalkthroughVideoModalOpen] = useState(false)
   const [isPrivateKeyHelpModalOpen, setIsPrivateKeyHelpModalOpen] = useState(false)
@@ -88,7 +91,7 @@ export function App() {
       </>
     )
   }
-  if (!deposit.generatedConsensusAccount) {
+  if (!deposit.generatedConsensusAccount && !withdraw.generatedConsensusAccount) {
     return (
       <Layout
         header={
@@ -130,7 +133,9 @@ export function App() {
                 <p>
                   Move ROSE from your Sapphire account (e.g. in MetaMask) to your Consensus account (e.g. an exchange).
                 </p>
-                <Button disabled>Coming soon</Button>
+                <Button onClick={withdraw.step2} className={classes.opacity50}>
+                  Coming soon
+                </Button>
                 <Button
                   onClick={() => open('https://wallet.oasis.io/')}
                   style={{
@@ -149,5 +154,10 @@ export function App() {
     )
   }
 
-  return <Deposit deposit={deposit} />
+  if (deposit.generatedConsensusAccount) {
+    return <Deposit deposit={deposit} />
+  }
+  if (withdraw.generatedConsensusAccount) {
+    return <Withdraw withdraw={withdraw} />
+  }
 }

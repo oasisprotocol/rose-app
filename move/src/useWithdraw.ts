@@ -1,58 +1,66 @@
 import { useState } from 'react'
-import { useAccount, useBalance } from 'wagmi'
-import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
-import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
-import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
+import { parseEther } from 'viem'
+import { useAccount, useBalance, useSendTransaction } from 'wagmi'
+import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
+import { transferToConsensus } from './withdraw/transferToConsensus'
+import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
+import { withdrawToConsensus } from './withdraw/withdrawToConsensus'
 
+/**
+ * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
+ */
 export function useWithdraw() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
-  const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
+  const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } = useGenerateSapphireAccount()
+  const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
-  const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
+  const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({ address: sapphireAddress })
+  const { sendTransactionAsync } = useSendTransaction()
 
-  // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
     if (!sapphireAddress) return
-    const consensusAccount = await generateConsensusAccount(sapphireAddress)
-    blockNavigatingAway() // Start blocking early for the first transfer
-    await step3(consensusAccount, sapphireAddress)
+    await generateSapphireAccount(sapphireAddress)
   }
-  async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
-    // Note: don't use outside state vars. They are outdated.
+  // Long running promise, doesn't get canceled if this component is destroyed
+  async function step3(consensusAddress: `oasis1${string}`) {
+    // Note: outside state var consensusAddress is outdated. Use param.
+    if (!sapphireAddress) return
+    if (!generatedSapphireAccount) return
+    if (!generatedConsensusAccount) return
+    if (!consensusAddress) return
     try {
       setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-      const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
-      setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+      const amountToWithdraw = await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
+      setProgress({ percentage: 0.25, message: `${amountToWithdraw.formatted} ROSE detected` })
       blockNavigatingAway()
-      await depositToSapphireStep1({
-        amountToDeposit: amountToDeposit.raw,
-        consensusSigner: consensusAccount.signer,
-        consensusAddress: consensusAccount.address,
-        sapphireAddress: sapphireAddress,
+      await updateBalanceInsideConnectButton()
+      await withdrawToConsensus({
+        amountToWithdraw: amountToWithdraw.raw,
+        sapphireAccount: generatedSapphireAccount,
+        consensusAddress: generatedConsensusAccount.address,
       })
-      setProgress({ percentage: 0.5, message: `Depositing ${amountToDeposit.formatted} ROSE` })
-      const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
-      await depositToSapphireStep2({
-        amountToDeposit: amountToDeposit.raw,
-        consensusSigner: consensusAccount.signer,
-        consensusAddress: consensusAccount.address,
-        sapphireAddress: sapphireAddress,
+      setProgress({ percentage: 0.5, message: `Withdrawing ${amountToWithdraw.formatted} ROSE` })
+      // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
+      const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
+      const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
+      await transferToConsensus({
+        amount: amountToWithdraw2.raw,
+        fromConsensusAccount: generatedConsensusAccount,
+        toConsensusAddress: consensusAddress,
       })
-      setProgress({ percentage: 0.75, message: `Depositing ${amountToDeposit.formatted} ROSE` })
-      await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
-      // TODO: handle probable failure if balance doesn't change after ~10 seconds of depositing
+      setProgress({ percentage: 0.75, message: `Withdrawing ${amountToWithdraw2.formatted} ROSE` })
+      await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw)
       setProgress({
         percentage: 1.0,
-        message: `${amountToDeposit.formatted} ROSE deposited`,
+        message: `${amountToWithdraw2.formatted} ROSE withdrawn to Consensus`,
       })
       allowNavigatingAway() // Stop blocking unless new transfer comes in
-      await updateBalanceInsideConnectButton()
 
       await new Promise((r) => setTimeout(r, 6000))
-      // Stay on "Deposited" screen unless new transfer comes in
-      await waitForConsensusBalance(consensusAccount.address, 0n)
+      // Stay on "Withdrawn" screen unless new transfer comes in
+      await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
       if (window.mock) throw 'mock error'
     } catch (err) {
       console.error(err)
@@ -63,7 +71,7 @@ export function useWithdraw() {
     }
 
     // Loop
-    await step3(consensusAccount, sapphireAddress)
+    await step3(consensusAddress)
   }
 
   function transferMore() {
@@ -72,11 +80,26 @@ export function useWithdraw() {
     setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
   }
 
+  /** Transfer into step3 */
+  async function step4(amount: string) {
+    if (!generatedSapphireAccount) return
+    await sendTransactionAsync({
+      to: generatedSapphireAccount?.address,
+      value: parseEther(amount),
+    })
+  }
+
   return {
     sapphireAddress,
-    consensusAccount,
+    generatedSapphireAccount,
+    generatedConsensusAccount,
+    consensusAddress,
+    setConsensusAddress,
     step2,
+    step3,
+    step4,
     transferMore,
+    availableBalance,
     progress,
     isBlockingNavigatingAway,
   }
