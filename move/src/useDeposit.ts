@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
 import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
@@ -7,26 +7,10 @@ import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 
 export function useDeposit() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
-  const latestConnectedSapphireAccount = useAccount()
-  const [sapphireAddress, setSapphireAddress] = useState<`0x${string}`>()
+  const sapphireAddress = useAccount().address
   const { consensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
-
-  useEffect(() => {
-    if (latestConnectedSapphireAccount.address && !sapphireAddress) {
-      // Only save first connected sapphire account
-      setSapphireAddress(latestConnectedSapphireAccount.address)
-    }
-  }, [sapphireAddress, latestConnectedSapphireAccount.address])
-
-  useEffect(() => {
-    if (sapphireAddress && sapphireAddress !== latestConnectedSapphireAccount.address) {
-      // Correctly supporting switching accounts would require rewriting depositing logic into
-      // redux-saga to make it cancelable at any step. Cancel by reloading instead.
-      window.location.reload()
-    }
-  }, [sapphireAddress, latestConnectedSapphireAccount.address])
 
   // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
