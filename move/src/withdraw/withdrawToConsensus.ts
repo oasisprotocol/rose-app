@@ -4,19 +4,20 @@ import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../uti
 import { SapphireAccount } from './useGenerateSapphireAccount'
 
 export async function withdrawToConsensus(props: {
-  amountToWithdraw: bigint
+  availableAmountToWithdraw: bigint
   sapphireAccount: SapphireAccount
   consensusAddress: `oasis1${string}`
 }) {
-  if (props.amountToWithdraw <= 0n) return
+  if (props.availableAmountToWithdraw <= 0n) return
   const feeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
+  const amountToWithdraw = roundTo9Decimals(props.availableAmountToWithdraw - feeAmount)
 
   const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
   const chainContext = await nic.consensusGetChainContext()
   const rtw = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
     .callWithdraw()
     .setBody({
-      amount: [oasis.quantity.fromBigInt(props.amountToWithdraw - feeAmount), oasisRT.token.NATIVE_DENOMINATION],
+      amount: [oasis.quantity.fromBigInt(amountToWithdraw), oasisRT.token.NATIVE_DENOMINATION],
       to: oasis.staking.addressFromBech32(props.consensusAddress),
     })
     .setFeeAmount([oasis.quantity.fromBigInt(feeAmount), oasisRT.token.NATIVE_DENOMINATION])
@@ -31,8 +32,16 @@ export async function withdrawToConsensus(props: {
       },
     ])
   await rtw.sign([new oasis.signature.BlindContextSigner(props.sapphireAccount.signer)], chainContext)
-  console.log('withdrawToConsensus', props.amountToWithdraw)
+  console.log('withdrawToConsensus', props.availableAmountToWithdraw)
   await rtw.submit(nic)
+}
+
+/**
+ * If you try to withdraw 1.234567891234567891 ROSE it throws "amount not representable".
+ * Round to 1.234567891000000000 ROSE
+ */
+function roundTo9Decimals(amount: bigint) {
+  return (amount / multiplyConsensusToSapphire) * multiplyConsensusToSapphire
 }
 
 async function getEvmBech32Address(evmAddress: `0x${string}`) {
