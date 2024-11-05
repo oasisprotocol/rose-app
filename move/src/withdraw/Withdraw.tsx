@@ -116,7 +116,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
               }}
             >
               Amount:
-              <input name="amount" type="number" step="any" required />
+              <input name="amount" type="number" step="any" min="0.1" required />
               <button type="submit">Submit</button>
               (balance: {availableBalance?.formatted} {availableBalance?.symbol})
             </form>
