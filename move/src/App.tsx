@@ -22,6 +22,8 @@ import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 import { Withdraw } from './withdraw/Withdraw'
 
+const isProduction = import.meta.env.PROD
+
 export function App() {
   useReloadIfAccountSwitched()
   const isRpcResponding = useIsRpcResponding()
@@ -133,7 +135,7 @@ export function App() {
                 <p>
                   Move ROSE from your Sapphire account (e.g. in MetaMask) to your Consensus account (e.g. an exchange).
                 </p>
-                <Button onClick={withdraw.step2} className={classes.opacity50}>
+                <Button onClick={withdraw.step2} className={classes.opacity50} disabled={isProduction}>
                   Coming soon
                 </Button>
                 <Button

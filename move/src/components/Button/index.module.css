@@ -8,10 +8,11 @@
   font-weight: 700;
   border-radius: 999px;
 
+  background-color: var(--brand-extra-dark);
+  color: var(--white);
+
   &:enabled {
     cursor: pointer;
-    background-color: var(--brand-extra-dark);
-    color: var(--white);
 
     &:hover,
     &:focus-visible {
