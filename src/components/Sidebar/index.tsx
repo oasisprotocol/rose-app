@@ -1,5 +1,5 @@
 import menu_svg from '@material-design-icons/svg/filled/menu.svg'
-import { Logo } from '../icons/Logo.tsx'
+import { Logo } from '../icons/Logo'
 import classes from './index.module.css'
 
 export function Sidebar(props: { children: React.ReactNode }) {
