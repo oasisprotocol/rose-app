@@ -1,20 +1,22 @@
 import { FC, useEffect } from 'react'
 import { JSX } from 'react/jsx-runtime'
-import { useWeb3 } from '../hooks/useWeb3'
 import { useNavigate } from 'react-router-dom'
+import { useAccount } from 'wagmi'
+import { useWeb3 } from '../hooks/useWeb3'
 
 export const withDisconnectedWallet = (WrappedComponent: FC) => {
   const WithDisconnectedWallet = (props: JSX.IntrinsicAttributes) => {
     const navigate = useNavigate()
+    const { isConnected } = useAccount()
     const {
-      state: { isConnected },
+      state: { isSupportedNetwork },
     } = useWeb3()
 
     useEffect(() => {
-      if (!isConnected) {
+      if (!isSupportedNetwork || !isConnected) {
         navigate('/')
       }
-    }, [isConnected, navigate])
+    }, [isSupportedNetwork, isConnected, navigate])
 
     return <WrappedComponent {...props} />
   }

@@ -1,20 +1,6 @@
-import { FC, memo, Suspense } from 'react'
-import { PromiseUtils } from '../../utils/promise.utils'
-import { useWeb3 } from '../../hooks/useWeb3'
+import { FC, memo } from 'react'
 import { Amount } from '../Amount'
-
-interface FeeEstimateProps {
-  getGasPrice: () => bigint
-  gasLimit: bigint
-}
-
-const FeeEstimate: FC<FeeEstimateProps> = ({ getGasPrice, gasLimit }) => {
-  const gasPrice = getGasPrice()
-
-  if (!gasPrice) return null
-
-  return <Amount amount={gasPrice * gasLimit} />
-}
+import { useEstimateFeesPerGas } from 'wagmi'
 
 interface Props {
   gasLimit: bigint
@@ -22,16 +8,14 @@ interface Props {
 }
 
 const FeeAmountCmp: FC<Props> = ({ gasLimit, gasPrice }) => {
-  const { getGasPrice } = useWeb3()
-  const wGasPrice = PromiseUtils.wrapPromise(
-    !!gasPrice && gasPrice >= 0n ? Promise.resolve(gasPrice) : getGasPrice()
-  )
+  const { data, isLoading } = useEstimateFeesPerGas({ type: 'legacy', query: { enabled: !gasPrice } })
+  const _gasPrice = gasPrice ?? data?.gasPrice
 
-  return (
-    <Suspense fallback={<>...</>}>
-      <FeeEstimate gasLimit={gasLimit} getGasPrice={wGasPrice} />
-    </Suspense>
-  )
+  if (isLoading) return <>...</>
+
+  if (!_gasPrice) return null
+
+  return <Amount amount={_gasPrice * gasLimit} />
 }
 
 export const FeeAmount = memo(FeeAmountCmp)

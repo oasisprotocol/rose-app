@@ -1,41 +1,25 @@
-import { FC, memo, ReactNode, Suspense } from 'react'
-import { PromiseUtils } from '../../utils/promise.utils'
-import { useWeb3 } from '../../hooks/useWeb3'
+import { FC, memo, ReactNode } from 'react'
 import { Amount } from '../Amount'
-
-interface FeeEstimateProps {
-  children?: (gasPrice: bigint | null) => ReactNode
-  getGasPrice: () => bigint
-}
-
-const FormatGasPrice: FC<FeeEstimateProps> = ({ getGasPrice, children }) => {
-  const gasPrice = getGasPrice()
-
-  if (!gasPrice) return null
-
-  if (typeof children === 'function') {
-    return children(gasPrice)
-  }
-
-  return <Amount amount={gasPrice} unit="nano" />
-}
+import { useEstimateFeesPerGas } from 'wagmi'
 
 interface Props {
   gasPrice?: bigint
-  children?: (gasPrice: bigint | null) => ReactNode
+  children?: (gasPrice: bigint | undefined) => ReactNode
 }
 
 const GasPriceCmp: FC<Props> = ({ gasPrice, children }) => {
-  const { getGasPrice } = useWeb3()
-  const wGasPrice = PromiseUtils.wrapPromise(
-    !!gasPrice && gasPrice >= 0n ? Promise.resolve(gasPrice) : getGasPrice()
-  )
+  const { data, isLoading } = useEstimateFeesPerGas({ type: 'legacy', query: { enabled: !gasPrice } })
+  const _gasPrice = gasPrice ?? data?.gasPrice
 
-  return (
-    <Suspense fallback={children?.(null) ?? <>...</>}>
-      <FormatGasPrice getGasPrice={wGasPrice} children={children} />
-    </Suspense>
-  )
+  if (isLoading) return <>...</>
+
+  if (!_gasPrice) return undefined
+
+  if (typeof children === 'function') {
+    return children(_gasPrice)
+  }
+
+  return <Amount amount={_gasPrice} unit="nano" />
 }
 
 export const GasPrice = memo(GasPriceCmp)

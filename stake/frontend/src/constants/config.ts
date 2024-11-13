@@ -12,9 +12,9 @@ interface AddEthereumChainParameter {
   blockExplorerUrls: string[]
 }
 
-export const CHAINS: Map<bigint, AddEthereumChainParameter> = new Map([
+export const CHAINS: Map<number, AddEthereumChainParameter> = new Map([
   [
-    23294n,
+    23294,
     {
       chainId: '0x5afe',
       chainName: 'Oasis Sapphire',
@@ -28,7 +28,7 @@ export const CHAINS: Map<bigint, AddEthereumChainParameter> = new Map([
     },
   ],
   [
-    23295n,
+    23295,
     {
       chainId: '0x5aff',
       chainName: 'Oasis Sapphire Testnet',
@@ -39,14 +39,14 @@ export const CHAINS: Map<bigint, AddEthereumChainParameter> = new Map([
   ],
 ])
 
-export const NEXUS_BASE_URL_CONFIG: Map<bigint, string> = new Map([
-  [23294n, 'https://nexus.oasis.io/v1/'],
-  [23295n, 'https://testnet.nexus.oasis.io/v1/'],
+export const NEXUS_BASE_URL_CONFIG: Map<number, string> = new Map([
+  [23294, 'https://nexus.oasis.io/v1/'],
+  [23295, 'https://testnet.nexus.oasis.io/v1/'],
 ])
 
-export const GRPC_URL_CONFIG: Map<bigint, string> = new Map([
-  [23294n, 'https://grpc.oasis.io'],
-  [23295n, 'https://testnet.grpc.oasis.io'],
+export const GRPC_URL_CONFIG: Map<number, string> = new Map([
+  [23294, 'https://grpc.oasis.io'],
+  [23295, 'https://testnet.grpc.oasis.io'],
 ])
 
 export const NETWORK_NAMES: Record<string, string> = {
@@ -54,7 +54,6 @@ export const NETWORK_NAMES: Record<string, string> = {
   'Oasis Sapphire Testnet': 'Sapphire Testnet',
 }
 
-export const METAMASK_HOME_PAGE_URL = 'https://metamask.io/'
 export const GITHUB_REPOSITORY_URL = 'https://github.com/oasisprotocol/rose/'
 export const OASIS_HOME_PAGE_URL = 'https://oasisprotocol.org/'
 export const OASIS_HOME_PAGE_TOKENOMICS_URL = 'https://oasisprotocol.org/rose-and-tokenomics'
@@ -69,8 +68,6 @@ export const AVERAGE_BLOCKS_PER_EPOCH = 600
 export const CONSENSUS_DECIMALS = 9
 export const NEXUS_COMMISSION_RATE_DECIMALS = 5
 export const MIN_STAKE_AMOUNT = 100_000_000_000n
-
-export const VITE_NETWORK = BigInt(import.meta.env.VITE_NETWORK) ?? 0n
 
 // Specifies multiplier so wallet has enough fees for future transactions
 export const FEE_DEDUCTION_MULTIPLIER = 5

@@ -1,5 +1,3 @@
-import { BigNumberish } from 'ethers'
-
 const dateFormatLong = new Intl.DateTimeFormat('en', {
   timeStyle: 'long',
   dateStyle: 'long',
@@ -18,7 +16,7 @@ export abstract class DateUtils {
     return dateFormatShort.format(date)
   }
 
-  static unixFormatToDate(unixFormat: BigNumberish) {
+  static unixFormatToDate(unixFormat: number | bigint | string) {
     return new Date(Number(unixFormat) * 1000)
   }
 

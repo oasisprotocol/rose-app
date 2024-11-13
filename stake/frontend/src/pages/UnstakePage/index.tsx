@@ -20,8 +20,9 @@ import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
-import { formatUnits } from 'ethers'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
+import { useAccount, useSendTransaction } from 'wagmi'
+import { formatUnits } from 'viem'
 
 enum Steps {
   UndelegateInputAmount,
@@ -41,10 +42,10 @@ const UnstakePageCmp: FC = () => {
     fetchUndelegations,
     fetchValidators,
   } = useAppState()
-  const {
-    state: { nativeCurrency },
-    undelegate,
-  } = useWeb3()
+  const { populateUndelegateTx, getTransactionReceipt } = useWeb3()
+  const { chain } = useAccount()
+  const { sendTransactionAsync } = useSendTransaction()
+  const nativeCurrency = chain?.nativeCurrency
   const [step, setStep] = useState<Steps>(Steps.UndelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [sharePerRoseRatio, setSharePerRoseRatio] = useState<BigNumber>(BigNumber(0))
@@ -105,37 +106,49 @@ const UnstakePageCmp: FC = () => {
 
   const handleUndelegate = async (
     prevUndelegations: Undelegations,
-    amountShares: bigint = BigInt(shares.integerValue(BigNumber.ROUND_DOWN).toString()),
+    gasPrice: bigint | undefined,
+    amountShares: bigint = BigInt(
+      BigNumber.min(
+        shares.integerValue(BigNumber.ROUND_CEIL),
+        delegation.current?.shares.toString() ?? '0'
+      ).toString()
+    ),
     to = delegation.current!.to
   ) => {
     setError('')
+    setStep(Steps.UndelegateInProgress)
 
-    try {
-      await undelegate(amountShares, to, () => {
-        setStep(Steps.UndelegateInProgress)
-      })
+    sendTransactionAsync(populateUndelegateTx(amountShares, to, gasPrice!), {
+      onSuccess: async hash => {
+        await getTransactionReceipt(hash)
 
-      const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations(), fetchValidators()])
+        const [undelegations] = await Promise.all([
+          fetchUndelegations(),
+          fetchDelegations(),
+          fetchValidators(),
+        ])
 
-      // This should work in 99% of cases!
-      const [diff] = undelegations.filter(
-        und =>
-          !prevUndelegations.some(prevUnd => {
-            return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
-          })
-      )
+        // This should work in 99% of cases!
+        const [diff] = undelegations.filter(
+          und =>
+            !prevUndelegations.some(prevUnd => {
+              return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
+            })
+        )
 
-      if (!diff) {
-        throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
-      }
+        if (!diff) {
+          throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
+        }
 
-      setUndelegationEpoch(diff.epoch)
+        setUndelegationEpoch(diff.epoch)
 
-      setStep(Steps.UndelegateSuccessful)
-    } catch (e) {
-      setError(toErrorString(e as Error))
-      setStep(Steps.UndelegateFailed)
-    }
+        setStep(Steps.UndelegateSuccessful)
+      },
+      onError: e => {
+        setError(toErrorString(e as Error))
+        setStep(Steps.UndelegateFailed)
+      },
+    })
   }
 
   const getAmountFromPercentage = (delegationShares => (percentage: number) => {
@@ -143,13 +156,13 @@ const UnstakePageCmp: FC = () => {
       return ''
     }
 
-    const shares = delegationShares.multipliedBy(percentage)
+    const _shares = delegationShares.multipliedBy(percentage)
 
-    const amount = BigNumber(shares.toString() ?? 0)
+    const amount = BigNumber(_shares.toString() ?? 0)
       .multipliedBy(rosePerShareRatio)
       .integerValue(BigNumber.ROUND_DOWN)
 
-    return formatUnits(amount.toString(), CONSENSUS_DECIMALS)
+    return formatUnits(BigInt(amount.toString()), CONSENSUS_DECIMALS)
   })(BigNumber(delegation.current?.shares.toString() ?? 0))
 
   const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
@@ -179,7 +192,7 @@ const UnstakePageCmp: FC = () => {
       const maxAmount = delegationShares.multipliedBy(rosePerShareRatio).integerValue(BigNumber.ROUND_DOWN)
 
       setAmountError(
-        `Maximum amount you can unstake is ${formatUnits(maxAmount.toString(), CONSENSUS_DECIMALS)} ${nativeCurrency?.symbol} !`
+        `Maximum amount you can unstake is ${formatUnits(BigInt(maxAmount.toString()), CONSENSUS_DECIMALS)} ${nativeCurrency?.symbol} !`
       )
     }
   }
@@ -243,60 +256,66 @@ const UnstakePageCmp: FC = () => {
           <p className={StringUtils.clsx('body', classes.description)}>
             Check the details of the transaction below.
           </p>
-          <PreviewTable
-            className={classes.undelegatePreviewTransactionTable}
-            content={[
-              [
-                <p className="body">Amount:</p>,
-                <p className="body">
-                  <SharesAmount shares={shares} validator={validator} type="staking" />
-                </p>,
-              ],
-              [
-                <p className="body">Validator:</p>,
-                <p className="body mono">
-                  {(() => {
-                    const validatorName = StringUtils.getValidatorName(validator)
+          <GasPrice>
+            {gasPrice => (
+              <>
+                <PreviewTable
+                  className={classes.undelegatePreviewTransactionTable}
+                  content={[
+                    [
+                      <p className="body">Amount:</p>,
+                      <p className="body">
+                        <SharesAmount shares={shares} validator={validator} type="staking" />
+                      </p>,
+                    ],
+                    [
+                      <p className="body">Validator:</p>,
+                      <p className="body mono">
+                        {(() => {
+                          const validatorName = StringUtils.getValidatorName(validator)
 
-                    if (!validatorName) return null
+                          if (!validatorName) return null
 
-                    return (
-                      <>
-                        {validatorName}
-                        <br />
-                      </>
-                    )
-                  })()}
-                  {StringUtils.getValidatorFriendlyAddress(validator)}
-                  {!validator.active && <p className="body mute">(inactive)</p>}
-                </p>,
-              ],
-              [
-                <p className="body">Max fee:</p>,
-                <p className="body">
-                  <FeeAmount gasLimit={GAS_LIMIT_UNSTAKE} />
-                </p>,
-              ],
-              [
-                <span className="body">Gas price:</span>,
-                <span className="body">
-                  <GasPrice />
-                </span>,
-              ],
-            ]}
-          />
-          <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => handleUndelegate(undelegations!)}>Confirm</Button>
-            {isDesktopScreen && (
-              <Button
-                variant="text"
-                onClick={() => setStep(Steps.UndelegateInputAmount)}
-                startSlot={<ArrowLeftIcon />}
-              >
-                Back
-              </Button>
+                          return (
+                            <>
+                              {validatorName}
+                              <br />
+                            </>
+                          )
+                        })()}
+                        {StringUtils.getValidatorFriendlyAddress(validator)}
+                        {!validator.active && <p className="body mute">(inactive)</p>}
+                      </p>,
+                    ],
+                    [
+                      <p className="body">Max fee:</p>,
+                      <p className="body">
+                        <FeeAmount gasPrice={gasPrice} gasLimit={GAS_LIMIT_UNSTAKE} />
+                      </p>,
+                    ],
+                    [
+                      <span className="body">Gas price:</span>,
+                      <span className="body">
+                        <GasPrice gasPrice={gasPrice} />
+                      </span>,
+                    ],
+                  ]}
+                />
+                <div className={classes.actionButtonsContainer}>
+                  <Button onClick={() => handleUndelegate(undelegations!, gasPrice)}>Confirm</Button>
+                  {isDesktopScreen && (
+                    <Button
+                      variant="text"
+                      onClick={() => setStep(Steps.UndelegateInputAmount)}
+                      startSlot={<ArrowLeftIcon />}
+                    >
+                      Back
+                    </Button>
+                  )}
+                </div>
+              </>
             )}
-          </div>
+          </GasPrice>
         </Card>
       )}
       {step === Steps.UndelegateSuccessful && (

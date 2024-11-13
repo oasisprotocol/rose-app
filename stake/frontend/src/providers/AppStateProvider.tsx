@@ -3,13 +3,14 @@ import { AppStateContext, AppStateProviderContext, AppStateProviderState } from 
 import { useMediaQuery } from 'react-responsive'
 import { toErrorString } from '../utils/errors'
 import { usePrevious } from '../hooks/usePrevious'
-import { useWeb3 } from '../hooks/useWeb3'
 import { useApi } from '../hooks/useApi'
 import { FormattingUtils } from '../utils/formatting.utils'
 import { useGrpc } from '../hooks/useGrpc'
 import { Delegations, Undelegations } from '../types'
 import { NumberUtils } from '../utils/number.utils'
 import BigNumber from 'bignumber.js'
+import { useAccount, useBalance } from 'wagmi'
+import { useWeb3 } from '../hooks/useWeb3'
 
 const appStateProviderInitialState: AppStateProviderState = {
   appError: '',
@@ -22,18 +23,24 @@ const appStateProviderInitialState: AppStateProviderState = {
 }
 
 export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  const { getValidators } = useApi()
+  const { address } = useAccount()
+  const { data: balance } = useBalance({
+    address,
+    query: {
+      enabled: !!address,
+    },
+  })
   const {
-    state: { account, chainId },
-    getAccountBalance,
+    state: { isSupportedNetwork },
   } = useWeb3()
+  const { getValidators } = useApi()
   const { fetchDelegations: grpcFetchDelegations, fetchUndelegations: grpcFetchUndelegations } = useGrpc()
   const isMobileScreen = useMediaQuery({ query: '(max-width: 1000px)' })
 
   const [state, setState] = useState<AppStateProviderState>({
     ...appStateProviderInitialState,
   })
-  const previousAccount = usePrevious(account)
+  const previousAddress = usePrevious(address)
 
   useEffect(() => {
     setState(prevState => ({
@@ -83,8 +90,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
     return undelegations
   }
 
-  const fetchAccountBalance = async () => {
-    const accountBalance = await getAccountBalance()
+  useEffect(() => {
     setState(prevState => ({
       ...prevState,
 
@@ -94,14 +100,14 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
         },
         balances: {
           ...(prevState.stats?.balances ?? {}),
-          accountBalance,
+          accountBalance: balance?.value,
         },
       },
     }))
-  }
+  }, [balance])
 
   useEffect(() => {
-    if (previousAccount !== null && previousAccount !== account) {
+    if (previousAddress !== null && previousAddress !== address) {
       setState(prevState => ({
         ...prevState,
         accountBalance: null,
@@ -113,19 +119,23 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }))
     }
 
+    if (!isSupportedNetwork) {
+      return
+    }
+
     const fetchAccountData = async () => {
       try {
-        await Promise.all([fetchAccountBalance(), fetchDelegations(), fetchUndelegations()])
+        await Promise.all([fetchDelegations(), fetchUndelegations()])
       } catch (e) {
         setAppError(e as Error)
       }
     }
 
-    if (account) {
+    if (address) {
       fetchAccountData()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [account])
+  }, [address, isSupportedNetwork])
 
   const fetchValidators = async () => {
     const validatorsList = await getValidators()
@@ -134,11 +144,11 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   }
 
   useEffect(() => {
-    if (chainId) {
+    if (isSupportedNetwork) {
       fetchValidators()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId])
+  }, [isSupportedNetwork])
 
   const setAppError = (error: Error | object | string) => {
     if (error === undefined || error === null) return

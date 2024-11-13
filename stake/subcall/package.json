@@ -20,7 +20,7 @@
     "@oasisprotocol/client": "^1.1.0",
     "@oasisprotocol/client-rt": "^1.1.0",
     "cborg": "^4.2.3",
-    "ethers": "6.10.0"
+    "viem": "^2.12.7"
   },
   "exports": {
     ".": {

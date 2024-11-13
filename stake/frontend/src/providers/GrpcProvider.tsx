@@ -2,17 +2,19 @@ import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { GrpcContext, GrpcProviderContext, GrpcProviderState } from './GrpcContext'
 import { AVERAGE_BLOCK_TIME_IN_SEC, AVERAGE_BLOCKS_PER_EPOCH, GRPC_URL_CONFIG } from '../constants/config'
 import { DateUtils } from '../utils/date.utils'
-import { useWeb3 } from '../hooks/useWeb3'
 import { getDelegations, getUndelegations } from '@oasisprotocol/dapp-staker-subcall'
 import * as oasis from '@oasisprotocol/client'
+import { useAccount } from 'wagmi'
+import { useWeb3 } from '../hooks/useWeb3'
 
 const grpcProviderInitialState: GrpcProviderState = {
   consensusStatus: null,
 }
 
 export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
+  const { address, chainId } = useAccount()
   const {
-    state: { account, chainId },
+    state: { isSupportedNetwork },
   } = useWeb3()
 
   const [state, setState] = useState<GrpcProviderState>({
@@ -68,18 +70,18 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   useEffect(() => {
-    if (chainId) {
+    if (isSupportedNetwork) {
       fetchConsensusStatus()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId])
+  }, [isSupportedNetwork])
 
   const providerState: GrpcProviderContext = {
     state,
     fetchConsensusStatus,
     getTimeEstimateForFutureEpoch,
-    fetchDelegations: () => getDelegations(chainId!, account!),
-    fetchUndelegations: () => getUndelegations(chainId!, account!),
+    fetchDelegations: () => getDelegations(chainId!, address!),
+    fetchUndelegations: () => getUndelegations(chainId!, address!),
   }
 
   return <GrpcContext.Provider value={providerState}>{children}</GrpcContext.Provider>

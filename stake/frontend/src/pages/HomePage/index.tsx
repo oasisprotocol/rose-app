@@ -1,8 +1,7 @@
 import { FC } from 'react'
-import classes from './index.module.css'
+import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { LogoIcon } from '../../components/icons/LogoIcon'
 import { StringUtils } from '../../utils/string.utils'
-import { ConnectWallet } from '../../components/ConnectWallet'
 import { SearchIcon } from '../../components/icons/SearchIcon'
 import { TokenIcon } from '../../components/icons/TokenIcon'
 import { MenuBookIcon } from '../../components/icons/MenuBookIcon'
@@ -12,23 +11,19 @@ import {
   OASIS_HOME_PAGE_TOKENOMICS_URL,
 } from '../../constants/config'
 import { InfoCard } from '../../components/InfoCard'
-import { useWeb3 } from '../../hooks/useWeb3'
 import { withConnectedWallet } from '../../hoc/withConnectedWallet'
+import classes from './index.module.css'
 
 const HomePageCmp: FC = () => {
-  const {
-    state: { nativeCurrency },
-  } = useWeb3()
-
   return (
     <div className={classes.homePage}>
       <LogoIcon className={classes.logo} />
       <p className={StringUtils.clsx('body', classes.description)}>
-        Easily stake {nativeCurrency?.symbol} tokens on Sapphire using our ROSE stake dApp and help the
-        network. By staking you help the ecosystem’s network security and earn rewards at the same time.
+        Easily stake ROSE tokens on Sapphire using our ROSE stake dApp and help the network. By staking you
+        help the ecosystem’s network security and earn rewards at the same time.
       </p>
       <div className={classes.connectWallet}>
-        <ConnectWallet inline />
+        <ConnectButton />
       </div>
       <p className={StringUtils.clsx('body', classes.discoverMore)}>
         Discover more info through the info cards below

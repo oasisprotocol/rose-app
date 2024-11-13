@@ -1,10 +1,7 @@
-import { AbiCoder } from 'ethers'
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { PARATIMES_CONFIG } from './config.ts'
 import { ParaTimeChainId } from './types.ts'
-
-const ABI_CODER = AbiCoder.defaultAbiCoder()
 
 const toSecp256k1eth = async (hexAddress: string) => {
   return await oasis.address.fromData(
@@ -26,4 +23,4 @@ const getParaTimeConfig = (chainId: ParaTimeChainId) => {
   return PARATIMES_CONFIG.get(_chainId)
 }
 
-export { ABI_CODER, toSecp256k1eth, getParaTimeConfig }
+export { toSecp256k1eth, getParaTimeConfig }

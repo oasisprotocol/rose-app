@@ -8,7 +8,6 @@ import classes from './index.module.css'
 import { useAppState } from '../../hooks/useAppState'
 import { AmountInput } from '../../components/AmountInput'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { formatUnits, parseUnits } from 'ethers'
 import { PreviewTable } from '../../components/PreviewTable'
 import { Amount } from '../../components/Amount'
 import { FeeAmount } from '../../components/FeeAmount'
@@ -23,6 +22,8 @@ import BigNumber from 'bignumber.js'
 import { NumberUtils } from '../../utils/number.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { FeeWarningModal } from '../../components/FeeWarningModal'
+import { useAccount, useSendTransaction } from 'wagmi'
+import { formatUnits, parseUnits } from 'viem'
 
 enum Steps {
   DelegateInputAmount,
@@ -41,13 +42,14 @@ const StakingAmountPageCmp: FC = () => {
     fetchDelegations,
     fetchValidators,
   } = useAppState()
-  const {
-    state: { nativeCurrency },
-    delegate,
-  } = useWeb3()
+  const { populateDelegateTx, getTransactionReceipt } = useWeb3()
+  const { chain } = useAccount()
+  const { sendTransactionAsync } = useSendTransaction()
+  const nativeCurrency = chain?.nativeCurrency
   const [step, setStep] = useState<Steps>(Steps.DelegateInputAmount)
   const [validator, setValidator] = useState<Validator | null>(null)
   const [amount, setAmount] = useState<bigint>(0n)
+  const [gasPrice, setGasPrice] = useState<bigint>(0n)
   const [error, setError] = useState('')
   const [amountError, setAmountError] = useState<string | null>(null)
   const [isFeeWarningModalOpen, setIsFeeWarningModalOpen] = useState(false)
@@ -76,34 +78,42 @@ const StakingAmountPageCmp: FC = () => {
     init()
   }, [getValidatorByAddress, address])
 
-  const handleDelegate = async (prevDelegations: Delegations, value: bigint, to: string) => {
+  const handleDelegate = async (
+    prevDelegations: Delegations,
+    value: bigint,
+    to: string,
+    gasPriceSnapshot: bigint
+  ) => {
     setError('')
     const sapphireAmount = NumberUtils.consensusAmountToSapphireAmount(value)
+    setStep(Steps.DelegateInProgress)
 
-    try {
-      await delegate(sapphireAmount, to, () => {
-        setStep(Steps.DelegateInProgress)
-      })
+    sendTransactionAsync(populateDelegateTx(sapphireAmount, to, gasPriceSnapshot), {
+      onSuccess: async hash => {
+        await getTransactionReceipt(hash)
 
-      const [delegations] = await Promise.all([fetchDelegations(), fetchValidators()])
+        const [delegations] = await Promise.all([fetchDelegations(), fetchValidators()])
 
-      // This should work in 99% of cases!
-      const [diff] = delegations.filter(
-        d =>
-          !prevDelegations.some(prevD => {
-            return FormattingUtils.serializeObj(prevD) === FormattingUtils.serializeObj(d)
-          })
-      )
+        // This should work in 99% of cases!
+        const [diff] = delegations.filter(
+          d =>
+            !prevDelegations.some(prevD => {
+              return FormattingUtils.serializeObj(prevD) === FormattingUtils.serializeObj(d)
+            })
+        )
 
-      if (!diff) {
-        throw new Error('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
-      }
+        if (!diff) {
+          setError('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
+          setStep(Steps.DelegateFailed)
+        }
 
-      setStep(Steps.DelegateSuccessful)
-    } catch (e) {
-      setError(toErrorString(e as Error))
-      setStep(Steps.DelegateFailed)
-    }
+        setStep(Steps.DelegateSuccessful)
+      },
+      onError: e => {
+        setError(toErrorString(e as Error))
+        setStep(Steps.DelegateFailed)
+      },
+    })
   }
 
   const getAmountFromPercentage = (accountBalance => (percentage: number) => {
@@ -152,10 +162,12 @@ const StakingAmountPageCmp: FC = () => {
     }
   }
 
-  const handleConfirmAmount = (gasPrice: bigint) => {
+  const handleConfirmAmount = (gasPriceSnapshot: bigint) => {
+    setGasPrice(gasPriceSnapshot)
+
     const paratimeAmount = NumberUtils.consensusAmountToSapphireAmount(amount)
     const accountBalanceAmount = stats?.balances.accountBalance ?? 0n
-    const fee = gasPrice * GAS_LIMIT_STAKE
+    const fee = gasPriceSnapshot * GAS_LIMIT_STAKE
 
     if (
       NumberUtils.shouldShowFeeWarningModal({
@@ -271,19 +283,19 @@ const StakingAmountPageCmp: FC = () => {
               [
                 <p className="body">Max fee:</p>,
                 <p className="body">
-                  <FeeAmount gasLimit={GAS_LIMIT_STAKE} />
+                  <FeeAmount gasPrice={gasPrice} gasLimit={GAS_LIMIT_STAKE} />
                 </p>,
               ],
               [
                 <span className="body">Gas price:</span>,
                 <span className="body">
-                  <GasPrice />
+                  <GasPrice gasPrice={gasPrice} />
                 </span>,
               ],
             ]}
           />
           <div className={classes.actionButtonsContainer}>
-            <Button onClick={() => handleDelegate(delegations!, amount, validator?.entity_address)}>
+            <Button onClick={() => handleDelegate(delegations!, amount, validator?.entity_address, gasPrice)}>
               Confirm
             </Button>
             {isDesktopScreen && (
