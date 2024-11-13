@@ -11,18 +11,6 @@ export default defineConfig({
   base: '/stake/',
   build: {
     sourcemap: true,
-    rollupOptions: {
-      output: {
-        manualChunks(id: string) {
-          if (id.includes('ethers')) {
-            return 'ethers'
-          }
-          if (id.includes('react-dom')) {
-            return 'react-dom'
-          }
-        },
-      },
-    },
   },
   define: {
     APP_VERSION: JSON.stringify(process.env.npm_package_version),

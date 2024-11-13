@@ -2,15 +2,13 @@ import { FC, PropsWithChildren, useState } from 'react'
 import { ApiContext, ApiProviderContext, ApiProviderState } from './ApiContext'
 import { Api, HttpClient } from '@oasisprotocol/nexus-api'
 import { AxiosRequestConfig } from 'axios'
-import { useWeb3 } from '../hooks/useWeb3'
 import { NEXUS_BASE_URL_CONFIG } from '../constants/config'
+import { useAccount } from 'wagmi'
 
 const apiProviderInitialState: ApiProviderState = {}
 
 export const ApiContextProvider: FC<PropsWithChildren> = ({ children }) => {
-  const {
-    state: { chainId },
-  } = useWeb3()
+  const { chainId } = useAccount()
   const [state] = useState<ApiProviderState>({
     ...apiProviderInitialState,
   })

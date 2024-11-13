@@ -1,25 +1,16 @@
-import { FC, useEffect, useState } from 'react'
-import { useWeb3 } from '../../hooks/useWeb3'
-import { useNavigate } from 'react-router-dom'
+import { FC, useState } from 'react'
 import { Card } from '../../components/Card'
 import { StakingTabs } from '../../components/StakingTabs'
 import { StringUtils } from '../../utils/string.utils'
 import classes from './index.module.css'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
+import { useAccount } from 'wagmi'
 
 const DashboardPageCmp: FC = () => {
-  const navigate = useNavigate()
-  const {
-    state: { isConnected, nativeCurrency },
-  } = useWeb3()
+  const { chain } = useAccount()
+  const nativeCurrency = chain?.nativeCurrency
   const tabIndex = useState<number>(0)
   const [activeIndex] = tabIndex
-
-  useEffect(() => {
-    if (!isConnected) {
-      navigate('/')
-    }
-  }, [isConnected, navigate])
 
   return (
     <Card header={<h2>Dashboard</h2>}>

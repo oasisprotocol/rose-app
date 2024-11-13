@@ -2,7 +2,7 @@ import { FC } from 'react'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
 import { Amount } from '../Amount'
-import { useWeb3 } from '../../hooks/useWeb3'
+import { useAccount } from 'wagmi'
 
 interface Props {
   totalAmount: bigint
@@ -12,9 +12,8 @@ interface Props {
 }
 
 export const OverviewTab: FC<Props> = ({ totalAmount, availableAmount, stakedAmount, debondingAmount }) => {
-  const {
-    state: { nativeCurrency },
-  } = useWeb3()
+  const { chain } = useAccount()
+  const nativeCurrency = chain?.nativeCurrency
 
   return (
     <div className={classes.overviewTab}>

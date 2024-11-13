@@ -15,10 +15,10 @@ import { CalendarUtils } from '../../utils/calendar.utils'
 import { NumberUtils } from '../../utils/number.utils'
 import { startOfDay } from 'date-fns/startOfDay'
 import { endOfDay } from 'date-fns/endOfDay'
-import { useWeb3 } from '../../hooks/useWeb3'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip'
 import { DateUtils } from '../../utils/date.utils'
 import { useAppState } from '../../hooks/useAppState'
+import { useAccount } from 'wagmi'
 
 type DebondingItemStatus = 'ready' | 'waiting' | null
 
@@ -51,9 +51,8 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
     state: { consensusStatus },
     getTimeEstimateForFutureEpoch,
   } = useGrpc()
-  const {
-    state: { nativeCurrency },
-  } = useWeb3()
+  const { chain } = useAccount()
+  const nativeCurrency = chain?.nativeCurrency
   const {
     state: { isMobileScreen, isDesktopScreen },
   } = useAppState()

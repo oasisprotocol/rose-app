@@ -1,34 +1,21 @@
-import createJazzIcon from '@metamask/jazzicon'
-import classes from './index.module.css'
-import { FC, memo, useEffect, useRef } from 'react'
-import { NumberUtils } from '../../utils/number.utils'
-import { StringUtils } from '../../utils/string.utils'
+import jazzicon from '@metamask/jazzicon'
+import { memo, useEffect, useRef } from 'react'
 
 interface JazzIconProps {
-  address: string
-  size: number
-  className?: string
+  diameter: number
+  seed: number
 }
 
-const JazzIconCmp: FC<JazzIconProps> = ({ address, size, className }) => {
-  const ref = useRef<HTMLDivElement | null>(null)
+export const JazzIcon = memo(({ diameter, seed }: JazzIconProps) => {
+  const ref = useRef<HTMLSpanElement>(null)
 
   useEffect(() => {
     if (ref?.current) {
-      const seed = NumberUtils.jsNumberForAddress(address)
-      const icon = createJazzIcon(size, seed)
+      const icon = jazzicon(diameter, seed)
 
-      ref.current?.replaceChildren(icon)
+      ref.current.replaceChildren(icon)
     }
-  }, [size, ref, address])
+  }, [diameter, seed])
 
-  return (
-    <div
-      ref={ref}
-      style={{ width: size, height: size }}
-      className={StringUtils.clsx(className, classes.jazzIcon)}
-    />
-  )
-}
-
-export const JazzIcon = memo(JazzIconCmp)
+  return <span ref={ref} style={{ lineHeight: 0 }}></span>
+})

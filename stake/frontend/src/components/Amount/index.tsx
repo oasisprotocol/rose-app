@@ -1,9 +1,9 @@
 import { FC } from 'react'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
-import { useWeb3 } from '../../hooks/useWeb3'
 import { CONSENSUS_DECIMALS } from '../../constants/config'
 import { NumberUtils } from '../../utils/number.utils'
+import { useAccount } from 'wagmi'
 
 const supportedUnits = {
   nano: {
@@ -23,9 +23,8 @@ interface Props {
 }
 
 export const Amount: FC<Props> = ({ amount, className, unit }) => {
-  const {
-    state: { nativeCurrency },
-  } = useWeb3()
+  const { chain } = useAccount()
+  const nativeCurrency = chain?.nativeCurrency
 
   const unitDecimals = unit ? supportedUnits[unit].decimals : null
   const unitPrefix = unit ? supportedUnits[unit].prefix : ''

@@ -6,7 +6,7 @@ import {
   FEE_DEDUCTION_MULTIPLIER,
 } from '../constants/config'
 import { SharesType } from '../types/shares-type'
-import { formatUnits, Numeric } from 'ethers'
+import { formatUnits } from 'viem'
 
 export abstract class NumberUtils {
   // Compatible with https://github.com/MetaMask/metamask-extension/blob/v10.7.0/ui/helpers/utils/icon-factory.js#L84-L88
@@ -80,8 +80,10 @@ export abstract class NumberUtils {
       .integerValue(BigNumber.ROUND_DOWN)
   }
 
-  static formatAmount(amount: bigint | string, dp: Numeric | string): string {
-    return BigNumber(formatUnits(amount, dp)).dp(2, BigNumber.ROUND_DOWN).toFormat(2)
+  static formatAmount(amount: bigint | string, dp: number): string {
+    return BigNumber(formatUnits(BigInt(amount), dp))
+      .dp(2, BigNumber.ROUND_DOWN)
+      .toFormat(2)
   }
 
   static shouldShowFeeWarningModal({
