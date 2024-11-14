@@ -36,7 +36,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
           headers={['', 'Name', 'Fee', '']}
           data={validatorsList.validators}
           isExpandable
-          maxHeight={404}
+          maxHeight={328}
         >
           {({ entry, isExpanded, toggleRow }) => {
             const isSelected = value?.entity_address === entry.entity_address

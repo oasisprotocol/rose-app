@@ -3,7 +3,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 728px;
-  min-height: 750px;
+  height: 750px;
   padding: 2.25rem 4.6875rem 1.875rem;
   margin: 0 auto 5rem;
   border-radius: 12px;
