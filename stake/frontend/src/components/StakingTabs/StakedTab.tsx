@@ -36,7 +36,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
         </EmptyTableData>
       )}
       {delegations.length > 0 && (
-        <Table data={delegations} isExpandable>
+        <Table data={delegations} isExpandable maxHeight={458}>
           {({ entry, isExpanded, toggleRow }) => (
             <Validator key={entry.to} address={entry.to} fallback={<tr />}>
               {validator => (

@@ -20,6 +20,11 @@
 
   .connectWallet {
     margin-bottom: 2.5rem;
+
+    button {
+      padding: 0 2rem;
+      border-radius: 999px;
+    }
   }
 
   .infoBoxes {
@@ -27,6 +32,10 @@
     flex-direction: column;
     gap: 0.625rem;
     max-width: 375px;
+
+    a {
+      text-decoration: none;
+    }
   }
 }
 

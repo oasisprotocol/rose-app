@@ -92,7 +92,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
         </EmptyTableData>
       )}
       {debondingItems.length > 0 && (
-        <Table data={debondingItems} isExpandable>
+        <Table data={debondingItems} isExpandable maxHeight={458}>
           {({ entry, isExpanded, toggleRow }) => (
             <Validator key={entry.from + entry.epoch} address={entry.from} fallback={<tr />}>
               {validator => (
