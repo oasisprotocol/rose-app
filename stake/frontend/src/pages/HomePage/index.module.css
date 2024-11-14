@@ -20,6 +20,11 @@
 
   .connectWallet {
     margin-bottom: 2.5rem;
+
+    button {
+      padding: 0 2rem;
+      border-radius: 999px;
+    }
   }
 
   .infoBoxes {
