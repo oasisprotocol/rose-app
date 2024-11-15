@@ -14,12 +14,15 @@ import { SharesAmount } from '../SharesAmount'
 import { NumberUtils } from '../../utils/number.utils'
 import { EmptyTableData } from '../EmptyTableData'
 import { useAppState } from '../../hooks/useAppState'
+import { useAccount } from 'wagmi'
 
 interface Props {
   delegations: Delegations
 }
 
 const StakedTabCmp: FC<Props> = ({ delegations }) => {
+  const { chain } = useAccount()
+  const nativeCurrency = chain?.nativeCurrency
   const navigate = useNavigate()
   const {
     state: { isInteractingWithChain },
@@ -32,7 +35,7 @@ const StakedTabCmp: FC<Props> = ({ delegations }) => {
     <div className={classes.stakedTab}>
       {delegations.length === 0 && (
         <EmptyTableData>
-          <p>There are no staking records.</p>
+          <p>You currently have no {nativeCurrency?.symbol} debonding.</p>
         </EmptyTableData>
       )}
       {delegations.length > 0 && (

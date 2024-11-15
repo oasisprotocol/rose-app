@@ -201,13 +201,13 @@ const StakingAmountPageCmp: FC = () => {
       {step === Steps.DelegateInputAmount && (
         <Card header={<h2>Staking amount</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
-            Enter the amount you want to stake with{' '}
+            Enter the amount of {nativeCurrency?.symbol} you wish to stake with{' '}
             <span className={StringUtils.clsx('mono', classes.validatorName)}>
               {StringUtils.getValidatorFriendlyName(validator)}
             </span>
             .
             <br />
-            There is a minimum of 100 {nativeCurrency?.symbol} stake amount.
+            100 {nativeCurrency?.symbol} stake minimum.
           </p>
           <AmountInput
             className={classes.amountInput}
@@ -229,7 +229,7 @@ const StakingAmountPageCmp: FC = () => {
                   disabled={amountError !== '' || gasPrice === null}
                   onClick={() => handleConfirmAmount(gasPrice!)}
                 >
-                  Stake
+                  Delegate
                 </Button>
               )}
             </GasPrice>
@@ -244,7 +244,7 @@ const StakingAmountPageCmp: FC = () => {
       {step === Steps.DelegatePreviewTransaction && (
         <Card className={classes.previewTxCard} header={<h2>Preview</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
-            Check the details of the transaction below.
+            Check the details of your staked position below.
           </p>
           <PreviewTable
             className={classes.delegatePreviewTransactionTable}
@@ -313,7 +313,7 @@ const StakingAmountPageCmp: FC = () => {
       {step === Steps.DelegateSuccessful && (
         <Alert
           type="success"
-          headerText="Staking successful"
+          headerText="Your ROSE is now staked!"
           actions={
             <Button onClick={navigateToDashboard}>
               {isMobileScreen && <>Continue</>}

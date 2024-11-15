@@ -15,13 +15,13 @@ const DashboardPageCmp: FC = () => {
   return (
     <Card header={<h2>Dashboard</h2>}>
       <h3 className={classes.subHeader}>
-        {activeIndex === 0 && <>Your balances</>}
-        {(activeIndex === 1 || activeIndex === 2) && <>Your active delegations</>}
+        {activeIndex === 0 && <>Your {nativeCurrency?.symbol} balances</>}
+        {(activeIndex === 1 || activeIndex === 2) && <>Your staked positions</>}
       </h3>
       <p className={StringUtils.clsx('body', classes.description)}>
-        {activeIndex === 0 && <>Overview of your current {nativeCurrency?.symbol} balances.</>}
-        {activeIndex === 1 && <>Overview of your currently staked {nativeCurrency?.symbol}.</>}
-        {activeIndex === 2 && <>Overview of your {nativeCurrency?.symbol} (being) debonded.</>}
+        {activeIndex === 0 && <>&nbsp;</>}
+        {activeIndex === 1 && <>Overview of your {nativeCurrency?.symbol} staking delegations.</>}
+        {activeIndex === 2 && <>See below for your {nativeCurrency?.symbol} being debonded.</>}
       </p>
       <StakingTabs tabIndex={tabIndex} />
     </Card>

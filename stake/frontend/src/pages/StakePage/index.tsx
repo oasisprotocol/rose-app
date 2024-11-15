@@ -22,11 +22,11 @@ const StakePageCmp: FC = () => {
 
   return (
     <Card className={classes.validatorsCard} header={<h2>Validators</h2>}>
-      <p className={StringUtils.clsx('body', classes.description)}>Select a validator below to proceed.</p>
+      <p className={StringUtils.clsx('body', classes.description)}>All options will reward users with 2.5% APY. Commission charged on rewards may vary.</p>
       <ValidatorsTable value={selectedValidator} onChange={setSelectedValidator} />
       <div className={classes.actionButtonsContainer}>
         <Button disabled={!selectedValidator} onClick={() => navigateToStakeAmount(selectedValidator!)}>
-          Select validator
+          Confirm validator
         </Button>
         {isDesktopScreen && (
           <Button variant="text" onClick={() => navigateToDashboard()} startSlot={<ArrowLeftIcon />}>

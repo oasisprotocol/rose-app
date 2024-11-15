@@ -39,8 +39,8 @@ export function App() {
             <div>
               <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
               <p>
-                Easily move your ROSE tokens from your Consensus account (e.g. on a crypto exchange) to your Sapphire
-                account (e.g. in Metamask), or vice versa. Connect your wallet and follow the next steps.
+                Easily move your ROSE tokens from a crypto exchange to use on Sapphire with an EVM compatible wallet.
+                Start by connecting your wallet.
               </p>
             </div>
             {isRpcResponding ? (
@@ -52,7 +52,6 @@ export function App() {
             )}
 
             <div></div>
-            <div>Discover more info below:</div>
             <div className={classes.helpLinks}>
               <button
                 type="button"
@@ -61,8 +60,8 @@ export function App() {
               >
                 <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
-                  <h3>Need help? Watch the walkthrough</h3>
-                  <div>Watch the video on how to use the dApp</div>
+                  <h3>Watch this walkthrough to get started.</h3>
+                  <div>Learn how to use Move</div>
                 </div>
               </button>
               <button type="button" className={classes.plainButton2} onClick={() => setIsPrivateKeyHelpModalOpen(true)}>
@@ -108,8 +107,7 @@ export function App() {
           <div>
             <h1>Where do you want to move your ROSE?</h1>
             <p>
-              Choose the destination network where you want to move your ROSE tokens to. You will be asked to sign a
-              message from which your unique Consensus account will be derived.
+              Choose the destination to move your ROSE. Select and sign-in to verify.
             </p>
           </div>
           <div className={classes.cards}>
@@ -118,8 +116,7 @@ export function App() {
               <div className={classes.cardContent}>
                 <h2>Consensus to Sapphire</h2>
                 <p>
-                  Move ROSE from your Consensus account (e.g. on an exchange) to your Sapphire account (e.g. in
-                  MetaMask).
+                  Easily move your ROSE tokens from a crypto exchange to use on Sapphire with an EVM compatible wallet.
                 </p>
                 <Button onClick={deposit.step2}>Select and sign-in</Button>
               </div>
@@ -130,7 +127,7 @@ export function App() {
               <div className={classes.cardContent}>
                 <h2>Sapphire to Consensus</h2>
                 <p>
-                  Move ROSE from your Sapphire account (e.g. in MetaMask) to your Consensus account (e.g. an exchange).
+                  Move your ROSE tokens from Sapphire back to a crypto exchange.
                 </p>
                 <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>

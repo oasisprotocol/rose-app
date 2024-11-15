@@ -226,7 +226,7 @@ const UnstakePageCmp: FC = () => {
       {step === Steps.UndelegateInputAmount && (
         <Card header={<h2>Unstaking amount</h2>}>
           <p className={StringUtils.clsx('body', classes.description)}>
-            Enter the amount you want to unstake from{' '}
+            Enter the amount of {nativeCurrency?.symbol} you wish to unstake from{' '}
             <span className={StringUtils.clsx('mono', classes.validatorName)}>
               {StringUtils.getValidatorFriendlyName(validator)}
             </span>
@@ -239,6 +239,9 @@ const UnstakePageCmp: FC = () => {
             onChange={handleAmountInputChange}
             calcAmountFromPercentage={getAmountFromPercentage}
           />
+          <p className="body mute">
+            <b>Note:</b> users will be able to claim their staked ROSE after the 14 day debonding period has finished.
+          </p>
           <div className={classes.actionButtonsContainer}>
             <Button disabled={amountError !== ''} onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>
               Unstake
@@ -325,8 +328,7 @@ const UnstakePageCmp: FC = () => {
           actions={
             <div className={classes.undelegateStartSuccessfulAlertActions}>
               <p className="body">
-                The debonding process has successfully started. <br />
-                Your funds will be available {isMobileScreen && <br />} in{' '}
+                Your {nativeCurrency?.symbol} will be available {isMobileScreen && <br />} in{' '}
                 <EpochTimeEstimate epoch={undelegationEpoch} distance /> (on{' '}
                 <EpochTimeEstimate epoch={undelegationEpoch} />
                 ).
@@ -363,8 +365,8 @@ const UnstakePageCmp: FC = () => {
       {step === Steps.UndelegateInProgress && (
         <Alert
           type="loading"
-          headerText="Unstaking in progress..."
-          actions={<span className="body">Submitting transaction...</span>}
+          headerText="Unstaking initiated"
+          actions={<span className="body">You can see your debonding positions from the Stake dashboard.</span>}
         />
       )}
     </>

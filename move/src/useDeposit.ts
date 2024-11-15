@@ -24,9 +24,9 @@ export function useDeposit() {
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
-      setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+      setProgress({ percentage: 0.05, message: 'Waiting to Move your ROSE…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
-      setProgress({ percentage: 0.25, message: `${amountToDeposit.formatted} ROSE detected` })
+      setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       blockNavigatingAway()
       await depositToSapphireStep1({
         amountToDeposit: amountToDeposit.raw,
@@ -34,7 +34,7 @@ export function useDeposit() {
         consensusAddress: consensusAccount.address,
         sapphireAddress: sapphireAddress,
       })
-      setProgress({ percentage: 0.5, message: `Depositing ${amountToDeposit.formatted} ROSE` })
+      setProgress({ percentage: 0.5, message: 'ROSE transfer initiated' })
       const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
       await depositToSapphireStep2({
         amountToDeposit: amountToDeposit.raw,
@@ -42,12 +42,12 @@ export function useDeposit() {
         consensusAddress: consensusAccount.address,
         sapphireAddress: sapphireAddress,
       })
-      setProgress({ percentage: 0.75, message: `Depositing ${amountToDeposit.formatted} ROSE` })
+      setProgress({ percentage: 0.75, message: 'ROSE transfer initiated' })
       await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of depositing
       setProgress({
         percentage: 1.0,
-        message: `${amountToDeposit.formatted} ROSE deposited`,
+        message: 'Your ROSE transfer is complete!',
       })
       allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
@@ -71,7 +71,7 @@ export function useDeposit() {
   function transferMore() {
     // Just pretends to be on that step. In reality process is still stuck at
     // waitForConsensusBalance, but if user makes a transfer, it becomes real.
-    setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
+    setProgress({ percentage: 0.05, message: 'Waiting to Move your ROSE…' })
   }
 
   return {

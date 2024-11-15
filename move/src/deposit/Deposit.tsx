@@ -59,10 +59,9 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 : `${classes.collapsible} ${classes.collapsed}`
             }
           >
-            <h1>Address created and awaiting your transfer {generatedConsensusAccount.isFresh && '✨'}</h1>
+            <h1>Your exchange withdrawal address is created! {generatedConsensusAccount.isFresh && '✨'}</h1>
             <p>
-              Send ROSE to your unique Consensus address shown below to initiate the move to Sapphire. The ROSE tokens
-              you’ve sent will be automatically detected and moved to Sapphire.{' '}
+              Copy the below address and initiate the withdrawal from your centralized exchange to continue. Your ROSE will be automatically routed to your Sapphire address.{' '}
               <button
                 type="button"
                 className={classes.plainButton2}
