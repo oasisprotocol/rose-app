@@ -207,7 +207,7 @@
 }
 
 .cardHeader {
-  padding: 2.625rem 1.5rem;
+  padding: 3.75rem 2.375rem;
   background-color: var(--gray-light-bg);
 
   h2 {
@@ -247,6 +247,10 @@
   gap: 2rem;
   max-width: 575px;
   padding-left: 105px;
+
+  h1 {
+    margin-bottom: 0.5rem;
+  }
 
   form {
     button {

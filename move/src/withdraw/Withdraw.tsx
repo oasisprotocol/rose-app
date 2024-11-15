@@ -226,9 +226,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
               <div>
                 <h1>Where do you want your funds to be sent to?</h1>
                 <p className="body">
-                  Please specify the recipient address
-                  {!hasPreviousBalance && ' and the amount of funds to be transferred.'}
-                  {hasPreviousBalance && ' and transfer the rest of your amount.'}
+                  Please enter the exchange deposit address or recipient address
+                  {!hasPreviousBalance && ' and the amount of ROSE you want to transfer'}
+                  .
                 </p>
               </div>
               <form onSubmit={(e) => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>

@@ -114,9 +114,6 @@ export function App() {
             <div className={classes.card}>
               <div className={classes.cardHeader}>
                 <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt=""/>
-                <h2>
-                  <span>Consensus</span> <span>to&nbsp;</span> <span>&nbsp;Sapphire</span>
-                </h2>
               </div>
               <div className={classes.cardContent}>
                 <p>
@@ -129,7 +126,6 @@ export function App() {
             <div className={classes.card}>
               <div className={classes.cardHeader}>
                 <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt=""/>
-                <h2><span>&nbsp;Sapphire</span> <span>&nbsp;to</span> <span>Consensus</span></h2>
               </div>
               <div className={classes.cardContent}>
                 <p>
