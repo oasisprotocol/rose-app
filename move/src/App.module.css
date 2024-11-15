@@ -206,6 +206,17 @@
   padding: 16px;
 }
 
+.cardHeader {
+  padding: 2.625rem 1.5rem;
+  background-color: var(--gray-light-bg);
+
+  h2 {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 -0.5rem;
+  }
+}
+
 .cardImage {
   width: 100%;
 }
