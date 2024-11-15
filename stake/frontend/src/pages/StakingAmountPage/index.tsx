@@ -157,7 +157,7 @@ const StakingAmountPageCmp: FC = () => {
 
     if (parsedAmount < MIN_STAKE_AMOUNT) {
       setAmountError(`The minimum amount to stake is 100 ${nativeCurrency?.symbol}`)
-    } else if (accountBalance.gt(0) && accountBalance.lt(parsedAmount.toString())) {
+    } else if (accountBalance.gte(0) && accountBalance.lt(parsedAmount.toString())) {
       setAmountError('Your account balance is too low.')
     }
   }
