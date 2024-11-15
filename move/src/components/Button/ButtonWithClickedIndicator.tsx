@@ -4,7 +4,9 @@ import { Button } from '.'
 export function ButtonWithClickedIndicator({
   clickedIndicator,
   ...props
-}: ButtonHTMLAttributes<HTMLButtonElement> & { clickedIndicator: React.ReactNode }) {
+}: ButtonHTMLAttributes<HTMLButtonElement> & {
+  clickedIndicator: React.ReactNode
+}) {
   const [wasClicked, setWasClicked] = useState(false)
   return (
     <Button

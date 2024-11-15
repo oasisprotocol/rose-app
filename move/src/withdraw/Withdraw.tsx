@@ -1,29 +1,43 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import classes from '../App.module.css'
-import { Button } from '../components/Button'
-import { ButtonWithClickedIndicator } from '../components/Button/ButtonWithClickedIndicator'
-import { CopyPrivateKeyModal } from '../components/CopyPrivateKeyModal'
-import { Layout } from '../components/Layout'
-import ProgressBar from '../components/ProgressBar'
-import { ShortAddress } from '../components/ShortAddress'
-import { useWithdraw } from '../useWithdraw'
-
-import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
-import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
-import { staking } from '@oasisprotocol/client'
-import { useState } from 'react'
+import { FormEvent, useState } from 'react'
+import { parseUnits } from 'viem'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
+import classes from '../App.module.css'
+import { AccountAvatar } from '../components/AccountAvatar'
+import { Amount } from '../components/Amount'
+import { Button } from '../components/Button'
+import { Input } from '../components/Input'
+import { Layout } from '../components/Layout'
+import ProgressBar from '../components/ProgressBar'
+import { ShortAddress } from '../components/ShortAddress'
+import { useWithdraw } from '../useWithdraw'
+import { getValidOasisAddress } from '../utils/getBalances.ts'
+import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
+import { ExistingBalance } from './ExistingBalance.tsx'
 
-function isValidOasisAddress(addr: string): boolean {
-  try {
-    staking.addressFromBech32(addr)
-    return true
-  } catch (e) {
-    return false
-  }
+interface FormItem<T = string> {
+  value: T | undefined
+  error: string | undefined
+}
+
+interface DestinationForm {
+  destinationConsensusAddress: FormItem<`oasis1${string}`>
+  amount: FormItem<bigint>
+  error: string | undefined
+  isDirty: boolean
+}
+
+const destinationFormInitialValue: DestinationForm = {
+  destinationConsensusAddress: {
+    value: undefined,
+    error: 'Wallet address is required!',
+  },
+  amount: { value: undefined, error: 'Amount is required!' },
+  error: undefined,
+  isDirty: false,
 }
 
 export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
@@ -38,16 +52,160 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     availableBalance,
     progress,
     isBlockingNavigatingAway,
+    isInputMode,
   } = props.withdraw // Parent useWithdraw
 
   const isError = progress.percentage === undefined
 
-  const [isCopySapphirePrivateKeyModalOpen, setIsCopySapphirePrivateKeyModalOpen] = useState(false)
-  const [isCopyConsensusPrivateKeyModalOpen, setIsCopyConsensusPrivateKeyModalOpen] = useState(false)
+  const [destinationForm, setDestinationForm] = useState<DestinationForm>({
+...destinationFormInitialValue
+  })
+
+  const handleDestinationFormAddressChange = (value?: string) => {
+    if (!value) {
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        destinationConsensusAddress: {
+          ...prevState.destinationConsensusAddress,
+          error: 'Wallet address is required!',
+        },
+      }))
+
+      return
+    }
+
+    const address = getValidOasisAddress(value)
+
+    if (!address) {
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        destinationConsensusAddress: {
+          ...prevState.destinationConsensusAddress,
+          error: 'Invalid oasis1 address!',
+        },
+      }))
+
+      return
+    }
+
+    setDestinationForm((prevState) => ({
+      ...prevState,
+      destinationConsensusAddress: {
+        value: address,
+        error: undefined,
+      },
+    }))
+  }
+  const handleDestinationFormAmountChange = (value?: string) => {
+    if (!value) {
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        amount: {
+          value: 0n,
+          error: 'Amount is required!',
+        },
+      }))
+
+      return
+    }
+
+    const _value = value.replace(',', '.')
+
+    if (!_value.match(amountPattern)) {
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        amount: {
+          ...prevState.amount,
+          error: 'Amount is invalid! Should be in x.xxxxxxxxx format',
+        },
+      }))
+
+      return
+    }
+
+    try {
+      const amount = parseUnits(_value, consensusConfig.decimals)
+
+      if (amount * 10n ** 9n < withdrawEstimatedFee) {
+        setDestinationForm((prevState) => ({
+          ...prevState,
+          amount: {
+            ...prevState.amount,
+            error: 'Amount is too low!',
+          },
+        }))
+
+        return
+      }
+
+      if (amount * 10n ** 9n > (availableBalance?.value ?? 0n)) {
+        setDestinationForm((prevState) => ({
+          ...prevState,
+          amount: {
+            ...prevState.amount,
+            error: 'There is not enough available balance!',
+          },
+        }))
+
+        return
+      }
+
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        amount: {
+          value: amount,
+          error: undefined,
+        },
+      }))
+    } catch (ex) {
+      setDestinationForm((prevState) => ({
+        ...prevState,
+        amount: {
+          ...prevState.amount,
+          error: 'Invalid amount!',
+        },
+      }))
+    }
+  }
+
+  const handleDestinationFormSubmit = async (
+    e: FormEvent,
+    opts: {
+      hasPreviousBalance: boolean
+    } = { hasPreviousBalance: false },
+  ) => {
+    const { hasPreviousBalance } = opts
+    e.preventDefault()
+
+    setDestinationForm((prevState) => ({ ...prevState, isDirty: true }))
+
+    const { destinationConsensusAddress, amount } = destinationForm
+
+    if (!destinationConsensusAddress.value || destinationConsensusAddress.error) {
+      return
+    }
+
+    if (!hasPreviousBalance) {
+      if (!amount.value || amount.error) {
+        return
+      }
+      try {
+        await step3(amount.value * 10n ** 9n)
+      } catch (err) {
+        setDestinationForm((prevState) => ({ ...prevState, error: (err as Error).message }))
+        return
+      }
+    }
+
+    setConsensusAddress(destinationConsensusAddress.value)
+    step4(destinationConsensusAddress.value)
+
+    setDestinationForm({...destinationFormInitialValue})
+  }
 
   if (!generatedConsensusAccount) throw new Error('<Withdraw> used before SIWE')
   if (!generatedSapphireAccount) throw new Error('<Withdraw> used before SIWE')
-  if (!consensusAddress) {
+  if (isInputMode) {
     return (
       <Layout
         header={
@@ -59,30 +217,86 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
           </>
         }
       >
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            // @ts-expect-error Missing types
-            const consensusAddress = e.currentTarget.elements.consensusAddress.value
-            setConsensusAddress(consensusAddress)
-            step3(consensusAddress)
-          }}
+        <ExistingBalance
+          consensusAddress={generatedConsensusAccount.address}
+          sapphireAddress={generatedSapphireAccount.address}
         >
-          Where do you want your funds to be sent to?
-          <input
-            name="consensusAddress"
-            required
-            onChange={(e) => {
-              e.currentTarget.setCustomValidity(
-                isValidOasisAddress(e.currentTarget.value) ? '' : 'Invalid oasis1 address',
-              )
-            }}
-          />
-          <button type="submit">Submit</button>
-        </form>
+          {(hasPreviousBalance, previousAmount) => (
+            <div className={classes.withdrawStep1}>
+              <div>
+                <h1>Where do you want your funds to be sent to?</h1>
+                <p className="body">
+                  Please specify the recipient address
+                  {!hasPreviousBalance && ' and the amount of funds to be transferred.'}
+                  {hasPreviousBalance && ' and transfer the rest of your amount.'}
+                </p>
+              </div>
+              <form onSubmit={(e) => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>
+                <Input
+                  className={classes.withdrawStep1Address}
+                  onChange={handleDestinationFormAddressChange}
+                  label="Wallet address"
+                  inputMode="text"
+                  error={destinationForm.isDirty ? destinationForm.destinationConsensusAddress.error : undefined}
+                  initialValue={consensusAddress}
+                />
+                {!hasPreviousBalance && (
+                  <Input
+                    onChange={handleDestinationFormAmountChange}
+                    label="Amount"
+                    inputMode="decimal"
+                    pattern={amountPattern}
+                    error={destinationForm.isDirty ? destinationForm.amount.error : undefined}
+                  />
+                )}
+
+                {!hasPreviousBalance && availableBalance && (
+                  <div className={classes.withdrawStep1Breakdown}>
+                    <div>
+                      <p>Available</p>
+                      <p>
+                        <Amount value={availableBalance.value} />
+                      </p>
+                    </div>
+                    <div>
+                      <p>Fee</p>
+                      <p>
+                        <Amount value={withdrawEstimatedFee} />
+                      </p>
+                    </div>
+                    <div>
+                      <p><b>Withdrawal amount</b></p>
+                      <p>
+                        {!destinationForm.amount.error && destinationForm.amount.value ? (
+                          <Amount value={destinationForm.amount.value * 10n ** 9n - withdrawEstimatedFee} />
+                        ) : (
+                          <Amount value={0n} />
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                {hasPreviousBalance && (
+                  <div className={classes.withdrawStep1Breakdown}>
+                    <div>
+                      <p><b>Withdrawal amount</b></p>
+                      <p>
+                        <Amount value={previousAmount - withdrawEstimatedFee} />
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <Button type="submit">Submit</Button>
+                <p className="error">{destinationForm.error}</p>
+              </form>
+            </div>
+          )}
+        </ExistingBalance>
       </Layout>
     )
   }
+
   return (
     <>
       <Layout
@@ -96,34 +310,27 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
         }
       >
         <div className={classes.step3}>
-          <div
-            className={
-              progress.percentage && progress.percentage <= 0.05
-                ? classes.collapsible
-                : `${classes.collapsible} ${classes.collapsed}`
-            }
-          >
-            <h1>Address created and awaiting your transfer {generatedConsensusAccount.isFresh && '✨'}</h1>
+          {consensusAddress && (
+            <div>
+              <p className={`body ${classes.withdrawStep4ProgressBarLabel}`}>
+                Your funds will be sent to this address:
+              </p>
+              <div className={classes.overrideMaxWidth}>
+                <div className={classes.addressWrapper}>
+                  <div className={classes.startAdornment}>Destination</div>
+                  <div className={classes.address}>
+                    <AccountAvatar diameter={24} account={{ address: consensusAddress }} />
+                    <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
+                      <ShortAddress address={consensusAddress} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
-            <form
-              onSubmit={(e) => {
-                e.preventDefault()
-                // trigger transfer
-                step4(
-                  // @ts-expect-error Missing types
-                  e.currentTarget.elements.amount.value,
-                )
-              }}
-            >
-              Amount:
-              <input name="amount" type="number" step="any" min="0.1" required />
-              <button type="submit">Submit</button>
-              (balance: {availableBalance?.formatted} {availableBalance?.symbol})
-            </form>
-          </div>
           <h2 style={{ marginBottom: '-20px' }}>{progress.message}</h2>
           <ProgressBar percentage={progress.percentage || 0} isError={isError} />
-          Your funds will be sent to this address: {consensusAddress}
           {isBlockingNavigatingAway && (
             <>
               <img src={loader_blocks_svg} alt="" style={{ marginTop: '-20px', width: '106px' }} />
@@ -153,16 +360,16 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
               </a>
             </div>
           )}
-          <details>
+          {/*<details>
             <summary>Advanced</summary>
-            <br />
+            <br/>
             Transfer to:
             <div className={classes.overrideMaxWidth}>
               <div className={classes.addressWrapper}>
                 <div className={classes.startAdornment}>Your address 1</div>
                 <div className={classes.address}>
                   <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
-                    <ShortAddress address={generatedSapphireAccount.address} />
+                    <ShortAddress address={generatedSapphireAccount.address}/>
                   </div>
                 </div>
                 <div>
@@ -171,7 +378,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                     className={classes.plainButton}
                     onClick={() => setIsCopySapphirePrivateKeyModalOpen(true)}
                   >
-                    <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
+                    <img src={vpn_key_svg} alt="Show your private key" width="24" style={{filter: 'invert(1)'}}/>
                   </Button>
                   <CopyPrivateKeyModal
                     privateKey={generatedSapphireAccount.privateKey}
@@ -184,9 +391,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                     title="Copy address"
                     className={classes.plainButton}
                     onClick={() => window.navigator.clipboard.writeText(generatedSapphireAccount.address)}
-                    clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24" />}
+                    clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24"/>}
                   >
-                    <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
+                    <img src={file_copy_svg} alt="Copy address" width="24" style={{filter: 'invert(1)'}}/>
                   </ButtonWithClickedIndicator>
                 </div>
               </div>
@@ -197,7 +404,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                 <div className={classes.startAdornment}>Your address 2</div>
                 <div className={classes.address}>
                   <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
-                    <ShortAddress address={generatedConsensusAccount.address} />
+                    <ShortAddress address={generatedConsensusAccount.address}/>
                   </div>
                 </div>
                 <div>
@@ -206,7 +413,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                     className={classes.plainButton}
                     onClick={() => setIsCopyConsensusPrivateKeyModalOpen(true)}
                   >
-                    <img src={vpn_key_svg} alt="Show your private key" width="24" style={{ filter: 'invert(1)' }} />
+                    <img src={vpn_key_svg} alt="Show your private key" width="24" style={{filter: 'invert(1)'}}/>
                   </Button>
                   <CopyPrivateKeyModal
                     privateKey={generatedConsensusAccount.privateKey}
@@ -219,15 +426,15 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                     title="Copy address"
                     className={classes.plainButton}
                     onClick={() => window.navigator.clipboard.writeText(generatedConsensusAccount.address)}
-                    clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24" />}
+                    clickedIndicator={<img src={symbol_check_circle_svg} alt="Copied" width="24"/>}
                   >
-                    <img src={file_copy_svg} alt="Copy address" width="24" style={{ filter: 'invert(1)' }} />
+                    <img src={file_copy_svg} alt="Copy address" width="24" style={{filter: 'invert(1)'}}/>
                   </ButtonWithClickedIndicator>
                 </div>
               </div>
             </div>
             Then transferred to {consensusAddress}
-          </details>
+          </details>*/}
         </div>
       </Layout>
     </>

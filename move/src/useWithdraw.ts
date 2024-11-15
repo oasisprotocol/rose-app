@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { parseEther } from 'viem'
 import { useAccount, useBalance, useSendTransaction } from 'wagmi'
 import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
@@ -15,6 +14,7 @@ export function useWithdraw() {
   const sapphireAddress = useAccount().address
   const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } = useGenerateSapphireAccount()
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
+  const [isInputMode, setIsInputMode] = useState(true)
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({ address: sapphireAddress })
   const { sendTransactionAsync } = useSendTransaction()
@@ -23,13 +23,25 @@ export function useWithdraw() {
     if (!sapphireAddress) return
     await generateSapphireAccount(sapphireAddress)
   }
+
+  async function step3(value: bigint) {
+    if (!generatedSapphireAccount) return
+    await sendTransactionAsync({
+      to: generatedSapphireAccount?.address,
+      value,
+    })
+  }
+
   // Long running promise, doesn't get canceled if this component is destroyed
-  async function step3(consensusAddress: `oasis1${string}`) {
+  async function step4(consensusAddress: `oasis1${string}`) {
     // Note: outside state var consensusAddress is outdated. Use param.
     if (!sapphireAddress) return
     if (!generatedSapphireAccount) return
     if (!generatedConsensusAccount) return
     if (!consensusAddress) return
+
+    setIsInputMode(false)
+
     try {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
       if (foundStuckRoseTokens.raw <= 0n) {
@@ -78,23 +90,14 @@ export function useWithdraw() {
       allowNavigatingAway()
     }
 
-    // Loop
-    await step3(consensusAddress)
+    // Loop unless in input mode, case when user click transfer more
+    if (!isInputMode) {
+      await step4(consensusAddress)
+    }
   }
 
   function transferMore() {
-    // Just pretends to be on that step. In reality process is still stuck at
-    // waitForConsensusBalance, but if user makes a transfer, it becomes real.
-    setProgress({ percentage: 0.05, message: 'Awaiting ROSE transfer…' })
-  }
-
-  /** Transfer into step3 */
-  async function step4(amount: string) {
-    if (!generatedSapphireAccount) return
-    await sendTransactionAsync({
-      to: generatedSapphireAccount?.address,
-      value: parseEther(amount),
-    })
+    setIsInputMode(true)
   }
 
   return {
@@ -110,5 +113,6 @@ export function useWithdraw() {
     availableBalance,
     progress,
     isBlockingNavigatingAway,
+    isInputMode,
   }
 }

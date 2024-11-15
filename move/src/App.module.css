@@ -51,6 +51,7 @@
   h1 {
     margin-bottom: 10px;
   }
+
   .cards {
     display: flex;
     flex-direction: row;
@@ -89,6 +90,7 @@
     display: flex;
     justify-content: center;
   }
+
   .addressWrapper {
     display: grid;
     grid-template-columns: auto auto auto auto auto;
@@ -113,6 +115,7 @@
       color: var(--brand-extra-dark);
       border-radius: 8px 0 0 8px;
     }
+
     .address {
       font-family: Roboto Mono Variable, monospace;
       flex-grow: 1;
@@ -120,15 +123,18 @@
       padding: 23px;
       gap: 8px;
     }
+
     .addressLonger > * {
       max-width: 50ch;
     }
+
     .endAdornment {
       display: flex;
       gap: 6px;
 
       border-left: 2px solid var(--white);
     }
+
     .plainButton {
       background-color: transparent;
     }
@@ -150,15 +156,19 @@
         border-radius: 8px 8px 0 0;
         text-align: center;
       }
+
       .endAdornment {
         border: none;
       }
+
       button {
         padding: 0px 15px;
       }
+
       .address {
         padding: 10px;
       }
+
       .addressLonger > * {
         max-width: calc(100cqw - 300px);
       }
@@ -186,6 +196,7 @@
   background-color: var(--white);
   color: var(--brand-extra-dark);
 }
+
 .cardContent {
   display: flex;
   flex-direction: column;
@@ -194,12 +205,9 @@
   gap: 8px;
   padding: 16px;
 }
+
 .cardImage {
   width: 100%;
-}
-
-.opacity50 {
-  opacity: 0.5;
 }
 
 .collapsible {
@@ -220,4 +228,47 @@
   font: inherit;
   cursor: pointer;
   outline: inherit;
+}
+
+.withdrawStep1 {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 575px;
+  padding-left: 105px;
+
+  form {
+    button {
+      margin-top: 2rem;
+    }
+  }
+
+  .withdrawStep1Address {
+    margin-bottom: 1.5rem;
+  }
+
+  .withdrawStep1Breakdown {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 1rem;
+
+    div {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      padding: 1rem 0;
+
+      border-bottom: 1px solid var(--white);
+
+      &:last-of-type {
+        border-bottom: 2px solid var(--white);
+      }
+    }
+  }
+}
+
+.withdrawStep4ProgressBarLabel {
+  text-align: center;
+  margin-bottom: 0.5rem;
 }

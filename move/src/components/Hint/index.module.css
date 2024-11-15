@@ -13,6 +13,7 @@
   margin-top: 16px;
   border-radius: 4px;
   position: relative;
+
   &::before {
     content: '';
     border-radius: 2px;
@@ -40,8 +41,10 @@
     left: 50px; /* Extra space so hint doesn't cover sidebar toggle */
     right: 110px;
     margin-top: -60px;
+
     .hint {
       width: 100%;
+
       &::before {
         right: -8px;
         left: auto;

@@ -1,7 +1,10 @@
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../utils/oasisConfig'
+import { getConsensusAccountsWrapper, getNodeInternal } from '../utils/client.ts'
+import { multiplyConsensusToSapphire, sapphireConfig } from '../utils/oasisConfig'
 import { SapphireAccount } from './useGenerateSapphireAccount'
+
+const { PROD } = import.meta.env
 
 const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
 const minimalRepresentableAmount = 1n * multiplyConsensusToSapphire
@@ -19,9 +22,9 @@ export async function withdrawToConsensus(props: {
   const amountToWithdraw = roundTo9Decimals(props.availableAmountToWithdraw - feeAmount)
   if (amountToWithdraw <= 0n) return // should be equal to (props.availableAmountToWithdraw <= minimalWithdrawableAmount)
 
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const chainContext = await nic.consensusGetChainContext()
-  const rtw = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+  const rtw = getConsensusAccountsWrapper()
     .callWithdraw()
     .setBody({
       amount: [oasis.quantity.fromBigInt(amountToWithdraw), oasisRT.token.NATIVE_DENOMINATION],
@@ -63,8 +66,10 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
 }
 
 async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
-  const accountsWrapper = new oasisRT.accounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+  const nic = getNodeInternal()
+  const accountsWrapper = new oasisRT.accounts.Wrapper(
+    oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
+  )
   const nonce = await accountsWrapper
     .queryNonce()
     .setArgs({ address: oasis.staking.addressFromBech32(oasisAddress) })

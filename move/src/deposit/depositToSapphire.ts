@@ -1,6 +1,9 @@
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
-import { multiplyConsensusToSapphire, oasisConfig, sapphireConfig } from '../utils/oasisConfig'
+import { getConsensusAccountsWrapper, getNodeInternal } from '../utils/client.ts'
+import { multiplyConsensusToSapphire, sapphireConfig } from '../utils/oasisConfig'
+
+const { PROD } = import.meta.env
 
 /**
  * Set allowance from consensusAddress to sapphireConfig.mainnet.address (step 1 of depositing)
@@ -11,11 +14,13 @@ export async function depositToSapphireStep1(props: {
   consensusSigner: oasis.signature.NaclSigner
   sapphireAddress: `0x${string}`
 }) {
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const existingAllowance = oasis.quantity.toBigInt(
     await nic.stakingAllowance({
       owner: oasis.staking.addressFromBech32(props.consensusAddress),
-      beneficiary: oasis.staking.addressFromBech32(sapphireConfig.mainnet.address),
+      beneficiary: oasis.staking.addressFromBech32(
+        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address,
+      ),
       height: oasis.consensus.HEIGHT_LATEST,
     }),
   )
@@ -28,7 +33,9 @@ export async function depositToSapphireStep1(props: {
     .setNonce(await getConsensusNonce(props.consensusAddress))
     .setFeeAmount(oasis.quantity.fromBigInt(0n)) // TODO: assumes consensus txs are free
     .setBody({
-      beneficiary: oasis.staking.addressFromBech32(sapphireConfig.mainnet.address),
+      beneficiary: oasis.staking.addressFromBech32(
+        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address,
+      ),
       negative: false,
       amount_change: oasis.quantity.fromBigInt(props.amountToDeposit - existingAllowance),
     })
@@ -48,9 +55,9 @@ export async function depositToSapphireStep2(props: {
   sapphireAddress: `0x${string}`
 }) {
   if (props.amountToDeposit <= 0n) return
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const chainContext = await nic.consensusGetChainContext()
-  const rtw = new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+  const rtw = getConsensusAccountsWrapper()
     .callDeposit()
     .setBody({
       amount: [
@@ -72,7 +79,9 @@ export async function depositToSapphireStep2(props: {
     ])
 
   rtw.setFeeGas(
-    await new oasisRT.core.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+    await new oasisRT.core.Wrapper(
+      oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
+    )
       .queryEstimateGas()
       .setArgs({ tx: rtw.transaction })
       .query(nic),
@@ -94,7 +103,7 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
 }
 
 async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const nonce =
     (await nic.consensusGetSignerNonce({
       account_address: oasis.staking.addressFromBech32(oasisAddress),
@@ -104,8 +113,10 @@ async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
 }
 
 async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
-  const accountsWrapper = new oasisRT.accounts.Wrapper(oasis.misc.fromHex(sapphireConfig.mainnet.runtimeId))
+  const nic = getNodeInternal()
+  const accountsWrapper = new oasisRT.accounts.Wrapper(
+    oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
+  )
   const nonce = await accountsWrapper
     .queryNonce()
     .setArgs({ address: oasis.staking.addressFromBech32(oasisAddress) })

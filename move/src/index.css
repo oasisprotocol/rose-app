@@ -21,6 +21,7 @@
   --green: #4cd4a9;
   --green-25: #4cd4a940;
   --red: #ff0e0e;
+  --red-dark: #620000;
   --orange: #ed6c02;
   --orange-bg: #ffe8cd;
   --orange-light: #fff0e4;
@@ -64,6 +65,10 @@ span {
     font-size: 16px;
     font-weight: 500;
     line-height: 24px;
+  }
+
+  &.error.error {
+    color: var(--red-dark);
   }
 }
 

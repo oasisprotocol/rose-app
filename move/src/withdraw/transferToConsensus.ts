@@ -1,6 +1,7 @@
 import * as oasis from '@oasisprotocol/client'
-import { oasisConfig } from '../utils/oasisConfig'
 import { ConsensusAccount } from './useGenerateSapphireAccount'
+
+import { getNodeInternal } from '../utils/client.ts'
 
 export async function transferToConsensus(props: {
   amount: bigint
@@ -8,7 +9,7 @@ export async function transferToConsensus(props: {
   toConsensusAddress: `oasis1${string}`
 }) {
   if (props.amount <= 0n) return
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const chainContext = await nic.consensusGetChainContext()
   const tw = oasis.staking
     .transferWrapper()
@@ -25,7 +26,7 @@ export async function transferToConsensus(props: {
 }
 
 async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+  const nic = getNodeInternal()
   const nonce =
     (await nic.consensusGetSignerNonce({
       account_address: oasis.staking.addressFromBech32(oasisAddress),

@@ -9,7 +9,6 @@ import { useDeposit } from './useDeposit'
 import { useWithdraw } from './useWithdraw'
 import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
-import open_in_new_svg from '@material-design-icons/svg/filled/open_in_new.svg'
 import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import { useState } from 'react'
@@ -21,8 +20,6 @@ import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
 import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 import { Withdraw } from './withdraw/Withdraw'
-
-const isProduction = import.meta.env.PROD
 
 export function App() {
   useReloadIfAccountSwitched()
@@ -129,25 +126,13 @@ export function App() {
             </div>
 
             <div className={classes.card}>
-              <img className={`${classes.cardImage} ${classes.opacity50}`} src={sapphire_to_consensus_svg} alt="" />
+              <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt="" />
               <div className={classes.cardContent}>
                 <h2>Sapphire to Consensus</h2>
                 <p>
                   Move ROSE from your Sapphire account (e.g. in MetaMask) to your Consensus account (e.g. an exchange).
                 </p>
-                <Button onClick={withdraw.step2} className={classes.opacity50} disabled={isProduction}>
-                  Coming soon
-                </Button>
-                <Button
-                  onClick={() => open('https://wallet.oasis.io/')}
-                  style={{
-                    position: 'absolute',
-                    marginTop: -50,
-                  }}
-                >
-                  Instead use our ROSE Wallet &nbsp;&nbsp;&nbsp;&nbsp;
-                  <img src={open_in_new_svg} alt="" width="24" style={{ filter: 'invert(1)' }} />
-                </Button>
+                <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>
             </div>
           </div>

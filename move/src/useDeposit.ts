@@ -20,6 +20,7 @@ export function useDeposit() {
     blockNavigatingAway() // Start blocking early for the first transfer
     await step3(generatedConsensusAccount, sapphireAddress)
   }
+
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
