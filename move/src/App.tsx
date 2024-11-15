@@ -112,9 +112,13 @@ export function App() {
           </div>
           <div className={classes.cards}>
             <div className={classes.card}>
-              <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt="" />
+              <div className={classes.cardHeader}>
+                <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt=""/>
+                <h2>
+                  <span>Consensus</span> <span>to&nbsp;</span> <span>&nbsp;Sapphire</span>
+                </h2>
+              </div>
               <div className={classes.cardContent}>
-                <h2>Consensus to Sapphire</h2>
                 <p>
                   Easily move your ROSE tokens from a crypto exchange to use on Sapphire with an EVM compatible wallet.
                 </p>
@@ -123,11 +127,15 @@ export function App() {
             </div>
 
             <div className={classes.card}>
-              <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt="" />
+              <div className={classes.cardHeader}>
+                <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt=""/>
+                <h2><span>&nbsp;Sapphire</span> <span>&nbsp;to</span> <span>Consensus</span></h2>
+              </div>
               <div className={classes.cardContent}>
-                <h2>Sapphire to Consensus</h2>
                 <p>
                   Move your ROSE tokens from Sapphire back to a crypto exchange.
+                  <br/>
+                  <br/>
                 </p>
                 <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>
