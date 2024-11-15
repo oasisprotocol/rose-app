@@ -7,14 +7,13 @@ export function App() {
       <div className={classes.row}>
         <a href="/stake/" className={classes.stake}>
           <h2>Stake</h2>
-          <p>A dApp that let's you stake ROSE on the Oasis Sapphire ParaTime.</p>
+          <p>Stake your ROSE directly from Sapphire using an EVM compatible wallet.</p>
           <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
         </a>
         <a href="/move/" className={classes.move}>
           <h2>Move</h2>
           <p>
-            Makes it easy to move ROSE tokens into Sapphire. It generates a Consensus account (oasis1*) that
-            automatically forwards any received ROSE into your Sapphire account.
+            Send your ROSE between any centralized exchange and Sapphire.
           </p>
           <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
         </a>
