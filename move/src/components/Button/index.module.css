@@ -18,13 +18,16 @@
     &:focus-visible {
       filter: contrast(0.9);
     }
+
     &:active {
       filter: contrast(0.7);
     }
   }
+
   &:disabled {
     cursor: not-allowed;
   }
+
   img {
     vertical-align: middle;
   }

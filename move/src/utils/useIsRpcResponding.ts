@@ -1,12 +1,12 @@
-import * as oasis from '@oasisprotocol/client'
 import { useQuery } from '@tanstack/react-query'
-import { oasisConfig } from './oasisConfig'
+
+import { getNodeInternal } from './client.ts'
 
 export function useIsRpcResponding() {
   const data = useQuery({
     queryKey: ['beaconGetEpoch'],
     queryFn: async () => {
-      const nic = new oasis.client.NodeInternal(oasisConfig.mainnet.grpc)
+      const nic = getNodeInternal()
       return await nic.beaconGetEpoch(0)
     },
     retry: false,
