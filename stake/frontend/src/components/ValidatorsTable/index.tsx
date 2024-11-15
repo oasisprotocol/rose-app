@@ -33,7 +33,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
       {!!validatorsList?.validators.length && (
         <Table
           className={classes.table}
-          headers={['', 'Name', 'Fee', '']}
+          headers={['', 'Name', 'Commission', '']}
           data={validatorsList.validators}
           isExpandable
           maxHeight={328}

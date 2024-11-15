@@ -56,6 +56,10 @@
   color: var(--brand-blue);
 }
 
+.amountInput {
+  margin-bottom: 1.625rem;
+}
+
 @media screen and (max-width: 1000px) {
   .amountInput {
     margin-bottom: 172px;
