@@ -126,8 +126,6 @@ export function App() {
               <div className={classes.cardContent}>
                 <p>
                   Move your ROSE from Sapphire back to a crypto exchange or consensus account.
-                  <br />
-                  <br />
                 </p>
                 <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>
