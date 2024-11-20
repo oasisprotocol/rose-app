@@ -26,6 +26,7 @@ export function Sidebar(props: { children: React.ReactNode }) {
         </div>
       </nav>
       <div className={classes.main}>{props.children}</div>
+      {/*biome-ignore lint/a11y/noLabelWithoutControl: for input[type="checkbox"]*/}
       <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>
   )

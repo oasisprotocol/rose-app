@@ -39,8 +39,8 @@ export function App() {
             <div>
               <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
               <p>
-                Easily move your ROSE tokens from a crypto exchange to use on Sapphire with an EVM compatible wallet.
-                Start by connecting your wallet.
+                Easily move your ROSE from a crypto exchange or consensus account to Sapphire. Start by connecting your
+                wallet.
               </p>
             </div>
             {isRpcResponding ? (
@@ -95,7 +95,7 @@ export function App() {
         header={
           <>
             <img src={logo_rose_move_svg} alt="ROSE Move logo" />
-            <Hint title="Your funds will be sent to this address.">
+            <Hint title="Your ROSE will be sent to this address.">
               <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
                 <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
               </div>
@@ -106,32 +106,28 @@ export function App() {
         <div className={classes.step2}>
           <div>
             <h1>Where do you want to move your ROSE?</h1>
-            <p>
-              Choose the destination to move your ROSE. Select and sign-in to verify.
-            </p>
+            <p>Choose the destination to move your ROSE. Select and sign-in to verify.</p>
           </div>
           <div className={classes.cards}>
             <div className={classes.card}>
               <div className={classes.cardHeader}>
-                <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt=""/>
+                <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt="" />
               </div>
               <div className={classes.cardContent}>
-                <p>
-                  Easily move your ROSE tokens from a crypto exchange to use on Sapphire with an EVM compatible wallet.
-                </p>
+                <p>Easily move your ROSE from a crypto exchange or consensus account to use on Sapphire.</p>
                 <Button onClick={deposit.step2}>Select and sign-in</Button>
               </div>
             </div>
 
             <div className={classes.card}>
               <div className={classes.cardHeader}>
-                <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt=""/>
+                <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt="" />
               </div>
               <div className={classes.cardContent}>
                 <p>
-                  Move your ROSE tokens from Sapphire back to a crypto exchange.
-                  <br/>
-                  <br/>
+                  Move your ROSE from Sapphire back to a crypto exchange or consensus account.
+                  <br />
+                  <br />
                 </p>
                 <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>
