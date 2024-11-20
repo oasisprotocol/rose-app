@@ -58,7 +58,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
   const isError = progress.percentage === undefined
 
   const [destinationForm, setDestinationForm] = useState<DestinationForm>({
-...destinationFormInitialValue
+    ...destinationFormInitialValue,
   })
 
   const handleDestinationFormAddressChange = (value?: string) => {
@@ -200,7 +200,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     setConsensusAddress(destinationConsensusAddress.value)
     step4(destinationConsensusAddress.value)
 
-    setDestinationForm({...destinationFormInitialValue})
+    setDestinationForm({ ...destinationFormInitialValue })
   }
 
   if (!generatedConsensusAccount) throw new Error('<Withdraw> used before SIWE')
@@ -224,11 +224,10 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
           {(hasPreviousBalance, previousAmount) => (
             <div className={classes.withdrawStep1}>
               <div>
-                <h1>Where do you want your funds to be sent to?</h1>
+                <h1>Where do you want to move your ROSE to?</h1>
                 <p className="body">
-                  Please enter the exchange deposit address or recipient address
-                  {!hasPreviousBalance && ' and the amount of ROSE you want to transfer'}
-                  .
+                  Please enter the crypto exchange deposit address or consensus account address
+                  {!hasPreviousBalance && ' and the amount of ROSE you want to move'}.
                 </p>
               </div>
               <form onSubmit={(e) => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>
@@ -265,7 +264,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                       </p>
                     </div>
                     <div>
-                      <p><b>Withdrawal amount</b></p>
+                      <p>
+                        <b>Withdrawal amount</b>
+                      </p>
                       <p>
                         {!destinationForm.amount.error && destinationForm.amount.value ? (
                           <Amount value={destinationForm.amount.value * 10n ** 9n - withdrawEstimatedFee} />
@@ -279,7 +280,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                 {hasPreviousBalance && (
                   <div className={classes.withdrawStep1Breakdown}>
                     <div>
-                      <p><b>Withdrawal amount</b></p>
+                      <p>
+                        <b>Withdrawal amount</b>
+                      </p>
                       <p>
                         <Amount value={previousAmount - withdrawEstimatedFee} />
                       </p>
@@ -312,9 +315,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
         <div className={classes.step3}>
           {consensusAddress && (
             <div>
-              <p className={`body ${classes.withdrawStep4ProgressBarLabel}`}>
-                Your funds will be sent to this address:
-              </p>
+              <p className={`body ${classes.withdrawStep4ProgressBarLabel}`}>Your ROSE will be sent to this address:</p>
               <div className={classes.overrideMaxWidth}>
                 <div className={classes.addressWrapper}>
                   <div className={classes.startAdornment}>Destination</div>

@@ -45,7 +45,7 @@ export function useWithdraw() {
     try {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
       if (foundStuckRoseTokens.raw <= 0n) {
-        setProgress({ percentage: 0.05, message: 'Waiting to Move your ROSE…' })
+        setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
         const availableAmountToWithdraw = await waitForSapphireBalance(
           generatedSapphireAccount.address,
           minimalWithdrawableAmount,

@@ -24,7 +24,7 @@ export function useDeposit() {
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
-      setProgress({ percentage: 0.05, message: 'Waiting to Move your ROSE…' })
+      setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
       setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       blockNavigatingAway()
@@ -71,7 +71,7 @@ export function useDeposit() {
   function transferMore() {
     // Just pretends to be on that step. In reality process is still stuck at
     // waitForConsensusBalance, but if user makes a transfer, it becomes real.
-    setProgress({ percentage: 0.05, message: 'Waiting to Move your ROSE…' })
+    setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
   }
 
   return {

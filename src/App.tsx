@@ -12,9 +12,7 @@ export function App() {
         </a>
         <a href="/move/" className={classes.move}>
           <h2>Move</h2>
-          <p>
-            Send your ROSE between any centralized exchange and Sapphire.
-          </p>
+          <p>Move your ROSE between any crypto exchange or consensus account and Sapphire.</p>
           <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
         </a>
       </div>
