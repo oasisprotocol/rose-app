@@ -124,9 +124,7 @@ export function App() {
                 <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt="" />
               </div>
               <div className={classes.cardContent}>
-                <p>
-                  Move your ROSE from Sapphire back to a crypto exchange or consensus account.
-                </p>
+                <p>Move your ROSE from Sapphire back to a crypto exchange or consensus account.</p>
                 <Button onClick={withdraw.step2}>Select and sign-in</Button>
               </div>
             </div>

@@ -1,10 +1,17 @@
 import { useState } from 'react'
 import { useAccount, useBalance, useSendTransaction } from 'wagmi'
+import { usePrevious } from './hooks/usePrevious.ts'
 import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
+
+// Use global variable here, due to step4 using different context(not in sync with react hooks)
+let isInputMode = true
+const setIsInputMode = (_isInputMode: boolean) => {
+  isInputMode = _isInputMode
+}
 
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
@@ -14,10 +21,10 @@ export function useWithdraw() {
   const sapphireAddress = useAccount().address
   const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } = useGenerateSapphireAccount()
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
-  const [isInputMode, setIsInputMode] = useState(true)
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({ address: sapphireAddress })
   const { sendTransactionAsync } = useSendTransaction()
+  const isPrevError = usePrevious(progress.percentage === undefined)
 
   async function step2() {
     if (!sapphireAddress) return
@@ -39,8 +46,6 @@ export function useWithdraw() {
     if (!generatedSapphireAccount) return
     if (!generatedConsensusAccount) return
     if (!consensusAddress) return
-
-    setIsInputMode(false)
 
     try {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
@@ -114,5 +119,7 @@ export function useWithdraw() {
     progress,
     isBlockingNavigatingAway,
     isInputMode,
+    setIsInputMode,
+    isPrevError,
   }
 }
