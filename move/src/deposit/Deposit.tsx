@@ -22,7 +22,7 @@ import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/symbol_warning.svg?url'
 
 export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
-  const { generatedConsensusAccount, transferMore, progress, isBlockingNavigatingAway } = props.deposit // Parent useDeposit
+  const { generatedConsensusAccount, transferMore, progress, isBlockingNavigatingAway, isPrevError } = props.deposit // Parent useDeposit
 
   const isError = progress.percentage === undefined
 
@@ -54,7 +54,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
         <div className={classes.step3}>
           <div
             className={
-              progress.percentage && progress.percentage <= 0.05
+              !isPrevError && progress.percentage && progress.percentage <= 0.05
                 ? classes.collapsible
                 : `${classes.collapsible} ${classes.collapsed}`
             }
@@ -78,7 +78,11 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
               <div className={classes.startAdornment}>Your address</div>
               <div className={classes.address}>
                 <AccountAvatar diameter={24} account={{ address: generatedConsensusAccount.address }} />
-                <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
+                <div
+                  className={
+                    !isPrevError && progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''
+                  }
+                >
                   <ShortAddress address={generatedConsensusAccount.address} />
                 </div>
               </div>

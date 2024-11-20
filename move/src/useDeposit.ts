@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
 import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
+import { usePrevious } from './hooks/usePrevious.ts'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 
@@ -12,6 +13,7 @@ export function useDeposit() {
   const { generatedConsensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
+  const isPrevError = usePrevious(progress.percentage === undefined)
 
   // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
@@ -81,5 +83,6 @@ export function useDeposit() {
     transferMore,
     progress,
     isBlockingNavigatingAway,
+    isPrevError,
   }
 }

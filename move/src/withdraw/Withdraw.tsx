@@ -53,6 +53,8 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     progress,
     isBlockingNavigatingAway,
     isInputMode,
+    setIsInputMode,
+    isPrevError,
   } = props.withdraw // Parent useWithdraw
 
   const isError = progress.percentage === undefined
@@ -197,6 +199,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
       }
     }
 
+    setIsInputMode(false)
     setConsensusAddress(destinationConsensusAddress.value)
     step4(destinationConsensusAddress.value)
 
@@ -321,7 +324,11 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                   <div className={classes.startAdornment}>Destination</div>
                   <div className={classes.address}>
                     <AccountAvatar diameter={24} account={{ address: consensusAddress }} />
-                    <div className={progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''}>
+                    <div
+                      className={
+                        !isPrevError && progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''
+                      }
+                    >
                       <ShortAddress address={consensusAddress} />
                     </div>
                   </div>
