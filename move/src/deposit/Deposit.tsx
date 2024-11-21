@@ -146,7 +146,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
         </div>
       </Layout>
       <VideoModal
-        src="https://www.youtube.com/embed/EtK7mh4Llfc"
+        src="https://www.youtube-nocookie.com/embed/EtK7mh4Llfc"
         header="How do I start the transfer?"
         body="Not sure how to tackle this step? Check out our example below."
         isOpen={isMoveTransferVideoModalOpen}
