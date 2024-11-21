@@ -307,7 +307,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
           )}
         </ExistingBalance>
         <VideoModal
-          src="https://www.youtube.com/embed/ordwjaT88I4"
+          src="https://www.youtube-nocookie.com/embed/ordwjaT88I4"
           header="How do I start the transfer?"
           body="Not sure how to tackle this step? Check out our example below."
           isOpen={isWithdrawHelpVideoOpen}
