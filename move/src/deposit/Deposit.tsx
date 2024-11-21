@@ -62,7 +62,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
             <h1>Your exchange withdrawal address is created! {generatedConsensusAccount.isFresh && '✨'}</h1>
             <p>
               Copy the below address and initiate the withdrawal from your crypto exchange or consensus account to
-              continue. Your ROSE Will be automatically moved to your Sapphire address.{' '}
+              continue. Your ROSE will be automatically moved to your Sapphire address.{' '}
               <button
                 type="button"
                 className={classes.plainButton2}
