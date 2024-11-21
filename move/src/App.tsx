@@ -1,7 +1,6 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import classes from './App.module.css'
 import { Button } from './components/Button'
-import { Hint } from './components/Hint'
 import { Layout } from './components/Layout'
 import { PrivateKeyHelpModal } from './components/PrivateKeyHelpModal'
 import { VideoModal } from './components/VideoModal'
@@ -95,11 +94,9 @@ export function App() {
         header={
           <>
             <img src={logo_rose_move_svg} alt="ROSE Move logo" />
-            <Hint title="Your ROSE will be sent to this address.">
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
-              </div>
-            </Hint>
+            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
+            </div>
           </>
         }
       >
