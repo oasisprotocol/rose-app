@@ -1,3 +1,4 @@
+import photo_camera_outlined_svg from '@material-design-icons/svg/outlined/photo_camera.svg'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { FormEvent, useState } from 'react'
 import { parseUnits } from 'viem'
@@ -13,6 +14,7 @@ import { Input } from '../components/Input'
 import { Layout } from '../components/Layout'
 import ProgressBar from '../components/ProgressBar'
 import { ShortAddress } from '../components/ShortAddress'
+import { VideoModal } from '../components/VideoModal'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
@@ -62,6 +64,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
   const [destinationForm, setDestinationForm] = useState<DestinationForm>({
     ...destinationFormInitialValue,
   })
+  const [isWithdrawHelpVideoOpen, setIsWithdrawHelpVideoOpen] = useState(false)
 
   const handleDestinationFormAddressChange = (value?: string) => {
     if (!value) {
@@ -232,6 +235,10 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                   Please enter the crypto exchange deposit address or consensus account address
                   {!hasPreviousBalance && ' and the amount of ROSE you want to move'}.
                 </p>
+                <button type="button" className={classes.linkButton} onClick={() => setIsWithdrawHelpVideoOpen(true)}>
+                  Need help? Click here
+                  <img src={photo_camera_outlined_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
+                </button>
               </div>
               <form onSubmit={(e) => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>
                 <Input
@@ -299,6 +306,13 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
             </div>
           )}
         </ExistingBalance>
+        <VideoModal
+          src="https://www.youtube.com/embed/ordwjaT88I4"
+          header="How do I start the transfer?"
+          body="Not sure how to tackle this step? Check out our example below."
+          isOpen={isWithdrawHelpVideoOpen}
+          closeModal={() => setIsWithdrawHelpVideoOpen(false)}
+        />
       </Layout>
     )
   }
