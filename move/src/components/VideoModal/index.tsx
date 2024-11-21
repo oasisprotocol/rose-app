@@ -4,7 +4,7 @@ import classes from './index.module.css'
 
 export interface Props extends ModalProps {
   src: string
-  header: ReactNode
+  header: string
   body: ReactNode
 }
 
@@ -15,8 +15,17 @@ export const VideoModal: FC<Props> = ({ src, header, body, ...modalOpts }) => {
         <h1>{header}</h1>
         <p className="body">{body}</p>
 
-        {/*biome-ignore lint/a11y/useMediaCaption: Provide captions*/}
-        <video autoPlay className={classes.video} controls src={src}></video>
+        <div className={classes.videoContainer}>
+          <iframe
+            className={classes.video}
+            src={`${src}?autoplay=1&mute=1`}
+            title={header}
+            frameBorder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerPolicy="strict-origin-when-cross-origin"
+            allowFullScreen
+          ></iframe>
+        </div>
       </div>
     </Modal>
   )

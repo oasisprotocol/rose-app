@@ -12,7 +12,6 @@ import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import ROSE_Move_Walkthrough_mp4 from '/ROSE Move Walkthrough.mp4?url'
 import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
 import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
@@ -74,7 +73,7 @@ export function App() {
           </div>
         </Layout>
         <VideoModal
-          src={ROSE_Move_Walkthrough_mp4}
+          src="https://www.youtube-nocookie.com/embed/2AEBhbArV0k"
           header="How do I use ROSE move?"
           body="Our walkthrough below shows you what the process would look like. The exact process might differ from your
         experience depending on the exchange you are using."

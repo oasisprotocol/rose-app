@@ -12,10 +12,9 @@ import { VideoModal } from '../components/VideoModal'
 import { useDeposit } from '../useDeposit'
 
 import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
-import help_outline_svg from '@material-design-icons/svg/filled/help_outline.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
+import photo_camera_outlined_svg from '@material-design-icons/svg/outlined/photo_camera.svg'
 import { useState } from 'react'
-import ROSE_Move_Transfer_mp4 from '/ROSE Move Transfer.mp4?url'
 import loader_blocks_svg from '/loader_blocks.svg?url'
 import logo_rose_move_svg from '/logo_rose_move.svg?url'
 import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
@@ -65,10 +64,11 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
               continue. Your ROSE will be automatically moved to your Sapphire address.{' '}
               <button
                 type="button"
-                className={classes.plainButton2}
+                className={`${classes.justifySelfCenter} ${classes.linkButton}`}
                 onClick={() => setIsMoveTransferVideoModalOpen(true)}
               >
-                <img src={help_outline_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
+                Need help? Click here
+                <img src={photo_camera_outlined_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
               </button>
             </p>
           </div>
@@ -146,7 +146,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
         </div>
       </Layout>
       <VideoModal
-        src={ROSE_Move_Transfer_mp4}
+        src="https://www.youtube.com/embed/EtK7mh4Llfc"
         header="How do I start the transfer?"
         body="Not sure how to tackle this step? Check out our example below."
         isOpen={isMoveTransferVideoModalOpen}
