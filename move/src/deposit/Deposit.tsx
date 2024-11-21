@@ -39,8 +39,8 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
             <Hint
               title={(() => {
                 if (progress.percentage === undefined) return
-                if (progress.percentage <= 0.05) return 'Your ROSE will be sent to this address.'
-                if (progress.percentage >= 1) return 'ROSE tokens received at this address'
+                if (progress.percentage <= 0.05) return 'Your ROSE will be moved to this address.'
+                if (progress.percentage >= 1) return 'ROSE tokens moved to this address'
                 return
               })()}
             >
@@ -59,7 +59,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 : `${classes.collapsible} ${classes.collapsed}`
             }
           >
-            <h1>Your exchange withdrawal address is created! {generatedConsensusAccount.isFresh && '✨'}</h1>
+            <h1>Your transfer address is created! {generatedConsensusAccount.isFresh && '✨'}</h1>
             <p>
               Copy the below address and initiate the withdrawal from your crypto exchange or consensus account to
               continue. Your ROSE will be automatically moved to your Sapphire address.{' '}
