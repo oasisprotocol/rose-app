@@ -318,7 +318,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
         <div className={classes.step3}>
           {consensusAddress && (
             <div>
-              <p className={`body ${classes.withdrawStep4ProgressBarLabel}`}>Your ROSE will be sent to this address:</p>
+              <p className={`body ${classes.withdrawStep4ProgressBarLabel}`}>
+                Your ROSE will be moved to this address:
+              </p>
               <div className={classes.overrideMaxWidth}>
                 <div className={classes.addressWrapper}>
                   <div className={classes.startAdornment}>Destination</div>
