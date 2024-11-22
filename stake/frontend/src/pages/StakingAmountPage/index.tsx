@@ -24,6 +24,8 @@ import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { FeeWarningModal } from '../../components/FeeWarningModal'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits, parseUnits } from 'viem'
+import { InfoIcon } from '../../components/icons/InfoIcon'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
 
 enum Steps {
   DelegateInputAmount,
@@ -287,7 +289,17 @@ const StakingAmountPageCmp: FC = () => {
                 </p>,
               ],
               [
-                <span className="body">Gas price:</span>,
+                <span className="body">
+                  Gas price:&nbsp;
+                  <Tooltip>
+                    <TooltipTrigger>
+                      <InfoIcon />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      Cost per unit of gas spent for the transaction in n{nativeCurrency?.symbol}.
+                    </TooltipContent>
+                  </Tooltip>
+                </span>,
                 <span className="body">
                   <GasPrice gasPrice={gasPrice} />
                 </span>,
