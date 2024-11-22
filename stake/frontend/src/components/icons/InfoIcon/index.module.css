@@ -1,0 +1,9 @@
+.infoIcon {
+  &:before {
+    color: var(--brand-dark-blue);
+  }
+
+  svg {
+    color: var(--gray-dark);
+  }
+}

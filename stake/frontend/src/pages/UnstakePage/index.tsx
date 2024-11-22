@@ -23,6 +23,8 @@ import { FormattingUtils } from '../../utils/formatting.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits } from 'viem'
+import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
+import { InfoIcon } from '../../components/icons/InfoIcon'
 
 enum Steps {
   UndelegateInputAmount,
@@ -240,7 +242,8 @@ const UnstakePageCmp: FC = () => {
             calcAmountFromPercentage={getAmountFromPercentage}
           />
           <p className="body mute">
-            <b>Note:</b> users will be able to claim their staked ROSE after the 14 day debonding period has finished.
+            <b>Note:</b> users will be able to claim their staked ROSE after the 14 day debonding period has
+            finished.
           </p>
           <div className={classes.actionButtonsContainer}>
             <Button disabled={amountError !== ''} onClick={() => setStep(Steps.UndelegatePreviewTransaction)}>
@@ -297,7 +300,17 @@ const UnstakePageCmp: FC = () => {
                       </p>,
                     ],
                     [
-                      <span className="body">Gas price:</span>,
+                      <span className="body">
+                        Gas price:&nbsp;
+                        <Tooltip>
+                          <TooltipTrigger>
+                            <InfoIcon />
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Cost per unit of gas spent for the transaction in n{nativeCurrency?.symbol}.
+                          </TooltipContent>
+                        </Tooltip>
+                      </span>,
                       <span className="body">
                         <GasPrice gasPrice={gasPrice} />
                       </span>,
@@ -366,7 +379,9 @@ const UnstakePageCmp: FC = () => {
         <Alert
           type="loading"
           headerText="Unstaking initiated"
-          actions={<span className="body">You can see your debonding positions from the Stake dashboard.</span>}
+          actions={
+            <span className="body">You can see your debonding positions from the Stake dashboard.</span>
+          }
         />
       )}
     </>
