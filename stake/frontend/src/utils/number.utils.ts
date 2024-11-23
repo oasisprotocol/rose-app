@@ -8,6 +8,15 @@ import {
 import { SharesType } from '../types/shares-type'
 import { formatUnits } from 'viem'
 
+export const BIG_NUMBER_PLAIN_FORMAT = {
+  decimalSeparator: '',
+  groupSeparator: '',
+  groupSize: 0,
+  secondaryGroupSize: 0,
+  fractionGroupSeparator: '',
+  fractionGroupSize: 0
+}
+
 export abstract class NumberUtils {
   // Compatible with https://github.com/MetaMask/metamask-extension/blob/v10.7.0/ui/helpers/utils/icon-factory.js#L84-L88
   static jsNumberForAddress(address: string) {
