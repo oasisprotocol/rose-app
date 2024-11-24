@@ -90,7 +90,7 @@ const StakingAmountPageCmp: FC = () => {
     const sapphireAmount = NumberUtils.consensusAmountToSapphireAmount(value)
     setStep(Steps.DelegateInProgress)
 
-    sendTransactionAsync(populateDelegateTx(sapphireAmount, to, gasPriceSnapshot), {
+    sendTransactionAsync(await populateDelegateTx(sapphireAmount, to, gasPriceSnapshot), {
       onSuccess: async hash => {
         await getTransactionReceipt(hash)
 

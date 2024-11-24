@@ -1,43 +1,78 @@
-// EIP-3085: wallet_addEthereumChain RPC Method
-interface AddEthereumChainParameter {
-  chainId: string
-  chainName: string
-  iconUrls?: string[]
-  nativeCurrency: {
-    name: string
-    symbol: string
-    decimals: number
-  }
-  rpcUrls: string[]
-  blockExplorerUrls: string[]
-}
+import { Chain, defineChain } from 'viem'
 
-export const CHAINS: Map<number, AddEthereumChainParameter> = new Map([
-  [
-    23294,
-    {
-      chainId: '0x5afe',
-      chainName: 'Oasis Sapphire',
-      nativeCurrency: {
-        name: 'ROSE',
-        symbol: 'ROSE',
-        decimals: 18,
-      },
-      rpcUrls: ['https://sapphire.oasis.io/', 'wss://sapphire.oasis.io/ws'],
-      blockExplorerUrls: ['https://explorer.oasis.io/mainnet/sapphire'],
+export const SAPPHIRE_CHAIN_CONFIG = defineChain({
+  id: 23294,
+  name: 'Oasis Sapphire',
+  network: 'sapphire',
+  nativeCurrency: { name: 'Sapphire Rose', symbol: 'ROSE', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ['https://sapphire.oasis.io'],
+      webSocket: ['wss://sapphire.oasis.io/ws'],
     },
-  ],
-  [
-    23295,
-    {
-      chainId: '0x5aff',
-      chainName: 'Oasis Sapphire Testnet',
-      nativeCurrency: { name: 'TEST', symbol: 'TEST', decimals: 18 },
-      rpcUrls: ['https://testnet.sapphire.oasis.dev/', 'wss://testnet.sapphire.oasis.dev/ws'],
-      blockExplorerUrls: ['https://explorer.oasis.io/testnet/sapphire'],
+  },
+  blockExplorers: {
+    default: {
+      name: 'Oasis Explorer',
+      url: 'https://explorer.oasis.io/mainnet/sapphire',
     },
-  ],
-])
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 734531,
+    },
+  },
+})
+
+export const SAPPHIRE_1RPC_CHAIN_CONFIG = defineChain({
+  id: 23294,
+  name: 'Oasis Sapphire',
+  network: 'sapphire',
+  nativeCurrency: { name: 'Sapphire Rose', symbol: 'ROSE', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ['https://1rpc.io/oasis/sapphire'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Oasis Explorer',
+      url: 'https://explorer.oasis.io/mainnet/sapphire',
+    },
+  },
+  contracts: {
+    multicall3: {
+      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
+      blockCreated: 734531,
+    },
+  },
+})
+
+export const SAPPHIRE_TESTNET_CHAIN_CONFIG = defineChain({
+  id: 23295,
+  name: 'Oasis Sapphire Testnet',
+  network: 'sapphire-testnet',
+  nativeCurrency: { name: 'Sapphire Test Rose', symbol: 'TEST', decimals: 18 },
+  rpcUrls: {
+    default: {
+      http: ['https://testnet.sapphire.oasis.dev'],
+      webSocket: ['wss://testnet.sapphire.oasis.dev/ws'],
+    },
+  },
+  blockExplorers: {
+    default: {
+      name: 'Oasis Explorer',
+      url: 'https://explorer.oasis.io/testnet/sapphire',
+    },
+  },
+  testnet: true,
+})
+
+export const SUPPORTED_CHAIN_IDS: Record<number, Chain> = {
+  [23294]: SAPPHIRE_1RPC_CHAIN_CONFIG,
+  [23295]: SAPPHIRE_TESTNET_CHAIN_CONFIG,
+}
 
 export const NEXUS_BASE_URL_CONFIG: Map<number, string> = new Map([
   [23294, 'https://nexus.oasis.io/v1/'],

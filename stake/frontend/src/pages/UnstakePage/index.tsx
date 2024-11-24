@@ -121,7 +121,7 @@ const UnstakePageCmp: FC = () => {
     setError('')
     setStep(Steps.UndelegateInProgress)
 
-    sendTransactionAsync(populateUndelegateTx(amountShares, to, gasPrice!), {
+    sendTransactionAsync(await populateUndelegateTx(amountShares, to, gasPrice!), {
       onSuccess: async hash => {
         await getTransactionReceipt(hash)
 
