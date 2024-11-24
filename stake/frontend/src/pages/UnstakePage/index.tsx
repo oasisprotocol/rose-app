@@ -25,7 +25,7 @@ import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits } from 'viem'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
 import { InfoIcon } from '../../components/icons/InfoIcon'
-import {BIG_NUMBER_PLAIN_FORMAT} from "../../utils/number.utils";
+import { BIG_NUMBER_PLAIN_FORMAT } from '../../utils/number.utils'
 
 enum Steps {
   UndelegateInputAmount,

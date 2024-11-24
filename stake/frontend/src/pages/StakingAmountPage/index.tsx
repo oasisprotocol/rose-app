@@ -19,7 +19,7 @@ import { Delegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
 import { CONSENSUS_DECIMALS, GAS_LIMIT_STAKE, MIN_STAKE_AMOUNT } from '../../constants/config'
 import BigNumber from 'bignumber.js'
-import {BIG_NUMBER_PLAIN_FORMAT, NumberUtils} from '../../utils/number.utils'
+import { BIG_NUMBER_PLAIN_FORMAT, NumberUtils } from '../../utils/number.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { FeeWarningModal } from '../../components/FeeWarningModal'
 import { useAccount, useSendTransaction } from 'wagmi'
@@ -126,7 +126,10 @@ const StakingAmountPageCmp: FC = () => {
     const balance = BigNumber(stats?.balances.accountBalance?.toString() ?? '0').div(10 ** CONSENSUS_DECIMALS)
 
     const parsedAmount = BigInt(
-      BigNumber(balance).multipliedBy(percentage).integerValue(BigNumber.ROUND_DOWN).toFormat(BIG_NUMBER_PLAIN_FORMAT)
+      BigNumber(balance)
+        .multipliedBy(percentage)
+        .integerValue(BigNumber.ROUND_DOWN)
+        .toFormat(BIG_NUMBER_PLAIN_FORMAT)
     )
 
     return formatUnits(parsedAmount, CONSENSUS_DECIMALS)
