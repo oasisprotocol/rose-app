@@ -1,9 +1,31 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
-import { CHAINS, GAS_LIMIT_STAKE, GAS_LIMIT_UNSTAKE } from '../constants/config'
+import {
+  GAS_LIMIT_STAKE,
+  GAS_LIMIT_UNSTAKE,
+  SAPPHIRE_1RPC_CHAIN_CONFIG,
+  SAPPHIRE_CHAIN_CONFIG,
+  SAPPHIRE_TESTNET_CHAIN_CONFIG,
+  SUPPORTED_CHAIN_IDS,
+} from '../constants/config'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { consensusDelegate, consensusUndelegate } from '@oasisprotocol/dapp-staker-subcall'
 import { useAccount, usePublicClient } from 'wagmi'
-import { TransactionRequestLegacy } from 'viem'
+import { TransactionRequestLegacy, createPublicClient, http, PublicClient } from 'viem'
+
+const { PROD } = import.meta.env
+
+const clients: PublicClient[] = PROD
+  ? [
+      createPublicClient({
+        chain: SAPPHIRE_1RPC_CHAIN_CONFIG,
+        transport: http(),
+      }),
+      createPublicClient({
+        chain: SAPPHIRE_CHAIN_CONFIG,
+        transport: http(),
+      }),
+    ]
+  : [createPublicClient({ chain: SAPPHIRE_TESTNET_CHAIN_CONFIG, transport: http() })]
 
 const web3ProviderInitialState: Web3ProviderState = {
   explorerBaseUrl: null,
@@ -34,7 +56,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       return
     }
 
-    if (!CHAINS.has(chainId)) {
+    if (!Object.keys(SUPPORTED_CHAIN_IDS).includes(chainId.toString())) {
       setState(prevState => ({
         ...prevState,
         isSupportedNetwork: false,
@@ -44,8 +66,8 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       return
     }
 
-    const { blockExplorerUrls, nativeCurrency } = CHAINS.get(chainId)!
-    const [explorerBaseUrl] = blockExplorerUrls
+    const { blockExplorers, nativeCurrency } = SUPPORTED_CHAIN_IDS[chainId]
+    const explorerBaseUrl = blockExplorers!.default.url
 
     setState(prevState => ({
       ...prevState,
@@ -55,14 +77,21 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     }))
   }, [chainId])
 
-  const populateDelegateTx = (value: bigint, to: string, gasPrice: bigint) => {
-    const preparedTx = consensusDelegate(chainId!, to, value)
-    return { ...preparedTx, gas: GAS_LIMIT_STAKE, gasPrice } as TransactionRequestLegacy
+  const getNonce = async () => {
+    const nonces = await Promise.all(clients.map(c => c.getTransactionCount({ address: address! })))
+    return Math.max(...nonces)
   }
 
-  const populateUndelegateTx = (shares: bigint, from: string, gasPrice: bigint) => {
+  const populateDelegateTx = async (value: bigint, to: string, gasPrice: bigint) => {
+    const preparedTx = consensusDelegate(chainId!, to, value)
+    const nonce = await getNonce()
+    return { ...preparedTx, gas: GAS_LIMIT_STAKE, gasPrice, nonce } as TransactionRequestLegacy
+  }
+
+  const populateUndelegateTx = async (shares: bigint, from: string, gasPrice: bigint) => {
     const preparedTx = consensusUndelegate(chainId!, from, shares)
-    return { ...preparedTx, gas: GAS_LIMIT_UNSTAKE, gasPrice } as TransactionRequestLegacy
+    const nonce = await getNonce()
+    return { ...preparedTx, gas: GAS_LIMIT_UNSTAKE, gasPrice, nonce } as TransactionRequestLegacy
   }
 
   const getTransactionReceipt = async (hash: `0x${string}`) => {

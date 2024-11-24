@@ -14,7 +14,7 @@ export const BIG_NUMBER_PLAIN_FORMAT = {
   groupSize: 0,
   secondaryGroupSize: 0,
   fractionGroupSeparator: '',
-  fractionGroupSize: 0
+  fractionGroupSize: 0,
 }
 
 export abstract class NumberUtils {

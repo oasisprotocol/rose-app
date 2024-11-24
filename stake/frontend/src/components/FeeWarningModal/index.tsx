@@ -5,7 +5,7 @@ import { Button } from '../Button'
 import { CONSENSUS_DECIMALS, FEE_DEDUCTION_MULTIPLIER } from '../../constants/config'
 import { Amount } from '../Amount'
 import { AmountInput } from '../AmountInput'
-import {BIG_NUMBER_PLAIN_FORMAT, NumberUtils} from '../../utils/number.utils'
+import { BIG_NUMBER_PLAIN_FORMAT, NumberUtils } from '../../utils/number.utils'
 
 interface FeeWarningModalProps extends Pick<ModalProps, 'isOpen' | 'closeModal'> {
   fee: bigint
@@ -41,7 +41,9 @@ export const FeeWarningModal: FC<FeeWarningModalProps> = ({ isOpen, closeModal, 
         <AmountInput
           className={classes.feeWarningModalInput}
           label="Stake amount"
-          initialValue={consensusAmountWithDeductedFees.div(10 ** CONSENSUS_DECIMALS).toFormat(BIG_NUMBER_PLAIN_FORMAT)}
+          initialValue={consensusAmountWithDeductedFees
+            .div(10 ** CONSENSUS_DECIMALS)
+            .toFormat(BIG_NUMBER_PLAIN_FORMAT)}
         />
 
         <div className={classes.feeWarningModalActions}>
@@ -55,7 +57,11 @@ export const FeeWarningModal: FC<FeeWarningModalProps> = ({ isOpen, closeModal, 
           <button
             className={classes.feeWarningModalFullAmount}
             onClick={() =>
-              next(NumberUtils.sapphireAmountToConsensusAmount(estimatedAmountWithoutFee).toFormat(BIG_NUMBER_PLAIN_FORMAT))
+              next(
+                NumberUtils.sapphireAmountToConsensusAmount(estimatedAmountWithoutFee).toFormat(
+                  BIG_NUMBER_PLAIN_FORMAT
+                )
+              )
             }
           >
             Continue with full amount
