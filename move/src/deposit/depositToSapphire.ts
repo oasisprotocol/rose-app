@@ -1,6 +1,7 @@
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { getConsensusAccountsWrapper, getNodeInternal } from '../utils/client.ts'
+import { getConsensusNonce, getSapphireNonce } from '../utils/nonce.ts'
 import { multiplyConsensusToSapphire, sapphireConfig } from '../utils/oasisConfig'
 
 const { PROD } = import.meta.env
@@ -100,26 +101,4 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
   )
   const bech32Address = oasisRT.address.toBech32(address) as `oasis1${string}`
   return bech32Address
-}
-
-async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const nic = getNodeInternal()
-  const nonce =
-    (await nic.consensusGetSignerNonce({
-      account_address: oasis.staking.addressFromBech32(oasisAddress),
-      height: 0,
-    })) ?? 0
-  return nonce
-}
-
-async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
-  const nic = getNodeInternal()
-  const accountsWrapper = new oasisRT.accounts.Wrapper(
-    oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
-  )
-  const nonce = await accountsWrapper
-    .queryNonce()
-    .setArgs({ address: oasis.staking.addressFromBech32(oasisAddress) })
-    .query(nic)
-  return nonce
 }
