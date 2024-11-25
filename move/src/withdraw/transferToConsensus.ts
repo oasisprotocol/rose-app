@@ -2,6 +2,7 @@ import * as oasis from '@oasisprotocol/client'
 import { ConsensusAccount } from './useGenerateSapphireAccount'
 
 import { getNodeInternal } from '../utils/client.ts'
+import { getConsensusNonce } from '../utils/nonce.ts'
 
 export async function transferToConsensus(props: {
   amount: bigint
@@ -23,14 +24,4 @@ export async function transferToConsensus(props: {
   await tw.sign(new oasis.signature.BlindContextSigner(props.fromConsensusAccount.signer), chainContext)
   console.log('transferToConsensus', props.amount)
   await tw.submit(nic)
-}
-
-async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const nic = getNodeInternal()
-  const nonce =
-    (await nic.consensusGetSignerNonce({
-      account_address: oasis.staking.addressFromBech32(oasisAddress),
-      height: 0,
-    })) ?? 0
-  return nonce
 }
