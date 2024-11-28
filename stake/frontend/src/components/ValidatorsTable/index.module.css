@@ -144,6 +144,16 @@
           color: var(--gray-extra-dark);
           line-height: 38px;
         }
+
+        &.validatorDetailsActiveEscrowAmount {
+          display: inline-flex;
+          align-items: center;
+          line-height: unset;
+
+          span {
+            line-height: 24px;
+          }
+        }
       }
     }
   }

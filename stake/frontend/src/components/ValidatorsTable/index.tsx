@@ -109,7 +109,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
                         </p>
                         <p className="body">
                           <span>Active escrow:</span>
-                          <span>
+                          <span className={classes.validatorDetailsActiveEscrowAmount}>
                             <Amount unit="consensus" amount={entry.escrow.active_balance ?? 0n} />
                           </span>
                         </p>
