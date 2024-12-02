@@ -25,7 +25,7 @@ import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits } from 'viem'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
 import { InfoIcon } from '../../components/icons/InfoIcon'
-import { BIG_NUMBER_PLAIN_FORMAT } from '../../utils/number.utils'
+import {} from '../../utils/number.utils'
 
 enum Steps {
   UndelegateInputAmount,
@@ -114,7 +114,7 @@ const UnstakePageCmp: FC = () => {
       BigNumber.min(
         shares.integerValue(BigNumber.ROUND_CEIL),
         delegation.current?.shares.toString() ?? '0'
-      ).toFormat(BIG_NUMBER_PLAIN_FORMAT)
+      ).toFixed(0)
     ),
     to = delegation.current!.to
   ) => {
@@ -161,11 +161,11 @@ const UnstakePageCmp: FC = () => {
 
     const _shares = delegationShares.multipliedBy(percentage)
 
-    const amount = BigNumber(_shares.toFormat(BIG_NUMBER_PLAIN_FORMAT) ?? 0)
+    const amount = BigNumber(_shares.toFixed(0) ?? 0)
       .multipliedBy(rosePerShareRatio)
       .integerValue(BigNumber.ROUND_DOWN)
 
-    return formatUnits(BigInt(amount.toFormat(BIG_NUMBER_PLAIN_FORMAT)), CONSENSUS_DECIMALS)
+    return formatUnits(BigInt(amount.toFixed(0)), CONSENSUS_DECIMALS)
   })(BigNumber(delegation.current?.shares.toString() ?? 0))
 
   const handleAmountInputChange = ({ value, percentage }: { value?: string; percentage?: number }) => {
@@ -195,7 +195,7 @@ const UnstakePageCmp: FC = () => {
       const maxAmount = delegationShares.multipliedBy(rosePerShareRatio).integerValue(BigNumber.ROUND_DOWN)
 
       setAmountError(
-        `Maximum amount you can unstake is ${formatUnits(BigInt(maxAmount.toFormat(BIG_NUMBER_PLAIN_FORMAT)), CONSENSUS_DECIMALS)} ${nativeCurrency?.symbol} !`
+        `Maximum amount you can unstake is ${formatUnits(BigInt(maxAmount.toFixed(0)), CONSENSUS_DECIMALS)} ${nativeCurrency?.symbol} !`
       )
     }
   }

@@ -12,7 +12,7 @@ import { ToggleButton } from '../ToggleButton'
 import { SharesAmount } from '../SharesAmount'
 import { EmptyTableData } from '../EmptyTableData'
 import { CalendarUtils } from '../../utils/calendar.utils'
-import { BIG_NUMBER_PLAIN_FORMAT, NumberUtils } from '../../utils/number.utils'
+import { NumberUtils } from '../../utils/number.utils'
 import { startOfDay } from 'date-fns/startOfDay'
 import { endOfDay } from 'date-fns/endOfDay'
 import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip'
@@ -200,7 +200,7 @@ const DebondingTabCmp: FC<Props> = ({ undelegations }) => {
                                   if (amount === null) return null
                                   if (entry.debondTimeEstimate === null) return null
 
-                                  const formattedAmount = `${NumberUtils.formatAmount(amount.toFormat(BIG_NUMBER_PLAIN_FORMAT), 18)} ${nativeCurrency?.symbol}`
+                                  const formattedAmount = `${NumberUtils.formatAmount(amount.toFixed(0), 18)} ${nativeCurrency?.symbol}`
                                   const validatorFriendlyName =
                                     StringUtils.getValidatorFriendlyName(validator)
 

@@ -7,7 +7,7 @@ import { useApi } from '../hooks/useApi'
 import { FormattingUtils } from '../utils/formatting.utils'
 import { useGrpc } from '../hooks/useGrpc'
 import { Delegations, Undelegations } from '../types'
-import { BIG_NUMBER_PLAIN_FORMAT, NumberUtils } from '../utils/number.utils'
+import { NumberUtils } from '../utils/number.utils'
 import BigNumber from 'bignumber.js'
 import { useAccount, useBalance } from 'wagmi'
 import { useWeb3 } from '../hooks/useWeb3'
@@ -203,7 +203,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
           return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'staking') ?? 0)
         }, BigNumber(0))
-        .toFormat(BIG_NUMBER_PLAIN_FORMAT)
+        .toFixed(0)
 
       setState(prevState => ({
         ...prevState,
@@ -238,7 +238,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
           return acc.plus(NumberUtils.getAmountFromShares(shares.toString(), validator!, 'unstaking') ?? 0)
         }, BigNumber(0))
-        .toFormat(BIG_NUMBER_PLAIN_FORMAT)
+        .toFixed(0)
 
       setState(prevState => ({
         ...prevState,
