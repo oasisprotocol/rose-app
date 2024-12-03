@@ -13,7 +13,7 @@ import { useAppState } from '../../hooks/useAppState'
 const StakePageCmp: FC = () => {
   const navigate = useNavigate()
   const {
-    state: { isDesktopScreen },
+    state: { isMobileScreen, isDesktopScreen },
   } = useAppState()
   const [selectedValidator, setSelectedValidator] = useState<Validator | null>(null)
 
@@ -21,7 +21,12 @@ const StakePageCmp: FC = () => {
   const navigateToDashboard = () => navigate('/dashboard')
 
   return (
-    <Card className={classes.validatorsCard} header={<h2>Validators</h2>}>
+    <Card
+      className={classes.validatorsCard}
+      header={<h2>Validators</h2>}
+      hasBackButton={isMobileScreen}
+      onBackButtonClick={navigateToDashboard}
+    >
       <p className={StringUtils.clsx('body', classes.description)}>
         All options will reward users with 2.5% APY. Commission charged on rewards may vary.
       </p>

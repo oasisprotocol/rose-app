@@ -227,7 +227,11 @@ const UnstakePageCmp: FC = () => {
   return (
     <>
       {step === Steps.UndelegateInputAmount && (
-        <Card header={<h2>Unstaking amount</h2>}>
+        <Card
+          header={<h2>Unstaking amount</h2>}
+          hasBackButton={isMobileScreen}
+          onBackButtonClick={navigateToDashboard}
+        >
           <p className={StringUtils.clsx('body', classes.description)}>
             Enter the amount of {nativeCurrency?.symbol} you wish to unstake from{' '}
             <span className={StringUtils.clsx('mono', classes.validatorName)}>
@@ -259,7 +263,14 @@ const UnstakePageCmp: FC = () => {
         </Card>
       )}
       {step === Steps.UndelegatePreviewTransaction && (
-        <Card className={classes.previewTxCard} header={<h2>Preview</h2>}>
+        <Card
+          className={classes.previewTxCard}
+          header={<h2>Preview</h2>}
+          hasBackButton={isMobileScreen}
+          onBackButtonClick={() => {
+            setStep(Steps.UndelegateInputAmount)
+          }}
+        >
           <p className={StringUtils.clsx('body', classes.description)}>
             Check the details of the transaction below.
           </p>

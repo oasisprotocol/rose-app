@@ -201,7 +201,11 @@ const StakingAmountPageCmp: FC = () => {
   return (
     <>
       {step === Steps.DelegateInputAmount && (
-        <Card header={<h2>Staking amount</h2>}>
+        <Card
+          header={<h2>Staking amount</h2>}
+          hasBackButton={isMobileScreen}
+          onBackButtonClick={navigateToStake}
+        >
           <p className={StringUtils.clsx('body', classes.description)}>
             Enter the amount of {nativeCurrency?.symbol} you wish to stake with{' '}
             <span className={StringUtils.clsx('mono', classes.validatorName)}>
@@ -244,7 +248,14 @@ const StakingAmountPageCmp: FC = () => {
         </Card>
       )}
       {step === Steps.DelegatePreviewTransaction && (
-        <Card className={classes.previewTxCard} header={<h2>Preview</h2>}>
+        <Card
+          className={classes.previewTxCard}
+          header={<h2>Preview</h2>}
+          hasBackButton={isMobileScreen}
+          onBackButtonClick={() => {
+            setStep(Steps.DelegateInputAmount)
+          }}
+        >
           <p className={StringUtils.clsx('body', classes.description)}>
             Check the details of your staked position below.
           </p>
