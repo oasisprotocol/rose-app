@@ -261,7 +261,10 @@
   flex-direction: column;
   gap: 2rem;
   max-width: 575px;
-  padding-left: 105px;
+
+  @container (min-width: 700px) {
+    padding-left: 105px;
+  }
 
   h1 {
     margin-bottom: 0.5rem;
