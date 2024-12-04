@@ -1,6 +1,9 @@
 import { ReactElement, useState } from 'react'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
+import { SortOption } from '../../types'
+import { ArrowDropDownIcon } from '../icons/ArrowDropDownIcon'
+import { ArrowDropUpIcon } from '../icons/ArrowDropUpIcon'
 
 interface Props<T> {
   headers?: string[]
@@ -15,6 +18,8 @@ interface Props<T> {
   }) => ReactElement
   isExpandable?: boolean
   maxHeight?: number | string
+  sortByHeaders?: string[]
+  sortBy?: (sortByHeader: string, direction: SortOption, data: T[]) => T[]
 }
 
 export const Table = <T extends object>({
@@ -24,7 +29,12 @@ export const Table = <T extends object>({
   children,
   isExpandable,
   maxHeight,
+  sortByHeaders = [],
+  sortBy,
 }: Props<T>): ReactElement => {
+  const [rows, setRows] = useState([...data])
+  const [sortByOptions, setSortByOptions] = useState<{ header: string; direction: SortOption } | null>(null)
+
   const [isExpandedByIndex, setIsExpandedByIndex] = useState(() => {
     if (isExpandable) {
       return Array.from({ length: data.length }, () => false)
@@ -43,13 +53,51 @@ export const Table = <T extends object>({
     })
   }
 
+  const handleSortBy = (header: string) => {
+    if (!sortBy) {
+      return
+    }
+
+    const currentHeader = sortByOptions?.header ?? null
+    const currentDirection = sortByOptions?.direction ?? null
+
+    const nextDirection =
+      currentHeader === header ? ((Number(currentDirection) ?? 0) + 1) % 3 : SortOption.Down
+    if (nextDirection === SortOption.Default) {
+      setRows([...data])
+      setSortByOptions(null)
+
+      return
+    }
+
+    const sortedData = sortBy(header, nextDirection, [...data])
+    setRows(sortedData)
+    setSortByOptions({ header, direction: nextDirection })
+  }
+
   return (
     <table className={StringUtils.clsx(classes.table, className)}>
       {!!headers?.length && (
         <thead>
           <tr>
             {headers.map((headerName, index) => (
-              <th key={`${index}${headerName}`}>{headerName !== '' && <h3>{headerName}</h3>}</th>
+              <th key={`${index}${headerName}`}>
+                {headerName !== '' && (
+                  <button
+                    className={classes.sortBtn}
+                    onClick={() => handleSortBy(headerName)}
+                    disabled={!sortByHeaders.includes(headerName)}
+                  >
+                    {sortByOptions?.header === headerName && (
+                      <>
+                        {sortByOptions?.direction === SortOption.Down && <ArrowDropDownIcon />}
+                        {sortByOptions?.direction === SortOption.Up && <ArrowDropUpIcon />}
+                      </>
+                    )}
+                    <h3>{headerName}</h3>
+                  </button>
+                )}
+              </th>
             ))}
           </tr>
         </thead>
@@ -59,7 +107,7 @@ export const Table = <T extends object>({
           maxHeight: maxHeight ?? 'auto',
         }}
       >
-        {data.map((entry, index, entries) =>
+        {rows.map((entry, index, entries) =>
           children({
             entry,
             entries,

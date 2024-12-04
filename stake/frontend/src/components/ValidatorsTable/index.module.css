@@ -24,12 +24,16 @@
       th,
       td {
         &:nth-child(3) {
-          width: 80px;
+          width: 132px;
         }
       }
 
       th:nth-child(3) {
         text-align: right;
+
+        button {
+          margin-left: auto;
+        }
       }
 
       td:nth-child(3) {

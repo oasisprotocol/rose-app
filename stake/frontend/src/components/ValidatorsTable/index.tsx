@@ -11,6 +11,7 @@ import { Amount } from '../Amount'
 import { NumberUtils } from '../../utils/number.utils'
 import { LoadingTableData } from '../LoadingTableData'
 import { EmptyTableData } from '../EmptyTableData'
+import { SortOption } from '../../types'
 
 interface Props {
   value: Validator | null
@@ -21,6 +22,20 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
   const {
     state: { validatorsList, isMobileScreen, isDesktopScreen },
   } = useAppState()
+
+  const handleSortBy = (sortByHeader: string, direction: SortOption, data: Validator[]): Validator[] => {
+    if (!data.length) {
+      return []
+    }
+
+    if (sortByHeader === 'Commission') {
+      return data.sort(({ current_rate: currentRateA }, { current_rate: currentRateB }) =>
+        direction === SortOption.Down ? currentRateB - currentRateA : currentRateA - currentRateB
+      )
+    }
+
+    return []
+  }
 
   return (
     <div className={classes.validatorsTable}>
@@ -37,6 +52,8 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
           data={validatorsList.validators}
           isExpandable
           maxHeight={328}
+          sortByHeaders={['Commission']}
+          sortBy={handleSortBy}
         >
           {({ entry, isExpanded, toggleRow }) => {
             const isSelected = value?.entity_address === entry.entity_address
