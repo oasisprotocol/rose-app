@@ -34,6 +34,18 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
       )
     }
 
+    if (sortByHeader === 'Name') {
+      return data.sort((validatorA, validatorB) =>
+        direction === SortOption.Down
+          ? `${StringUtils.getValidatorFriendlyName(validatorB)}}`.localeCompare(
+              StringUtils.getValidatorFriendlyName(validatorA)
+            )
+          : `${StringUtils.getValidatorFriendlyName(validatorA)}}`.localeCompare(
+              StringUtils.getValidatorFriendlyName(validatorB)
+            )
+      )
+    }
+
     return []
   }
 
@@ -52,7 +64,7 @@ export const ValidatorsTable: FC<Props> = ({ value, onChange }) => {
           data={validatorsList.validators}
           isExpandable
           maxHeight={328}
-          sortByHeaders={['Commission']}
+          sortByHeaders={['Name', 'Commission']}
           sortBy={handleSortBy}
         >
           {({ entry, isExpanded, toggleRow }) => {

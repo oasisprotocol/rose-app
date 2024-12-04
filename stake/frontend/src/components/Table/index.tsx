@@ -61,8 +61,7 @@ export const Table = <T extends object>({
     const currentHeader = sortByOptions?.header ?? null
     const currentDirection = sortByOptions?.direction ?? null
 
-    const nextDirection =
-      currentHeader === header ? ((Number(currentDirection) ?? 0) + 1) % 3 : SortOption.Down
+    const nextDirection = currentHeader === header ? ((Number(currentDirection) ?? 0) + 1) % 3 : SortOption.Up
     if (nextDirection === SortOption.Default) {
       setRows([...data])
       setSortByOptions(null)

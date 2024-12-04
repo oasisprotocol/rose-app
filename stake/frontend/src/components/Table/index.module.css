@@ -84,4 +84,10 @@
   h3 {
     line-height: 30px;
   }
+
+  &:not(:disabled) {
+    h3 {
+      text-decoration: underline;
+    }
+  }
 }
