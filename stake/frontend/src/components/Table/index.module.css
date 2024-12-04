@@ -61,3 +61,33 @@
     }
   }
 }
+
+.sortBtn {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  background: none;
+  color: inherit;
+  border: none;
+  padding: 0;
+  font: inherit;
+  outline: inherit;
+
+  &:not(:disabled) {
+    cursor: pointer;
+  }
+
+  svg {
+    fill: var(--white);
+  }
+
+  h3 {
+    line-height: 30px;
+  }
+
+  &:not(:disabled) {
+    h3 {
+      text-decoration: underline;
+    }
+  }
+}
