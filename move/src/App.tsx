@@ -93,7 +93,7 @@ export function App() {
         header={
           <>
             <img src={logo_rose_move_svg} alt="ROSE Move logo" />
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <div className={classes.headerAccount}>
               <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
             </div>
           </>

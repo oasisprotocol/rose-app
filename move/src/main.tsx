@@ -12,6 +12,7 @@ import { config } from './wagmi.ts'
 import '@rainbow-me/rainbowkit/styles.css'
 import './index.css'
 import { AccountAvatar } from './components/AccountAvatar/index.tsx'
+import { SidebarAccount } from './components/SidebarAccount'
 
 const queryClient = new QueryClient()
 const rainbowkitTheme: RainbowkitTheme = {
@@ -22,20 +23,20 @@ const rainbowkitTheme: RainbowkitTheme = {
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <Sidebar>
-    <React.StrictMode>
-      <WagmiProvider config={config}>
-        <QueryClientProvider client={queryClient}>
-          <RainbowKitProvider
-            theme={rainbowkitTheme}
-            avatar={({ address, size }) => (
-              <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
-            )}
-          >
+  <React.StrictMode>
+    <WagmiProvider config={config}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider
+          theme={rainbowkitTheme}
+          avatar={({ address, size }) => (
+            <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
+          )}
+        >
+          <Sidebar navItem={<SidebarAccount />}>
             <App />
-          </RainbowKitProvider>
-        </QueryClientProvider>
-      </WagmiProvider>
-    </React.StrictMode>
-  </Sidebar>,
+          </Sidebar>
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+  </React.StrictMode>,
 )

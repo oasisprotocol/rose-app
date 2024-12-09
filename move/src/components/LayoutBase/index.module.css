@@ -42,7 +42,7 @@
 
 @container (max-width: 1000px) {
   .layout {
-    padding: 0 1.5rem 0.25rem;
+    padding: 0 0.75rem 0.25rem;
   }
 
   .footer {
