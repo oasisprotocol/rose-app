@@ -1,18 +1,30 @@
+import close_svg from '@material-design-icons/svg/filled/close.svg'
 import menu_svg from '@material-design-icons/svg/filled/menu.svg'
+import { PropsWithChildren, ReactNode } from 'react'
 import { Logo } from '../icons/Logo'
 import classes from './index.module.css'
 
-export function Sidebar(props: { children: React.ReactNode }) {
+interface Props {
+  navItem?: ReactNode
+}
+
+export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
   return (
     <div className={classes.sidebarLayout}>
       <input type="checkbox" id="sidebarCheckbox" className={classes.sidebarCheckbox} />
       <label title="Show sidebar" className={classes.sidebarToggle} htmlFor="sidebarCheckbox">
-        <img src={menu_svg} alt="Show sidebar" width="24" style={{ filter: 'invert(1)' }} />
+        <img src={menu_svg} alt="Show sidebar" width="20" style={{ filter: 'invert(1)' }} />
       </label>
       <nav className={classes.sidebar}>
-        <a href="/" className={classes.logo}>
-          <Logo />
-        </a>
+        <div className={classes.sidebarHeader}>
+          <a href="/" className={classes.logo}>
+            <Logo />
+          </a>
+          <label title="Hide sidebar" className={classes.mobileSidebarClose} htmlFor="sidebarCheckbox">
+            <img src={close_svg} alt="Hide sidebar" width="20" />
+          </label>
+        </div>
+        <hr />
 
         <div className={classes.linksWrapper}>
           <div className={classes.links}>
@@ -24,8 +36,10 @@ export function Sidebar(props: { children: React.ReactNode }) {
             </a>
           </div>
         </div>
+
+        {navItem}
       </nav>
-      <div className={classes.main}>{props.children}</div>
+      <div className={classes.main}>{children}</div>
       {/*biome-ignore lint/a11y/noLabelWithoutControl: for input[type="checkbox"]*/}
       <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>
