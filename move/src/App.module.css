@@ -309,3 +309,15 @@
 .justifySelfCenter {
   justify-self: center;
 }
+
+.headerAccount {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media screen and (max-width: 1023px) {
+  .headerAccount,
+  .headerAccountHint {
+    display: none;
+  }
+}

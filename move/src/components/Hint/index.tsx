@@ -1,8 +1,8 @@
 import classes from './index.module.css'
 
-export function Hint(props: { title: string | undefined; children: React.ReactNode }) {
+export function Hint(props: { title: string | undefined; className?: string; children: React.ReactNode }) {
   return (
-    <div>
+    <div className={props.className}>
       {props.children}
       {props.title && (
         <div className={classes.hintWrapper}>

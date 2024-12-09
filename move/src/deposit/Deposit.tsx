@@ -36,6 +36,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
           <>
             <img src={logo_rose_move_svg} alt="ROSE Move logo" />
             <Hint
+              className={classes.headerAccountHint}
               title={(() => {
                 if (progress.percentage === undefined) return
                 if (progress.percentage <= 0.05) return 'Your ROSE will be moved to this address.'
@@ -43,7 +44,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 return
               })()}
             >
-              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+              <div className={classes.headerAccount}>
                 <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
               </div>
             </Hint>
