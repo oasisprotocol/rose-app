@@ -5,7 +5,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { WagmiProvider } from 'wagmi'
 
-import { Sidebar } from '../../src/components/Sidebar/index.tsx'
+import { Sidebar } from '../../home/src/components/Sidebar/index.tsx'
 import { App } from './App.tsx'
 import { config } from './wagmi.ts'
 
