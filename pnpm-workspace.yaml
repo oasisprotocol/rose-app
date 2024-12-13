@@ -1,2 +1,5 @@
 packages:
   - 'home'
+  - 'stake'
+  - 'nexus'
+  - 'subcall'

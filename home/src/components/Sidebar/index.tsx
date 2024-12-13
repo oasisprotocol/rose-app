@@ -3,6 +3,7 @@ import menu_svg from '@material-design-icons/svg/filled/menu.svg'
 import { PropsWithChildren, ReactNode } from 'react'
 import { Logo } from '../icons/Logo'
 import classes from './index.module.css'
+import { NavLink } from 'react-router-dom'
 
 interface Props {
   navItem?: ReactNode
@@ -17,9 +18,9 @@ export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
       </label>
       <nav className={classes.sidebar}>
         <div className={classes.sidebarHeader}>
-          <a href="/" className={classes.logo}>
+          <NavLink to="/" className={classes.logo}>
             <Logo />
-          </a>
+          </NavLink>
           <label title="Hide sidebar" className={classes.mobileSidebarClose} htmlFor="sidebarCheckbox">
             <img src={close_svg} alt="Hide sidebar" width="20" />
           </label>
@@ -28,10 +29,13 @@ export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
 
         <div className={classes.linksWrapper}>
           <div className={classes.links}>
-            <a href="/stake/" className={window.location.pathname.startsWith('/stake/') ? classes.activeLink : ''}>
+            <NavLink to="/stake" className={({ isActive }) => (isActive ? classes.activeLink : '')}>
               Stake
-            </a>
-            <a href="/move/" className={window.location.pathname.startsWith('/move/') ? classes.activeLink : ''}>
+            </NavLink>
+            <a
+              href="/move/"
+              className={window.location.pathname.startsWith('/#/move/') ? classes.activeLink : ''}
+            >
               Move
             </a>
           </div>

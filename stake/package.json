@@ -1,35 +1,52 @@
 {
-  "name": "@oasisprotocol/dapp-staker",
-  "version": "1.0.0",
+  "name": "@oasisprotocol/rose-app-stake",
   "private": true,
+  "version": "1.0.0",
+  "license": "See License in ../LICENSE",
+  "type": "module",
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
-    "prepare": "husky",
-    "eslint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
-    "lint-git": "node ./internals/scripts/gitlint.mjs",
-    "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
-    "prettier-check": "prettier --check . --ignore-path .eslintignore",
-    "prettier": "prettier --write . --ignore-path .eslintignore"
+    "checkTs": "tsc --noEmit",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
   },
-  "license": "See License in LICENSE",
   "packageManager": "pnpm@8.15.4",
   "engines": {
     "node": ">=20"
   },
-  "lint-staged": {
-    "*.{js,mjs,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
-    "*.{js,mjs,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
+  "dependencies": {
+    "@floating-ui/react": "^0.26.24",
+    "@fontsource-variable/figtree": "^5.0.20",
+    "@fontsource-variable/roboto-mono": "^5.0.18",
+    "@material-design-icons/svg": "^0.14.13",
+    "@metamask/detect-provider": "^2.0.0",
+    "@metamask/jazzicon": "^2.0.0",
+    "@oasisprotocol/client": "^1.1.0",
+    "@oasisprotocol/nexus-api": "workspace:*",
+    "@oasisprotocol/rose-app-subcall": "workspace:*",
+    "@rainbow-me/rainbowkit": "^2.1.2",
+    "@tanstack/react-query": "5.0.5",
+    "axios": "^1.7.2",
+    "bignumber.js": "^9.1.2",
+    "date-fns": "^3.6.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-responsive": "^9.0.2",
+    "react-router-dom": "^6.22.2",
+    "viem": "^2.12.7",
+    "wagmi": "^2.12.7"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^7.1.0",
-    "@typescript-eslint/parser": "^7.1.0",
-    "eslint": "^8.57.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-plugin-react-refresh": "^0.4.5",
-    "husky": "^9.0.11",
-    "lint-staged": "^15.2.2",
-    "markdownlint-cli": "^0.39.0",
-    "prettier": "^3.2.5"
+    "@types/react": "^18.2.56",
+    "@types/react-dom": "^18.2.19",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.1.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/main.tsx"
+    }
   }
 }
