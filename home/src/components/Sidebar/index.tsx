@@ -3,13 +3,13 @@ import menu_svg from '@material-design-icons/svg/filled/menu.svg'
 import { PropsWithChildren, ReactNode } from 'react'
 import { Logo } from '../icons/Logo'
 import classes from './index.module.css'
-import { NavLink } from 'react-router-dom'
+import { NavLink, Outlet } from 'react-router-dom'
 
 interface Props {
   navItem?: ReactNode
 }
 
-export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
+export function Sidebar({ navItem }: Props) {
   return (
     <div className={classes.sidebarLayout}>
       <input type="checkbox" id="sidebarCheckbox" className={classes.sidebarCheckbox} />
@@ -43,7 +43,9 @@ export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
 
         {navItem}
       </nav>
-      <div className={classes.main}>{children}</div>
+      <div className={classes.main}>
+        <Outlet />
+      </div>
       {/*biome-ignore lint/a11y/noLabelWithoutControl: for input[type="checkbox"]*/}
       <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>

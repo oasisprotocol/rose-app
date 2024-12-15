@@ -18,7 +18,7 @@ const oasisAddressToSeed = (address: `oasis1${string}`) => {
 export function addressToJazzIconSeed(
   account:
     | { address: `oasis1${string}`; address_eth?: `0x${string}` }
-    | { address?: `oasis1${string}`; address_eth: `0x${string}` },
+    | { address?: `oasis1${string}`; address_eth: `0x${string}` }
 ) {
   return account.address_eth ? ethAddressToSeed(account.address_eth) : oasisAddressToSeed(account.address)
 }

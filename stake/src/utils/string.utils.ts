@@ -1,4 +1,3 @@
-import { NETWORK_NAMES } from '../constants/config'
 import { Validator } from '@oasisprotocol/nexus-api'
 
 const truncateEthRegex = /^(0x[a-zA-Z0-9]{4})[a-zA-Z0-9]+([a-zA-Z0-9]{4})$/
@@ -21,10 +20,6 @@ export abstract class StringUtils {
       .map(className => (className ? [className] : []))
       .flat()
       .join(' ')
-  }
-
-  static getNetworkFriendlyName = (chainName: string) => {
-    return NETWORK_NAMES[chainName] ?? 'Unknown network'
   }
 
   static truncate = (s: string, sliceIndex = 200) => {

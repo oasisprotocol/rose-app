@@ -4,33 +4,30 @@ import { stakeRouteObject } from '@oasisprotocol/rose-app-stake'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 
 import { App } from './App.tsx'
-import { Sidebar } from './components/Sidebar'
+import { ProvidersWithSidebar } from './ProvidersWithSidebar.tsx'
+
 import './index.css'
 
 const router = createHashRouter([
   {
     path: '',
+    element: <ProvidersWithSidebar />,
     children: [
       {
         path: '/',
-        element: (
-          <Sidebar>
-            <App />
-          </Sidebar>
-        ),
+        element: <App />,
       },
       {
         ...stakeRouteObject,
         path: 'stake',
-        element: <Sidebar>{stakeRouteObject.element}</Sidebar>,
       },
       {
         path: 'move',
-        element: (
-          <Sidebar>
-            <MoveApp />
-          </Sidebar>
-        ),
+        element: <MoveApp />,
+      },
+      {
+        path: '*',
+        element: <App />,
       },
     ],
   },
