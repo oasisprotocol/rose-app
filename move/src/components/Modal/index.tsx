@@ -10,7 +10,12 @@ export interface ModalProps {
   closeModal: (event?: MouseEvent<HTMLElement>) => void
 }
 
-export const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, isOpen, disableBackdropClick, closeModal }) => {
+export const Modal: FC<PropsWithChildren<ModalProps>> = ({
+  children,
+  isOpen,
+  disableBackdropClick,
+  closeModal,
+}) => {
   const modalOverlayRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -39,10 +44,8 @@ export const Modal: FC<PropsWithChildren<ModalProps>> = ({ children, isOpen, dis
   }
 
   return (
-    // biome-ignore lint/a11y/useKeyWithClickEvents: Global listener provided
     <div ref={modalOverlayRef} className={classes.modalOverlay} onClick={handleOverlayClick}>
-      {/*biome-ignore lint/a11y/useKeyWithClickEvents: Prevent backdrop propagation*/}
-      <div className={classes.modal} onClick={(e) => e.stopPropagation()}>
+      <div className={classes.modal} onClick={e => e.stopPropagation()}>
         <button type="button" className={classes.modalCloseButton} onClick={closeModal}>
           <CancelSvg />
         </button>

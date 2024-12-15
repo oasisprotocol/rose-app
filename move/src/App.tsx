@@ -12,9 +12,9 @@ import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
 import { useState } from 'react'
 import { useAccount } from 'wagmi'
-import consensus_to_sapphire_svg from '/consensus_to_sapphire.svg?url'
-import logo_rose_move_svg from '/logo_rose_move.svg?url'
-import sapphire_to_consensus_svg from '/sapphire_to_consensus.svg?url'
+import consensus_to_sapphire_svg from '/move/consensus_to_sapphire.svg?url'
+import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
+import sapphire_to_consensus_svg from '/move/sapphire_to_consensus.svg?url'
 import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 import { Withdraw } from './withdraw/Withdraw'
@@ -37,8 +37,8 @@ export function App() {
             <div>
               <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
               <p>
-                Easily move your ROSE from a crypto exchange or consensus account to Sapphire. Start by connecting your
-                wallet.
+                Easily move your ROSE from a crypto exchange or consensus account to Sapphire. Start by
+                connecting your wallet.
               </p>
             </div>
             {isRpcResponding ? (
@@ -62,7 +62,11 @@ export function App() {
                   <div>Learn how to use Move</div>
                 </div>
               </button>
-              <button type="button" className={classes.plainButton2} onClick={() => setIsPrivateKeyHelpModalOpen(true)}>
+              <button
+                type="button"
+                className={classes.plainButton2}
+                onClick={() => setIsPrivateKeyHelpModalOpen(true)}
+              >
                 <img src={vpn_key_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
                 <div>
                   <h3>Lost your private key?</h3>

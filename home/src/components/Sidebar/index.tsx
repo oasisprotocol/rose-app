@@ -32,12 +32,12 @@ export function Sidebar({ children, navItem }: PropsWithChildren<Props>) {
             <NavLink to="/stake" className={({ isActive }) => (isActive ? classes.activeLink : '')}>
               Stake
             </NavLink>
-            <a
-              href="/move/"
+            <NavLink
+              to="/move"
               className={window.location.pathname.startsWith('/#/move/') ? classes.activeLink : ''}
             >
               Move
-            </a>
+            </NavLink>
           </div>
         </div>
 

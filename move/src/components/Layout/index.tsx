@@ -1,4 +1,4 @@
-import symbol_warning_svg from '/symbol_warning.svg?url'
+import symbol_warning_svg from '/move/symbol_warning.svg?url'
 import { useIsRpcResponding } from '../../utils/useIsRpcResponding'
 import { LayoutBase } from '../LayoutBase'
 import classes from './index.module.css'

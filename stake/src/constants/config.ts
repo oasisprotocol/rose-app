@@ -89,8 +89,6 @@ export const NETWORK_NAMES: Record<string, string> = {
   'Oasis Sapphire Testnet': 'Sapphire Testnet',
 }
 
-export const GITHUB_REPOSITORY_URL = 'https://github.com/oasisprotocol/rose/'
-export const OASIS_HOME_PAGE_URL = 'https://oasisprotocol.org/'
 export const OASIS_HOME_PAGE_TOKENOMICS_URL = 'https://oasisprotocol.org/rose-and-tokenomics'
 export const OASIS_DOCS_PAGE_URL = 'https://docs.oasis.io/'
 export const OASIS_EXPLORER_SAPPHIRE_MAINNET_PAGE_URL = 'https://explorer.oasis.io/mainnet/sapphire'
