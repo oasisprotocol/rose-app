@@ -1,4 +1,4 @@
-import { Api } from '../generated/OasisScanV2Api.ts'
+import { Api } from '@oasisprotocol/oasisscan-api'
 
 const { PROD } = import.meta.env
 

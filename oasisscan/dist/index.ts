@@ -1151,16 +1151,18 @@ export type RequestParams = Omit<FullRequestParams, 'body' | 'method' | 'query' 
 export interface ApiConfig<SecurityDataType = unknown> {
   baseUrl?: string
   baseApiParams?: Omit<RequestParams, 'baseUrl' | 'cancelToken' | 'signal'>
-  securityWorker?: (securityData: SecurityDataType | null) => Promise<RequestParams | void> | RequestParams | void
+  securityWorker?: (
+    securityData: SecurityDataType | null
+  ) => Promise<RequestParams | void> | RequestParams | void
   customFetch?: typeof fetch
 }
 
-export interface HttpResponse<D, E = unknown> extends Response {
+export interface HttpResponse<D extends unknown, E extends unknown = unknown> extends Response {
   data: D
   error: E
 }
 
-type CancelToken = symbol | string | number
+type CancelToken = Symbol | string | number
 
 export enum ContentType {
   Json = 'application/json',
@@ -1170,7 +1172,7 @@ export enum ContentType {
 }
 
 export class HttpClient<SecurityDataType = unknown> {
-  public baseUrl = 'https://api.oasisscan.com/v2/mainnet'
+  public baseUrl: string = 'https://api.oasisscan.com/v2/mainnet'
   private securityData: SecurityDataType | null = null
   private securityWorker?: ApiConfig<SecurityDataType>['securityWorker']
   private abortControllers = new Map<CancelToken, AbortController>()
@@ -1207,9 +1209,11 @@ export class HttpClient<SecurityDataType = unknown> {
 
   protected toQueryString(rawQuery?: QueryParamsType): string {
     const query = rawQuery || {}
-    const keys = Object.keys(query).filter((key) => 'undefined' !== typeof query[key])
+    const keys = Object.keys(query).filter(key => 'undefined' !== typeof query[key])
     return keys
-      .map((key) => (Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)))
+      .map(key =>
+        Array.isArray(query[key]) ? this.addArrayQueryParam(query, key) : this.addQueryParam(query, key)
+      )
       .join('&')
   }
 
@@ -1220,8 +1224,11 @@ export class HttpClient<SecurityDataType = unknown> {
 
   private contentFormatters: Record<ContentType, (input: any) => any> = {
     [ContentType.Json]: (input: any) =>
-      input !== null && (typeof input === 'object' || typeof input === 'string') ? JSON.stringify(input) : input,
-    [ContentType.Text]: (input: any) => (input !== null && typeof input !== 'string' ? JSON.stringify(input) : input),
+      input !== null && (typeof input === 'object' || typeof input === 'string')
+        ? JSON.stringify(input)
+        : input,
+    [ContentType.Text]: (input: any) =>
+      input !== null && typeof input !== 'string' ? JSON.stringify(input) : input,
     [ContentType.FormData]: (input: any) =>
       Object.keys(input || {}).reduce((formData, key) => {
         const property = input[key]
@@ -1231,7 +1238,7 @@ export class HttpClient<SecurityDataType = unknown> {
             ? property
             : typeof property === 'object' && property !== null
               ? JSON.stringify(property)
-              : `${property}`,
+              : `${property}`
         )
         return formData
       }, new FormData()),
@@ -1295,15 +1302,18 @@ export class HttpClient<SecurityDataType = unknown> {
     const payloadFormatter = this.contentFormatters[type || ContentType.Json]
     const responseFormat = format || requestParams.format
 
-    return this.customFetch(`${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`, {
-      ...requestParams,
-      headers: {
-        ...(requestParams.headers || {}),
-        ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
-      },
-      signal: (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) || null,
-      body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
-    }).then(async (response) => {
+    return this.customFetch(
+      `${baseUrl || this.baseUrl || ''}${path}${queryString ? `?${queryString}` : ''}`,
+      {
+        ...requestParams,
+        headers: {
+          ...(requestParams.headers || {}),
+          ...(type && type !== ContentType.FormData ? { 'Content-Type': type } : {}),
+        },
+        signal: (cancelToken ? this.createAbortSignal(cancelToken) : requestParams.signal) || null,
+        body: typeof body === 'undefined' || body === null ? null : payloadFormatter(body),
+      }
+    ).then(async response => {
       const r = response.clone() as HttpResponse<T, E>
       r.data = null as unknown as T
       r.error = null as unknown as E
@@ -1311,7 +1321,7 @@ export class HttpClient<SecurityDataType = unknown> {
       const data = !responseFormat
         ? r
         : await response[responseFormat]()
-            .then((data) => {
+            .then(data => {
               if (r.ok) {
                 r.data = data
               } else {
@@ -1319,7 +1329,7 @@ export class HttpClient<SecurityDataType = unknown> {
               }
               return r
             })
-            .catch((e) => {
+            .catch(e => {
               r.error = e
               return r
             })
@@ -1340,7 +1350,7 @@ export class HttpClient<SecurityDataType = unknown> {
  *
  * This api document example is the Mainnet document, and the Testnet base URL is api.oasisscan.com/v2/testnet
  */
-export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
+export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDataType> {
   account = {
     /**
      * No description
@@ -1364,7 +1374,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountDebondingResponse, any>({
         path: `/account/debonding`,
@@ -1403,7 +1413,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountDelegationsResponse, any>({
         path: `/account/delegations`,
@@ -1442,7 +1452,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         account: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountRewardExportResponse, any>({
         path: `/account/reward/export`,
@@ -1476,7 +1486,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountRewardResponse, any>({
         path: `/account/reward/list`,
@@ -1500,7 +1510,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         account: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountRewardStatsResponse, any>({
         path: `/account/reward/stats`,
@@ -1534,7 +1544,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountStakingEventsResponse, any>({
         path: `/account/staking/events`,
@@ -1558,7 +1568,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         id: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<AccountStakingEventsInfoResponse, any>({
         path: `/account/staking/events/info`,
@@ -1607,7 +1617,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ChainBlocksResponse, any>({
         path: `/chain/blocks`,
@@ -1656,7 +1666,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ChainProposedBlocksResponse, any>({
         path: `/chain/proposedblocks`,
@@ -1680,7 +1690,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         key: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ChainSearchResponse, any>({
         path: `/chain/search`,
@@ -1737,7 +1747,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ChainTransactionsResponse, any>({
         path: `/chain/transactions`,
@@ -1778,7 +1788,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         id: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<GovernanceProposalWithVotesResponse, any>({
         path: `/governance/proposalwithvotes`,
@@ -1814,7 +1824,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<GovernanceVotesResponse, any>({
         path: `/governance/votes`,
@@ -1919,7 +1929,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         round: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<RuntimeRoundInfoResponse, any>({
         path: `/runtime/round/info`,
@@ -1953,7 +1963,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<RuntimeRoundListResponse, any>({
         path: `/runtime/round/list`,
@@ -1977,7 +1987,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         id: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<RuntimeStatsResponse, any>({
         path: `/runtime/stats`,
@@ -2004,7 +2014,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         hash: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<RuntimeTransactionInfoResponse, any>({
         path: `/runtime/transaction/info`,
@@ -2041,7 +2051,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<RuntimeTransactionListResponse, any>({
         path: `/runtime/transaction/list`,
@@ -2082,7 +2092,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         address: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorBlocksStatsResponse, any>({
         path: `/validator/blocksstats`,
@@ -2116,7 +2126,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<DelegatorsResponse, any>({
         path: `/validator/delegators`,
@@ -2150,7 +2160,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         size: number
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorEscrowEventResponse, any>({
         path: `/validator/escrowevent`,
@@ -2174,7 +2184,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         address: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorEscrowStatsResponse, any>({
         path: `/validator/escrowstats`,
@@ -2198,7 +2208,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         address: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorInfoResponse, any>({
         path: `/validator/info`,
@@ -2225,7 +2235,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         sort: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorListResponse, any>({
         path: `/validator/list`,
@@ -2249,7 +2259,7 @@ export class Api<SecurityDataType> extends HttpClient<SecurityDataType> {
         address: string
       },
       data?: any,
-      params: RequestParams = {},
+      params: RequestParams = {}
     ) =>
       this.request<ValidatorSignStatsResponse, any>({
         path: `/validator/signstats`,

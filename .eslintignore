@@ -19,5 +19,8 @@ pnpm-lock.yaml
 # Add Nexus API distribution package
 !nexus/dist/
 
+# Add OasisScan API distribution package
+!oasisscan/dist/
+
 # Include prettier config
 !.prettierrc.cjs

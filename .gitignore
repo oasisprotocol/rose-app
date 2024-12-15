@@ -26,6 +26,9 @@ dist-ssr
 # Add Nexus API distribution package
 !nexus/dist/
 
+# Add OasisScan API distribution package
+!oasisscan/dist/
+
 # eslint
 /.eslintcache
 
