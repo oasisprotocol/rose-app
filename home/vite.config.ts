@@ -6,7 +6,7 @@ import { nodePolyfills } from 'vite-plugin-node-polyfills'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [svgr(), react(), nodePolyfills()],
+  plugins: [nodePolyfills(), svgr(), react()],
   base: '/',
   build: {
     sourcemap: true,

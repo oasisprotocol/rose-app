@@ -1,7 +1,7 @@
 import { FC, memo, ReactNode, useEffect, useState } from 'react'
 import { Validator as APIValidator } from '@oasisprotocol/nexus-api'
 import { useAppState } from '../../hooks/useAppState'
-import { RequireAtLeastOne } from '@oasisprotocol/rose-app-ui'
+import { RequireAtLeastOne } from '@oasisprotocol/rose-app-ui/stake'
 
 type Props = RequireAtLeastOne<
   {

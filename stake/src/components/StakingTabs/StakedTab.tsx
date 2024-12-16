@@ -10,7 +10,7 @@ import {
   StringUtils,
   Table,
   ToggleButton,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import { Validator } from '../Validator'
 import { useWeb3 } from '../../hooks/useWeb3'
 import classes from './index.module.css'

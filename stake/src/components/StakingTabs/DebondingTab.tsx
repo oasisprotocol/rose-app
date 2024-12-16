@@ -15,7 +15,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import { Validator } from '../Validator'
 import { useGrpc } from '../../hooks/useGrpc'
 import { CalendarUtils } from '../../utils/calendar.utils'

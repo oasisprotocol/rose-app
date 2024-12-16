@@ -7,14 +7,16 @@ import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
 import symbol_check_circle_svg from '/move/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/move/symbol_warning.svg?url'
 import classes from '../App.module.css'
-import { AccountAvatar } from '../components/AccountAvatar'
-import { Amount } from '../components/Amount'
-import { Button } from '../components/Button'
-import { Input } from '../components/Input'
+import {
+  AccountAvatar,
+  Input,
+  MoveAmount as Amount,
+  MoveButton as Button,
+  ProgressBar,
+  ShortAddress,
+  VideoModal,
+} from '@oasisprotocol/rose-app-ui/move'
 import { Layout } from '../components/Layout'
-import ProgressBar from '../components/ProgressBar'
-import { ShortAddress } from '../components/ShortAddress'
-import { VideoModal } from '../components/VideoModal'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'

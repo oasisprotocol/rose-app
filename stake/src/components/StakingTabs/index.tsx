@@ -9,7 +9,7 @@ import {
   Tabs,
   TabsContext,
   TabsContextProvider,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import { OverviewTab } from './OverviewTab'
 import { StakedTab } from './StakedTab'
 import { useAppState } from '../../hooks/useAppState'

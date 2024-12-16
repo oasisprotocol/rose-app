@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode, Suspense } from 'react'
 import { useGrpc } from '../../hooks/useGrpc'
-import { DateUtils, PromiseUtils } from '@oasisprotocol/rose-app-ui'
+import { DateUtils, PromiseUtils } from '@oasisprotocol/rose-app-ui/stake'
 import { formatDistance } from 'date-fns'
 
 interface TimeEstimateProps {

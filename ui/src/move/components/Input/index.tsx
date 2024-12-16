@@ -12,7 +12,16 @@ interface Props {
   onChange: (value?: string) => void
 }
 
-export const Input: FC<Props> = ({ required, label, error, className, initialValue, pattern, inputMode, onChange }) => {
+export const Input: FC<Props> = ({
+  required,
+  label,
+  error,
+  className,
+  initialValue,
+  pattern,
+  inputMode,
+  onChange,
+}) => {
   const id = useId()
   const ref = useRef<HTMLInputElement | null>(null)
 

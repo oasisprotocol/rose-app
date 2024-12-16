@@ -23,7 +23,11 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
         <span>
           <div>
             Version: {APP_VERSION} (commit:{' '}
-            <a href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`} rel="noopener noreferrer" target="_blank">
+            <a
+              href={`${GITHUB_REPOSITORY_URL}commit/${BUILD_COMMIT}`}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
               {BUILD_COMMIT.substring(0, 7)}
             </a>
             ) built at {dateFormatLong.format(BUILD_DATETIME)}

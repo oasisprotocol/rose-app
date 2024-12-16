@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import classes from './index.module.css'
-import { Amount, StringUtils } from '@oasisprotocol/rose-app-ui'
+import { Amount, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
 import { useAccount } from 'wagmi'
 
 interface Props {

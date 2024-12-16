@@ -77,4 +77,8 @@ jobs:
         # Always run this step so that all linting errors can be seen at once.
         if: always()
       - name: Validate TypeScript
-        run: pnpm --filter @oasisprotocol/dapp-staker-frontend checkTs
+        run: |
+          pnpm --filter @oasisprotocol/rose-app-ui checkTs
+          pnpm --filter @oasisprotocol/rose-app-move checkTs
+          pnpm --filter @oasisprotocol/rose-app-stake checkTs
+          pnpm --filter @oasisprotocol/rose-app-home checkTs

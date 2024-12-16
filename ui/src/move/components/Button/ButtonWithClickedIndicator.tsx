@@ -11,7 +11,7 @@ export function ButtonWithClickedIndicator({
   return (
     <Button
       {...props}
-      onClick={async (e) => {
+      onClick={async e => {
         const result: unknown | Promise<unknown> = props.onClick?.(e)
         await result
         setWasClicked(true)

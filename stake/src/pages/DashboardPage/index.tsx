@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { Card, StringUtils } from '@oasisprotocol/rose-app-ui'
+import { Card, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
 import classes from './index.module.css'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { useAccount } from 'wagmi'

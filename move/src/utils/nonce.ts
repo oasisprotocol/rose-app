@@ -20,14 +20,14 @@ async function _getConsensusNonce(oasisAddress: `oasis1${string}`) {
   const [oasisScanNonce, grpcNonce] = await Promise.all([
     getOasisScanClient()
       .account.accountInfoHandler(oasisAddress)
-      .then((accountInfoResponse) => (accountInfoResponse.ok ? accountInfoResponse.json() : 0))
-      .then((accountInfoJson) => accountInfoJson.data.nonce),
+      .then(accountInfoResponse => (accountInfoResponse.ok ? accountInfoResponse.json() : 0))
+      .then(accountInfoJson => accountInfoJson.data.nonce),
     getNodeInternal()
       .consensusGetSignerNonce({
         account_address: oasis.staking.addressFromBech32(oasisAddress),
         height: 0,
       })
-      .then((nonce) => nonce ?? 0),
+      .then(nonce => nonce ?? 0),
   ])
 
   return Math.max(oasisScanNonce, Number(grpcNonce))
@@ -38,7 +38,7 @@ const consensusLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longn
 async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
   const lastKnownNonce = consensusLastKnownNonce[oasisAddress] ?? null
 
-  const newNonce = await retry(_getConsensusNonce(oasisAddress), (nonce) => checkNonce(nonce, lastKnownNonce))
+  const newNonce = await retry(_getConsensusNonce(oasisAddress), nonce => checkNonce(nonce, lastKnownNonce))
 
   consensusLastKnownNonce[oasisAddress] = newNonce
   return newNonce
@@ -47,7 +47,7 @@ async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
 async function _getSapphireNonce(oasisAddress: `oasis1${string}`) {
   const nic = getNodeInternal()
   const accountsWrapper = new oasisRT.accounts.Wrapper(
-    oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
+    oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId)
   )
   const nonce = await accountsWrapper
     .queryNonce()
@@ -61,7 +61,7 @@ const sapphireLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longnu
 async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
   const lastKnownNonce = sapphireLastKnownNonce[oasisAddress] ?? null
 
-  const newNonce = await retry(_getSapphireNonce(oasisAddress), (nonce) => checkNonce(nonce, lastKnownNonce))
+  const newNonce = await retry(_getSapphireNonce(oasisAddress), nonce => checkNonce(nonce, lastKnownNonce))
 
   sapphireLastKnownNonce[oasisAddress] = newNonce
   return newNonce

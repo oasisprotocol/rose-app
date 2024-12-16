@@ -13,7 +13,7 @@ import {
   StringUtils,
   Table,
   ToggleButton,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 
 interface Props {
   value: Validator | null

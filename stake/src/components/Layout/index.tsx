@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { NavLink, Outlet, useMatch } from 'react-router-dom'
 import classes from './index.module.css'
-import { LogoIcon, Alert, Button, LayoutBase, StringUtils } from '@oasisprotocol/rose-app-ui'
+import { LogoIcon, Alert, Button, LayoutBase, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
 import { useAppState } from '../../hooks/useAppState'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 

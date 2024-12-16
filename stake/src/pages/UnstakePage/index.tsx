@@ -16,7 +16,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppState } from '../../hooks/useAppState'
 import classes from './index.module.css'

@@ -7,7 +7,7 @@ import {
   SearchIcon,
   StringUtils,
   TokenIcon,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import {
   OASIS_EXPLORER_SAPPHIRE_MAINNET_PAGE_URL,
   OASIS_HOME_PAGE_TOKENOMICS_URL,

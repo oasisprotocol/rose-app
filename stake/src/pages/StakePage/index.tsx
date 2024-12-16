@@ -1,5 +1,5 @@
 import { FC, useState } from 'react'
-import { ArrowLeftIcon, Button, Card, StringUtils } from '@oasisprotocol/rose-app-ui'
+import { ArrowLeftIcon, Button, Card, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
 import { Validator } from '@oasisprotocol/nexus-api'
 import { useNavigate } from 'react-router-dom'
 import classes from './index.module.css'

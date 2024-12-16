@@ -1,15 +1,17 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import classes from '../App.module.css'
-import { AccountAvatar } from '../components/AccountAvatar'
-import { Button } from '../components/Button'
-import { ButtonWithClickedIndicator } from '../components/Button/ButtonWithClickedIndicator'
-import { CopyPrivateKeyModal } from '../components/CopyPrivateKeyModal'
-import { Hint } from '../components/Hint'
+import {
+  AccountAvatar,
+  ButtonWithClickedIndicator,
+  CopyPrivateKeyModal,
+  Hint,
+  MoveButton as Button,
+  ProgressBar,
+  ShortAddress,
+  VideoModal,
+} from '@oasisprotocol/rose-app-ui/move'
 import { Layout } from '../components/Layout'
-import ProgressBar from '../components/ProgressBar'
-import { ShortAddress } from '../components/ShortAddress'
-import { VideoModal } from '../components/VideoModal'
 import { useDeposit } from '../useDeposit'
+import classes from '../App.module.css'
 
 import file_copy_svg from '@material-design-icons/svg/filled/file_copy.svg'
 import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'

@@ -17,7 +17,7 @@ import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from '@oasisprotocol/rose-app-ui'
+} from '@oasisprotocol/rose-app-ui/stake'
 import { Validator } from '@oasisprotocol/nexus-api'
 import { useNavigate, useParams } from 'react-router-dom'
 import classes from './index.module.css'

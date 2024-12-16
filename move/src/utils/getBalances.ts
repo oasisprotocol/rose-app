@@ -2,7 +2,6 @@ import * as oasis from '@oasisprotocol/client'
 import { staking } from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import BigNumber from 'bignumber.js'
-import { formatUnits } from 'viem'
 import { getConsensusAccountsWrapper, getNodeInternal } from './client.ts'
 import { consensusConfig, sapphireConfig } from './oasisConfig'
 
@@ -89,10 +88,4 @@ export function getValidOasisAddress(addr: string): `oasis1${string}` | null {
   } catch (e) {
     return null
   }
-}
-
-export const formatAmount = (amount: bigint | string, dp: number, formatDp = 3): string => {
-  return BigNumber(formatUnits(BigInt(amount), dp))
-    .dp(formatDp, BigNumber.ROUND_DOWN)
-    .toFormat(formatDp)
 }

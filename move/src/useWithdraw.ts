@@ -19,10 +19,13 @@ const setIsInputMode = (_isInputMode: boolean) => {
 export function useWithdraw() {
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
-  const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } = useGenerateSapphireAccount()
+  const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } =
+    useGenerateSapphireAccount()
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
-  const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({ address: sapphireAddress })
+  const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({
+    address: sapphireAddress,
+  })
   const { sendTransactionAsync } = useSendTransaction()
   const isPrevError = usePrevious(progress.percentage === undefined)
 
@@ -53,7 +56,7 @@ export function useWithdraw() {
         setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
         const availableAmountToWithdraw = await waitForSapphireBalance(
           generatedSapphireAccount.address,
-          minimalWithdrawableAmount,
+          minimalWithdrawableAmount
         )
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
         blockNavigatingAway()
@@ -83,14 +86,14 @@ export function useWithdraw() {
       })
       allowNavigatingAway() // Stop blocking unless new transfer comes in
 
-      await new Promise((r) => setTimeout(r, 6000))
+      await new Promise(r => setTimeout(r, 6000))
       // Stay on "Withdrawn" screen unless new transfer comes in
       await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
       if (window.mock) throw 'mock error'
     } catch (err) {
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
-      await new Promise((r) => setTimeout(r, 6000))
+      await new Promise(r => setTimeout(r, 6000))
     } finally {
       allowNavigatingAway()
     }

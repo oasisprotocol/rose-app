@@ -19,6 +19,7 @@
     "@fontsource-variable/roboto-mono": "^5.0.18",
     "@material-design-icons/svg": "^0.14.13",
     "@metamask/detect-provider": "^2.0.0",
+    "@metamask/jazzicon": "^2.0.0",
     "@oasisprotocol/client": "^1.1.0",
     "@oasisprotocol/nexus-api": "workspace:*",
     "@oasisprotocol/rose-app-subcall": "workspace:*",
@@ -43,6 +44,12 @@
   "exports": {
     ".": {
       "import": "./src/index.ts"
+    },
+    "./stake": {
+      "import": "./src/stake/index.ts"
+    },
+    "./move": {
+      "import": "./src/move/index.ts"
     }
   }
 }

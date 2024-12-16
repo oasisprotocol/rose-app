@@ -58,7 +58,7 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
   const address = await oasis.address.fromData(
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
-    evmBytes,
+    evmBytes
   )
   const bech32Address = oasisRT.address.toBech32(address) as `oasis1${string}`
   return bech32Address

@@ -20,10 +20,10 @@ export async function depositToSapphireStep1(props: {
     await nic.stakingAllowance({
       owner: oasis.staking.addressFromBech32(props.consensusAddress),
       beneficiary: oasis.staking.addressFromBech32(
-        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address,
+        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address
       ),
       height: oasis.consensus.HEIGHT_LATEST,
-    }),
+    })
   )
   console.log('existingAllowance', existingAllowance)
   if (existingAllowance >= props.amountToDeposit) return
@@ -35,7 +35,7 @@ export async function depositToSapphireStep1(props: {
     .setFeeAmount(oasis.quantity.fromBigInt(0n)) // TODO: assumes consensus txs are free
     .setBody({
       beneficiary: oasis.staking.addressFromBech32(
-        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address,
+        PROD ? sapphireConfig.mainnet.address : sapphireConfig.testnet.address
       ),
       negative: false,
       amount_change: oasis.quantity.fromBigInt(props.amountToDeposit - existingAllowance),
@@ -81,11 +81,11 @@ export async function depositToSapphireStep2(props: {
 
   rtw.setFeeGas(
     await new oasisRT.core.Wrapper(
-      oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId),
+      oasis.misc.fromHex(PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId)
     )
       .queryEstimateGas()
       .setArgs({ tx: rtw.transaction })
-      .query(nic),
+      .query(nic)
   )
   await rtw.sign([new oasis.signature.BlindContextSigner(props.consensusSigner)], chainContext)
   console.log('depositToSapphireStep2', props.amountToDeposit)
@@ -97,7 +97,7 @@ async function getEvmBech32Address(evmAddress: `0x${string}`) {
   const address = await oasis.address.fromData(
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
-    evmBytes,
+    evmBytes
   )
   const bech32Address = oasisRT.address.toBech32(address) as `oasis1${string}`
   return bech32Address
