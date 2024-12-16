@@ -1,6 +1,5 @@
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import {
-  AccountAvatar,
   ButtonWithClickedIndicator,
   CopyPrivateKeyModal,
   Hint,
@@ -9,6 +8,7 @@ import {
   ShortAddress,
   VideoModal,
 } from '@oasisprotocol/rose-app-ui/move'
+import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useDeposit } from '../useDeposit'
 import classes from '../App.module.css'

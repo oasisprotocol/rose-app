@@ -50,6 +50,9 @@
     },
     "./move": {
       "import": "./src/move/index.ts"
+    },
+    "./core": {
+      "import": "./src/core/index.ts"
     }
   }
 }

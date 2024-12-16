@@ -3,8 +3,8 @@ import { WagmiProvider } from 'wagmi'
 import { wagmiConfig } from './constants/wagmi-config.ts'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit'
-import { AccountAvatar } from './components/AccountAvatar'
-import { Sidebar } from './components/Sidebar'
+import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
+import { Sidebar } from '@oasisprotocol/rose-app-ui/core'
 
 import '@rainbow-me/rainbowkit/styles.css'
 

@@ -8,7 +8,6 @@ import symbol_check_circle_svg from '/move/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/move/symbol_warning.svg?url'
 import classes from '../App.module.css'
 import {
-  AccountAvatar,
   Input,
   MoveAmount as Amount,
   MoveButton as Button,
@@ -16,6 +15,7 @@ import {
   ShortAddress,
   VideoModal,
 } from '@oasisprotocol/rose-app-ui/move'
+import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'

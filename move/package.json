@@ -8,7 +8,6 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "biome check --write",
     "generate:oasisscanv2": "swagger-typescript-api -p https://api.oasisscan.com/v2/swagger/api.json -o ./src/generated -n OasisScanV2Api.ts",
     "preview": "vite preview"
   },
