@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { GAS_LIMIT_STAKE } from '../../constants/config'
-import { NumberUtils } from '../number.utils'
+import { NumberUtils } from '../../../../ui/src/stake/utils/number.utils'
 import { parseEther, parseUnits } from 'viem'
 
 const { shouldShowFeeWarningModal } = NumberUtils

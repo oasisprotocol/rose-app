@@ -1,18 +1,20 @@
 import { FC, useContext } from 'react'
-import { Tabs } from '../Tabs'
-import { Tab } from '../Tabs/Tab'
-import { Panel } from '../Tabs/Panel'
-import { TabsContextProvider } from '../Tabs/TabsContextProvider'
+import {
+  Button,
+  LoadingTableData,
+  NumberUtils,
+  Panel,
+  StringUtils,
+  Tab,
+  Tabs,
+  TabsContext,
+  TabsContextProvider,
+} from '@oasisprotocol/rose-app-ui'
 import { OverviewTab } from './OverviewTab'
 import { StakedTab } from './StakedTab'
 import { useAppState } from '../../hooks/useAppState'
 import { DebondingTab } from './DebondingTab'
-import { StringUtils } from '../../utils/string.utils'
-import { TabsContext } from '../Tabs/TabsContext'
-import { Button } from '../Button'
 import { useNavigate } from 'react-router-dom'
-import { NumberUtils } from '../../utils/number.utils'
-import { LoadingTableData } from '../LoadingTableData'
 import classes from './index.module.css'
 
 export const StakingTabsCmp: FC = () => {

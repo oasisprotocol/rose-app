@@ -5,3 +5,4 @@ packages:
   - 'subcall'
   - 'move'
   - 'oasisscan'
+  - 'ui'

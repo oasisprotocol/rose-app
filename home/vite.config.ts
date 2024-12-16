@@ -17,5 +17,6 @@ export default defineConfig({
     BUILD_DATETIME: JSON.stringify(new Date().getTime()),
     GITHUB_REPOSITORY_URL: JSON.stringify('https://github.com/oasisprotocol/rose/'),
     OASIS_HOME_PAGE_URL: JSON.stringify('https://oasisprotocol.org/'),
+    OASIS_DOCS_PAGE_URL: JSON.stringify('https://docs.oasis.io/'),
   },
 })

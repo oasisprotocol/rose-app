@@ -1,18 +1,20 @@
 import { FC, Fragment, memo } from 'react'
 import { Delegations } from '../../types'
-import { Table } from '../Table'
+import {
+  ActiveIcon,
+  Button,
+  EmptyTableData,
+  InactiveIcon,
+  NumberUtils,
+  SharesAmount,
+  StringUtils,
+  Table,
+  ToggleButton,
+} from '@oasisprotocol/rose-app-ui'
 import { Validator } from '../Validator'
-import { StringUtils } from '../../utils/string.utils'
-import { Button } from '../Button'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { ActiveIcon } from '../icons/ActiveIcon'
 import classes from './index.module.css'
-import { InactiveIcon } from '../icons/InactiveIcon'
-import { ToggleButton } from '../ToggleButton'
 import { useNavigate } from 'react-router-dom'
-import { SharesAmount } from '../SharesAmount'
-import { NumberUtils } from '../../utils/number.utils'
-import { EmptyTableData } from '../EmptyTableData'
 import { useAppState } from '../../hooks/useAppState'
 import { useAccount } from 'wagmi'
 

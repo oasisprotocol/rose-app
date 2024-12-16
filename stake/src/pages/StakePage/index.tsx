@@ -1,14 +1,11 @@
 import { FC, useState } from 'react'
-import { Card } from '../../components/Card'
-import { StringUtils } from '../../utils/string.utils'
-import { ValidatorsTable } from '../../components/ValidatorsTable'
+import { ArrowLeftIcon, Button, Card, StringUtils } from '@oasisprotocol/rose-app-ui'
 import { Validator } from '@oasisprotocol/nexus-api'
-import { Button } from '../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import classes from './index.module.css'
-import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { useAppState } from '../../hooks/useAppState'
+import { ValidatorsTable } from '../../components/ValidatorsTable'
 
 const StakePageCmp: FC = () => {
   const navigate = useNavigate()

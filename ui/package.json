@@ -1,5 +1,5 @@
 {
-  "name": "@oasisprotocol/rose-app-stake",
+  "name": "@oasisprotocol/rose-app-ui",
   "private": true,
   "version": "1.0.0",
   "license": "See License in ../LICENSE",
@@ -7,10 +7,7 @@
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "checkTs": "tsc --noEmit",
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview",
-    "test": "vitest"
+    "build": "tsc && vite build"
   },
   "packageManager": "pnpm@8.15.4",
   "engines": {
@@ -25,7 +22,6 @@
     "@oasisprotocol/client": "^1.1.0",
     "@oasisprotocol/nexus-api": "workspace:*",
     "@oasisprotocol/rose-app-subcall": "workspace:*",
-    "@oasisprotocol/rose-app-ui": "workspace:*",
     "@rainbow-me/rainbowkit": "^2.1.2",
     "axios": "^1.7.2",
     "bignumber.js": "^9.1.2",
@@ -46,7 +42,7 @@
   },
   "exports": {
     ".": {
-      "import": "./src/main.tsx"
+      "import": "./src/index.ts"
     }
   }
 }

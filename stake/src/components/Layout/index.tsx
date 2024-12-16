@@ -1,12 +1,8 @@
 import { FC } from 'react'
 import { NavLink, Outlet, useMatch } from 'react-router-dom'
 import classes from './index.module.css'
-import { LogoIcon } from '../icons/LogoIcon'
-import { Alert } from '../Alert'
+import { LogoIcon, Alert, Button, LayoutBase, StringUtils } from '@oasisprotocol/rose-app-ui'
 import { useAppState } from '../../hooks/useAppState'
-import { Button } from '../Button'
-import { StringUtils } from '../../utils/string.utils'
-import { LayoutBase } from '../LayoutBase'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export const Layout: FC = () => {

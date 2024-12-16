@@ -1,31 +1,35 @@
 import { FC, useEffect, useState } from 'react'
-import { Card } from '../../components/Card'
-import { StringUtils } from '../../utils/string.utils'
+import {
+  Alert,
+  Amount,
+  AmountInput,
+  ArrowLeftIcon,
+  Button,
+  Card,
+  FeeAmount,
+  FeeWarningModal,
+  GasPrice,
+  InfoIcon,
+  NumberUtils,
+  PreviewTable,
+  StringUtils,
+  toErrorString,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@oasisprotocol/rose-app-ui'
 import { Validator } from '@oasisprotocol/nexus-api'
-import { Button } from '../../components/Button'
 import { useNavigate, useParams } from 'react-router-dom'
 import classes from './index.module.css'
 import { useAppState } from '../../hooks/useAppState'
-import { AmountInput } from '../../components/AmountInput'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { PreviewTable } from '../../components/PreviewTable'
-import { Amount } from '../../components/Amount'
-import { FeeAmount } from '../../components/FeeAmount'
-import { GasPrice } from '../../components/GasPrice'
-import { Alert } from '../../components/Alert'
-import { toErrorString } from '../../utils/errors'
-import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
 import { Delegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
 import { CONSENSUS_DECIMALS, GAS_LIMIT_STAKE, MIN_STAKE_AMOUNT } from '../../constants/config'
 import BigNumber from 'bignumber.js'
-import { NumberUtils } from '../../utils/number.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
-import { FeeWarningModal } from '../../components/FeeWarningModal'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits, parseUnits } from 'viem'
-import { InfoIcon } from '../../components/icons/InfoIcon'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
 
 enum Steps {
   DelegateInputAmount,

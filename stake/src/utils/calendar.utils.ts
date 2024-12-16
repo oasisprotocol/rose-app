@@ -1,4 +1,4 @@
-import { DateUtils } from './date.utils'
+import { DateUtils } from '../../../ui/src/stake/utils/date.utils'
 
 export abstract class CalendarUtils {
   static addGoogleCalendarEventLink(

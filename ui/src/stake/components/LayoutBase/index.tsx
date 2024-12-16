@@ -1,6 +1,5 @@
 import { FC, PropsWithChildren, ReactNode } from 'react'
 import classes from './index.module.css'
-import { OASIS_DOCS_PAGE_URL } from '../../constants/config'
 import { DateUtils } from '../../utils/date.utils'
 import { useMediaQuery } from 'react-responsive'
 

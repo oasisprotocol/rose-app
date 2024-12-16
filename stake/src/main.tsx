@@ -1,6 +1,6 @@
 import { App } from './App'
 import { RouteObject } from 'react-router-dom'
-import { RouterErrorBoundary } from './components/RouterErrorBoundary'
+import { RouterErrorBoundary } from '@oasisprotocol/rose-app-ui'
 import { HomePage } from './pages/HomePage'
 import { DashboardPage } from './pages/DashboardPage'
 import { StakingAmountPage } from './pages/StakingAmountPage'

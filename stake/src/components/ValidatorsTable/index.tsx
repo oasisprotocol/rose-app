@@ -2,16 +2,18 @@ import { FC, Fragment } from 'react'
 import classes from './index.module.css'
 import { Validator } from '@oasisprotocol/nexus-api'
 import { useAppState } from '../../hooks/useAppState'
-import { Table } from '../Table'
-import { StringUtils } from '../../utils/string.utils'
-import { ToggleButton } from '../ToggleButton'
-import { ActiveIcon } from '../icons/ActiveIcon'
-import { InactiveIcon } from '../icons/InactiveIcon'
-import { Amount } from '../Amount'
-import { NumberUtils } from '../../utils/number.utils'
-import { LoadingTableData } from '../LoadingTableData'
-import { EmptyTableData } from '../EmptyTableData'
-import { SortOption } from '../../types'
+import {
+  ActiveIcon,
+  Amount,
+  EmptyTableData,
+  InactiveIcon,
+  LoadingTableData,
+  NumberUtils,
+  SortOption,
+  StringUtils,
+  Table,
+  ToggleButton,
+} from '@oasisprotocol/rose-app-ui'
 
 interface Props {
   value: Validator | null

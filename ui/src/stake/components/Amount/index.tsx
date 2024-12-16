@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
-import { CONSENSUS_DECIMALS } from '../../constants/config'
+import { CONSENSUS_DECIMALS } from '../../utils/number.utils'
 import { NumberUtils } from '../../utils/number.utils'
 import { useAccount } from 'wagmi'
 

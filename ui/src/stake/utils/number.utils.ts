@@ -1,12 +1,12 @@
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
-import {
-  CONSENSUS_DECIMALS,
-  NEXUS_COMMISSION_RATE_DECIMALS,
-  FEE_DEDUCTION_MULTIPLIER,
-} from '../constants/config'
 import { SharesType } from '../types/shares-type'
 import { formatUnits } from 'viem'
+
+export const CONSENSUS_DECIMALS = 9
+export const NEXUS_COMMISSION_RATE_DECIMALS = 5
+// Specifies multiplier so wallet has enough fees for future transactions
+export const FEE_DEDUCTION_MULTIPLIER = 5
 
 export abstract class NumberUtils {
   /**

@@ -1,7 +1,7 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
 import { GrpcContext, GrpcProviderContext, GrpcProviderState } from './GrpcContext'
 import { AVERAGE_BLOCK_TIME_IN_SEC, AVERAGE_BLOCKS_PER_EPOCH, GRPC_URL_CONFIG } from '../constants/config'
-import { DateUtils } from '../utils/date.utils'
+import { DateUtils } from '../../../ui/src/stake/utils/date.utils'
 import { getDelegations, getUndelegations } from '@oasisprotocol/rose-app-subcall'
 import * as oasis from '@oasisprotocol/client'
 import { useAccount } from 'wagmi'

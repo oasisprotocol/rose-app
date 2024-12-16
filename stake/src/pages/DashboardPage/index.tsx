@@ -1,10 +1,9 @@
 import { FC, useState } from 'react'
-import { Card } from '../../components/Card'
-import { StakingTabs } from '../../components/StakingTabs'
-import { StringUtils } from '../../utils/string.utils'
+import { Card, StringUtils } from '@oasisprotocol/rose-app-ui'
 import classes from './index.module.css'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { useAccount } from 'wagmi'
+import { StakingTabs } from '../../components/StakingTabs'
 
 const DashboardPageCmp: FC = () => {
   const { chain } = useAccount()

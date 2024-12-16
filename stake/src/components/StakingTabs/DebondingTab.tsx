@@ -1,22 +1,26 @@
 import { FC, memo, useEffect, useState } from 'react'
 import classes from './index.module.css'
 import { Undelegation, Undelegations } from '../../types'
-import { Table } from '../Table'
+import {
+  Button,
+  DateUtils,
+  EmptyTableData,
+  HourglassIcon,
+  NumberUtils,
+  SharesAmount,
+  StringUtils,
+  SuccessIcon,
+  Table,
+  ToggleButton,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@oasisprotocol/rose-app-ui'
 import { Validator } from '../Validator'
-import { StringUtils } from '../../utils/string.utils'
-import { Button } from '../Button'
 import { useGrpc } from '../../hooks/useGrpc'
-import { HourglassIcon } from '../icons/HourglassIcon'
-import { SuccessIcon } from '../icons/SuccessIcon'
-import { ToggleButton } from '../ToggleButton'
-import { SharesAmount } from '../SharesAmount'
-import { EmptyTableData } from '../EmptyTableData'
 import { CalendarUtils } from '../../utils/calendar.utils'
-import { NumberUtils } from '../../utils/number.utils'
 import { startOfDay } from 'date-fns/startOfDay'
 import { endOfDay } from 'date-fns/endOfDay'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../Tooltip'
-import { DateUtils } from '../../utils/date.utils'
 import { useAppState } from '../../hooks/useAppState'
 import { useAccount } from 'wagmi'
 

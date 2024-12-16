@@ -1,31 +1,35 @@
 import { FC, useEffect, useRef, useState } from 'react'
-import { Card } from '../../components/Card'
-import { amountPattern, StringUtils } from '../../utils/string.utils'
+import {
+  Alert,
+  AmountInput,
+  amountPattern,
+  ArrowLeftIcon,
+  Button,
+  Card,
+  FeeAmount,
+  GasPrice,
+  InfoIcon,
+  PreviewTable,
+  SharesAmount,
+  StringUtils,
+  toErrorString,
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@oasisprotocol/rose-app-ui'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useAppState } from '../../hooks/useAppState'
 import classes from './index.module.css'
-import { Alert } from '../../components/Alert'
-import { Button } from '../../components/Button'
-import { AmountInput } from '../../components/AmountInput'
 import { Validator } from '@oasisprotocol/nexus-api'
 import BigNumber from 'bignumber.js'
 import { CONSENSUS_DECIMALS, GAS_LIMIT_UNSTAKE } from '../../constants/config'
-import { PreviewTable } from '../../components/PreviewTable'
-import { FeeAmount } from '../../components/FeeAmount'
-import { GasPrice } from '../../components/GasPrice'
 import { useWeb3 } from '../../hooks/useWeb3'
-import { toErrorString } from '../../utils/errors'
-import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
-import { ArrowLeftIcon } from '../../components/icons/ArrowLeftIcon'
-import { SharesAmount } from '../../components/SharesAmount'
 import { Delegation, Undelegations } from '../../types'
 import { FormattingUtils } from '../../utils/formatting.utils'
 import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 import { useAccount, useSendTransaction } from 'wagmi'
 import { formatUnits } from 'viem'
-import { Tooltip, TooltipContent, TooltipTrigger } from '../../components/Tooltip'
-import { InfoIcon } from '../../components/icons/InfoIcon'
-import {} from '../../utils/number.utils'
+import { EpochTimeEstimate } from '../../components/EpochTimeEstimate'
 
 enum Steps {
   UndelegateInputAmount,

@@ -1,16 +1,17 @@
 import { FC } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { LogoIcon } from '../../components/icons/LogoIcon'
-import { StringUtils } from '../../utils/string.utils'
-import { SearchIcon } from '../../components/icons/SearchIcon'
-import { TokenIcon } from '../../components/icons/TokenIcon'
-import { MenuBookIcon } from '../../components/icons/MenuBookIcon'
 import {
-  OASIS_DOCS_PAGE_URL,
+  InfoCard,
+  LogoIcon,
+  MenuBookIcon,
+  SearchIcon,
+  StringUtils,
+  TokenIcon,
+} from '@oasisprotocol/rose-app-ui'
+import {
   OASIS_EXPLORER_SAPPHIRE_MAINNET_PAGE_URL,
   OASIS_HOME_PAGE_TOKENOMICS_URL,
 } from '../../constants/config'
-import { InfoCard } from '../../components/InfoCard'
 import { withConnectedWallet } from '../../hoc/withConnectedWallet'
 import classes from './index.module.css'
 
