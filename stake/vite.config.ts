@@ -16,6 +16,7 @@ export default defineConfig({
       external: [
         ...Object.keys(pkg.dependencies), // don't bundle dependencies
         /^node:.*/,
+        /\?url$/,
       ],
     },
     target: 'esnext',
