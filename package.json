@@ -10,7 +10,8 @@
     "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
     "prettier-check": "prettier --check . --ignore-path .eslintignore",
     "prettier": "prettier --write . --ignore-path .eslintignore",
-    "build": "pnpm --filter @oasisprotocol/rose-app-home build"
+    "build": "pnpm --filter @oasisprotocol/rose-app-home build",
+    "dev": "pnpm --filter @oasisprotocol/rose-app-home dev"
   },
   "license": "See License in LICENSE",
   "packageManager": "pnpm@8.15.4",
