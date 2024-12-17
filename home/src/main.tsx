@@ -6,7 +6,7 @@ import { createHashRouter, RouterProvider } from 'react-router-dom'
 import { App } from './App.tsx'
 import { ProvidersWithSidebar } from './ProvidersWithSidebar.tsx'
 
-import './index.css'
+import '@oasisprotocol/rose-app-ui/core/index.css'
 
 const router = createHashRouter([
   {

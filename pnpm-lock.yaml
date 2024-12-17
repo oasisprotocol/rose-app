@@ -41,12 +41,6 @@ importers:
 
   home:
     dependencies:
-      '@fontsource-variable/figtree':
-        specifier: ^5.0.20
-        version: 5.1.1
-      '@fontsource-variable/roboto-mono':
-        specifier: ^5.0.18
-        version: 5.1.0
       '@material-design-icons/svg':
         specifier: ^0.14.13
         version: 0.14.13
@@ -294,6 +288,12 @@ importers:
       '@floating-ui/react':
         specifier: ^0.26.24
         version: 0.26.28(react-dom@18.3.1)(react@18.3.1)
+      '@fontsource-variable/figtree':
+        specifier: ^5.0.20
+        version: 5.1.1
+      '@fontsource-variable/roboto-mono':
+        specifier: ^5.0.18
+        version: 5.1.0
       '@material-design-icons/svg':
         specifier: ^0.14.13
         version: 0.14.13

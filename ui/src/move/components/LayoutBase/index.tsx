@@ -1,5 +1,6 @@
 import { FC, PropsWithChildren, ReactNode } from 'react'
 import classes from './index.module.css'
+import globalClasses from '../../index.module.css'
 
 interface Props {
   header?: ReactNode
@@ -16,7 +17,7 @@ const dateFormatLong = new Intl.DateTimeFormat('en', {
 
 export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) => {
   return (
-    <div className={classes.layout}>
+    <div className={`${globalClasses.global} ${classes.layout}`}>
       {header}
       <main className={classes.main}>{children}</main>
       <footer className={classes.footer}>

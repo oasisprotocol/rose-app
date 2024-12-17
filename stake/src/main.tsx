@@ -6,7 +6,6 @@ import { DashboardPage } from './pages/DashboardPage'
 import { StakingAmountPage } from './pages/StakingAmountPage'
 import { StakePage } from './pages/StakePage'
 import { UnstakePage } from './pages/UnstakePage'
-import './index.css'
 
 export const stakeRouteObject: RouteObject = {
   path: '',

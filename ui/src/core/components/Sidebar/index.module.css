@@ -117,7 +117,7 @@
     transform: translate(100vw);
     transition: transform 0.2s ease-out;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
 
     hr {
       display: block;

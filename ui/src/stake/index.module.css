@@ -1,0 +1,56 @@
+.global {
+  color: var(--black);
+
+  :global(p),
+  :global(span) {
+    &:global(.body) {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+    }
+
+    &:global(.small) {
+      font-size: 12px;
+      font-weight: 400;
+      line-height: 18px;
+    }
+
+    &:global(.ellipsis) {
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      height: 24px;
+    }
+
+    &:global(.mute) {
+      font-size: 16px;
+      font-weight: 500;
+      line-height: 24px;
+      color: var(--gray-medium-dark);
+    }
+
+    &:global(.error.error) {
+      color: var(--red);
+    }
+  }
+
+  :global(.mono) {
+    font-family: 'Roboto Mono Variable', monospace, system-ui;
+    font-style: normal;
+  }
+
+  :global(h2) {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 33.8px;
+    letter-spacing: -0.03em;
+    color: var(--brand-blue);
+  }
+
+  :global(h3) {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 25.2px;
+    color: var(--brand-extra-dark);
+  }
+}

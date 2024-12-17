@@ -1,7 +1,9 @@
 import { FC, PropsWithChildren, ReactNode } from 'react'
-import classes from './index.module.css'
 import { DateUtils } from '../../utils/date.utils'
 import { useMediaQuery } from 'react-responsive'
+import classes from './index.module.css'
+import globalClasses from '../../index.module.css'
+import { StringUtils } from '../../utils'
 
 interface Props {
   header?: ReactNode
@@ -11,7 +13,7 @@ export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) =
   const ltLargeScreen = useMediaQuery({ query: '(max-width: 1280px)' })
 
   return (
-    <div className={classes.layout}>
+    <div className={StringUtils.clsx(globalClasses.global, classes.layout)}>
       {header}
       <main className={classes.main}>{children}</main>
       {!ltLargeScreen && (
