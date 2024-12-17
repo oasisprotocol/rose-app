@@ -16,10 +16,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@fontsource-variable/figtree": "^5.0.22",
-    "@fontsource-variable/roboto-mono": "^5.0.20",
     "@material-design-icons/svg": "^0.14.13",
-    "@metamask/jazzicon": "^2.0.0",
     "@oasisprotocol/client": "^1.1.0",
     "@oasisprotocol/client-rt": "^1.1.0",
     "@oasisprotocol/oasisscan-api": "workspace:*",
@@ -27,7 +24,6 @@
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@tanstack/react-query": "5.0.5",
     "bignumber.js": "^9.1.2",
-    "buffer": "^6.0.3",
     "react": "^18.2.0",
     "tweetnacl": "^1.0.3",
     "viem": "^2.14.2",
