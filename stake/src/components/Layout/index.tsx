@@ -6,9 +6,9 @@ import { useAppState } from '../../hooks/useAppState'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 
 export const Layout: FC = () => {
-  const isHomePage = useMatch('/')
+  const isHomePage = useMatch('/stake')
   const {
-    state: { appError, isDesktopScreen },
+    state: { appError, isMobileScreen, isDesktopScreen },
     clearAppError,
   } = useAppState()
 
@@ -16,13 +16,15 @@ export const Layout: FC = () => {
     <LayoutBase
       header={
         <header className={classes.header}>
-          <NavLink
-            className={classes.headerLink}
-            to="/stake/dashboard"
-            style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
-          >
-            <LogoIcon />
-          </NavLink>
+          {!isHomePage && (
+            <NavLink
+              className={classes.headerLink}
+              to="/stake/dashboard"
+              style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
+            >
+              <LogoIcon isMobileScreen={isMobileScreen} />
+            </NavLink>
+          )}
           {!isHomePage && isDesktopScreen && <ConnectButton />}
         </header>
       }
