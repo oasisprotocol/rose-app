@@ -38,7 +38,10 @@ export function useGenerateSapphireAccount() {
         // Only take half
         const seed32bytes = new Uint8Array(hashedSignature.slice(0, hashedSignature.byteLength / 2))
         if (seed32bytes.length !== 32) throw new Error('Unexpected derived private key length')
-        const signer = oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(seed32bytes, 'this key is not important')
+        const signer = oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(
+          seed32bytes,
+          'this key is not important'
+        )
         const privateKey = `0x${signer.key.getPrivate('hex')}` as `0x${string}`
         const address = privateToEthAddress(privateKey)
         return { address, privateKey, signer }

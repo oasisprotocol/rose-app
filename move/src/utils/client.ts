@@ -9,7 +9,7 @@ export function getNodeInternal(grpcConfig = PROD ? oasisConfig.mainnet.grpc : o
 }
 
 export function getConsensusAccountsWrapper(
-  runtimeId = PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId,
+  runtimeId = PROD ? sapphireConfig.mainnet.runtimeId : sapphireConfig.testnet.runtimeId
 ) {
   return new oasisRT.consensusAccounts.Wrapper(oasis.misc.fromHex(runtimeId))
 }

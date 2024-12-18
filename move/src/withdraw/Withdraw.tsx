@@ -2,19 +2,21 @@ import photo_camera_outlined_svg from '@material-design-icons/svg/outlined/photo
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { FormEvent, useState } from 'react'
 import { parseUnits } from 'viem'
-import loader_blocks_svg from '/loader_blocks.svg?url'
-import logo_rose_move_svg from '/logo_rose_move.svg?url'
-import symbol_check_circle_svg from '/symbol_check_circle.svg?url'
-import symbol_warning_svg from '/symbol_warning.svg?url'
+import loader_blocks_svg from '/move/loader_blocks.svg?url'
+import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
+import symbol_check_circle_svg from '/move/symbol_check_circle.svg?url'
+import symbol_warning_svg from '/move/symbol_warning.svg?url'
 import classes from '../App.module.css'
-import { AccountAvatar } from '../components/AccountAvatar'
-import { Amount } from '../components/Amount'
-import { Button } from '../components/Button'
-import { Input } from '../components/Input'
+import {
+  Input,
+  MoveAmount as Amount,
+  MoveButton as Button,
+  ProgressBar,
+  ShortAddress,
+  VideoModal,
+} from '@oasisprotocol/rose-app-ui/move'
+import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
-import ProgressBar from '../components/ProgressBar'
-import { ShortAddress } from '../components/ShortAddress'
-import { VideoModal } from '../components/VideoModal'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
@@ -68,7 +70,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
 
   const handleDestinationFormAddressChange = (value?: string) => {
     if (!value) {
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         destinationConsensusAddress: {
           ...prevState.destinationConsensusAddress,
@@ -82,7 +84,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     const address = getValidOasisAddress(value)
 
     if (!address) {
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         destinationConsensusAddress: {
           ...prevState.destinationConsensusAddress,
@@ -93,7 +95,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
       return
     }
 
-    setDestinationForm((prevState) => ({
+    setDestinationForm(prevState => ({
       ...prevState,
       destinationConsensusAddress: {
         value: address,
@@ -103,7 +105,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
   }
   const handleDestinationFormAmountChange = (value?: string) => {
     if (!value) {
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         amount: {
           value: 0n,
@@ -117,7 +119,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     const _value = value.replace(',', '.')
 
     if (!_value.match(amountPattern)) {
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         amount: {
           ...prevState.amount,
@@ -132,7 +134,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
       const amount = parseUnits(_value, consensusConfig.decimals)
 
       if (amount * 10n ** 9n < withdrawEstimatedFee) {
-        setDestinationForm((prevState) => ({
+        setDestinationForm(prevState => ({
           ...prevState,
           amount: {
             ...prevState.amount,
@@ -144,7 +146,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
       }
 
       if (amount * 10n ** 9n > (availableBalance?.value ?? 0n)) {
-        setDestinationForm((prevState) => ({
+        setDestinationForm(prevState => ({
           ...prevState,
           amount: {
             ...prevState.amount,
@@ -155,7 +157,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
         return
       }
 
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         amount: {
           value: amount,
@@ -163,7 +165,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
         },
       }))
     } catch (ex) {
-      setDestinationForm((prevState) => ({
+      setDestinationForm(prevState => ({
         ...prevState,
         amount: {
           ...prevState.amount,
@@ -177,12 +179,12 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     e: FormEvent,
     opts: {
       hasPreviousBalance: boolean
-    } = { hasPreviousBalance: false },
+    } = { hasPreviousBalance: false }
   ) => {
     const { hasPreviousBalance } = opts
     e.preventDefault()
 
-    setDestinationForm((prevState) => ({ ...prevState, isDirty: true }))
+    setDestinationForm(prevState => ({ ...prevState, isDirty: true }))
 
     const { destinationConsensusAddress, amount } = destinationForm
 
@@ -197,7 +199,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
       try {
         await step3(amount.value * 10n ** 9n)
       } catch (err) {
-        setDestinationForm((prevState) => ({ ...prevState, error: (err as Error).message }))
+        setDestinationForm(prevState => ({ ...prevState, error: (err as Error).message }))
         return
       }
     }
@@ -235,18 +237,29 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                   Please enter the crypto exchange deposit address or consensus account address
                   {!hasPreviousBalance && ' and the amount of ROSE you want to move'}.
                 </p>
-                <button type="button" className={classes.linkButton} onClick={() => setIsWithdrawHelpVideoOpen(true)}>
+                <button
+                  type="button"
+                  className={classes.linkButton}
+                  onClick={() => setIsWithdrawHelpVideoOpen(true)}
+                >
                   Need help? Click here
-                  <img src={photo_camera_outlined_svg} alt="Help" width="16" style={{ filter: 'invert(1)' }} />
+                  <img
+                    src={photo_camera_outlined_svg}
+                    alt="Help"
+                    width="16"
+                    style={{ filter: 'invert(1)' }}
+                  />
                 </button>
               </div>
-              <form onSubmit={(e) => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>
+              <form onSubmit={e => handleDestinationFormSubmit(e, { hasPreviousBalance })} noValidate>
                 <Input
                   className={classes.withdrawStep1Address}
                   onChange={handleDestinationFormAddressChange}
                   label="Wallet address"
                   inputMode="text"
-                  error={destinationForm.isDirty ? destinationForm.destinationConsensusAddress.error : undefined}
+                  error={
+                    destinationForm.isDirty ? destinationForm.destinationConsensusAddress.error : undefined
+                  }
                   initialValue={consensusAddress}
                 />
                 {!hasPreviousBalance && (
@@ -342,7 +355,9 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
                     <AccountAvatar diameter={24} account={{ address: consensusAddress }} />
                     <div
                       className={
-                        !isPrevError && progress.percentage && progress.percentage <= 0.05 ? classes.addressLonger : ''
+                        !isPrevError && progress.percentage && progress.percentage <= 0.05
+                          ? classes.addressLonger
+                          : ''
                       }
                     >
                       <ShortAddress address={consensusAddress} />
@@ -361,8 +376,8 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
               <div className="warningNotification">
                 <img src={symbol_warning_svg} alt="Warning" width="24" />
                 <p>
-                  Please do not close this window in order to complete the process. If the window is closed you can
-                  always recover from the last step and your funds won't be lost.
+                  Please do not close this window in order to complete the process. If the window is closed
+                  you can always recover from the last step and your funds won't be lost.
                 </p>
               </div>
             </>

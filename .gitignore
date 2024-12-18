@@ -7,7 +7,6 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-pnpm-lock.yaml
 node_modules
 dist
 dist-ssr
@@ -23,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Add Nexus API distribution package
+!nexus/dist/
+
+# Add OasisScan API distribution package
+!oasisscan/dist/
+
+# eslint
+/.eslintcache
+
+# Include prettier config
+!.prettierrc.cjs

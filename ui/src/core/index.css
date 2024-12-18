@@ -1,0 +1,106 @@
+@import '@fontsource-variable/figtree/index.css';
+@import '@fontsource-variable/roboto-mono/index.css';
+
+/** Use Figtree for "…" instead of Roboto Mono. */
+@font-face {
+  font-family: 'Roboto Mono Variable';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 700;
+  src: url('@fontsource-variable/figtree/files/figtree-latin-wght-normal.woff2') format('woff2');
+  unicode-range: U+2026;
+}
+
+:root {
+  --black: #000;
+  --blue-bg: #3902e1;
+  --blue-dark-border: #1b0f33;
+  --brand-blue: #0500e1;
+  --brand-dark-blue: #1e1e73;
+  --brand-extra-dark-21: #00006236;
+  --brand-extra-dark-50: #00006280;
+  --brand-extra-dark-75: #000062bf;
+  --brand-extra-dark: #000062;
+  --dark: #1b0f33;
+  --gray-blue-border: #2c3bd533;
+  --gray-dark-box-shadow: #222f3f3d;
+  --gray-dark: #eae6f0;
+  --gray-extra-dark: #242629;
+  --gray-extra-light: #b0aabd;
+  --gray-light-bg: #f4f2f7;
+  --gray-light: #fafafa;
+  --gray-medium-dark: #585266;
+  --gray: #b0aabd;
+  --green-25: #4cd4a940;
+  --green: #4cd4a9;
+  --orange-bg: #ffe8cd;
+  --orange-light: #fff0e4;
+  --orange: #ed6c02;
+  --red-dark: #620000;
+  --red: #ff0e0e;
+  --white: #fff;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Figtree Variable', system-ui, sans-serif;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: normal;
+  line-height: 150%;
+  color: var(--white);
+  text-align: left;
+  background-color: #0d0d0f;
+  min-height: 100dvh;
+}
+
+button {
+  font-family: inherit;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin: 0;
+}
+
+p,
+span {
+  &.body {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 24px;
+  }
+}
+
+h1 {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+h2 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 140%;
+}
+
+h3 {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 25.2px;
+}
+
+img {
+  max-width: 100%;
+}

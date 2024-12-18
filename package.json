@@ -1,27 +1,37 @@
 {
-  "name": "@oasisprotocol/rose",
+  "name": "@oasisprotocol/rose-app",
+  "version": "1.0.0",
   "private": true,
-  "version": "0.1.0",
-  "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "biome check --write",
-    "preview": "vite preview"
+    "preinstall": "npx only-allow pnpm",
+    "prepare": "husky",
+    "eslint": "eslint . --cache --ext .js,.ts,.tsx --max-warnings 0",
+    "lint-git": "node ./internals/scripts/gitlint.mjs",
+    "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
+    "prettier-check": "prettier --check . --ignore-path .eslintignore",
+    "prettier": "prettier --write . --ignore-path .eslintignore",
+    "build": "pnpm --filter @oasisprotocol/rose-app-home build",
+    "dev": "pnpm --filter @oasisprotocol/rose-app-home dev"
   },
-  "dependencies": {
-    "@fontsource-variable/figtree": "^5.0.22",
-    "@material-design-icons/svg": "^0.14.13",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+  "license": "See License in LICENSE",
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "lint-staged": {
+    "*.{js,cjs,mjs,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
+    "*.{js,cjs,mjs,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.1.2",
-    "@types/node": "^22.7.5",
-    "@types/react": "^18.2.23",
-    "@types/react-dom": "^18.2.8",
-    "@vitejs/plugin-react": "^4.1.0",
-    "typescript": "^5.2.2",
-    "vite": "^5.4.9"
+    "@typescript-eslint/eslint-plugin": "^7.1.0",
+    "@typescript-eslint/parser": "^7.1.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.5",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "markdownlint-cli": "^0.39.0",
+    "prettier": "^3.2.5"
   }
 }

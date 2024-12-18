@@ -1,0 +1,26 @@
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+node_modules
+dist
+dist-ssr
+*.local
+pnpm-workspace.yaml
+pnpm-lock.yaml
+
+# Add Nexus API distribution package
+!nexus/dist/
+
+# Add OasisScan API distribution package
+!oasisscan/dist/
+
+# Include prettier config
+!.prettierrc.cjs

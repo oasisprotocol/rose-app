@@ -1,0 +1,17 @@
+{
+  "name": "@oasisprotocol/oasisscan-api",
+  "private": true,
+  "version": "1.0.0",
+  "license": "See License in ../LICENSE",
+  "scripts": {
+    "start": "swagger-typescript-api -p https://api.oasisscan.com/v2/swagger/api.json -o ./dist -n index.ts"
+  },
+  "dependencies": {
+    "swagger-typescript-api": "^13.0.22"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.ts"
+    }
+  }
+}

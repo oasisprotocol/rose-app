@@ -117,7 +117,9 @@
     }
 
     .address {
-      font-family: Roboto Mono Variable, monospace;
+      font-family:
+        Roboto Mono Variable,
+        monospace;
       flex-grow: 1;
       display: flex;
       padding: 23px;

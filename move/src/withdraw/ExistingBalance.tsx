@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import loader_blocks_svg from '/loader_blocks.svg?url'
+import loader_blocks_svg from '/move/loader_blocks.svg?url'
 import { getBalances } from '../utils/getBalances.ts'
 import { withdrawEstimatedFee } from '../utils/oasisConfig.ts'
 import classes from './ExistingBalance.module.css'
@@ -13,17 +13,24 @@ interface Props {
 export const ExistingBalance: FC<Props> = ({ consensusAddress, sapphireAddress, children }) => {
   const [balances, setBalances] = useState<Awaited<ReturnType<typeof getBalances>>>()
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: Run only once when component initializes
   useEffect(() => {
     const init = async () => {
       setBalances(await getBalances({ consensusAddress, sapphireAddress }))
     }
 
     init()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   if (!balances) {
-    return <img className={classes.existingBalanceLoader} src={loader_blocks_svg} alt="Please wait..." width={106} />
+    return (
+      <img
+        className={classes.existingBalanceLoader}
+        src={loader_blocks_svg}
+        alt="Please wait..."
+        width={106}
+      />
+    )
   }
 
   const { consensus, sapphire } = balances

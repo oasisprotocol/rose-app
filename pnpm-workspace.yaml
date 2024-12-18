@@ -1,0 +1,8 @@
+packages:
+  - 'home'
+  - 'stake'
+  - 'nexus'
+  - 'subcall'
+  - 'move'
+  - 'oasisscan'
+  - 'ui'

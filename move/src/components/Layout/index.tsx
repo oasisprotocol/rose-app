@@ -1,6 +1,6 @@
-import symbol_warning_svg from '/symbol_warning.svg?url'
+import symbol_warning_svg from '/move/symbol_warning.svg?url'
 import { useIsRpcResponding } from '../../utils/useIsRpcResponding'
-import { LayoutBase } from '../LayoutBase'
+import { MoveLayoutBase as LayoutBase } from '@oasisprotocol/rose-app-ui/move'
 import classes from './index.module.css'
 
 export function Layout(props: { header: React.ReactNode; children: React.ReactNode }) {

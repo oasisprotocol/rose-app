@@ -2,11 +2,13 @@ import * as oasis from '@oasisprotocol/client'
 import { staking } from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import BigNumber from 'bignumber.js'
-import { formatUnits } from 'viem'
 import { getConsensusAccountsWrapper, getNodeInternal } from './client.ts'
 import { consensusConfig, sapphireConfig } from './oasisConfig'
 
-export async function getBalances(props: { consensusAddress: `oasis1${string}`; sapphireAddress: `0x${string}` }) {
+export async function getBalances(props: {
+  consensusAddress: `oasis1${string}`
+  sapphireAddress: `0x${string}`
+}) {
   const consensus = await getConsensusBalance(props.consensusAddress)
   const sapphire = await getSapphireBalance(props.sapphireAddress)
   return { consensus, sapphire }
@@ -14,22 +16,24 @@ export async function getBalances(props: { consensusAddress: `oasis1${string}`; 
 
 /** Continuously fetches gRPC balance until it is > minBalance */
 export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, moreThan: bigint) {
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const balance = await getConsensusBalance(consensusAddress)
     console.log('waitForConsensusBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
-    await new Promise((r) => setTimeout(r, 6000))
+    await new Promise(r => setTimeout(r, 6000))
     if (window.mock) return balance
   }
 }
 
 /** Continuously fetches gRPC balance until it is > minBalance */
 export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, moreThan: bigint) {
+  // eslint-disable-next-line no-constant-condition
   while (true) {
     const balance = await getSapphireBalance(sapphireAddress)
     console.log('waitForSapphireBalance', balance, '>', moreThan)
     if (balance.raw > moreThan) return balance
-    await new Promise((r) => setTimeout(r, 6000))
+    await new Promise(r => setTimeout(r, 6000))
     if (window.mock) return balance
   }
 }
@@ -53,7 +57,7 @@ export async function getSapphireBalance(ethAddress: `0x${string}`) {
   const underlyingAddress = await oasis.address.fromData(
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
-    oasis.misc.fromHex(ethAddress.replace('0x', '')),
+    oasis.misc.fromHex(ethAddress.replace('0x', ''))
   )
 
   const balanceResult = await consensusWrapper
@@ -84,10 +88,4 @@ export function getValidOasisAddress(addr: string): `oasis1${string}` | null {
   } catch (e) {
     return null
   }
-}
-
-export const formatAmount = (amount: bigint | string, dp: number, formatDp = 3): string => {
-  return BigNumber(formatUnits(BigInt(amount), dp))
-    .dp(formatDp, BigNumber.ROUND_DOWN)
-    .toFormat(formatDp)
 }
