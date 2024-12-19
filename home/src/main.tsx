@@ -1,6 +1,7 @@
 import ReactDOM from 'react-dom/client'
 import { MoveApp } from '@oasisprotocol/rose-app-move'
 import { stakeRouteObject } from '@oasisprotocol/rose-app-stake'
+import { DiscoverApp } from '@oasisprotocol/rose-app-discover'
 import { createHashRouter, RouterProvider } from 'react-router-dom'
 
 import { App } from './App.tsx'
@@ -24,6 +25,10 @@ const router = createHashRouter([
       {
         path: 'move',
         element: <MoveApp />,
+      },
+      {
+        path: 'discover',
+        element: <DiscoverApp />,
       },
       {
         path: '*',

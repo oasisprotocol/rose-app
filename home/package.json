@@ -18,6 +18,7 @@
     "@material-design-icons/svg": "^0.14.13",
     "@metamask/jazzicon": "^2.0.0",
     "@oasisprotocol/client": "^1.1.0",
+    "@oasisprotocol/rose-app-discover": "workspace:*",
     "@oasisprotocol/rose-app-move": "workspace:*",
     "@oasisprotocol/rose-app-stake": "workspace:*",
     "@oasisprotocol/rose-app-ui": "workspace:*",
