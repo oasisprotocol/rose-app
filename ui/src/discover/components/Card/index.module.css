@@ -82,3 +82,11 @@
 .grantRecipient {
   color: var(--teal-300);
 }
+
+@media screen and (min-width: 1000px) {
+  .card {
+    &.isFeatured {
+      height: 320px;
+    }
+  }
+}
