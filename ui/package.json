@@ -53,6 +53,9 @@
     },
     "./core/index.css": {
       "import": "./src/core/index.css"
+    },
+    "./discover": {
+      "import": "./src/discover/index.ts"
     }
   }
 }
