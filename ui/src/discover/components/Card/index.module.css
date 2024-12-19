@@ -80,6 +80,8 @@
 }
 
 .grantRecipient {
+  display: flex;
+  align-items: center;
   color: var(--teal-300);
 }
 

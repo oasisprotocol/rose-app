@@ -1,4 +1,5 @@
 import { FC, ReactNode } from 'react'
+import { Coins } from 'lucide-react'
 import { CardConfig, CardConfigLabel } from '../../types'
 import classes from './index.module.css'
 
@@ -10,7 +11,8 @@ interface Props extends CardConfig {
 const cardConfigLabelMap: { [key in CardConfigLabel]: (isFeatured?: boolean) => ReactNode } = {
   [CardConfigLabel.Grant]: isFeatured => (
     <p className={`${classes.grantRecipient} text-sm ${isFeatured ? 'medium' : 'regular'}`}>
-      Grant Recipient
+      <Coins size={13.33} />
+      &nbsp; Grant Recipient
     </p>
   ),
 }
