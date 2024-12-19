@@ -82,3 +82,4 @@ jobs:
           pnpm --filter @oasisprotocol/rose-app-move checkTs
           pnpm --filter @oasisprotocol/rose-app-stake checkTs
           pnpm --filter @oasisprotocol/rose-app-home checkTs
+          pnpm --filter @oasisprotocol/rose-app-discover checkTs

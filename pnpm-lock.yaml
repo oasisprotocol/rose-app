@@ -39,6 +39,31 @@ importers:
         specifier: ^3.2.5
         version: 3.4.2
 
+  discover:
+    dependencies:
+      '@oasisprotocol/rose-app-ui':
+        specifier: workspace:*
+        version: link:../ui
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.3.11
+      typescript:
+        specifier: ^5.2.2
+        version: 5.6.3
+      vite:
+        specifier: ^5.4.9
+        version: 5.4.11(@types/node@22.7.7)
+      vite-plugin-dts:
+        specifier: ^4.1.0
+        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+      vite-plugin-svgr:
+        specifier: ^4.2.0
+        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+
   home:
     dependencies:
       '@material-design-icons/svg':
@@ -50,6 +75,9 @@ importers:
       '@oasisprotocol/client':
         specifier: ^1.1.0
         version: 1.1.0
+      '@oasisprotocol/rose-app-discover':
+        specifier: workspace:*
+        version: link:../discover
       '@oasisprotocol/rose-app-move':
         specifier: workspace:*
         version: link:../move

@@ -6,3 +6,4 @@ packages:
   - 'move'
   - 'oasisscan'
   - 'ui'
+  - 'discover'
