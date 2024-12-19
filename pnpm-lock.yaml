@@ -39,6 +39,28 @@ importers:
         specifier: ^3.2.5
         version: 3.4.2
 
+  discover:
+    dependencies:
+      '@oasisprotocol/rose-app-ui':
+        specifier: workspace:*
+        version: link:../ui
+      react:
+        specifier: ^18.2.0
+        version: 18.3.1
+    devDependencies:
+      '@types/react':
+        specifier: ^18.2.56
+        version: 18.3.11
+      typescript:
+        specifier: ^5.2.2
+        version: 5.6.3
+      vite:
+        specifier: ^5.4.9
+        version: 5.4.11(@types/node@22.7.7)
+      vite-plugin-dts:
+        specifier: ^4.1.0
+        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+
   home:
     dependencies:
       '@material-design-icons/svg':
@@ -50,6 +72,9 @@ importers:
       '@oasisprotocol/client':
         specifier: ^1.1.0
         version: 1.1.0
+      '@oasisprotocol/rose-app-discover':
+        specifier: workspace:*
+        version: link:../discover
       '@oasisprotocol/rose-app-move':
         specifier: workspace:*
         version: link:../move
@@ -315,6 +340,9 @@ importers:
       bignumber.js:
         specifier: ^9.1.2
         version: 9.1.2
+      lucide-react:
+        specifier: ^0.468.0
+        version: 0.468.0(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
@@ -5243,6 +5271,14 @@ packages:
     dependencies:
       yallist: 4.0.0
     dev: true
+
+  /lucide-react@0.468.0(react@18.3.1):
+    resolution: {integrity: sha512-6koYRhnM2N0GGZIdXzSeiNwguv1gt/FAjZOiPl76roBi3xKEXa4WmfpxgQwTTL4KipXjefrnf3oV4IsYhi4JFA==}
+    peerDependencies:
+      react: ^16.5.1 || ^17.0.0 || ^18.0.0 || ^19.0.0-rc
+    dependencies:
+      react: 18.3.1
+    dev: false
 
   /magic-string@0.30.15:
     resolution: {integrity: sha512-zXeaYRgZ6ldS1RJJUrMrYgNJ4fdwnyI6tVqoiIhyCyv5IVTK9BU8Ic2l253GGETQHxI4HNUwhJ3fjDhKqEoaAw==}

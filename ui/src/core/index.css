@@ -38,7 +38,13 @@
   --orange: #ed6c02;
   --red-dark: #620000;
   --red: #ff0e0e;
+  --teal-300: #5eead4;
   --white: #fff;
+  --zinc-300: #d4d4d8;
+  --zinc-500: #71717a;
+  --zinc-800: #27272a;
+  --zinc-900: #18181b;
+  --zinc-950: #09090b;
 }
 
 *,

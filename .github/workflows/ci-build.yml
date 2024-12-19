@@ -51,6 +51,8 @@ jobs:
         run: pnpm --filter @oasisprotocol/rose-app-stake build
       - name: Build move lib
         run: pnpm --filter @oasisprotocol/rose-app-move build
+      - name: Build discover lib
+        run: pnpm --filter @oasisprotocol/rose-app-discover build
       - name: Build app
         run: pnpm build
       - name: Upload frontend build artifacts
