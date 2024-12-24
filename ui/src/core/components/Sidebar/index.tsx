@@ -1,21 +1,28 @@
 import close_svg from '@material-design-icons/svg/filled/close.svg'
-import menu_svg from '@material-design-icons/svg/filled/menu.svg'
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect } from 'react'
 import { Logo } from '../icons/Logo'
 import classes from './index.module.css'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { AppStateContextProvider } from '../../providers/SidebarStateProvider'
+import { useSidebarState } from '../../hooks/useSidebarState'
 
 interface Props {
   navItem?: ReactNode
 }
 
-export function Sidebar({ navItem }: Props) {
-  const [open, setOpen] = useState(false)
-
+export function SidebarCmp({ navItem }: Props) {
   const location = useLocation()
+  const {
+    state: { isOpen },
+    setIsOpen,
+  } = useSidebarState()
+
   useEffect(() => {
-    setOpen(false)
-  }, [location, setOpen])
+    if (isOpen) {
+      setIsOpen(false)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location])
 
   return (
     <div className={classes.sidebarLayout}>
@@ -23,12 +30,9 @@ export function Sidebar({ navItem }: Props) {
         type="checkbox"
         id="sidebarCheckbox"
         className={classes.sidebarCheckbox}
-        checked={open}
-        onChange={() => setOpen(!open)}
+        checked={isOpen}
+        onChange={() => setIsOpen(!isOpen)}
       />
-      <label title="Show sidebar" className={classes.sidebarToggle} htmlFor="sidebarCheckbox">
-        <img src={menu_svg} alt="Show sidebar" width="20" style={{ filter: 'invert(1)' }} />
-      </label>
       <nav className={classes.sidebar}>
         <div className={classes.sidebarHeader}>
           <NavLink to="/" className={classes.logo}>
@@ -59,5 +63,13 @@ export function Sidebar({ navItem }: Props) {
       {/*biome-ignore lint/a11y/noLabelWithoutControl: for input[type="checkbox"]*/}
       <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>
+  )
+}
+
+export function Sidebar(props: Props) {
+  return (
+    <AppStateContextProvider>
+      <SidebarCmp {...props} />{' '}
+    </AppStateContextProvider>
   )
 }

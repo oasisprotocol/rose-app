@@ -63,18 +63,20 @@
   }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1023px) {
   .layout {
-    padding: 0.75rem 0.75rem 0;
+    padding: 0;
   }
 
   .main {
-    padding: 0;
+    padding: 0 1rem;
   }
 }
 
 @media screen and (max-width: 576px) {
   .mobileFooter {
+    padding: 0 1rem 1rem;
+
     > div {
       text-align: unset;
     }

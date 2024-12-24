@@ -8,7 +8,7 @@ import {
   ShortAddress,
   VideoModal,
 } from '@oasisprotocol/rose-app-ui/move'
-import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
+import { AccountAvatar, Header } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useDeposit } from '../useDeposit'
 import classes from '../App.module.css'
@@ -36,8 +36,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
     <>
       <Layout
         header={
-          <>
-            <img src={logo_rose_move_svg} alt="ROSE Move logo" />
+          <Header logo={<img src={logo_rose_move_svg} alt="ROSE Move logo" />}>
             <Hint
               className={classes.headerAccountHint}
               title={(() => {
@@ -51,7 +50,7 @@ export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
                 <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
               </div>
             </Hint>
-          </>
+          </Header>
         }
       >
         <div className={classes.step3}>

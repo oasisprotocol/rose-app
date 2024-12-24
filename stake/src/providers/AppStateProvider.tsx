@@ -35,7 +35,7 @@ export const AppStateContextProvider: FC<PropsWithChildren> = ({ children }) => 
   } = useWeb3()
   const { getValidators } = useApi()
   const { fetchDelegations: grpcFetchDelegations, fetchUndelegations: grpcFetchUndelegations } = useGrpc()
-  const isMobileScreen = useMediaQuery({ query: '(max-width: 1000px)' })
+  const isMobileScreen = useMediaQuery({ query: '(max-width: 1023px)' })
 
   const [state, setState] = useState<AppStateProviderState>({
     ...appStateProviderInitialState,

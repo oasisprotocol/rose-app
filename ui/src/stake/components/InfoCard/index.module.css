@@ -21,7 +21,7 @@
   }
 }
 
-.title {
+.title.title {
   margin: 0;
   color: var(--white);
 }

@@ -47,6 +47,9 @@ importers:
       react:
         specifier: ^18.2.0
         version: 18.3.1
+      react-responsive:
+        specifier: ^9.0.2
+        version: 9.0.2(react@18.3.1)
     devDependencies:
       '@types/react':
         specifier: ^18.2.56
@@ -96,6 +99,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.3.1(react@18.3.1)
+      react-responsive:
+        specifier: ^9.0.2
+        version: 9.0.2(react@18.3.1)
       react-router-dom:
         specifier: ^6.22.2
         version: 6.28.0(react-dom@18.3.1)(react@18.3.1)

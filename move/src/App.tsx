@@ -16,6 +16,7 @@ import sapphire_to_consensus_svg from '/move/sapphire_to_consensus.svg?url'
 import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 import { Withdraw } from './withdraw/Withdraw'
+import { Header } from '@oasisprotocol/rose-app-ui/core'
 
 export function App() {
   useReloadIfAccountSwitched()
@@ -30,7 +31,7 @@ export function App() {
   if (!sapphireAddress) {
     return (
       <>
-        <Layout header={<img src={logo_rose_move_svg} alt="" style={{ visibility: 'hidden' }} />}>
+        <Layout header={<Header navLink={null} />}>
           <div className={classes.step1}>
             <div>
               <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
@@ -93,12 +94,11 @@ export function App() {
     return (
       <Layout
         header={
-          <>
-            <img src={logo_rose_move_svg} alt="ROSE Move logo" />
+          <Header logo={<img src={logo_rose_move_svg} alt="ROSE Move logo" />}>
             <div className={classes.headerAccount}>
               <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
             </div>
-          </>
+          </Header>
         }
       >
         <div className={classes.step2}>

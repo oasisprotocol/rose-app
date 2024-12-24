@@ -60,4 +60,11 @@
   :global(summary) {
     cursor: pointer;
   }
+
+  :global(header) {
+    img {
+      max-width: 50cqw;
+      max-height: 67px;
+    }
+  }
 }

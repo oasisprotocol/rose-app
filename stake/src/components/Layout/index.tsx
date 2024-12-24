@@ -1,32 +1,37 @@
 import { FC } from 'react'
 import { NavLink, Outlet, useMatch } from 'react-router-dom'
 import classes from './index.module.css'
-import { LogoIcon, Alert, Button, LayoutBase, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
+import { Alert, Button, LayoutBase, LogoIcon, StringUtils } from '@oasisprotocol/rose-app-ui/stake'
 import { useAppState } from '../../hooks/useAppState'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Header } from '@oasisprotocol/rose-app-ui/core'
 
 export const Layout: FC = () => {
   const isHomePage = useMatch('/stake')
   const {
-    state: { appError, isMobileScreen, isDesktopScreen },
+    state: { appError, isDesktopScreen },
     clearAppError,
   } = useAppState()
 
   return (
     <LayoutBase
       header={
-        <header className={classes.header}>
-          {!isHomePage && (
-            <NavLink
-              className={classes.headerLink}
-              to="/stake/dashboard"
-              style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
-            >
-              <LogoIcon isMobileScreen={isMobileScreen} />
-            </NavLink>
-          )}
+        <Header
+          navLink={
+            !isHomePage && (
+              <NavLink
+                className={classes.headerLink}
+                to="/stake/dashboard"
+                style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
+              >
+                <LogoIcon />
+              </NavLink>
+            )
+          }
+        >
+          {isHomePage && <div />}
           {!isHomePage && isDesktopScreen && <ConnectButton />}
-        </header>
+        </Header>
       }
     >
       <section className={classes.mainSection}>
