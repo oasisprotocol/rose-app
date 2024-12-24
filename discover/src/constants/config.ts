@@ -8,7 +8,7 @@ import { CardConfig, CardConfigLabel } from '@oasisprotocol/rose-app-ui/discover
 export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; tooling: CardConfig[] } = {
   featured: [
     {
-      title: 'Neby',
+      title: 'NEBY',
       type: 'DEX',
       imgSrc: '/discover/Neby.png',
       labels: [CardConfigLabel.Grant],
@@ -22,7 +22,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://accumulated.finance/',
     },
     {
-      title: 'BitProtocol',
+      title: 'Bit Protocol',
       type: 'CDP Stablecoin',
       imgSrc: '/discover/BitProtocol.png',
       externalLink: 'https://bitusd.finance/',
@@ -30,7 +30,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
   ],
   dApps: [
     {
-      title: 'Thorn',
+      title: 'Thorn Protocol',
       type: 'StableSwap',
       imgSrc: '/discover/ThornProtocol.jpg',
       labels: [CardConfigLabel.Grant],
@@ -47,7 +47,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'Rosy',
       type: 'Meme',
       imgSrc: '/discover/Rosy.jpg',
-      externalLink: 'https://daosis.io/',
+      externalLink: 'https://rosytoken.com/',
     },
     {
       title: '4P SuperdApp',
@@ -69,7 +69,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://www.predictoor.ai/',
     },
     {
-      title: 'Pixelrealm',
+      title: 'Pixel Realm',
       type: 'NFT Marketplace & Gaming Incubator',
       imgSrc: '/discover/PixelRealm.jpg',
       labels: [CardConfigLabel.Grant],
@@ -112,12 +112,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://app.routernitro.com/swap',
     },
     {
-      title: 'Dexscreener',
+      title: 'DEX Screener',
       imgSrc: '/discover/DexScreener.jpg',
       externalLink: 'https://dexscreener.com/oasissapphire',
     },
     {
-      title: 'Dappradar',
+      title: 'DappRadar',
       imgSrc: '/discover/DappRadar.jpg',
       externalLink: 'https://dappradar.com/rankings/protocol/oasis-sapphire',
     },
@@ -127,25 +127,25 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://defillama.com/chain/Oasis%20Sapphire',
     },
     {
-      title: 'Rose wallet',
+      title: 'ROSE Wallet',
       type: 'Wallet',
       imgSrc: '/discover/RoseWalletWhite.png',
       externalLink: 'https://wallet.oasis.io/',
     },
     {
-      title: 'Illuminex',
+      title: 'illuminex',
       type: 'Privacy Wallet',
       imgSrc: '/discover/illumineX.jpg',
       labels: [CardConfigLabel.Grant],
       externalLink: 'https://illuminex.xyz/',
     },
     {
-      title: 'Explorer',
+      title: 'Oasis Explorer',
       imgSrc: '/discover/OasisExploreWhite.png',
       externalLink: 'https://explorer.oasis.io/',
     },
     {
-      title: 'Docs',
+      title: 'Oasis Docs',
       imgSrc: '/discover/OasisDocsWhite.png',
       externalLink: 'https://docs.oasis.io/',
     },
@@ -173,7 +173,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://www.reclaimprotocol.org/',
     },
     {
-      title: 'Ra1l',
+      title: 'RA1L',
       type: 'DID',
       imgSrc: '/discover/Ra1l.jpg',
       labels: [CardConfigLabel.Grant],
