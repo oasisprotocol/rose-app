@@ -36,7 +36,7 @@ export function Layout(props: { header: React.ReactNode; children: React.ReactNo
               </p>
             </div>
           )}
-          <header className={classes.header}>{props.header}</header>
+          {props.header}
         </>
       }
     >

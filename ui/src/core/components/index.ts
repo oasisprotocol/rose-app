@@ -1,4 +1,6 @@
 export * from './AccountAvatar'
+export * from './Header'
+export * from './icons'
 export * from './JazzIcon'
 export * from './Sidebar'
 export * from './SidebarAccount'

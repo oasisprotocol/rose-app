@@ -1,0 +1,33 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+  padding: 2.5rem 1rem 2rem;
+  margin: 0 auto;
+
+  &:empty {
+    display: none;
+  }
+}
+
+.sidebarToggle {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: auto;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  background-color: #0d0d0f;
+  z-index: 100;
+}
+
+@media screen and (min-width: 1024px) {
+  .header {
+    padding: 1.84375rem 1.5rem 1.84375rem;
+  }
+}

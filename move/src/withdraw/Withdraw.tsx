@@ -15,7 +15,7 @@ import {
   ShortAddress,
   VideoModal,
 } from '@oasisprotocol/rose-app-ui/move'
-import { AccountAvatar } from '@oasisprotocol/rose-app-ui/core'
+import { AccountAvatar, Header } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
@@ -217,12 +217,11 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     return (
       <Layout
         header={
-          <>
-            <img src={logo_rose_move_svg} alt="ROSE Move logo" />
+          <Header logo={<img src={logo_rose_move_svg} alt="ROSE Move logo" />}>
             <div className={classes.headerAccount}>
               <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
             </div>
-          </>
+          </Header>
         }
       >
         <ExistingBalance
