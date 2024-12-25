@@ -129,7 +129,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
     {
       title: 'ROSE Wallet',
       type: 'Wallet',
-      imgSrc: '/discover/RoseWalletWhite.png',
+      imgSrc: '/discover/RoseWallet.svg',
       externalLink: 'https://wallet.oasis.io/',
     },
     {
@@ -141,12 +141,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
     },
     {
       title: 'Oasis Explorer',
-      imgSrc: '/discover/OasisExploreWhite.png',
+      imgSrc: '/discover/OasisExplorer.svg',
       externalLink: 'https://explorer.oasis.io/',
     },
     {
       title: 'Oasis Docs',
-      imgSrc: '/discover/OasisDocsWhite.png',
+      imgSrc: '/discover/OasisDocs.svg',
       externalLink: 'https://docs.oasis.io/',
     },
     {
