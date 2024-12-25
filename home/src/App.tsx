@@ -12,6 +12,11 @@ export function App() {
       <Header logo={isMobileScreen && <Logo />} />
       <main className={classes.main}>
         <div className={classes.row}>
+          <NavLink to="/discover" className={classes.discover}>
+            <h2>Discover</h2>
+            <p>Discover the future of Web3 & AI on Oasis.</p>
+            <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
+          </NavLink>
           <NavLink to="/stake" className={classes.stake}>
             <h2>Stake</h2>
             <p>Stake your ROSE directly from Sapphire using an EVM compatible wallet.</p>
