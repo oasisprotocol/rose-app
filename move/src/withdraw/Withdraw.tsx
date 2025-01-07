@@ -333,12 +333,11 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     <>
       <Layout
         header={
-          <>
-            <img src={logo_rose_move_svg} alt="ROSE Move logo" />
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+          <Header logo={<img src={logo_rose_move_svg} alt="ROSE Move logo" />}>
+            <div className={classes.headerAccount}>
               <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
             </div>
-          </>
+          </Header>
         }
       >
         <div className={classes.step3}>
