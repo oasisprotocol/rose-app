@@ -28,7 +28,9 @@ export const Input: FC<Props> = ({
   useLayoutEffect(() => {
     if (ref.current) {
       ref.current.value = initialValue ?? ''
+      onChange?.(ref.current.value)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialValue])
 
   return (

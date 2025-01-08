@@ -8,9 +8,9 @@ import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccoun
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 
 // Use global variable here, due to step4 using different context(not in sync with react hooks)
-let isInputMode = true
-const setIsInputMode = (_isInputMode: boolean) => {
-  isInputMode = _isInputMode
+let isInputModeGlobal = true
+const setIsInputModeGlobal = (_isInputMode: boolean) => {
+  isInputModeGlobal = _isInputMode
 }
 
 /**
@@ -23,6 +23,7 @@ export function useWithdraw() {
     useGenerateSapphireAccount()
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
+  const [_isInputMode, _setIsInputMode] = useState(true)
   const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({
     address: sapphireAddress,
   })
@@ -99,9 +100,14 @@ export function useWithdraw() {
     }
 
     // Loop unless in input mode, case when user click transfer more
-    if (!isInputMode) {
+    if (!isInputModeGlobal) {
       await step4(consensusAddress)
     }
+  }
+
+  function setIsInputMode(inputMode: boolean) {
+    _setIsInputMode(inputMode)
+    setIsInputModeGlobal(inputMode)
   }
 
   function transferMore() {
@@ -121,7 +127,7 @@ export function useWithdraw() {
     availableBalance,
     progress,
     isBlockingNavigatingAway,
-    isInputMode,
+    isInputMode: _isInputMode,
     setIsInputMode,
     isPrevError,
   }
