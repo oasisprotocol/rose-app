@@ -1,6 +1,6 @@
 import photo_camera_outlined_svg from '@material-design-icons/svg/outlined/photo_camera.svg'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { FormEvent, useState } from 'react'
+import { FormEvent, useEffect, useRef, useState } from 'react'
 import { parseUnits } from 'viem'
 import loader_blocks_svg from '/move/loader_blocks.svg?url'
 import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
@@ -21,6 +21,7 @@ import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
+import { CancelablePromise } from '../utils/cancelablePromise.ts'
 
 interface FormItem<T = string> {
   value: T | undefined
@@ -67,6 +68,16 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     ...destinationFormInitialValue,
   })
   const [isWithdrawHelpVideoOpen, setIsWithdrawHelpVideoOpen] = useState(false)
+  const withdrawFlowCancelablePromise = useRef<CancelablePromise>()
+
+  useEffect(() => {
+    return () => {
+      if (withdrawFlowCancelablePromise.current) {
+        withdrawFlowCancelablePromise.current.cancel()
+        withdrawFlowCancelablePromise.current = undefined
+      }
+    }
+  }, [])
 
   const handleDestinationFormAddressChange = (value?: string) => {
     if (!value) {
@@ -206,7 +217,13 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
 
     setIsInputMode(false)
     setConsensusAddress(destinationConsensusAddress.value)
-    step4(destinationConsensusAddress.value)
+
+    if (withdrawFlowCancelablePromise.current) {
+      withdrawFlowCancelablePromise.current.cancel()
+      withdrawFlowCancelablePromise.current = undefined
+    }
+
+    withdrawFlowCancelablePromise.current = step4(destinationConsensusAddress.value)
 
     setDestinationForm({ ...destinationFormInitialValue })
   }

@@ -4,6 +4,7 @@ import * as oasisRT from '@oasisprotocol/client-rt'
 import BigNumber from 'bignumber.js'
 import { getConsensusAccountsWrapper, getNodeInternal } from './client.ts'
 import { consensusConfig, sapphireConfig } from './oasisConfig'
+import { CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE, cancelableTimeout } from './cancelablePromise.ts'
 
 export async function getBalances(props: {
   consensusAddress: `oasis1${string}`
@@ -16,26 +17,102 @@ export async function getBalances(props: {
 
 /** Continuously fetches gRPC balance until it is > minBalance */
 export async function waitForConsensusBalance(consensusAddress: `oasis1${string}`, moreThan: bigint) {
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const balance = await getConsensusBalance(consensusAddress)
-    console.log('waitForConsensusBalance', balance, '>', moreThan)
-    if (balance.raw > moreThan) return balance
-    await new Promise(r => setTimeout(r, 6000))
-    if (window.mock) return balance
-  }
+  const balance = await getConsensusBalance(consensusAddress)
+  console.log('waitForConsensusBalance', balance, '>', moreThan)
+
+  if (balance.raw > moreThan || window.mock) return balance
+
+  await new Promise(r => setTimeout(r, 6000))
+  return waitForConsensusBalance(consensusAddress, moreThan)
 }
 
 /** Continuously fetches gRPC balance until it is > minBalance */
 export async function waitForSapphireBalance(sapphireAddress: `0x${string}`, moreThan: bigint) {
-  // eslint-disable-next-line no-constant-condition
-  while (true) {
-    const balance = await getSapphireBalance(sapphireAddress)
-    console.log('waitForSapphireBalance', balance, '>', moreThan)
-    if (balance.raw > moreThan) return balance
-    await new Promise(r => setTimeout(r, 6000))
-    if (window.mock) return balance
+  const balance = await getSapphireBalance(sapphireAddress)
+  console.log('waitForSapphireBalance', balance, '>', moreThan)
+
+  if (balance.raw > moreThan || window.mock) {
+    return balance
   }
+
+  await new Promise(r => setTimeout(r, 6000))
+  return waitForSapphireBalance(sapphireAddress, moreThan)
+}
+
+/** Continuously fetches gRPC balance until it is > minBalance */
+export async function waitForConsensusBalanceCancelable(
+  consensusAddress: `oasis1${string}`,
+  moreThan: bigint,
+  signal: AbortSignal
+): Promise<{ raw: bigint; formatted: string; isFresh: boolean }> {
+  return new Promise((resolve, reject) => {
+    const checkBalance = async () => {
+      try {
+        const balance = await getConsensusBalance(consensusAddress)
+        console.log('waitForConsensusBalance', balance, '>', moreThan)
+
+        if (signal.aborted) {
+          return reject(new Error(CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE))
+        }
+
+        if (balance.raw > moreThan || window.mock) {
+          return resolve(balance)
+        }
+
+        await cancelableTimeout(6000, signal)
+
+        if (!signal.aborted) {
+          checkBalance()
+        }
+      } catch (err) {
+        reject(err)
+      }
+    }
+
+    signal.addEventListener('abort', () => {
+      reject(new Error(CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE))
+    })
+
+    checkBalance().catch(reject)
+  })
+}
+
+/** Continuously fetches gRPC balance until it is > minBalance */
+export async function waitForSapphireBalanceCancelable(
+  sapphireAddress: `0x${string}`,
+  moreThan: bigint,
+  signal: AbortSignal
+): Promise<{ raw: bigint; formatted: string }> {
+  return new Promise((resolve, reject) => {
+    const checkBalance = async () => {
+      try {
+        const balance = await getSapphireBalance(sapphireAddress)
+        console.log('waitForSapphireBalance', balance, '>', moreThan)
+
+        if (signal.aborted) {
+          return reject(new Error(CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE))
+        }
+
+        if (balance.raw > moreThan || window.mock) {
+          return resolve(balance)
+        }
+
+        await cancelableTimeout(6000, signal)
+
+        if (!signal.aborted) {
+          checkBalance()
+        }
+      } catch (err) {
+        reject(err)
+      }
+    }
+
+    signal.addEventListener('abort', () => {
+      reject(new Error(CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE))
+    })
+
+    checkBalance().catch(reject)
+  })
 }
 
 export async function getConsensusBalance(oasisAddress: `oasis1${string}`) {

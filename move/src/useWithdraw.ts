@@ -1,11 +1,21 @@
 import { useState } from 'react'
 import { useAccount, useBalance, useSendTransaction } from 'wagmi'
 import { usePrevious } from './hooks/usePrevious.ts'
-import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
+import {
+  getConsensusBalance,
+  waitForConsensusBalanceCancelable,
+  waitForSapphireBalanceCancelable,
+} from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
+import {
+  CancelablePromise,
+  CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE,
+  cancelableTimeout,
+  makeCancelablePromise,
+} from './utils/cancelablePromise.ts'
 
 // Use global variable here, due to step4 using different context(not in sync with react hooks)
 let isInputModeGlobal = true
@@ -43,8 +53,7 @@ export function useWithdraw() {
     })
   }
 
-  // Long running promise, doesn't get canceled if this component is destroyed
-  async function step4(consensusAddress: `oasis1${string}`) {
+  async function step4Cancelable(consensusAddress: `oasis1${string}`, signal: AbortSignal) {
     // Note: outside state var consensusAddress is outdated. Use param.
     if (!sapphireAddress) return
     if (!generatedSapphireAccount) return
@@ -55,9 +64,10 @@ export function useWithdraw() {
       const foundStuckRoseTokens = await getConsensusBalance(generatedConsensusAccount.address)
       if (foundStuckRoseTokens.raw <= 0n) {
         setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
-        const availableAmountToWithdraw = await waitForSapphireBalance(
+        const availableAmountToWithdraw = await waitForSapphireBalanceCancelable(
           generatedSapphireAccount.address,
-          minimalWithdrawableAmount
+          minimalWithdrawableAmount,
+          signal
         )
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
         blockNavigatingAway()
@@ -72,7 +82,11 @@ export function useWithdraw() {
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       }
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
-      const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
+      const amountToWithdraw2 = await waitForConsensusBalanceCancelable(
+        generatedConsensusAccount.address,
+        0n,
+        signal
+      )
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
       await transferToConsensus({
         amount: amountToWithdraw2.raw,
@@ -80,29 +94,45 @@ export function useWithdraw() {
         toConsensusAddress: consensusAddress,
       })
       setProgress({ percentage: 0.75, message: `Withdrawing ${amountToWithdraw2.formatted} ROSE` })
-      await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw)
+      await waitForConsensusBalanceCancelable(consensusAddress, preWithdrawConsensusBalance.raw, signal)
       setProgress({
         percentage: 1.0,
         message: 'Your ROSE transfer is complete!',
       })
       allowNavigatingAway() // Stop blocking unless new transfer comes in
 
-      await new Promise(r => setTimeout(r, 6000))
+      await cancelableTimeout(6000, signal)
       // Stay on "Withdrawn" screen unless new transfer comes in
-      await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
+      await waitForSapphireBalanceCancelable(generatedSapphireAccount.address, 0n, signal)
       if (window.mock) throw 'mock error'
     } catch (err) {
+      if (err instanceof Error && err.message === CANCELABLE_PROMISE_ABORT_SIGNAL_ERROR_MESSAGE) {
+        console.log('Withdraw flow canceled!')
+        return
+      }
+
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
-      await new Promise(r => setTimeout(r, 6000))
+      await cancelableTimeout(6000, signal)
     } finally {
       allowNavigatingAway()
     }
 
     // Loop unless in input mode, case when user click transfer more
     if (!isInputModeGlobal) {
-      await step4(consensusAddress)
+      await step4Cancelable(consensusAddress, signal)
     }
+  }
+
+  function step4(consensusAddress: `oasis1${string}`): CancelablePromise<void> {
+    return makeCancelablePromise<void>(async (resolve, reject, signal) => {
+      try {
+        await step4Cancelable(consensusAddress, signal)
+        resolve()
+      } catch (err) {
+        reject(err as Error)
+      }
+    })
   }
 
   function setIsInputMode(inputMode: boolean) {
