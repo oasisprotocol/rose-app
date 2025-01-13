@@ -96,6 +96,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       labels: [CardConfigLabel.Grant],
       externalLink: 'https://midas.app/',
     },
+    {
+      title: 'Oasis Blockvote',
+      type: 'Governance',
+      imgSrc: '/discover/OasisBlockvote.svg',
+      externalLink: 'https://vote.oasis.io/',
+    },
   ],
   tooling: [
     {
