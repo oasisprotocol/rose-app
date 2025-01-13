@@ -63,7 +63,6 @@ export function SidebarCmp({ navItem }: Props) {
       <div className={classes.main}>
         <Outlet />
       </div>
-      {/*biome-ignore lint/a11y/noLabelWithoutControl: for input[type="checkbox"]*/}
       <label className={classes.backdrop} htmlFor="sidebarCheckbox"></label>
     </div>
   )
