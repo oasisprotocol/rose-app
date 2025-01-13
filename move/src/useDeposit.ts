@@ -12,9 +12,11 @@ import {
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { trackEvent } from 'fathom-client'
 import { consensusConfig } from './utils/oasisConfig.ts'
+import { UnmountedAbortError, useUnmountSignal } from './utils/useUnmountSignal'
 
 /** any consensus -> generatedConsensusAccount -> sapphireAddress */
 export function useDeposit() {
+  const unmountSignal = useUnmountSignal()
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
   const { generatedConsensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
@@ -22,7 +24,6 @@ export function useDeposit() {
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
   const isPrevError = usePrevious(progress.percentage === undefined)
 
-  // Long running promise, doesn't get canceled if this component is destroyed
   async function step2() {
     if (!sapphireAddress) return
     const generatedConsensusAccount = await generateConsensusAccount(sapphireAddress)
@@ -39,7 +40,7 @@ export function useDeposit() {
     // Note: don't use outside state vars. They are outdated.
     try {
       setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
-      const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
+      const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n, unmountSignal)
 
       trackEvent('deposit flow started', {
         _value: fromBaseUnitsToTrackEventCents(amountToDeposit.raw, consensusConfig.decimals),
@@ -63,7 +64,7 @@ export function useDeposit() {
         sapphireAddress: sapphireAddress,
       })
       setProgress({ percentage: 0.75, message: 'ROSE transfer initiated' })
-      await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw)
+      await waitForSapphireBalance(sapphireAddress, preDepositSapphireBalance.raw, unmountSignal)
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of depositing
       setProgress({
         percentage: 1.0,
@@ -77,11 +78,14 @@ export function useDeposit() {
       allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
 
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
       await new Promise(r => setTimeout(r, 6000))
       // Stay on "Deposited" screen unless new transfer comes in
-      await waitForConsensusBalance(consensusAccount.address, 0n)
+      await waitForConsensusBalance(consensusAccount.address, 0n, unmountSignal)
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
       if (window.mock) throw 'mock error'
     } catch (err) {
+      if (err instanceof UnmountedAbortError) return // Ignore and stop looping
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
       await new Promise(r => setTimeout(r, 6000))

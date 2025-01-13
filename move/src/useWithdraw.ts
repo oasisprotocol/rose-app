@@ -13,11 +13,13 @@ import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccoun
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 import { trackEvent } from 'fathom-client'
 import { consensusConfig, sapphireConfig } from './utils/oasisConfig.ts'
+import { UnmountedAbortError, useUnmountSignal } from './utils/useUnmountSignal'
 
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
  */
 export function useWithdraw() {
+  const unmountSignal = useUnmountSignal()
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
   const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } =
@@ -53,7 +55,6 @@ export function useWithdraw() {
     })
   }
 
-  // Long running promise, doesn't get canceled if this component is destroyed
   async function step4(consensusAddress: `oasis1${string}`, retryingAfterError: number) {
     // Note: outside state var consensusAddress is outdated. Use param.
     if (!sapphireAddress) return
@@ -67,7 +68,8 @@ export function useWithdraw() {
         setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
         const availableAmountToWithdraw = await waitForSapphireBalance(
           generatedSapphireAccount.address,
-          minimalWithdrawableAmount
+          minimalWithdrawableAmount,
+          unmountSignal
         )
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
 
@@ -84,13 +86,18 @@ export function useWithdraw() {
       }
 
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
-      const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
+      const amountToWithdraw2 = await waitForConsensusBalance(
+        generatedConsensusAccount.address,
+        0n,
+        unmountSignal
+      )
 
       trackEvent('withdrawal flow started', {
         _value: fromBaseUnitsToTrackEventCents(amountToWithdraw2.raw, consensusConfig.decimals),
       })
 
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
       await transferToConsensus({
         amount: amountToWithdraw2.raw,
         fromConsensusAccount: generatedConsensusAccount,
@@ -98,7 +105,7 @@ export function useWithdraw() {
       })
       setProgress({ percentage: 0.75, message: `Withdrawing ${amountToWithdraw2.formatted} ROSE` })
       if (window.mock && !retryingAfterError) throw 'mock error'
-      await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw)
+      await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw, unmountSignal)
       setProgress({
         percentage: 1.0,
         message: 'Your ROSE transfer is complete!',
@@ -110,6 +117,7 @@ export function useWithdraw() {
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
     } catch (err) {
+      if (err instanceof UnmountedAbortError) return // Ignore and stop looping
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
       await new Promise(r => setTimeout(r, 6000))
@@ -118,11 +126,17 @@ export function useWithdraw() {
       return
     }
 
-    await new Promise(r => setTimeout(r, 6000))
-    // Stay on "Withdrawn" screen unless new transfer comes in
-    await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
-    // Don't loop, force user to input destination again
-    transferMore()
+    try {
+      await new Promise(r => setTimeout(r, 6000))
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
+      // Stay on "Withdrawn" screen unless new transfer comes in
+      await waitForSapphireBalance(generatedSapphireAccount.address, 0n, unmountSignal)
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
+      // Don't loop, force user to input destination again
+      transferMore()
+    } catch (err) {
+      return // Ignore
+    }
   }
 
   function transferMore() {
