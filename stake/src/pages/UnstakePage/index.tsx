@@ -99,15 +99,15 @@ const UnstakePageCmp: FC = () => {
       return
     }
 
-    const foundDelagation = delegations.find(({ to }) => to === address)
+    const foundDelegation = delegations.find(({ to }) => to === address)
 
-    if (!foundDelagation) {
+    if (!foundDelegation) {
       delegation.current = null
       return
     }
 
     delegation.current = {
-      ...foundDelagation,
+      ...foundDelegation,
     }
   }, [address, delegations])
 
