@@ -1,24 +1,22 @@
-function rejectDelay(reason: string) {
+function rejectDelay(reason: string, timeoutMs = 5000) {
   return new Promise((_resolve, reject) => {
-    setTimeout(reject.bind(null, reason), 5000)
+    setTimeout(() => reject(reason), timeoutMs)
   })
 }
-
 export async function retry<T extends Promise<unknown>>(
-  attempt: T,
+  attempt: () => T,
   tryCb: (value: Awaited<T>) => void = () => {},
-  maxAttempts = 6
-): Promise<Awaited<T>> {
-  let p: Promise<Awaited<typeof attempt>> = Promise.reject()
-
+  maxAttempts = 6,
+  timeoutMs?: number
+): Promise<T> {
+  let p: Promise<T> = Promise.reject()
   for (let i = 0; i < maxAttempts; i++) {
     p = p
-      .catch(() => attempt)
+      .catch(attempt)
       .then(value => {
         return tryCb(value as Awaited<T>)
       })
-      .catch(rejectDelay) as Promise<Awaited<typeof attempt>>
+      .catch(reason => rejectDelay(reason, timeoutMs)) as Promise<T>
   }
-
   return p
 }
