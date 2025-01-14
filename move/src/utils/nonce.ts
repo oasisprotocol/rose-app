@@ -38,7 +38,10 @@ const consensusLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longn
 async function getConsensusNonce(oasisAddress: `oasis1${string}`) {
   const lastKnownNonce = consensusLastKnownNonce[oasisAddress] ?? null
 
-  const newNonce = await retry(_getConsensusNonce(oasisAddress), nonce => checkNonce(nonce, lastKnownNonce))
+  const newNonce = await retry(
+    () => _getConsensusNonce(oasisAddress),
+    nonce => checkNonce(nonce, lastKnownNonce)
+  )
 
   consensusLastKnownNonce[oasisAddress] = newNonce
   return newNonce
@@ -61,7 +64,10 @@ const sapphireLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longnu
 async function getSapphireNonce(oasisAddress: `oasis1${string}`) {
   const lastKnownNonce = sapphireLastKnownNonce[oasisAddress] ?? null
 
-  const newNonce = await retry(_getSapphireNonce(oasisAddress), nonce => checkNonce(nonce, lastKnownNonce))
+  const newNonce = await retry(
+    () => _getSapphireNonce(oasisAddress),
+    nonce => checkNonce(nonce, lastKnownNonce)
+  )
 
   sapphireLastKnownNonce[oasisAddress] = newNonce
   return newNonce
