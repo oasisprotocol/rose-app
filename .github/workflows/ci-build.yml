@@ -58,7 +58,7 @@ jobs:
       - name: Upload frontend build artifacts
         # Upload build artifacts on push event.
         if: github.event_name == 'push'
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: oasisprotocol-dapp-staker-frontend-${{ steps.vars.outputs.SHORT_SHA }}
           path: home/dist
