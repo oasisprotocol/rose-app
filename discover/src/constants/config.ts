@@ -199,5 +199,11 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       labels: [CardConfigLabel.Grant],
       externalLink: 'https://safepal.com/en/',
     },
+    {
+      title: 'StealthEX',
+      type: 'Exchange',
+      imgSrc: '/discover/StealthEX.svg',
+      externalLink: 'https://stealthex.io/?to=rose',
+    },
   ],
 }
