@@ -56,13 +56,14 @@
       display: flex;
       justify-content: center;
       width: 80px;
+      min-width: 80px;
       height: 80px;
       border: 1px solid var(--zinc-800);
       border-radius: 8px;
 
       img {
         height: 100%;
-        object-fit: cover;
+        object-fit: fill;
         border-radius: 8px;
       }
     }
