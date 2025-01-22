@@ -7,3 +7,4 @@ packages:
   - 'oasisscan'
   - 'ui'
   - 'discover'
+  - 'wrap'

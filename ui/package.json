@@ -57,6 +57,9 @@
     },
     "./discover": {
       "import": "./src/discover/index.ts"
+    },
+    "./wrap": {
+      "import": "./src/wrap/index.ts"
     }
   }
 }

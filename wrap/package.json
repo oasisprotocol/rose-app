@@ -1,0 +1,41 @@
+{
+  "name": "@oasisprotocol/rose-app-wrap",
+  "private": true,
+  "version": "1.0.0",
+  "license": "See License in ../LICENSE",
+  "type": "module",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "checkTs": "tsc --noEmit",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@oasisprotocol/rose-app-ui": "workspace:*",
+    "@rainbow-me/rainbowkit": "^2.1.2",
+    "bignumber.js": "^9.1.2",
+    "react": "^18.2.0",
+    "react-responsive": "^9.0.2",
+    "react-router-dom": "^6.22.2",
+    "viem": "^2.12.7",
+    "vitest": "^2.0.5",
+    "wagmi": "^2.12.7"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.1.0"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/main.tsx"
+    }
+  }
+}
