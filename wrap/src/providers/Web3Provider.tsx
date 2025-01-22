@@ -5,7 +5,7 @@ import { MAX_GAS_LIMIT, NETWORKS } from '../constants/config'
 import WrappedRoseMetadata from '../contracts/WrappedROSE.json'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { useAccount, usePublicClient, useWalletClient, useWatchAsset } from 'wagmi'
-import { getContract, Client } from 'viem'
+import { getContract } from 'viem'
 import BigNumber from 'bignumber.js'
 
 const web3ProviderInitialState: Web3ProviderState = {
@@ -17,15 +17,22 @@ const web3ProviderInitialState: Web3ProviderState = {
 
 export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const publicClient = usePublicClient()
-  const walletClient = useWalletClient()
   const { watchAsset } = useWatchAsset()
   const { address, chainId } = useAccount()
+  const { data: walletClient } = useWalletClient({
+    account: address,
+    chainId,
+  })
 
   const [state, setState] = useState<Web3ProviderState>({
     ...web3ProviderInitialState,
   })
 
   useEffect(() => {
+    if (!walletClient) {
+      return
+    }
+
     if (!chainId) {
       setState(prevState => ({
         ...prevState,
@@ -53,7 +60,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       abi: WrappedRoseMetadata.output.abi,
       client: {
         public: publicClient!,
-        wallet: walletClient! as unknown as Client,
+        wallet: walletClient!,
       },
     })
 
@@ -65,7 +72,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       wRoseContract,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chainId])
+  }, [chainId, walletClient])
 
   const getBalance = async () => {
     if (!publicClient || !address) {
@@ -75,14 +82,23 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
     return await publicClient.getBalance({ address })
   }
 
-  const getBalanceOfWROSE = async () => {
-    const { wRoseContract } = state
+  const getBalanceOfWROSE = async (): Promise<bigint> => {
+    const { wRoseContractAddress } = state
 
-    if (!wRoseContract || !address) {
-      throw new Error('[Web3Context] Unable to fetch WROSE balance!')
+    if (!publicClient) {
+      throw new Error('[Web3Context] publicClient is not initialized!')
     }
 
-    return (await wRoseContract.read.balanceOf([address])) as bigint
+    if (!address) {
+      throw new Error('[Web3Context] Address is required to fetch WROSE balance!')
+    }
+
+    return (await publicClient!.readContract({
+      address: wRoseContractAddress!,
+      abi: WrappedRoseMetadata.output.abi,
+      functionName: 'balanceOf',
+      args: [address],
+    })) as Promise<bigint>
   }
 
   const getGasPrice = async () => {
@@ -109,6 +125,7 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       value: amount,
       gas: MAX_GAS_LIMIT,
       gasPrice,
+      account: address,
     })
   }
 
@@ -123,7 +140,11 @@ export const Web3ContextProvider: FC<PropsWithChildren> = ({ children }) => {
       throw new Error('[wRoseContract] not initialized!')
     }
 
-    return await wRoseContract.write.withdraw([amount], { gasLimit: MAX_GAS_LIMIT, gasPrice })
+    return await wRoseContract.write.withdraw([amount], {
+      gasLimit: MAX_GAS_LIMIT,
+      gasPrice,
+      account: address,
+    })
   }
 
   const getTransaction = async (hash: `0x${string}`) => {

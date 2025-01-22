@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import classes from './index.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
-import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
+import { withConnectedWallet } from '../../hoc/withConnectedWallet'
 
 const ConnectWalletCmp: FC = () => {
   return (
@@ -17,4 +17,4 @@ const ConnectWalletCmp: FC = () => {
   )
 }
 
-export const ConnectWallet = withDisconnectedWallet(ConnectWalletCmp)
+export const ConnectWallet = withConnectedWallet(ConnectWalletCmp)

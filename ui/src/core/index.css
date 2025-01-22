@@ -17,10 +17,13 @@
   --blue-dark-border: #1b0f33;
   --brand-blue: #0500e1;
   --brand-dark-blue: #1e1e73;
+  --brand-dark: #3333c4;
   --brand-extra-dark-21: #00006236;
   --brand-extra-dark-50: #00006280;
   --brand-extra-dark-75: #000062bf;
   --brand-extra-dark: #000062;
+  --brand-medium: #0092f6;
+  --danger: #d44c4c;
   --dark: #1b0f33;
   --gray-blue-border: #2c3bd533;
   --gray-dark-box-shadow: #222f3f3d;
@@ -30,6 +33,9 @@
   --gray-light-bg: #f4f2f7;
   --gray-light: #fafafa;
   --gray-medium-dark: #585266;
+  --gray-medium-light: #e3e8ed;
+  --gray-wrap-extra-dark: #06152b;
+  --gray-wrap-medium-dark: #565b61;
   --gray: #b0aabd;
   --green-25: #4cd4a940;
   --green: #4cd4a9;
@@ -39,6 +45,7 @@
   --red-dark: #620000;
   --red: #ff0e0e;
   --teal-300: #5eead4;
+  --warn: #664d03;
   --white: #fff;
   --zinc-300: #d4d4d8;
   --zinc-500: #71717a;

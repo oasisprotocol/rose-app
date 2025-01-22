@@ -4,7 +4,7 @@ import WrappedRoseMetadata from '../contracts/WrappedROSE.json'
 import BigNumber from 'bignumber.js'
 
 export interface Web3ProviderState {
-  wRoseContractAddress: string | null
+  wRoseContractAddress: `0x${string}` | null
   wRoseContract: GetContractReturnType<typeof WrappedRoseMetadata.output.abi, Client> | null
   explorerBaseUrl: string | null
   isSupportedNetwork: boolean
@@ -12,8 +12,8 @@ export interface Web3ProviderState {
 
 export interface Web3ProviderContext {
   readonly state: Web3ProviderState
-  wrap: (amount: string, gasPrice: BigNumber) => Promise<unknown>
-  unwrap: (amount: string, gasPrice: BigNumber) => Promise<unknown>
+  wrap: (amount: string, gasPrice: BigNumber) => Promise<`0x${string}`>
+  unwrap: (amount: string, gasPrice: BigNumber) => Promise<`0x${string}`>
   getBalance: () => Promise<bigint>
   getBalanceOfWROSE: () => Promise<bigint>
   getTransaction: (txHash: `0x${string}`) => Promise<unknown>

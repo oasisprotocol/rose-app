@@ -41,7 +41,7 @@
 .buttonDisabled {
   cursor: not-allowed;
   border-color: var(--gray-medium-light);
-  background-color: var(--gray-medium-dark);
+  background-color: var(--gray-wrap-medium-dark);
   opacity: 0.5;
 }
 

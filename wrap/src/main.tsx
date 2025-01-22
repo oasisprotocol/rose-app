@@ -1,6 +1,5 @@
 import { App } from './App'
 import { RouteObject } from 'react-router-dom'
-import './index.css'
 import { ConnectWallet } from './pages/ConnectWallet'
 import { WrapFormContextProvider } from './providers/WrapFormProvider'
 import { Wrapper } from './pages/Wrapper'

@@ -3,11 +3,11 @@
   flex-direction: column;
 
   h4 {
-    color: var(--gray-extra-dark);
+    color: var(--gray-wrap-extra-dark);
   }
 
   p {
-    color: var(--gray-extra-dark);
+    color: var(--gray-wrap-extra-dark);
 
     &:first-of-type {
       margin-bottom: 1rem;

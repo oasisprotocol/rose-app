@@ -1,0 +1,36 @@
+.global {
+  :global(h1),
+  :global(h2),
+  :global(h3),
+  :global(h4),
+  :global(h5),
+  :global(h6),
+  :global(p) {
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  :global(h2) {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 140%;
+  }
+
+  :global(h3) {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 140%;
+  }
+
+  :global(h4) {
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 120%;
+  }
+
+  :global(p) {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 150%;
+  }
+}

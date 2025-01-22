@@ -17,7 +17,7 @@
 }
 
 .inputGroup > label {
-  color: var(--gray-extra-dark);
+  color: var(--gray-wrap-extra-dark);
   font-size: 18px;
   font-style: normal;
   font-weight: 400;
@@ -52,7 +52,7 @@
 }
 
 .inputGroupDark {
-  border: 2px solid var(--gray-medium-dark);
+  border: 2px solid var(--gray-wrap-medium-dark);
   background: var(--white);
 }
 

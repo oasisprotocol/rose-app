@@ -18,7 +18,14 @@ const wrapFormProviderInitialState: WrapFormProviderState = {
 
 export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => {
   const { isConnected } = useAccount()
-  const { getBalance, getBalanceOfWROSE, wrap, unwrap, getGasPrice } = useWeb3()
+  const {
+    state: { isSupportedNetwork },
+    getBalance,
+    getBalanceOfWROSE,
+    wrap,
+    unwrap,
+    getGasPrice,
+  } = useWeb3()
   const [state, setState] = useState<WrapFormProviderState>({
     ...wrapFormProviderInitialState,
   })
@@ -31,7 +38,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
   }
 
   const init = async () => {
-    if (!isConnected) {
+    if (!isConnected || !isSupportedNetwork) {
       return
     }
 
@@ -126,7 +133,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
 
     const { formType, balance, wRoseBalance, estimatedFee, estimatedGasPrice } = state
 
-    let receipt: unknown | null = null
+    let txHash: string | null = null
 
     if (formType === WrapFormType.WRAP) {
       if (amount.gt(balance.minus(estimatedFee))) {
@@ -135,7 +142,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }
 
       try {
-        receipt = await wrap(amount.toString(), estimatedGasPrice)
+        txHash = await wrap(amount.toString(), estimatedGasPrice)
       } catch (ex) {
         _setIsLoading(false)
         throw ex
@@ -147,7 +154,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }
 
       try {
-        receipt = await unwrap(amount.toString(), estimatedGasPrice)
+        txHash = await unwrap(amount.toString(), estimatedGasPrice)
       } catch (ex) {
         _setIsLoading(false)
         throw ex
@@ -158,7 +165,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
     }
 
     _setIsLoading(false)
-    return receipt
+    return txHash
   }
 
   const providerState: WrapFormProviderContext = {

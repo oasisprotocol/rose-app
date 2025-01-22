@@ -7,13 +7,14 @@ import { StringUtils } from '../../utils'
 
 interface Props {
   header?: ReactNode
+  className?: string
 }
 
-export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header }) => {
+export const LayoutBase: FC<PropsWithChildren<Props>> = ({ children, header, className }) => {
   const ltLargeScreen = useMediaQuery({ query: '(max-width: 1280px)' })
 
   return (
-    <div className={StringUtils.clsx(globalClasses.global, classes.layout)}>
+    <div className={StringUtils.clsx(globalClasses.global, classes.layout, className)}>
       {header}
       <main className={classes.main}>{children}</main>
       {!ltLargeScreen && (

@@ -1,14 +1,9 @@
-import { MouseEvent, FC, PropsWithChildren } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import classes from './index.module.css'
 import { TimesIcon } from '../icons/TimesIcon'
+import { WrapModalProps } from '../../types'
 
-export interface ModalProps {
-  isOpen: boolean
-  disableBackdropClick?: boolean
-  closeModal: (event?: MouseEvent<HTMLElement>) => void
-}
-
-export const Modal: FC<PropsWithChildren<ModalProps>> = ({
+export const Modal: FC<PropsWithChildren<WrapModalProps>> = ({
   children,
   isOpen,
   disableBackdropClick,

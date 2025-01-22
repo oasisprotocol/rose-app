@@ -14,7 +14,7 @@ export const withDisconnectedWallet = (WrappedComponent: FC) => {
 
     useEffect(() => {
       if (!isSupportedNetwork || !isConnected) {
-        navigate('/stake')
+        navigate('/wrap')
       }
     }, [isSupportedNetwork, isConnected, navigate])
 

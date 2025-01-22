@@ -20,12 +20,12 @@ const router = createHashRouter([
         element: <App />,
       },
       {
-        ...stakeRouteObject,
-        path: 'stake',
-      },
-      {
         ...wrapRouteObject,
         path: 'wrap',
+      },
+      {
+        ...stakeRouteObject,
+        path: 'stake',
       },
       {
         path: 'move',

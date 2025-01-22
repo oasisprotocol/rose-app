@@ -1,14 +1,12 @@
 import { FC, useEffect, useState } from 'react'
-import { Button } from '../../components/Button'
+import { WrapButton, OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui/wrap'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { OpenInNewIcon } from '../../components/icons/OpenInNewIcon'
 import classes from './index.module.css'
-import { Spinner } from '../../components/Spinner'
 import { StringUtils } from '../../utils/string.utils'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { WrapFormType } from '../../utils/types'
-import { withConnectedWallet } from '../../hoc/withConnectedWallet'
 import { TransactionBase } from 'viem'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
 enum TransactionStatus {
   Loading,
@@ -61,7 +59,7 @@ const TransactionCmp: FC = () => {
   const txUrl = explorerBaseUrl && txHash ? StringUtils.getTransactionUrl(explorerBaseUrl, txHash) : undefined
 
   const handleNavigateBack = () => {
-    navigate('/wrapper')
+    navigate('/wrap/wrapper')
   }
 
   return (
@@ -91,15 +89,15 @@ const TransactionCmp: FC = () => {
 
           {txUrl && (
             <a className={classes.noUnderlineLink} href={txUrl} target="_blank" rel="noopener noreferrer">
-              <Button className={classes.openInExplorerBtn} fullWidth>
+              <WrapButton className={classes.openInExplorerBtn} fullWidth>
                 View on explorer
                 <OpenInNewIcon />
-              </Button>
+              </WrapButton>
             </a>
           )}
-          <Button variant="secondary" onClick={handleNavigateBack} fullWidth>
+          <WrapButton variant="secondary" onClick={handleNavigateBack} fullWidth>
             Close
-          </Button>
+          </WrapButton>
         </div>
       )}
       {status === TransactionStatus.Fail && (
@@ -111,13 +109,13 @@ const TransactionCmp: FC = () => {
             Please try again.
           </h3>
 
-          <Button onClick={handleNavigateBack} fullWidth>
+          <WrapButton onClick={handleNavigateBack} fullWidth>
             Retry
-          </Button>
+          </WrapButton>
         </div>
       )}
     </>
   )
 }
 
-export const Transaction = withConnectedWallet(TransactionCmp)
+export const Transaction = withDisconnectedWallet(TransactionCmp)

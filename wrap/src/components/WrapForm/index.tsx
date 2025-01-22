@@ -1,16 +1,13 @@
 import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
-import { Input } from '../Input'
+import { WrapInput, WrapButton, WrapAlert, WrapToggleButton } from '@oasisprotocol/rose-app-ui/wrap'
 import classes from './index.module.css'
-import { Button } from '../Button'
-import { Alert } from '../Alert'
 import { useNavigate } from 'react-router-dom'
-import { ToggleButton } from '../ToggleButton'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WrapFormType } from '../../utils/types'
 import { useInterval } from '../../hooks/useInterval'
 import { NumberUtils } from '../../utils/number.utils'
 import { WrapFeeWarningModal } from '../WrapFeeWarningModal'
-import { formatEther, parseEther, TransactionReceipt } from 'viem'
+import { formatEther, parseEther } from 'viem'
 import BigNumber from 'bignumber.js'
 
 const AMOUNT_PATTERN = '^[0-9]*[.,]?[0-9]*$'
@@ -78,9 +75,9 @@ export const WrapForm: FC = () => {
 
   const submitTransaction = async (amount: BigNumber) => {
     try {
-      const txReceipt = (await submit(amount)) as TransactionReceipt
+      const txHash = await submit(amount)
 
-      navigate(`/tx/${txReceipt.transactionHash}?amount=${value}&action=${formType}`)
+      navigate(`/wrap/tx/${txHash}?amount=${value}&action=${formType}`)
     } catch (ex) {
       setError((ex as Error)?.message || JSON.stringify(ex))
     }
@@ -118,7 +115,7 @@ export const WrapForm: FC = () => {
     <div>
       <form className={classes.wrapForm} onSubmit={handleFormSubmit}>
         <div className={classes.wrapFormInputs}>
-          <Input<string>
+          <WrapInput<string>
             disabled={isLoading}
             type="text"
             label={firstInputLabel}
@@ -128,7 +125,7 @@ export const WrapForm: FC = () => {
             value={value}
             valueChange={handleValueChange}
           />
-          <Input<string>
+          <WrapInput<string>
             disabled={isLoading}
             type="text"
             label={secondInputLabel}
@@ -138,15 +135,19 @@ export const WrapForm: FC = () => {
             value={value}
             valueChange={handleValueChange}
           />
-          <ToggleButton className={classes.toggleBtn} onClick={handleToggleFormType} disabled={isLoading} />
+          <WrapToggleButton
+            className={classes.toggleBtn}
+            onClick={handleToggleFormType}
+            disabled={isLoading}
+          />
         </div>
 
         <h4 className={classes.gasEstimateLabel}>Estimated fee: {estimatedFeeTruncated}</h4>
 
-        <Button disabled={isLoading} type="submit" fullWidth>
+        <WrapButton disabled={isLoading} type="submit" fullWidth>
           {submitBtnLabel}
-        </Button>
-        {error && <Alert variant="danger">{error}</Alert>}
+        </WrapButton>
+        {error && <WrapAlert variant="danger">{error}</WrapAlert>}
       </form>
       <WrapFeeWarningModal
         isOpen={isWrapFeeModalOpen}

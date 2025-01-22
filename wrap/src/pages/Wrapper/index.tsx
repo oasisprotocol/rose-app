@@ -1,14 +1,14 @@
 import { FC, useEffect } from 'react'
 import classes from './index.module.css'
-import { Button } from '../../components/Button'
+import { WrapButton } from '@oasisprotocol/rose-app-ui/wrap'
 import { NumberUtils } from '../../utils/number.utils'
 import { WrapForm } from '../../components/WrapForm'
 import { useWeb3 } from '../../hooks/useWeb3'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WrapFormType } from '../../utils/types'
-import { withConnectedWallet } from '../../hoc/withConnectedWallet'
 import BigNumber from 'bignumber.js'
 import { useAccount } from 'wagmi'
+import { withDisconnectedWallet } from '../../hoc/withDisconnectedWallet'
 
 interface PercentageEntry {
   value: BigNumber
@@ -69,21 +69,21 @@ const WrapperCmp: FC = () => {
       <div className={classes.subHeader}>
         <p>Quickly wrap your ROSE into wROSE and vice versa with the (un)wrap ROSE tool.</p>
 
-        <Button className={classes.importWRoseBtn} onClick={addTokenToWallet}>
+        <WrapButton className={classes.importWRoseBtn} onClick={addTokenToWallet}>
           Import WROSE to Wallet
-        </Button>
+        </WrapButton>
       </div>
 
       <div className={classes.amountPercList}>
         {percentageList.map(({ label, value }) => (
-          <Button
+          <WrapButton
             disabled={isLoading}
             onClick={() => handlePercentageCalc(value)}
             key={label}
             variant="tertiary"
           >
             {label}
-          </Button>
+          </WrapButton>
         ))}
       </div>
 
@@ -92,4 +92,4 @@ const WrapperCmp: FC = () => {
   )
 }
 
-export const Wrapper = withConnectedWallet(WrapperCmp)
+export const Wrapper = withDisconnectedWallet(WrapperCmp)

@@ -1,6 +1,6 @@
 import { FC } from 'react'
 
-export const LogoIcon: FC = () => (
+export const WrapLogoIcon: FC = () => (
   <svg width="75" height="48" viewBox="0 0 75 48" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="0.5" y="10" width="74" height="37" rx="10.5" fill="#6665D8" stroke="#6665D8" />
     <path

@@ -1,16 +1,19 @@
 import { FC } from 'react'
-import { Modal, ModalProps } from '../Modal'
-import { LogoIconRound } from '../icons/LogoIconRound'
+import {
+  WrapModal,
+  WrapModalProps,
+  LogoIconRound,
+  WrapInput,
+  WrapButton,
+} from '@oasisprotocol/rose-app-ui/wrap'
 import classes from './index.module.css'
-import { Input } from '../Input'
-import { Button } from '../Button'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WRAP_FEE_DEDUCTION_MULTIPLIER } from '../../constants/config'
 import { NumberUtils } from '../../utils/number.utils'
 import BigNumber from 'bignumber.js'
 import { formatEther } from 'viem'
 
-interface WrapFeeWarningModalProps extends Pick<ModalProps, 'isOpen' | 'closeModal'> {
+interface WrapFeeWarningModalProps extends Pick<WrapModalProps, 'isOpen' | 'closeModal'> {
   next: (amount: BigNumber) => void
 }
 
@@ -24,7 +27,7 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
   const estimatedAmountWithDeductedFees = roseAmount!.minus(estimatedFeeDeduction)
 
   return (
-    <Modal isOpen={isOpen} closeModal={closeModal} disableBackdropClick>
+    <WrapModal isOpen={isOpen} closeModal={closeModal} disableBackdropClick>
       <div className={classes.wrapFeeWarningModalContent}>
         <div className={classes.wrapFeeWarningModalLogo}>
           <LogoIconRound />
@@ -41,7 +44,7 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
           your account, or continue with the full amount.
         </p>
 
-        <Input<string>
+        <WrapInput<string>
           className={classes.wrapFeeWarningModalInput}
           variant="dark"
           disabled
@@ -53,18 +56,18 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
         />
 
         <div className={classes.wrapFeeWarningModalActions}>
-          <Button
+          <WrapButton
             className={classes.wrapFeeWarningModalButton}
             onClick={() => next(estimatedAmountWithDeductedFees)}
           >
             <span className={classes.wrapFeeWarningModalButtonText}>Wrap reduced amount</span>
-          </Button>
+          </WrapButton>
 
           <button className={classes.wrapFeeWarningModalFullAmount} onClick={() => next(amount!)}>
             Continue with full amount
           </button>
         </div>
       </div>
-    </Modal>
+    </WrapModal>
   )
 }
