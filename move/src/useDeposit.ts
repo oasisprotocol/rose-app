@@ -35,7 +35,9 @@ export function useDeposit() {
       setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
 
-      trackEvent('deposit flow started')
+      trackEvent('deposit flow started', {
+        _value: Number(amountToDeposit.formatted),
+      })
 
       setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       blockNavigatingAway()
@@ -62,7 +64,9 @@ export function useDeposit() {
         message: 'Your ROSE transfer is complete!',
       })
 
-      trackEvent('deposit flow finished')
+      trackEvent('deposit flow finished', {
+        _value: Number(amountToDeposit.formatted),
+      })
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
