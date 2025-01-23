@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: CC BY
  */
 
-import { CardConfig, CardConfigLabel } from '@oasisprotocol/rose-app-ui/discover'
+import { CardConfig } from '@oasisprotocol/rose-app-ui/discover'
 
 export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; tooling: CardConfig[] } = {
   featured: [
@@ -11,14 +11,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'NEBY',
       type: 'DEX',
       imgSrc: '/discover/Neby.png',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://www.neby.exchange/',
     },
     {
       title: 'Accumulated Finance',
       type: 'Liquid staking',
       imgSrc: '/discover/AccumulatedFinance.png',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://accumulated.finance/',
     },
     {
@@ -33,14 +31,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'Thorn Protocol',
       type: 'StableSwap',
       imgSrc: '/discover/ThornProtocol.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://thornprotocol.com/',
     },
     {
       title: 'Daosis',
       type: 'Launchpad & Token Minter',
       imgSrc: '/discover/Daosis.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://daosis.io/',
     },
     {
@@ -65,35 +61,30 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'Predictoor',
       type: 'Predictions',
       imgSrc: '/discover/Predictoor.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://www.predictoor.ai/',
     },
     {
       title: 'Pixel Realm',
       type: 'NFT Marketplace & Gaming Incubator',
       imgSrc: '/discover/PixelRealm.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://app.pixelrealm.io/',
     },
     {
       title: 'Protocol Monster Labs',
       type: 'Gaming',
       imgSrc: '/discover/ProtocolMonsterLabs.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://protocolmonsterlabs.com/',
     },
     {
       title: 'Oasis Safe',
       type: 'Multisig Wallet',
       imgSrc: '/discover/OasisSafe.svg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://safe.oasis.io/welcome',
     },
     {
       title: 'Midas',
       type: 'RWA Yield',
       imgSrc: '/discover/Midas.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://midas.app/',
     },
     {
@@ -114,7 +105,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'Router Bridge',
       type: 'Bridge',
       imgSrc: '/discover/Router.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://app.routernitro.com/swap',
     },
     {
@@ -142,7 +132,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'illuminex',
       type: 'Privacy Wallet',
       imgSrc: '/discover/illumineX.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://illuminex.xyz/',
     },
     {
@@ -158,7 +147,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
     {
       title: 'Transak',
       imgSrc: '/discover/Transak.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://global.transak.com/',
     },
     {
@@ -175,28 +163,24 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       title: 'Reclaim Protocol',
       type: 'SDK',
       imgSrc: '/discover/ReclaimProtocol.svg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://www.reclaimprotocol.org/',
     },
     {
       title: 'RA1L',
       type: 'DID',
       imgSrc: '/discover/Ra1l.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://ra1l.com/',
     },
     {
       title: 'OWallet',
       type: 'Wallet',
       imgSrc: '/discover/OWallet.jpg',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://owallet.io/',
     },
     {
       title: 'Safepal',
       type: 'Wallet',
       imgSrc: '/discover/SafePal.png',
-      labels: [CardConfigLabel.Grant],
       externalLink: 'https://safepal.com/en/',
     },
     {
