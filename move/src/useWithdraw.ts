@@ -77,10 +77,14 @@ export function useWithdraw() {
       } else {
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       }
-      trackEvent('withdrawal flow started')
 
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
       const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
+
+      trackEvent('withdrawal flow started', {
+        _value: Number(amountToWithdraw2.formatted),
+      })
+
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
       await transferToConsensus({
         amount: amountToWithdraw2.raw,
@@ -94,7 +98,9 @@ export function useWithdraw() {
         message: 'Your ROSE transfer is complete!',
       })
 
-      trackEvent('withdrawal flow finished')
+      trackEvent('withdrawal flow finished', {
+        _value: Number(amountToWithdraw2.formatted),
+      })
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
 

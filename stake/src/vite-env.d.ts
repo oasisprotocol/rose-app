@@ -9,7 +9,7 @@ declare const OASIS_DOCS_PAGE_URL: string
 
 interface ImportMetaEnv {
   VITE_WALLET_CONNECT_PROJECT_ID: string
-  VITE_FATHOM_SIDE_ID: string
+  VITE_FATHOM_SITE_ID: string
 }
 
 interface ImportMeta {
