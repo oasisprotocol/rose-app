@@ -6,6 +6,7 @@ import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
+import { trackEvent } from 'fathom-client'
 
 // Use global variable here, due to step4 using different context(not in sync with react hooks)
 let isInputModeGlobal = true
@@ -33,6 +34,10 @@ export function useWithdraw() {
   async function step2() {
     if (!sapphireAddress) return
     await generateSapphireAccount(sapphireAddress)
+
+    if (generatedConsensusAccount?.isFresh) {
+      trackEvent('withdrawal account created')
+    }
   }
 
   async function step3(value: bigint) {
@@ -60,6 +65,7 @@ export function useWithdraw() {
           minimalWithdrawableAmount
         )
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
+
         blockNavigatingAway()
         await updateBalanceInsideConnectButton()
         await withdrawToConsensus({
@@ -71,6 +77,8 @@ export function useWithdraw() {
       } else {
         setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       }
+      trackEvent('withdrawal flow started')
+
       // TODO: handle probable failure if balance doesn't change after ~10 seconds of withdraw
       const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
@@ -85,6 +93,9 @@ export function useWithdraw() {
         percentage: 1.0,
         message: 'Your ROSE transfer is complete!',
       })
+
+      trackEvent('withdrawal flow finished')
+
       allowNavigatingAway() // Stop blocking unless new transfer comes in
 
       await new Promise(r => setTimeout(r, 6000))

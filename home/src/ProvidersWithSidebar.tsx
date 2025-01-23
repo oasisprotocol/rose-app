@@ -6,6 +6,7 @@ import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit'
 import { AccountAvatar, Sidebar, SidebarAccount } from '@oasisprotocol/rose-app-ui/core'
 
 import '@rainbow-me/rainbowkit/styles.css'
+import { FathomAnalytics } from './components/FathomAnalytics.tsx'
 
 const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
@@ -16,16 +17,19 @@ const rainbowKitTheme: Theme = {
 }
 
 export const ProvidersWithSidebar: FC = () => (
-  <WagmiProvider config={wagmiConfig}>
-    <QueryClientProvider client={queryClient}>
-      <RainbowKitProvider
-        theme={rainbowKitTheme}
-        avatar={({ address, size }) => (
-          <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
-        )}
-      >
-        <Sidebar navItem={<SidebarAccount />} />
-      </RainbowKitProvider>
-    </QueryClientProvider>
-  </WagmiProvider>
+  <>
+    <WagmiProvider config={wagmiConfig}>
+      <QueryClientProvider client={queryClient}>
+        <RainbowKitProvider
+          theme={rainbowKitTheme}
+          avatar={({ address, size }) => (
+            <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
+          )}
+        >
+          <Sidebar navItem={<SidebarAccount />} />
+        </RainbowKitProvider>
+      </QueryClientProvider>
+    </WagmiProvider>
+    <FathomAnalytics />
+  </>
 )

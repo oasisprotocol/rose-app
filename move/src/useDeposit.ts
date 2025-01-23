@@ -5,6 +5,7 @@ import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGene
 import { usePrevious } from './hooks/usePrevious.ts'
 import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
+import { trackEvent } from 'fathom-client'
 
 /** any consensus -> generatedConsensusAccount -> sapphireAddress */
 export function useDeposit() {
@@ -19,6 +20,11 @@ export function useDeposit() {
   async function step2() {
     if (!sapphireAddress) return
     const generatedConsensusAccount = await generateConsensusAccount(sapphireAddress)
+
+    if (generatedConsensusAccount.isFresh) {
+      trackEvent('deposit account created')
+    }
+
     blockNavigatingAway() // Start blocking early for the first transfer
     await step3(generatedConsensusAccount, sapphireAddress)
   }
@@ -28,6 +34,9 @@ export function useDeposit() {
     try {
       setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
+
+      trackEvent('deposit flow started')
+
       setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
       blockNavigatingAway()
       await depositToSapphireStep1({
@@ -36,6 +45,7 @@ export function useDeposit() {
         consensusAddress: consensusAccount.address,
         sapphireAddress: sapphireAddress,
       })
+
       setProgress({ percentage: 0.5, message: 'ROSE transfer initiated' })
       const preDepositSapphireBalance = await getSapphireBalance(sapphireAddress)
       await depositToSapphireStep2({
@@ -51,6 +61,9 @@ export function useDeposit() {
         percentage: 1.0,
         message: 'Your ROSE transfer is complete!',
       })
+
+      trackEvent('deposit flow finished')
+
       allowNavigatingAway() // Stop blocking unless new transfer comes in
       await updateBalanceInsideConnectButton()
 
