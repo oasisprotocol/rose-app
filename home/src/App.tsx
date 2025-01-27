@@ -28,6 +28,13 @@ export function App() {
             <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
           </NavLink>
         </div>
+        <div className={classes.row}>
+          <NavLink to="/wrap" className={classes.wrap}>
+            <h2>Wrap</h2>
+            <p>Wrap or unwrap ROSE.</p>
+            <img src={east_svg} alt="Go" width="24" style={{ filter: 'invert(1)' }} />
+          </NavLink>
+        </div>
       </main>
     </>
   )

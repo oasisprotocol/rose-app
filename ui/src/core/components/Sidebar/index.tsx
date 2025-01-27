@@ -55,9 +55,9 @@ export function SidebarCmp({ navItem }: Props) {
             <NavLink to="/move" className={({ isActive }) => (isActive ? classes.activeLink : '')}>
               Move
             </NavLink>
-            {/*<NavLink to="/wrap" className={({ isActive }) => (isActive ? classes.activeLink : '')}>
+            <NavLink to="/wrap" className={({ isActive }) => (isActive ? classes.activeLink : '')}>
               Wrap
-            </NavLink>*/}
+            </NavLink>
           </div>
         </div>
 
