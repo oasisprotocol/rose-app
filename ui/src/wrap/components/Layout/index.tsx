@@ -30,9 +30,7 @@ export const Layout: FC<PropsWithChildren> = () => {
               to="/wrap/wrapper"
               style={{ visibility: isHomePage ? 'hidden' : 'visible' }}
             >
-              <h2 className={classes.header}>
-                ROSE <WrapLogoIcon /> wrapper
-              </h2>
+              <WrapLogoIcon />
             </NavLink>
           )
         }
