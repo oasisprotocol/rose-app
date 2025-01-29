@@ -81,6 +81,11 @@ function fromBaseUnits(valueInBaseUnits: bigint, decimals: number): string {
   return value.toFixed()
 }
 
+export function fromBaseUnitsToTrackEventCents(valueInBaseUnits: bigint, decimals: number): number {
+  const value = fromBaseUnits(valueInBaseUnits, decimals)
+  return BigNumber(value).multipliedBy(100).integerValue().toNumber()
+}
+
 export function getValidOasisAddress(addr: string): `oasis1${string}` | null {
   try {
     staking.addressFromBech32(addr)

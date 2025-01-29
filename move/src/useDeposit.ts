@@ -3,9 +3,15 @@ import { useAccount, useBalance } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
 import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
 import { usePrevious } from './hooks/usePrevious.ts'
-import { getSapphireBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
+import {
+  fromBaseUnitsToTrackEventCents,
+  getSapphireBalance,
+  waitForConsensusBalance,
+  waitForSapphireBalance,
+} from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { trackEvent } from 'fathom-client'
+import { consensusConfig } from './utils/oasisConfig.ts'
 
 /** any consensus -> generatedConsensusAccount -> sapphireAddress */
 export function useDeposit() {
@@ -36,7 +42,7 @@ export function useDeposit() {
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n)
 
       trackEvent('deposit flow started', {
-        _value: Number(amountToDeposit.formatted),
+        _value: fromBaseUnitsToTrackEventCents(amountToDeposit.raw, consensusConfig.decimals),
       })
 
       setProgress({ percentage: 0.25, message: 'ROSE transfer initiated' })
@@ -65,7 +71,7 @@ export function useDeposit() {
       })
 
       trackEvent('deposit flow finished', {
-        _value: Number(amountToDeposit.formatted),
+        _value: fromBaseUnitsToTrackEventCents(amountToDeposit.raw, consensusConfig.decimals),
       })
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
