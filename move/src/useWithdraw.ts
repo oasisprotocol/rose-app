@@ -1,12 +1,18 @@
 import { useState } from 'react'
 import { useAccount, useBalance, useSendTransaction } from 'wagmi'
 import { usePrevious } from './hooks/usePrevious.ts'
-import { getConsensusBalance, waitForConsensusBalance, waitForSapphireBalance } from './utils/getBalances'
+import {
+  fromBaseUnitsToTrackEventCents,
+  getConsensusBalance,
+  waitForConsensusBalance,
+  waitForSapphireBalance,
+} from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 import { trackEvent } from 'fathom-client'
+import { consensusConfig } from './utils/oasisConfig.ts'
 
 // Use global variable here, due to step4 using different context(not in sync with react hooks)
 let isInputModeGlobal = true
@@ -82,7 +88,7 @@ export function useWithdraw() {
       const amountToWithdraw2 = await waitForConsensusBalance(generatedConsensusAccount.address, 0n)
 
       trackEvent('withdrawal flow started', {
-        _value: Number(amountToWithdraw2.formatted),
+        _value: fromBaseUnitsToTrackEventCents(amountToWithdraw2.raw, consensusConfig.decimals),
       })
 
       const preWithdrawConsensusBalance = await getConsensusBalance(consensusAddress)
@@ -99,7 +105,7 @@ export function useWithdraw() {
       })
 
       trackEvent('withdrawal flow finished', {
-        _value: Number(amountToWithdraw2.formatted),
+        _value: fromBaseUnitsToTrackEventCents(amountToWithdraw2.raw, consensusConfig.decimals),
       })
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
