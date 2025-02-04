@@ -60,5 +60,5 @@ jobs:
         if: github.event_name == 'push'
         uses: actions/upload-artifact@v4
         with:
-          name: oasisprotocol-dapp-staker-frontend-${{ steps.vars.outputs.SHORT_SHA }}
+          name: oasisprotocol-rose-app-${{ steps.vars.outputs.SHORT_SHA }}
           path: home/dist
