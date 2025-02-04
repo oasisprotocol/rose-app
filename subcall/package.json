@@ -9,13 +9,13 @@
     "test": "vitest"
   },
   "devDependencies": {
+    "ethers": "6.10.0",
     "nodemon": "^3.1.4",
     "typescript": "^5.5.3",
     "vite": "^5.4.9",
     "vite-plugin-dts": "^4.1.0",
-    "vitest": "^2.0.5",
-    "xhr2": "^0.2.1",
-    "ethers": "6.10.0"
+    "vitest": "^2.1.8",
+    "xhr2": "^0.2.1"
   },
   "dependencies": {
     "@oasisprotocol/client": "^1.1.0",
