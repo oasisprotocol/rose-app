@@ -11,7 +11,8 @@
     "prettier-check": "prettier --check . --ignore-path .eslintignore",
     "prettier": "prettier --write . --ignore-path .eslintignore",
     "build": "pnpm --filter @oasisprotocol/rose-app-home build",
-    "dev": "pnpm --filter @oasisprotocol/rose-app-home dev"
+    "dev": "pnpm --filter @oasisprotocol/rose-app-home dev",
+    "test": "pnpm -r exec vitest run --passWithNoTests"
   },
   "license": "See License in LICENSE",
   "packageManager": "pnpm@8.15.4",
