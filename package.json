@@ -9,6 +9,7 @@
     "lint-git": "node ./internals/scripts/gitlint.mjs",
     "lint-docs": "markdownlint --ignore '**/node_modules/**' '**/*.md'",
     "lint-changelog": "markdownlint --config .changelog/.markdownlint.yml .changelog/",
+    "changelog": "node ./internals/scripts/changelog.js",
     "release-tag": "node ./internals/scripts/release-tag.js",
     "prettier-check": "prettier --check . --ignore-path .eslintignore",
     "prettier": "prettier --write . --ignore-path .eslintignore",
