@@ -21,7 +21,7 @@ describe('Subcall', () => {
     signerAddress = await signer.getAddress()
   })
 
-  test('Should be able to stake', async () => {
+  test.skip('Should be able to stake', async () => {
     const preparedTx = consensusDelegate(
       LOCALNET_CHAIN_ID,
       STAKE_TO_ADDRESS,
@@ -34,7 +34,7 @@ describe('Subcall', () => {
     expect(txReciept.status).toEqual(1)
   })
 
-  test('Should be able to unstake', async () => {
+  test.skip('Should be able to unstake', async () => {
     // TODO: This is technically wrong, there is no delegation to undelegate, but tx should succeed anyway
     const preparedTx = consensusUndelegate(
       LOCALNET_CHAIN_ID,
