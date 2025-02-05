@@ -1,11 +1,21 @@
+# NOTE: This name appears in GitHub's Checks API and in workflow's status badge.
+name: release
+
+# Trigger the workflow when:
 on:
+  # A push occurs to one of the matched tags.
   push:
-    branches:
-      - master
+    tags:
+      # Pattern that roughly matches Oasis Core's version tags.
+      # For more details on GitHub Actions' pattern match syntax, see:
+      # https://help.github.com/en/actions/automating-your-workflow-with-github-actions/workflow-syntax-for-github-actions#patterns-to-match-branches-and-tags.
+      - 'v[0-9]+.[0-9]+*'
   workflow_dispatch: # Manual
 
 jobs:
   build:
+    # NOTE: This name appears in GitHub's Checks API.
+    name: prepare-release
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -45,7 +55,6 @@ jobs:
   deploy:
     # Add a dependency to the build job
     needs: build
-
     # Grant GITHUB_TOKEN the permissions required to make a Pages deployment
     permissions:
       pages: write # to deploy to Pages
