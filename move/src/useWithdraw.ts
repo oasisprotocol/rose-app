@@ -12,7 +12,7 @@ import { transferToConsensus } from './withdraw/transferToConsensus'
 import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 import { trackEvent } from 'fathom-client'
-import { consensusConfig } from './utils/oasisConfig.ts'
+import { consensusConfig, sapphireConfig } from './utils/oasisConfig.ts'
 
 // Use global variable here, due to step4 using different context(not in sync with react hooks)
 let isInputModeGlobal = true
@@ -48,9 +48,14 @@ export function useWithdraw() {
 
   async function step3(value: bigint) {
     if (!generatedSapphireAccount) return
+
     await sendTransactionAsync({
       to: generatedSapphireAccount?.address,
       value,
+    })
+
+    trackEvent('withdrawal flow form submitted', {
+      _value: fromBaseUnitsToTrackEventCents(value, sapphireConfig.decimals),
     })
   }
 
