@@ -62,6 +62,15 @@ export function SidebarCmp({ navItem }: Props) {
         </div>
 
         {navItem}
+
+        <a
+          className={classes.privacyPolicy}
+          href={PRIVACY_POLICY_URL}
+          rel="noopener noreferrer"
+          target="_blank"
+        >
+          Privacy policy
+        </a>
       </nav>
       <div className={classes.main}>
         <Outlet />
