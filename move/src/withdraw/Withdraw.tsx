@@ -19,7 +19,8 @@ import { AccountAvatar, Header } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
-import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
+import { amountPattern, consensusConfig } from '../utils/oasisConfig.ts'
+import { withdrawFeeAmount } from './withdrawToConsensus.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
 import { ConsensusAccount, SapphireAccount } from './useGenerateSapphireAccount.ts'
 
@@ -138,7 +139,7 @@ export function Withdraw({
     try {
       const amount = parseUnits(_value, consensusConfig.decimals)
 
-      if (amount * 10n ** 9n < withdrawEstimatedFee) {
+      if (amount * 10n ** 9n < withdrawFeeAmount) {
         setDestinationForm(prevState => ({
           ...prevState,
           amount: {
@@ -285,7 +286,7 @@ export function Withdraw({
                     <div>
                       <p>Fee</p>
                       <p>
-                        <Amount value={withdrawEstimatedFee} />
+                        <Amount value={withdrawFeeAmount} />
                       </p>
                     </div>
                     <div>
@@ -294,7 +295,7 @@ export function Withdraw({
                       </p>
                       <p>
                         {!destinationForm.amount.error && destinationForm.amount.value ? (
-                          <Amount value={destinationForm.amount.value * 10n ** 9n - withdrawEstimatedFee} />
+                          <Amount value={destinationForm.amount.value * 10n ** 9n - withdrawFeeAmount} />
                         ) : (
                           <Amount value={0n} />
                         )}
@@ -309,7 +310,7 @@ export function Withdraw({
                         <b>Withdrawal amount</b>
                       </p>
                       <p>
-                        <Amount value={previousAmount - withdrawEstimatedFee} />
+                        <Amount value={previousAmount - withdrawFeeAmount} />
                       </p>
                     </div>
                   </div>

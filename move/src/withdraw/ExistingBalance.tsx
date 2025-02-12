@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react'
 import loader_blocks_svg from '/move/loader_blocks.svg?url'
 import { getBalances } from '../utils/getBalances.ts'
-import { withdrawEstimatedFee } from '../utils/oasisConfig.ts'
+import { minimalWithdrawableAmount } from './withdrawToConsensus.ts'
 import classes from './ExistingBalance.module.css'
 
 interface Props {
@@ -35,7 +35,7 @@ export const ExistingBalance: FC<Props> = ({ consensusAddress, sapphireAddress, 
 
   const { consensus, sapphire } = balances
   const amount = consensus.raw * 10n ** 9n + sapphire.raw
-  let hasPreviousBalance = amount > withdrawEstimatedFee
+  let hasPreviousBalance = amount > minimalWithdrawableAmount
   if (window.mock) hasPreviousBalance = true
 
   return children(hasPreviousBalance, amount)

@@ -5,7 +5,7 @@ import { getSapphireNonce } from '../utils/nonce.ts'
 import { multiplyConsensusToSapphire, sapphireConfig } from '../utils/oasisConfig'
 import { SapphireAccount } from './useGenerateSapphireAccount'
 
-const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
+export const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
 const minimalRepresentableAmount = 1n * multiplyConsensusToSapphire
 // min 0.007 ROSE for fees
 // and <0.000000000999999999 can't be withdrawn; amount not representable
