@@ -17,7 +17,7 @@
     "node": ">=20"
   },
   "dependencies": {
-    "@material-design-icons/svg": "^0.14.13",
+    "@material-design-icons/svg": "^0.14.15",
     "@oasisprotocol/client": "^1.1.0",
     "@oasisprotocol/client-rt": "^1.1.0",
     "@oasisprotocol/oasisscan-api": "workspace:*",
