@@ -7,10 +7,13 @@ import { SapphireAccount } from './useGenerateSapphireAccount'
 
 export const withdrawFeeAmount = sapphireConfig.gasPrice * sapphireConfig.feeGas * multiplyConsensusToSapphire
 const minimalRepresentableAmount = 1n * multiplyConsensusToSapphire
+const minimalConsensusTransferableAmount = 10n ** 7n * multiplyConsensusToSapphire // stakingConsensusParameters min_transfer
 // min 0.007 ROSE for fees
 // and <0.000000000999999999 can't be withdrawn; amount not representable
-// = 0.007000001000000000
-export const minimalWithdrawableAmount = withdrawFeeAmount + minimalRepresentableAmount
+// and <0.01 can't be transferred in second step
+// = 0.017000001000000000
+export const minimalWithdrawableAmount =
+  withdrawFeeAmount + minimalRepresentableAmount + minimalConsensusTransferableAmount
 
 export async function withdrawToConsensus(props: {
   availableAmountToWithdraw: bigint
