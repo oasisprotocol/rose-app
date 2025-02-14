@@ -54,7 +54,7 @@ export function useWithdraw() {
   }
 
   // Long running promise, doesn't get canceled if this component is destroyed
-  async function step4(consensusAddress: `oasis1${string}`) {
+  async function step4(consensusAddress: `oasis1${string}`, retryingAfterError: number) {
     // Note: outside state var consensusAddress is outdated. Use param.
     if (!sapphireAddress) return
     if (!generatedSapphireAccount) return
@@ -97,7 +97,7 @@ export function useWithdraw() {
         toConsensusAddress: consensusAddress,
       })
       setProgress({ percentage: 0.75, message: `Withdrawing ${amountToWithdraw2.formatted} ROSE` })
-      if (window.mock) throw 'mock error'
+      if (window.mock && !retryingAfterError) throw 'mock error'
       await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw)
       setProgress({
         percentage: 1.0,
@@ -114,7 +114,7 @@ export function useWithdraw() {
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
       await new Promise(r => setTimeout(r, 6000))
       allowNavigatingAway()
-      await step4(consensusAddress) // Loop to retry
+      await step4(consensusAddress, retryingAfterError + 1) // Loop to retry
       return
     }
 

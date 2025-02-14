@@ -206,7 +206,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
 
     setIsInputMode(false)
     setConsensusAddress(destinationConsensusAddress.value)
-    step4(destinationConsensusAddress.value)
+    step4(destinationConsensusAddress.value, 0)
 
     setDestinationForm({ ...destinationFormInitialValue })
   }
