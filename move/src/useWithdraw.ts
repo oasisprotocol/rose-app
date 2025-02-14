@@ -14,12 +14,6 @@ import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withd
 import { trackEvent } from 'fathom-client'
 import { consensusConfig, sapphireConfig } from './utils/oasisConfig.ts'
 
-// Use global variable here, due to step4 using different context(not in sync with react hooks)
-let isInputModeGlobal = true
-const setIsInputModeGlobal = (_isInputMode: boolean) => {
-  isInputModeGlobal = _isInputMode
-}
-
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
  */
@@ -30,7 +24,7 @@ export function useWithdraw() {
     useGenerateSapphireAccount()
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
-  const [_isInputMode, _setIsInputMode] = useState(true)
+  const [isInputMode, setIsInputMode] = useState(true)
   const { refetch: updateBalanceInsideConnectButton, data: availableBalance } = useBalance({
     address: sapphireAddress,
   })
@@ -103,6 +97,7 @@ export function useWithdraw() {
         toConsensusAddress: consensusAddress,
       })
       setProgress({ percentage: 0.75, message: `Withdrawing ${amountToWithdraw2.formatted} ROSE` })
+      if (window.mock) throw 'mock error'
       await waitForConsensusBalance(consensusAddress, preWithdrawConsensusBalance.raw)
       setProgress({
         percentage: 1.0,
@@ -114,28 +109,20 @@ export function useWithdraw() {
       })
 
       allowNavigatingAway() // Stop blocking unless new transfer comes in
-
-      await new Promise(r => setTimeout(r, 6000))
-      // Stay on "Withdrawn" screen unless new transfer comes in
-      await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
-      if (window.mock) throw 'mock error'
     } catch (err) {
       console.error(err)
       setProgress({ percentage: undefined, message: `Error. Retrying…` })
       await new Promise(r => setTimeout(r, 6000))
-    } finally {
       allowNavigatingAway()
+      await step4(consensusAddress) // Loop to retry
+      return
     }
 
-    // Loop unless in input mode, case when user click transfer more
-    if (!isInputModeGlobal) {
-      await step4(consensusAddress)
-    }
-  }
-
-  function setIsInputMode(inputMode: boolean) {
-    _setIsInputMode(inputMode)
-    setIsInputModeGlobal(inputMode)
+    await new Promise(r => setTimeout(r, 6000))
+    // Stay on "Withdrawn" screen unless new transfer comes in
+    await waitForSapphireBalance(generatedSapphireAccount.address, 0n)
+    // Don't loop, force user to input destination again
+    transferMore()
   }
 
   function transferMore() {
@@ -155,7 +142,7 @@ export function useWithdraw() {
     availableBalance,
     progress,
     isBlockingNavigatingAway,
-    isInputMode: _isInputMode,
+    isInputMode,
     setIsInputMode,
     isPrevError,
   }
