@@ -12,6 +12,16 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.0.1 (2025-02-17)
+
+### Internal Changes
+
+- Replace GitHub pages deployment with GitHub release
+  ([#201](https://github.com/oasisprotocol/rose-app/issues/201))
+
+- Fix path of release build artifacts
+  ([#202](https://github.com/oasisprotocol/rose-app/issues/202))
+
 ## 1.0.0 (2025-02-14)
 
 ### Process Changes
