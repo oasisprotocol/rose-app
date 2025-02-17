@@ -21,7 +21,7 @@ export abstract class NumberUtils {
    */
   static getTruncatedAmount(amount: BigNumber) {
     const remainder = amount.mod(1e14)
-    const truncatedAmount = BigNumber(amount.toString()).minus(remainder)
+    const truncatedAmount = BigNumber(amount.toFixed(0)).minus(remainder)
     return formatEther(NumberUtils.BNtoBigInt(truncatedAmount))
   }
 

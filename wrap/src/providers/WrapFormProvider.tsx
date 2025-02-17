@@ -142,7 +142,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }
 
       try {
-        txHash = await wrap(amount.toString(), estimatedGasPrice)
+        txHash = await wrap(amount.toFixed(0), estimatedGasPrice)
       } catch (ex) {
         _setIsLoading(false)
         throw ex
@@ -154,7 +154,7 @@ export const WrapFormContextProvider: FC<PropsWithChildren> = ({ children }) => 
       }
 
       try {
-        txHash = await unwrap(amount.toString(), estimatedGasPrice)
+        txHash = await unwrap(amount.toFixed(0), estimatedGasPrice)
       } catch (ex) {
         _setIsLoading(false)
         throw ex
