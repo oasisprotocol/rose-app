@@ -35,7 +35,8 @@ export const ExistingBalance: FC<Props> = ({ consensusAddress, sapphireAddress, 
 
   const { consensus, sapphire } = balances
   const amount = consensus.raw * 10n ** 9n + sapphire.raw
-  const hasPreviousBalance = amount > withdrawEstimatedFee
+  let hasPreviousBalance = amount > withdrawEstimatedFee
+  if (window.mock) hasPreviousBalance = true
 
   return children(hasPreviousBalance, amount)
 }
