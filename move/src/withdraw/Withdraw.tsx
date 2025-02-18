@@ -20,7 +20,7 @@ import { Layout } from '../components/Layout'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig } from '../utils/oasisConfig.ts'
-import { withdrawFeeAmount } from './withdrawToConsensus.ts'
+import { withdrawFeeAmount, minimalWithdrawableAmount } from './withdrawToConsensus.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
 import { ConsensusAccount, SapphireAccount } from './useGenerateSapphireAccount.ts'
 
@@ -139,7 +139,7 @@ export function Withdraw({
     try {
       const amount = parseUnits(_value, consensusConfig.decimals)
 
-      if (amount * 10n ** 9n < withdrawFeeAmount) {
+      if (amount * 10n ** 9n < minimalWithdrawableAmount) {
         setDestinationForm(prevState => ({
           ...prevState,
           amount: {
