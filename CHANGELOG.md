@@ -12,6 +12,24 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.0.2 (2025-02-21)
+
+### Bug Fixes and Improvements
+
+- wrap: Fix BN to bigint conversion
+  ([#204](https://github.com/oasisprotocol/rose-app/issues/204))
+
+- Show correct ROSE App version in footer
+  ([#206](https://github.com/oasisprotocol/rose-app/issues/206))
+
+- move: Fix race conditions when withdrawing to second destination address
+  ([#207](https://github.com/oasisprotocol/rose-app/issues/207))
+
+### Internal Changes
+
+- Fix pnpm cache and install order in CI
+  ([#209](https://github.com/oasisprotocol/rose-app/issues/209))
+
 ## 1.0.1 (2025-02-17)
 
 ### Internal Changes
