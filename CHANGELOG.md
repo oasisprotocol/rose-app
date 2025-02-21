@@ -12,6 +12,13 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.0.3 (2025-02-21)
+
+### Internal Changes
+
+- Fix release workflow
+  ([#214](https://github.com/oasisprotocol/rose-app/issues/214))
+
 ## 1.0.2 (2025-02-21)
 
 ### Bug Fixes and Improvements
