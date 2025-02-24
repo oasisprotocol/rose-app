@@ -2,7 +2,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import classes from './App.module.css'
 import { MoveButton as Button, PrivateKeyHelpModal, VideoModal } from '@oasisprotocol/rose-app-ui/move'
 import { Layout } from './components/Layout'
-import { useDeposit } from './useDeposit'
 import { useWithdraw } from './useWithdraw'
 import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
@@ -17,13 +16,15 @@ import { Deposit } from './deposit/Deposit'
 import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
 import { Withdraw } from './withdraw/Withdraw'
 import { Header } from '@oasisprotocol/rose-app-ui/core'
+import { trackEvent } from 'fathom-client'
+import { useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
 
 export function App() {
   useReloadIfAccountSwitched()
   const isRpcResponding = useIsRpcResponding()
   const sapphireAddress = useAccount().address
-  const deposit = useDeposit()
   const withdraw = useWithdraw()
+  const deposit = useGenerateConsensusAccount()
 
   const [isMoveWalkthroughVideoModalOpen, setIsMoveWalkthroughVideoModalOpen] = useState(false)
   const [isPrivateKeyHelpModalOpen, setIsPrivateKeyHelpModalOpen] = useState(false)
@@ -113,7 +114,16 @@ export function App() {
               </div>
               <div className={classes.cardContent}>
                 <p>Easily move your ROSE from a crypto exchange or consensus account to use on Sapphire.</p>
-                <Button onClick={deposit.step2}>Select and sign-in</Button>
+                <Button
+                  onClick={async () => {
+                    const generatedConsensusAccount = await deposit.generateConsensusAccount(sapphireAddress)
+                    if (generatedConsensusAccount.isFresh) {
+                      trackEvent('deposit account created')
+                    }
+                  }}
+                >
+                  Select and sign-in
+                </Button>
               </div>
             </div>
 
@@ -133,7 +143,7 @@ export function App() {
   }
 
   if (deposit.generatedConsensusAccount) {
-    return <Deposit deposit={deposit} />
+    return <Deposit generatedConsensusAccount={deposit.generatedConsensusAccount} />
   }
   if (withdraw.generatedConsensusAccount) {
     return <Withdraw withdraw={withdraw} />

@@ -1,7 +1,7 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useAccount, useBalance } from 'wagmi'
 import { depositToSapphireStep1, depositToSapphireStep2 } from './deposit/depositToSapphire'
-import { ConsensusAccount, useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
+import { ConsensusAccount } from './deposit/useGenerateConsensusAccount'
 import { usePrevious } from './hooks/usePrevious.ts'
 import {
   fromBaseUnitsToTrackEventCents,
@@ -15,30 +15,28 @@ import { consensusConfig } from './utils/oasisConfig.ts'
 import { UnmountedAbortError, useUnmountSignal } from './utils/useUnmountSignal'
 
 /** any consensus -> generatedConsensusAccount -> sapphireAddress */
-export function useDeposit() {
+export function useDeposit({ generatedConsensusAccount }: { generatedConsensusAccount: ConsensusAccount }) {
   const unmountSignal = useUnmountSignal()
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
-  const { generatedConsensusAccount, generateConsensusAccount } = useGenerateConsensusAccount()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const { refetch: updateBalanceInsideConnectButton } = useBalance({ address: sapphireAddress })
   const isPrevError = usePrevious(progress.percentage === undefined)
 
-  async function step2() {
-    if (!sapphireAddress) return
-    const generatedConsensusAccount = await generateConsensusAccount(sapphireAddress)
-
-    if (generatedConsensusAccount.isFresh) {
-      trackEvent('deposit account created')
-    }
-
+  // Automatically start listening, and only cancel if unmounted.
+  useEffect(() => {
+    if (!sapphireAddress) throw new Error('useDeposit used before wallet connected')
     blockNavigatingAway() // Start blocking early for the first transfer
-    await step3(generatedConsensusAccount, sapphireAddress)
-  }
+    step3(generatedConsensusAccount, sapphireAddress)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   async function step3(consensusAccount: ConsensusAccount, sapphireAddress: `0x${string}`) {
     // Note: don't use outside state vars. They are outdated.
     try {
+      await new Promise(r => setTimeout(r, 1000)) // Handle React StrictMode: step3 is called by useEffect on mount
+      if (unmountSignal.aborted) throw new UnmountedAbortError()
+
       setProgress({ percentage: 0.05, message: 'Waiting to move your ROSE…' })
       const amountToDeposit = await waitForConsensusBalance(consensusAccount.address, 0n, unmountSignal)
 
@@ -105,8 +103,6 @@ export function useDeposit() {
 
   return {
     sapphireAddress,
-    generatedConsensusAccount,
-    step2,
     transferMore,
     progress,
     isBlockingNavigatingAway,

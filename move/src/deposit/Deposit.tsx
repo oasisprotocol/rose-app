@@ -21,17 +21,18 @@ import loader_blocks_svg from '/move/loader_blocks.svg?url'
 import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
 import symbol_check_circle_svg from '/move/symbol_check_circle.svg?url'
 import symbol_warning_svg from '/move/symbol_warning.svg?url'
+import { ConsensusAccount } from './useGenerateConsensusAccount'
 
-export function Deposit(props: { deposit: ReturnType<typeof useDeposit> }) {
-  const { generatedConsensusAccount, transferMore, progress, isBlockingNavigatingAway, isPrevError } =
-    props.deposit // Parent useDeposit
+export function Deposit({ generatedConsensusAccount }: { generatedConsensusAccount: ConsensusAccount }) {
+  const { transferMore, progress, isBlockingNavigatingAway, isPrevError } = useDeposit({
+    generatedConsensusAccount,
+  })
 
   const isError = progress.percentage === undefined
 
   const [isMoveTransferVideoModalOpen, setIsMoveTransferVideoModalOpen] = useState(false)
   const [isCopyPrivateKeyModalOpen, setIsCopyPrivateKeyModalOpen] = useState(false)
 
-  if (!generatedConsensusAccount) throw new Error('<Deposit> used before SIWE')
   return (
     <>
       <Layout
