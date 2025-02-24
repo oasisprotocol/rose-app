@@ -35,9 +35,9 @@ export function useWithdraw() {
 
   async function step2() {
     if (!sapphireAddress) return
-    await generateSapphireAccount(sapphireAddress)
+    const { generatedConsensusAccount } = await generateSapphireAccount(sapphireAddress)
 
-    if (generatedConsensusAccount?.isFresh) {
+    if (generatedConsensusAccount.isFresh) {
       trackEvent('withdrawal account created')
     }
   }
