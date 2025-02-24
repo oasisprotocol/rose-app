@@ -21,6 +21,7 @@ import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
 import { amountPattern, consensusConfig, withdrawEstimatedFee } from '../utils/oasisConfig.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
+import { ConsensusAccount, SapphireAccount } from './useGenerateSapphireAccount.ts'
 
 interface FormItem<T = string> {
   value: T | undefined
@@ -44,10 +45,14 @@ const destinationFormInitialValue: DestinationForm = {
   isDirty: false,
 }
 
-export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
+export function Withdraw({
+  generatedSapphireAccount,
+  generatedConsensusAccount,
+}: {
+  generatedSapphireAccount: SapphireAccount
+  generatedConsensusAccount: ConsensusAccount
+}) {
   const {
-    generatedSapphireAccount,
-    generatedConsensusAccount,
     consensusAddress,
     setConsensusAddress,
     step3,
@@ -59,7 +64,7 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     isInputMode,
     setIsInputMode,
     isPrevError,
-  } = props.withdraw // Parent useWithdraw
+  } = useWithdraw({ generatedSapphireAccount, generatedConsensusAccount })
 
   const isError = progress.percentage === undefined
 
@@ -211,8 +216,6 @@ export function Withdraw(props: { withdraw: ReturnType<typeof useWithdraw> }) {
     setDestinationForm({ ...destinationFormInitialValue })
   }
 
-  if (!generatedConsensusAccount) throw new Error('<Withdraw> used before SIWE')
-  if (!generatedSapphireAccount) throw new Error('<Withdraw> used before SIWE')
   if (isInputMode) {
     return (
       <Layout

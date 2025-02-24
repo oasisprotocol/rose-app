@@ -9,7 +9,7 @@ import {
 } from './utils/getBalances'
 import { useBlockNavigatingAway } from './utils/useBlockNavigatingAway'
 import { transferToConsensus } from './withdraw/transferToConsensus'
-import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
+import { ConsensusAccount, SapphireAccount } from './withdraw/useGenerateSapphireAccount'
 import { minimalWithdrawableAmount, withdrawToConsensus } from './withdraw/withdrawToConsensus'
 import { trackEvent } from 'fathom-client'
 import { consensusConfig, sapphireConfig } from './utils/oasisConfig.ts'
@@ -18,12 +18,17 @@ import { UnmountedAbortError, useUnmountSignal } from './utils/useUnmountSignal'
 /**
  * sapphireAddress -> generatedSapphireAccount -> generatedConsensusAccount -> consensusAddress
  */
-export function useWithdraw() {
+export function useWithdraw({
+  generatedSapphireAccount,
+  generatedConsensusAccount,
+}: {
+  generatedSapphireAccount: SapphireAccount
+  generatedConsensusAccount: ConsensusAccount
+}) {
   const unmountSignal = useUnmountSignal()
   const { isBlockingNavigatingAway, blockNavigatingAway, allowNavigatingAway } = useBlockNavigatingAway()
   const sapphireAddress = useAccount().address
-  const { generatedSapphireAccount, generatedConsensusAccount, generateSapphireAccount } =
-    useGenerateSapphireAccount()
+
   const [consensusAddress, setConsensusAddress] = useState<`oasis1${string}`>()
   const [progress, setProgress] = useState({ percentage: 0 as number | undefined, message: '' })
   const [isInputMode, setIsInputMode] = useState(true)
@@ -32,15 +37,6 @@ export function useWithdraw() {
   })
   const { sendTransactionAsync } = useSendTransaction()
   const isPrevError = usePrevious(progress.percentage === undefined)
-
-  async function step2() {
-    if (!sapphireAddress) return
-    const { generatedConsensusAccount } = await generateSapphireAccount(sapphireAddress)
-
-    if (generatedConsensusAccount.isFresh) {
-      trackEvent('withdrawal account created')
-    }
-  }
 
   async function step3(value: bigint) {
     if (!generatedSapphireAccount) return
@@ -145,11 +141,8 @@ export function useWithdraw() {
 
   return {
     sapphireAddress,
-    generatedSapphireAccount,
-    generatedConsensusAccount,
     consensusAddress,
     setConsensusAddress,
-    step2,
     step3,
     step4,
     transferMore,

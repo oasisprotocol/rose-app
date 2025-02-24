@@ -2,7 +2,6 @@ import { ConnectButton } from '@rainbow-me/rainbowkit'
 import classes from './App.module.css'
 import { MoveButton as Button, PrivateKeyHelpModal, VideoModal } from '@oasisprotocol/rose-app-ui/move'
 import { Layout } from './components/Layout'
-import { useWithdraw } from './useWithdraw'
 import { useIsRpcResponding } from './utils/useIsRpcResponding'
 
 import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
@@ -18,13 +17,14 @@ import { Withdraw } from './withdraw/Withdraw'
 import { Header } from '@oasisprotocol/rose-app-ui/core'
 import { trackEvent } from 'fathom-client'
 import { useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
+import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
 
 export function App() {
   useReloadIfAccountSwitched()
   const isRpcResponding = useIsRpcResponding()
   const sapphireAddress = useAccount().address
-  const withdraw = useWithdraw()
   const deposit = useGenerateConsensusAccount()
+  const withdraw = useGenerateSapphireAccount()
 
   const [isMoveWalkthroughVideoModalOpen, setIsMoveWalkthroughVideoModalOpen] = useState(false)
   const [isPrivateKeyHelpModalOpen, setIsPrivateKeyHelpModalOpen] = useState(false)
@@ -133,7 +133,17 @@ export function App() {
               </div>
               <div className={classes.cardContent}>
                 <p>Move your ROSE from Sapphire back to a crypto exchange or consensus account.</p>
-                <Button onClick={withdraw.step2}>Select and sign-in</Button>
+                <Button
+                  onClick={async () => {
+                    const { generatedConsensusAccount } =
+                      await withdraw.generateSapphireAccount(sapphireAddress)
+                    if (generatedConsensusAccount.isFresh) {
+                      trackEvent('withdrawal account created')
+                    }
+                  }}
+                >
+                  Select and sign-in
+                </Button>
               </div>
             </div>
           </div>
@@ -145,7 +155,12 @@ export function App() {
   if (deposit.generatedConsensusAccount) {
     return <Deposit generatedConsensusAccount={deposit.generatedConsensusAccount} />
   }
-  if (withdraw.generatedConsensusAccount) {
-    return <Withdraw withdraw={withdraw} />
+  if (withdraw.generatedSapphireAccount && withdraw.generatedConsensusAccount) {
+    return (
+      <Withdraw
+        generatedSapphireAccount={withdraw.generatedSapphireAccount}
+        generatedConsensusAccount={withdraw.generatedConsensusAccount}
+      />
+    )
   }
 }
