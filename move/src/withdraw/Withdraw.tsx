@@ -19,7 +19,7 @@ import { AccountAvatar, Header } from '@oasisprotocol/rose-app-ui/core'
 import { Layout } from '../components/Layout'
 import { useWithdraw } from '../useWithdraw'
 import { getValidOasisAddress } from '../utils/getBalances.ts'
-import { amountPattern, consensusConfig } from '../utils/oasisConfig.ts'
+import { amountPattern, consensusConfig, multiplyConsensusToSapphire } from '../utils/oasisConfig.ts'
 import { withdrawFeeAmount, minimalWithdrawableAmount } from './withdrawToConsensus.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
 import { ConsensusAccount, SapphireAccount } from './useGenerateSapphireAccount.ts'
@@ -139,7 +139,7 @@ export function Withdraw({
     try {
       const amount = parseUnits(_value, consensusConfig.decimals)
 
-      if (amount * 10n ** 9n < minimalWithdrawableAmount) {
+      if (amount * multiplyConsensusToSapphire < minimalWithdrawableAmount) {
         setDestinationForm(prevState => ({
           ...prevState,
           amount: {
@@ -151,7 +151,7 @@ export function Withdraw({
         return
       }
 
-      if (amount * 10n ** 9n > (availableBalance?.value ?? 0n)) {
+      if (amount * multiplyConsensusToSapphire > (availableBalance?.value ?? 0n)) {
         setDestinationForm(prevState => ({
           ...prevState,
           amount: {
@@ -203,7 +203,7 @@ export function Withdraw({
         return
       }
       try {
-        await step3(amount.value * 10n ** 9n)
+        await step3(amount.value * multiplyConsensusToSapphire)
       } catch (err) {
         setDestinationForm(prevState => ({ ...prevState, error: (err as Error).message }))
         return
