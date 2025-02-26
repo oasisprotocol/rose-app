@@ -14,7 +14,7 @@ export const withConnectedWallet = (WrappedComponent: FC) => {
 
     useEffect(() => {
       if (isSupportedNetwork && isConnected) {
-        navigate('/stake/dashboard')
+        navigate('/stake/dashboard', { replace: true })
       }
     }, [isSupportedNetwork, isConnected, navigate])
 
