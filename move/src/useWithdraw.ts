@@ -126,7 +126,7 @@ export function useWithdraw({
       await new Promise(r => setTimeout(r, 6000))
       if (unmountSignal.aborted) throw new UnmountedAbortError()
       // Stay on "Withdrawn" screen unless new transfer comes in
-      await waitForSapphireBalance(generatedSapphireAccount.address, 0n, unmountSignal)
+      await waitForSapphireBalance(generatedSapphireAccount.address, minimalWithdrawableAmount, unmountSignal)
       if (unmountSignal.aborted) throw new UnmountedAbortError()
       // Don't loop, force user to input destination again
       transferMore()

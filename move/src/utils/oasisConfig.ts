@@ -1,5 +1,3 @@
-import { parseUnits } from 'viem'
-
 export const oasisConfig = {
   mainnet: {
     grpc: 'https://grpc.oasis.io',
@@ -38,4 +36,3 @@ declare global {
 window.mock = false
 
 export const amountPattern = '^[0-9]*[.]?[0-9]{0,9}$'
-export const withdrawEstimatedFee = parseUnits('0.007', 18)

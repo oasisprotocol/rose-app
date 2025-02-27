@@ -6,6 +6,10 @@ import { multiplyConsensusToSapphire, sapphireConfig } from '../utils/oasisConfi
 
 const { PROD } = import.meta.env
 
+// const minimalConsensusTransferableAmount = 10n ** 7n
+// export const minimalDepositableAmount = minimalConsensusTransferableAmount
+// Ignored: User transfers to a consensus acc some amount and they already can't transfer less than minimal amount.
+
 /**
  * Set allowance from consensusAddress to sapphireConfig.mainnet.address (step 1 of depositing)
  */
