@@ -34,3 +34,9 @@ dist-ssr
 
 # Include prettier config
 !.prettierrc.cjs
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

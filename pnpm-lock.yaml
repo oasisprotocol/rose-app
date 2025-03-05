@@ -8,6 +8,12 @@ importers:
 
   .:
     devDependencies:
+      '@playwright/test':
+        specifier: ^1.50.1
+        version: 1.50.1
+      '@types/node':
+        specifier: ^22.7.5
+        version: 22.7.7
       '@typescript-eslint/eslint-plugin':
         specifier: ^7.1.0
         version: 7.18.0(@typescript-eslint/parser@7.18.0)(eslint@8.57.1)(typescript@5.7.3)
@@ -68,7 +74,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vitest:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.7.7)
@@ -217,7 +223,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vite-plugin-svgr:
         specifier: ^4.2.0
         version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
@@ -304,7 +310,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vite-plugin-svgr:
         specifier: ^4.2.0
         version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
@@ -341,7 +347,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vitest:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.7.7)
@@ -411,7 +417,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vite-plugin-svgr:
         specifier: ^4.2.0
         version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
@@ -457,7 +463,7 @@ importers:
         version: 5.4.11(@types/node@22.7.7)
       vite-plugin-dts:
         specifier: ^4.1.0
-        version: 4.3.0(typescript@5.6.3)(vite@5.4.11)
+        version: 4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11)
       vitest:
         specifier: ^2.1.9
         version: 2.1.9(@types/node@22.7.7)
@@ -1313,27 +1319,27 @@ packages:
       - supports-color
     dev: false
 
-  /@microsoft/api-extractor-model@7.30.0:
+  /@microsoft/api-extractor-model@7.30.0(@types/node@22.7.7):
     resolution: {integrity: sha512-26/LJZBrsWDKAkOWRiQbdVgcfd1F3nyJnAiJzsAgpouPk7LtOIj7PK9aJtBaw/pUXrkotEg27RrT+Jm/q0bbug==}
     dependencies:
       '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
-      '@rushstack/node-core-library': 5.10.0
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.7.7)
     transitivePeerDependencies:
       - '@types/node'
     dev: true
 
-  /@microsoft/api-extractor@7.48.0:
+  /@microsoft/api-extractor@7.48.0(@types/node@22.7.7):
     resolution: {integrity: sha512-FMFgPjoilMUWeZXqYRlJ3gCVRhB7WU/HN88n8OLqEsmsG4zBdX/KQdtJfhq95LQTQ++zfu0Em1LLb73NqRCLYQ==}
     hasBin: true
     dependencies:
-      '@microsoft/api-extractor-model': 7.30.0
+      '@microsoft/api-extractor-model': 7.30.0(@types/node@22.7.7)
       '@microsoft/tsdoc': 0.15.1
       '@microsoft/tsdoc-config': 0.17.1
-      '@rushstack/node-core-library': 5.10.0
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.7.7)
       '@rushstack/rig-package': 0.5.3
-      '@rushstack/terminal': 0.14.3
-      '@rushstack/ts-command-line': 4.23.1
+      '@rushstack/terminal': 0.14.3(@types/node@22.7.7)
+      '@rushstack/ts-command-line': 4.23.1(@types/node@22.7.7)
       lodash: 4.17.21
       minimatch: 3.0.8
       resolve: 1.22.8
@@ -1673,6 +1679,14 @@ packages:
     dev: true
     optional: true
 
+  /@playwright/test@1.50.1:
+    resolution: {integrity: sha512-Jii3aBg+CEDpgnuDxEp/h7BimHcUTDlpEtce89xEumlJ5ef2hqepZ+PWp1DDpYC/VO9fmWVI1IlEaoI5fK9FXQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      playwright: 1.50.1
+    dev: true
+
   /@protobufjs/aspromise@1.1.2:
     resolution: {integrity: sha512-j+gKExEuLmKwvz3OgROXtrJ2UG2x8Ch2YZUxahh+s1F2HZ+wAceUNLkvy6zKCPVRkU++ZWQrdxsUeQXmcg4uoQ==}
     dev: false
@@ -1928,7 +1942,7 @@ packages:
     dev: true
     optional: true
 
-  /@rushstack/node-core-library@5.10.0:
+  /@rushstack/node-core-library@5.10.0(@types/node@22.7.7):
     resolution: {integrity: sha512-2pPLCuS/3x7DCd7liZkqOewGM0OzLyCacdvOe8j6Yrx9LkETGnxul1t7603bIaB8nUAooORcct9fFDOQMbWAgw==}
     peerDependencies:
       '@types/node': '*'
@@ -1936,6 +1950,7 @@ packages:
       '@types/node':
         optional: true
     dependencies:
+      '@types/node': 22.7.7
       ajv: 8.13.0
       ajv-draft-04: 1.0.0(ajv@8.13.0)
       ajv-formats: 3.0.1(ajv@8.13.0)
@@ -1953,7 +1968,7 @@ packages:
       strip-json-comments: 3.1.1
     dev: true
 
-  /@rushstack/terminal@0.14.3:
+  /@rushstack/terminal@0.14.3(@types/node@22.7.7):
     resolution: {integrity: sha512-csXbZsAdab/v8DbU1sz7WC2aNaKArcdS/FPmXMOXEj/JBBZMvDK0+1b4Qao0kkG0ciB1Qe86/Mb68GjH6/TnMw==}
     peerDependencies:
       '@types/node': '*'
@@ -1961,14 +1976,15 @@ packages:
       '@types/node':
         optional: true
     dependencies:
-      '@rushstack/node-core-library': 5.10.0
+      '@rushstack/node-core-library': 5.10.0(@types/node@22.7.7)
+      '@types/node': 22.7.7
       supports-color: 8.1.1
     dev: true
 
-  /@rushstack/ts-command-line@4.23.1:
+  /@rushstack/ts-command-line@4.23.1(@types/node@22.7.7):
     resolution: {integrity: sha512-40jTmYoiu/xlIpkkRsVfENtBq4CW3R4azbL0Vmda+fMwHWqss6wwf/Cy/UJmMqIzpfYc2OTnjYP1ZLD3CmyeCA==}
     dependencies:
-      '@rushstack/terminal': 0.14.3
+      '@rushstack/terminal': 0.14.3(@types/node@22.7.7)
       '@types/argparse': 1.0.38
       argparse: 1.0.10
       string-argv: 0.3.2
@@ -4689,6 +4705,14 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
+  /fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -6139,6 +6163,22 @@ packages:
       mlly: 1.7.3
       pathe: 1.1.2
 
+  /playwright-core@1.50.1:
+    resolution: {integrity: sha512-ra9fsNWayuYumt+NiM069M6OkcRb1FZSK8bgi66AtpFoWkg2+y0bJSNmkFrWhMbEBbVKC/EruAHH3g0zmtwGmQ==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dev: true
+
+  /playwright@1.50.1:
+    resolution: {integrity: sha512-G8rwsOQJ63XG6BbKj2w5rHeavFjy5zynBA9zsJMMtBoe/Uf757oG12NXz6e6OirF7RCrTVAKFXbLmn1RbL7Qaw==}
+    engines: {node: '>=18'}
+    hasBin: true
+    dependencies:
+      playwright-core: 1.50.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /pngjs@5.0.0:
     resolution: {integrity: sha512-40QW5YalBNfQo5yRYmiw7Yz6TKKVr3h6970B2YE+3fQpsWcrbj1PzJgxeJ19DRQjhMbKPIuMY8rFaXc8moolVw==}
     engines: {node: '>=10.13.0'}
@@ -7415,7 +7455,7 @@ packages:
       - terser
     dev: true
 
-  /vite-plugin-dts@4.3.0(typescript@5.6.3)(vite@5.4.11):
+  /vite-plugin-dts@4.3.0(@types/node@22.7.7)(typescript@5.6.3)(vite@5.4.11):
     resolution: {integrity: sha512-LkBJh9IbLwL6/rxh0C1/bOurDrIEmRE7joC+jFdOEEciAFPbpEKOLSAr5nNh5R7CJ45cMbksTrFfy52szzC5eA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     peerDependencies:
@@ -7425,7 +7465,7 @@ packages:
       vite:
         optional: true
     dependencies:
-      '@microsoft/api-extractor': 7.48.0
+      '@microsoft/api-extractor': 7.48.0(@types/node@22.7.7)
       '@rollup/pluginutils': 5.1.3
       '@volar/typescript': 2.4.10
       '@vue/language-core': 2.1.6(typescript@5.6.3)
