@@ -24,3 +24,9 @@ pnpm-lock.yaml
 
 # Include prettier config
 !.prettierrc.cjs
+
+# Playwright
+/e2e/test-results/
+/e2e/playwright-report/
+/e2e/blob-report/
+/e2e/playwright/.cache/

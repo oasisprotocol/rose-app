@@ -15,7 +15,8 @@
     "prettier": "prettier --write . --ignore-path .eslintignore",
     "build": "pnpm --filter @oasisprotocol/rose-app-home build",
     "dev": "pnpm --filter @oasisprotocol/rose-app-home dev",
-    "test": "pnpm -r exec vitest run --passWithNoTests"
+    "test": "pnpm --filter=!@oasisprotocol/rose-app-e2e --parallel -r exec vitest run --passWithNoTests",
+    "test-e2e": "pnpm --filter @oasisprotocol/rose-app-e2e test"
   },
   "license": "See License in LICENSE",
   "packageManager": "pnpm@8.15.4",

@@ -1,0 +1,18 @@
+{
+  "name": "@oasisprotocol/rose-app-e2e",
+  "private": true,
+  "license": "See License in ../LICENSE",
+  "type": "module",
+  "scripts": {
+    "install": "pnpm exec playwright install --with-deps chromium",
+    "test": "pnpm exec playwright test"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.50.1",
+    "@types/node": "^22.7.5"
+  }
+}
