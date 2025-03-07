@@ -15,8 +15,8 @@
     "prettier": "prettier --write . --ignore-path .eslintignore",
     "build": "pnpm --filter @oasisprotocol/rose-app-home build",
     "dev": "pnpm --filter @oasisprotocol/rose-app-home dev",
-    "test": "pnpm -r exec vitest run --passWithNoTests",
-    "test-e2e": "pnpm exec playwright test"
+    "test": "pnpm --filter=!@oasisprotocol/rose-app-e2e --parallel -r exec vitest run --passWithNoTests",
+    "test-e2e": "pnpm --filter @oasisprotocol/rose-app-e2e test"
   },
   "license": "See License in LICENSE",
   "packageManager": "pnpm@8.15.4",
@@ -28,8 +28,6 @@
     "*.{js,cjs,mjs,ts,tsx,css}": "prettier --write --ignore-path .eslintignore"
   },
   "devDependencies": {
-    "@playwright/test": "^1.50.1",
-    "@types/node": "^22.7.5",
     "@typescript-eslint/eslint-plugin": "^7.1.0",
     "@typescript-eslint/parser": "^7.1.0",
     "eslint": "^8.57.0",
