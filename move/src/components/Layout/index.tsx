@@ -10,7 +10,7 @@ export function Layout(props: { header: React.ReactNode; children: React.ReactNo
     <LayoutBase
       header={
         <>
-          {window.location.origin !== 'https://rose.oasis.io' && (
+          {!['https://rose.oasis.io', 'https://rose.prd.oasis.io'].includes(window.location.origin) && (
             <div className="warningNotification" style={{ margin: '0 auto' }}>
               <img src={symbol_warning_svg} alt="Warning" width="24" />
               <p>Please note this is not production deploy.</p>
