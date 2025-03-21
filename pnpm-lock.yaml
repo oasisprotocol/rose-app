@@ -330,8 +330,8 @@ importers:
         specifier: ^1.1.0
         version: 1.1.0
       cborg:
-        specifier: ^4.2.3
-        version: 4.2.7
+        specifier: ^4.2.9
+        version: 4.2.9
       viem:
         specifier: ^2.23.1
         version: 2.23.1(typescript@5.6.3)
@@ -3641,8 +3641,8 @@ packages:
     hasBin: true
     dev: false
 
-  /cborg@4.2.7:
-    resolution: {integrity: sha512-zHTUAm+HAoRLtGEQ1b28HXBm8d/5YP+7eiSKzEu/mpFkptGYaMQCHv15OiQBuyNlIgbCBXvBbZQPl3xvcZTJXg==}
+  /cborg@4.2.9:
+    resolution: {integrity: sha512-HG8GprGhfzkbzDAIQApqYcN1BJAyf8vDQbzclAwaqrm3ATFnB7ygiWLr+YID+GBdfTJ+yHtzPi06218xULpZrg==}
     hasBin: true
     dev: false
 
