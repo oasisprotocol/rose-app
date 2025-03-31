@@ -43,4 +43,10 @@ const router = createBrowserRouter([
   },
 ])
 
+// Redirect from old URLs to new URLs
+if (location.pathname + location.hash === '/#/wrap') location.href = '/wrap'
+if (location.pathname + location.hash === '/#/stake') location.href = '/stake'
+if (location.pathname + location.hash === '/#/move') location.href = '/move'
+if (location.pathname + location.hash === '/#/discover') location.href = '/discover'
+
 ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />)
