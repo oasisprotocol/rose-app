@@ -3,14 +3,14 @@ import { MoveApp } from '@oasisprotocol/rose-app-move'
 import { stakeRouteObject } from '@oasisprotocol/rose-app-stake'
 import { wrapRouteObject } from '@oasisprotocol/rose-app-wrap'
 import { DiscoverApp } from '@oasisprotocol/rose-app-discover'
-import { createHashRouter, RouterProvider } from 'react-router-dom'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { App } from './App.tsx'
 import { ProvidersWithSidebar } from './ProvidersWithSidebar.tsx'
 
 import '@oasisprotocol/rose-app-ui/core/index.css'
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: '',
     element: <ProvidersWithSidebar />,
