@@ -237,8 +237,8 @@ importers:
   nexus:
     dependencies:
       axios:
-        specifier: ^1.7.2
-        version: 1.7.9
+        specifier: ^1.8.4
+        version: 1.8.4
       swagger-typescript-api:
         specifier: ^13.0.22
         version: 13.0.23
@@ -275,8 +275,8 @@ importers:
         specifier: ^2.1.2
         version: 2.2.1(@tanstack/react-query@5.45.1)(@types/react@18.3.11)(react-dom@18.3.1)(react@18.3.1)(viem@2.23.1)(wagmi@2.14.11)
       axios:
-        specifier: ^1.7.2
-        version: 1.7.9
+        specifier: ^1.8.4
+        version: 1.8.4
       bignumber.js:
         specifier: ^9.1.2
         version: 9.1.2
@@ -3408,8 +3408,8 @@ packages:
     dependencies:
       possible-typed-array-names: 1.0.0
 
-  /axios@1.7.9:
-    resolution: {integrity: sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==}
+  /axios@1.8.4:
+    resolution: {integrity: sha512-eBSYY4Y68NNlHbHBMdeDmKNtDgXWhQsJcGqzO3iLUM0GraQFSS9cVgPX5I9b3lbdFKyYoAEGAZF1DwhTaljNAw==}
     dependencies:
       follow-redirects: 1.15.9
       form-data: 4.0.1
