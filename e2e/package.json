@@ -4,7 +4,7 @@
   "license": "See License in ../LICENSE",
   "type": "module",
   "scripts": {
-    "install": "pnpm exec playwright install --with-deps chromium",
+    "install:deps": "pnpm exec playwright install --with-deps chromium",
     "test": "pnpm exec playwright test"
   },
   "packageManager": "pnpm@8.15.4",
