@@ -30,3 +30,6 @@ pnpm-lock.yaml
 /e2e/playwright-report/
 /e2e/blob-report/
 /e2e/playwright/.cache/
+
+# markdownlint formatted files
+*.md
