@@ -12,6 +12,39 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.0 (2025-04-02)
+
+### Features
+
+- Remove /#/ from URLs
+  ([#224](https://github.com/oasisprotocol/rose-app/issues/224))
+
+### Bug Fixes and Improvements
+
+- move: Fix withdrawing/depositing after navigating away and back without reload
+  ([#155](https://github.com/oasisprotocol/rose-app/issues/155))
+
+- move: Block react-router navigation while withdrawing/depositing
+  ([#208](https://github.com/oasisprotocol/rose-app/issues/208))
+
+- move: Fix withdrawing small amounts
+  ([#210](https://github.com/oasisprotocol/rose-app/issues/210))
+
+- move: Count rose.prd.oasis.io URL as production deploy
+  ([#221](https://github.com/oasisprotocol/rose-app/issues/221))
+
+### Internal Changes
+
+- Add basic e2e navigation tests
+  ([#218](https://github.com/oasisprotocol/rose-app/issues/218),
+   [#219](https://github.com/oasisprotocol/rose-app/issues/219))
+
+- Upgrade axios dependency
+  ([#220](https://github.com/oasisprotocol/rose-app/issues/220))
+
+- Rename playwright install script
+  ([#223](https://github.com/oasisprotocol/rose-app/issues/223))
+
 ## 1.0.3 (2025-02-21)
 
 ### Internal Changes
