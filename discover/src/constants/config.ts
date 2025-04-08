@@ -10,7 +10,7 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
     {
       title: 'NEBY',
       type: 'DEX',
-      imgSrc: '/discover/Neby.png',
+      imgSrc: '/discover/Neby.jpg',
       externalLink: 'https://www.neby.exchange/',
     },
     {
