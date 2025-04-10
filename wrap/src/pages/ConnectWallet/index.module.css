@@ -4,6 +4,13 @@
   gap: 1.5rem;
   align-items: flex-start;
   width: 100%;
+
+  button {
+    &&& {
+      padding: 0 32px;
+      border-radius: 999px;
+    }
+  }
 }
 
 .subHeader {
