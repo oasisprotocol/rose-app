@@ -1,3 +1,11 @@
+.connectWallet {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  align-items: flex-start;
+  width: 100%;
+}
+
 .subHeader {
   margin-bottom: 34dvh;
 }
