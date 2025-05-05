@@ -62,8 +62,8 @@
 
 @media screen and (min-width: 1000px) {
   .main {
-    max-width: 620px;
-    padding: 4.625rem 0 0;
+    max-width: 670px;
+    padding: 1.5rem 0 0;
   }
 
   .footer {
