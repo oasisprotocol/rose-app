@@ -65,12 +65,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://app.pixelrealm.io/',
     },
     {
-      title: 'Protocol Monster Labs',
-      type: 'Gaming',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/ProtocolMonsterLabs.jpg',
-      externalLink: 'https://protocolmonsterlabs.com/',
-    },
-    {
       title: 'Oasis Safe',
       type: 'Multisig Wallet',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisSafe.svg',
