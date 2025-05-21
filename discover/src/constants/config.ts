@@ -29,10 +29,10 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://thornprotocol.com/',
     },
     {
-      title: 'Daosis',
-      type: 'Launchpad & Token Minter',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
-      externalLink: 'https://daosis.io/',
+      title: 'Oasis Blockvote',
+      type: 'Governance',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisBlockvote.svg',
+      externalLink: 'https://vote.oasis.io/',
     },
     {
       title: 'Rosy',
@@ -83,10 +83,10 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://midas.app/',
     },
     {
-      title: 'Oasis Blockvote',
-      type: 'Governance',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisBlockvote.svg',
-      externalLink: 'https://vote.oasis.io/',
+      title: 'Daosis',
+      type: 'Launchpad & Token Minter',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
+      externalLink: 'https://daosis.io/',
     },
   ],
   tooling: [
