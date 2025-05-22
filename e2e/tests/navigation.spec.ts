@@ -5,6 +5,12 @@ test.describe('navigation', () => {
     page.on('pageerror', error => {
       throw error
     })
+
+    page.on('console', message => {
+      if (message.type() === 'error') {
+        throw new Error(`Console error: ${message.text()}`)
+      }
+    })
   })
 
   test.afterEach(async ({ page }) => {
@@ -13,22 +19,22 @@ test.describe('navigation', () => {
   })
 
   test('home page', async ({ page }) => {
-    await page.goto('/')
+    await page.goto('/', { waitUntil: 'networkidle' })
   })
 
   test('discover page', async ({ page }) => {
-    await page.goto('/#/discover')
+    await page.goto('/#/discover', { waitUntil: 'networkidle' })
   })
 
   test('stake page', async ({ page }) => {
-    await page.goto('/#/stake')
+    await page.goto('/#/stake', { waitUntil: 'networkidle' })
   })
 
   test('move page', async ({ page }) => {
-    await page.goto('/#/move')
+    await page.goto('/#/move', { waitUntil: 'networkidle' })
   })
 
   test('wrap page', async ({ page }) => {
-    await page.goto('/#/wrap')
+    await page.goto('/#/wrap', { waitUntil: 'networkidle' })
   })
 })
