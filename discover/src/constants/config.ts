@@ -29,22 +29,16 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://thornprotocol.com/',
     },
     {
-      title: 'Daosis',
-      type: 'Launchpad & Token Minter',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
-      externalLink: 'https://daosis.io/',
+      title: 'Oasis Blockvote',
+      type: 'Governance',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisBlockvote.svg',
+      externalLink: 'https://vote.oasis.io/',
     },
     {
       title: 'Rosy',
       type: 'Meme',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/Rosy.jpg',
       externalLink: 'https://rosytoken.com/',
-    },
-    {
-      title: '4P SuperdApp',
-      type: 'Web3 Messenger',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/4PSuperdApp.jpg',
-      externalLink: 'https://the4thpillar.io/',
     },
     {
       title: "Rakesh's Village",
@@ -83,10 +77,10 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://midas.app/',
     },
     {
-      title: 'Oasis Blockvote',
-      type: 'Governance',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisBlockvote.svg',
-      externalLink: 'https://vote.oasis.io/',
+      title: 'Daosis',
+      type: 'Launchpad & Token Minter',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
+      externalLink: 'https://daosis.io/',
     },
   ],
   tooling: [
