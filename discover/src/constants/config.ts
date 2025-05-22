@@ -41,12 +41,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://rosytoken.com/',
     },
     {
-      title: '4P SuperdApp',
-      type: 'Web3 Messenger',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/4PSuperdApp.jpg',
-      externalLink: 'https://the4thpillar.io/',
-    },
-    {
       title: "Rakesh's Village",
       type: 'Meme & Token Minter',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/RakeshsVillage.jpg',
