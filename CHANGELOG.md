@@ -12,6 +12,31 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.1 (2025-05-22)
+
+### Bug Fixes and Improvements
+
+- wrap: Unify background color
+  ([#233](https://github.com/oasisprotocol/rose-app/issues/233))
+
+- Add missing svgrrc config file
+  ([#240](https://github.com/oasisprotocol/rose-app/issues/240))
+
+### Internal Changes
+
+- Update dependencies
+  ([#179](https://github.com/oasisprotocol/rose-app/issues/179),
+   [#228](https://github.com/oasisprotocol/rose-app/issues/228))
+
+- Update README
+  ([#229](https://github.com/oasisprotocol/rose-app/issues/229))
+
+- discover: Move ecosystem icons to assets.oasis.io
+  ([#231](https://github.com/oasisprotocol/rose-app/issues/231))
+
+- Move brand logo to assets.oasis.io
+  ([#236](https://github.com/oasisprotocol/rose-app/issues/236))
+
 ## 1.1.0 (2025-04-02)
 
 ### Features
