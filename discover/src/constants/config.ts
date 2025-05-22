@@ -65,6 +65,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://app.pixelrealm.io/',
     },
     {
+      title: 'Pixudi',
+      type: 'Gaming',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/Pixudi.webp',
+      externalLink: 'https://pixudi.com/',
+    },
+    {
       title: 'Oasis Safe',
       type: 'Multisig Wallet',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/OasisSafe.svg',
