@@ -30,6 +30,8 @@ export default defineConfig({
 
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
+
+    headless: !!process.env.CI,
   },
 
   /* Configure projects for major browsers */
@@ -42,7 +44,9 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'pnpm --filter @oasisprotocol/rose-app-home dev',
+    command: process.env.CI
+      ? 'pnpm --filter @oasisprotocol/rose-app-home build && pnpm --filter @oasisprotocol/rose-app-home preview --port 5173'
+      : 'pnpm --filter @oasisprotocol/rose-app-home dev',
     url: 'http://localhost:5173',
     reuseExistingServer: !process.env.CI,
   },
