@@ -23,6 +23,7 @@
     "@oasisprotocol/rose-app-stake": "workspace:*",
     "@oasisprotocol/rose-app-ui": "workspace:*",
     "@oasisprotocol/rose-app-wrap": "workspace:*",
+    "@oasisprotocol/ui-library": "file:../ui-library",
     "@rainbow-me/rainbowkit": "^2.1.2",
     "@tanstack/react-query": "5.45.1",
     "fathom-client": "^3.7.2",
