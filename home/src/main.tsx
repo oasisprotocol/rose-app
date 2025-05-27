@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import { App } from './App.tsx'
 import { ProvidersWithSidebar } from './ProvidersWithSidebar.tsx'
 
+import './styles/global.css'
 import '@oasisprotocol/rose-app-ui/core/index.css'
 
 const router = createBrowserRouter([
