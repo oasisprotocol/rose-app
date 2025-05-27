@@ -1,11 +1,6 @@
 import { FC } from 'react'
-import {
-  WrapModal,
-  WrapModalProps,
-  LogoIconRound,
-  WrapInput,
-  WrapButton,
-} from '@oasisprotocol/rose-app-ui/wrap'
+import { WrapModal, WrapModalProps, LogoIconRound, WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
+import { Button } from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WRAP_FEE_DEDUCTION_MULTIPLIER } from '../../constants/config'
@@ -56,12 +51,12 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
         />
 
         <div className={classes.wrapFeeWarningModalActions}>
-          <WrapButton
+          <Button
             className={classes.wrapFeeWarningModalButton}
             onClick={() => next(estimatedAmountWithDeductedFees)}
           >
             <span className={classes.wrapFeeWarningModalButtonText}>Wrap reduced amount</span>
-          </WrapButton>
+          </Button>
 
           <button className={classes.wrapFeeWarningModalFullAmount} onClick={() => next(amount!)}>
             Continue with full amount

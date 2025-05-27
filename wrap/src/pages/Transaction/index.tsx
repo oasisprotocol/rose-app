@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
-import { WrapButton, OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui/wrap'
+import { OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui/wrap'
+import { Button } from '@oasisprotocol/ui-library/src'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import classes from './index.module.css'
 import { StringUtils } from '../../utils/string.utils'
@@ -89,15 +90,15 @@ const TransactionCmp: FC = () => {
 
           {txUrl && (
             <a className={classes.noUnderlineLink} href={txUrl} target="_blank" rel="noopener noreferrer">
-              <WrapButton className={classes.openInExplorerBtn} fullWidth>
+              <Button className={[classes.openInExplorerBtn, 'w-full'].join(' ')}>
                 View on explorer
                 <OpenInNewIcon />
-              </WrapButton>
+              </Button>
             </a>
           )}
-          <WrapButton variant="secondary" onClick={handleNavigateBack} fullWidth>
+          <Button variant="secondary" onClick={handleNavigateBack} className={'w-full'}>
             Close
-          </WrapButton>
+          </Button>
         </div>
       )}
       {status === TransactionStatus.Fail && (
@@ -109,9 +110,9 @@ const TransactionCmp: FC = () => {
             Please try again.
           </h3>
 
-          <WrapButton onClick={handleNavigateBack} fullWidth>
+          <Button onClick={handleNavigateBack} className="w-full">
             Retry
-          </WrapButton>
+          </Button>
         </div>
       )}
     </>

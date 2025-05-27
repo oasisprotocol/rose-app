@@ -1,6 +1,6 @@
 import { FC, useEffect } from 'react'
 import classes from './index.module.css'
-import { WrapButton } from '@oasisprotocol/rose-app-ui/wrap'
+import { Button } from '@oasisprotocol/ui-library/src'
 import { NumberUtils } from '../../utils/number.utils'
 import { WrapForm } from '../../components/WrapForm'
 import { useWeb3 } from '../../hooks/useWeb3'
@@ -69,21 +69,21 @@ const WrapperCmp: FC = () => {
       <div className={classes.subHeader}>
         <p>Quickly wrap your ROSE into wROSE and vice versa with the (un)wrap ROSE tool.</p>
 
-        <WrapButton className={classes.importWRoseBtn} onClick={addTokenToWallet}>
+        <Button className={classes.importWRoseBtn} onClick={addTokenToWallet}>
           Import WROSE to Wallet
-        </WrapButton>
+        </Button>
       </div>
 
       <div className={classes.amountPercList}>
         {percentageList.map(({ label, value }) => (
-          <WrapButton
+          <Button
             disabled={isLoading}
             onClick={() => handlePercentageCalc(value)}
             key={label}
-            variant="tertiary"
+            variant="outline"
           >
             {label}
-          </WrapButton>
+          </Button>
         ))}
       </div>
 
