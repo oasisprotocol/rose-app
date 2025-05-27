@@ -1,5 +1,6 @@
 import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
-import { WrapInput, WrapButton, WrapAlert, WrapToggleButton } from '@oasisprotocol/rose-app-ui/wrap'
+import { Button } from '@oasisprotocol/ui-library/src'
+import { WrapInput, WrapAlert, WrapToggleButton } from '@oasisprotocol/rose-app-ui/wrap'
 import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useWrapForm } from '../../hooks/useWrapForm'
@@ -144,9 +145,9 @@ export const WrapForm: FC = () => {
 
         <h4 className={classes.gasEstimateLabel}>Estimated fee: {estimatedFeeTruncated}</h4>
 
-        <WrapButton disabled={isLoading} type="submit" fullWidth>
+        <Button variant="default" disabled={isLoading} type="submit" className="w-full">
           {submitBtnLabel}
-        </WrapButton>
+        </Button>
         {error && <WrapAlert variant="danger">{error}</WrapAlert>}
       </form>
       <WrapFeeWarningModal
