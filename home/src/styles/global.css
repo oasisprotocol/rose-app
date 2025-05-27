@@ -1,1 +1,9 @@
 @import '@oasisprotocol/ui-library/src/styles/global.css';
+
+@source "../../node_modules/@oasisprotocol/ui-library";
+@source "../../../ui/src";
+@source "../"; /* this is home */
+@source "../../../discover/src";
+@source "../../../stake/src";
+@source "../../../move/src";
+@source "../../../wrap/src";
