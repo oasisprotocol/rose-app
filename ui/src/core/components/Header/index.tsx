@@ -19,6 +19,8 @@ export const Header: FC<PropsWithChildren<Props>> = ({ navLink, logo, children }
   const isMobileScreen = useMediaQuery({ query: '(max-width: 1023px)' })
   const { setIsOpen } = useSidebarState()
 
+  return null
+
   return (
     <header className={classes.header}>
       {navLink ?? logo ?? (

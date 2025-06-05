@@ -5,6 +5,7 @@ import classes from './index.module.css'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { AppStateContextProvider } from '../../providers/SidebarStateProvider'
 import { useSidebarState } from '../../hooks/useSidebarState'
+import { UILayout } from '../../../common'
 
 interface Props {
   navItem?: ReactNode
@@ -80,10 +81,10 @@ export function SidebarCmp({ navItem }: Props) {
   )
 }
 
-export function Sidebar(props: Props) {
+export function Sidebar() {
   return (
     <AppStateContextProvider>
-      <SidebarCmp {...props} />{' '}
+      <UILayout />
     </AppStateContextProvider>
   )
 }
