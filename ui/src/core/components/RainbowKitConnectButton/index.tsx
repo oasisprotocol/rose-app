@@ -9,7 +9,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
-import { AccountAvatar } from '../../../core/components/AccountAvatar'
+import { AccountAvatar } from '../AccountAvatar'
 import { useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
 
