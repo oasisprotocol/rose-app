@@ -3,7 +3,7 @@ import { WagmiProvider } from 'wagmi'
 import { wagmiConfig } from './constants/wagmi-config.ts'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit'
-import { AccountAvatar, Sidebar, SidebarAccount } from '@oasisprotocol/rose-app-ui/core'
+import { AccountAvatar, Sidebar } from '@oasisprotocol/rose-app-ui/core'
 
 import '@rainbow-me/rainbowkit/styles.css'
 import { FathomAnalytics } from './components/FathomAnalytics.tsx'
@@ -26,7 +26,7 @@ export const ProvidersWithSidebar: FC = () => (
             <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
           )}
         >
-          <Sidebar navItem={<SidebarAccount />} />
+          <Sidebar />
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
