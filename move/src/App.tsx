@@ -1,166 +1,85 @@
-import { ConnectButton } from '@rainbow-me/rainbowkit'
-import classes from './App.module.css'
-import { MoveButton as Button, PrivateKeyHelpModal, VideoModal } from '@oasisprotocol/rose-app-ui/move'
-import { Layout } from './components/Layout'
-import { useIsRpcResponding } from './utils/useIsRpcResponding'
-
-import videocam_svg from '@material-design-icons/svg/filled/videocam.svg'
-import vpn_key_svg from '@material-design-icons/svg/filled/vpn_key.svg'
-import { useState } from 'react'
-import { useAccount } from 'wagmi'
-import consensus_to_sapphire_svg from '/move/consensus_to_sapphire.svg?url'
-import logo_rose_move_svg from '/move/logo_rose_move.svg?url'
-import sapphire_to_consensus_svg from '/move/sapphire_to_consensus.svg?url'
-import { Deposit } from './deposit/Deposit'
-import { useReloadIfAccountSwitched } from './utils/useReloadIfAccountSwitched'
-import { Withdraw } from './withdraw/Withdraw'
-import { Header } from '@oasisprotocol/rose-app-ui/core'
-import { trackEvent } from 'fathom-client'
-import { useGenerateConsensusAccount } from './deposit/useGenerateConsensusAccount'
-import { useGenerateSapphireAccount } from './withdraw/useGenerateSapphireAccount'
+import { Button } from '@oasisprotocol/ui-library'
+import { Card, CardHeader, CardFooter } from '@oasisprotocol/ui-library'
+import { Wallet, PanelLeft, Video, KeyRound } from 'lucide-react'
 
 export function App() {
-  useReloadIfAccountSwitched()
-  const isRpcResponding = useIsRpcResponding()
-  const sapphireAddress = useAccount().address
-  const deposit = useGenerateConsensusAccount()
-  const withdraw = useGenerateSapphireAccount()
-
-  const [isMoveWalkthroughVideoModalOpen, setIsMoveWalkthroughVideoModalOpen] = useState(false)
-  const [isPrivateKeyHelpModalOpen, setIsPrivateKeyHelpModalOpen] = useState(false)
-
-  if (!sapphireAddress) {
-    return (
-      <>
-        <Layout header={<Header navLink={null} />}>
-          <div className={classes.step1}>
-            <div>
-              <img src={logo_rose_move_svg} alt="ROSE Move logo" style={{ maxHeight: '67px' }} />
-              <p>
-                Easily move your ROSE from a crypto exchange or consensus account to Sapphire. Start by
-                connecting your wallet.
-              </p>
-            </div>
-            {isRpcResponding ? (
-              <div className={classes.roundConnectButton}>
-                <ConnectButton />
+  return (
+    <div className="flex flex-col min-h-screen bg-background">
+      {/* Main Content */}
+      <div className="flex flex-1">
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col">
+          {/* Breadcrumb */}
+          <div className="flex items-center h-16 px-3 md:px-6 border-b">
+            <div className="flex items-center gap-2">
+              <Button variant="ghost" size="icon" className="h-7 w-7 md:flex hidden">
+                <PanelLeft className="h-4 w-4" />
+              </Button>
+              <div className="h-15 w-8 flex items-center md:flex hidden">
+                <div className="h-15 border-r border-border"></div>
               </div>
-            ) : (
-              <Button disabled>Connect Wallet</Button>
-            )}
-
-            <div></div>
-            <div className={classes.helpLinks}>
-              <button
-                type="button"
-                className={classes.plainButton2}
-                onClick={() => setIsMoveWalkthroughVideoModalOpen(true)}
-              >
-                <img src={videocam_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
-                <div>
-                  <h3>Watch this walkthrough to get started.</h3>
-                  <div>Learn how to use Move</div>
-                </div>
-              </button>
-              <button
-                type="button"
-                className={classes.plainButton2}
-                onClick={() => setIsPrivateKeyHelpModalOpen(true)}
-              >
-                <img src={vpn_key_svg} alt="" width="36" style={{ filter: 'invert(1)' }} />
-                <div>
-                  <h3>Lost your private key?</h3>
-                  <div>What to do if you lost your private key</div>
-                </div>
-              </button>
+              <nav className="text-foreground">
+                <span>Move</span>
+              </nav>
             </div>
           </div>
-        </Layout>
-        <VideoModal
-          src="https://www.youtube-nocookie.com/embed/2AEBhbArV0k"
-          header="How do I use ROSE move?"
-          body="Our walkthrough below shows you what the process would look like. The exact process might differ from your
-        experience depending on the exchange you are using."
-          isOpen={isMoveWalkthroughVideoModalOpen}
-          closeModal={() => setIsMoveWalkthroughVideoModalOpen(false)}
-        />
-        <PrivateKeyHelpModal
-          isOpen={isPrivateKeyHelpModalOpen}
-          closeModal={() => setIsPrivateKeyHelpModalOpen(false)}
-        />
-      </>
-    )
-  }
-  if (!deposit.generatedConsensusAccount && !withdraw.generatedConsensusAccount) {
-    return (
-      <Layout
-        header={
-          <Header logo={<img src={logo_rose_move_svg} alt="ROSE Move logo" />}>
-            <div className={classes.headerAccount}>
-              <ConnectButton accountStatus={{ smallScreen: 'avatar', largeScreen: 'full' }} />
-            </div>
-          </Header>
-        }
-      >
-        <div className={classes.step2}>
-          <div>
-            <h1>Where do you want to move your ROSE?</h1>
-            <p>Choose the destination to move your ROSE. Select and sign-in to verify.</p>
-          </div>
-          <div className={classes.cards}>
-            <div className={classes.card}>
-              <div className={classes.cardHeader}>
-                <img className={classes.cardImage} src={consensus_to_sapphire_svg} alt="" />
-              </div>
-              <div className={classes.cardContent}>
-                <p>Easily move your ROSE from a crypto exchange or consensus account to use on Sapphire.</p>
-                <Button
-                  onClick={async () => {
-                    const generatedConsensusAccount = await deposit.generateConsensusAccount(sapphireAddress)
-                    if (generatedConsensusAccount.isFresh) {
-                      trackEvent('deposit account created')
-                    }
-                  }}
-                >
-                  Select and sign-in
-                </Button>
-              </div>
-            </div>
 
-            <div className={classes.card}>
-              <div className={classes.cardHeader}>
-                <img className={`${classes.cardImage}`} src={sapphire_to_consensus_svg} alt="" />
-              </div>
-              <div className={classes.cardContent}>
-                <p>Move your ROSE from Sapphire back to a crypto exchange or consensus account.</p>
-                <Button
-                  onClick={async () => {
-                    const { generatedConsensusAccount } =
-                      await withdraw.generateSapphireAccount(sapphireAddress)
-                    if (generatedConsensusAccount.isFresh) {
-                      trackEvent('withdrawal account created')
-                    }
-                  }}
-                >
-                  Select and sign-in
-                </Button>
+          {/* Page Content */}
+          <div className="flex-1 flex items-center justify-center p-3 md:p-0">
+            <div className="w-full max-w-[560px] space-y-6">
+              {/* Connect Wallet Card */}
+              <Card className="border rounded-lg">
+                <CardHeader className="space-y-1.5">
+                  <h2 className="text-xl font-semibold text-card-foreground">Move tokens</h2>
+                  <p className="text-sm text-muted-foreground">
+                    Easily move your ROSE from a crypto exchange or consensus account to Sapphire. Start by
+                    connecting your wallet.
+                  </p>
+                </CardHeader>
+                <CardFooter>
+                  <Button className="w-full">
+                    <Wallet className="h-4 w-4 mr-2" />
+                    Connect Wallet
+                  </Button>
+                </CardFooter>
+              </Card>
+
+              {/* Help Sections */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-4 p-1 pr-4 border rounded">
+                  <div className="w-14 h-14 bg-accent rounded-sm flex items-center justify-center">
+                    <Video className="h-5 w-5 text-foreground" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-medium text-foreground">Learn how to use Move</h3>
+                    <p className="text-xs text-muted-foreground">Watch this walkthrough to get started.</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4 p-1 pr-4 border rounded">
+                  <div className="w-14 h-14 bg-accent rounded-sm flex items-center justify-center">
+                    <KeyRound className="h-5 w-5 text-foreground" />
+                  </div>
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-medium text-foreground">Lost your private key?</h3>
+                    <p className="text-xs text-muted-foreground">What to do if you lost your private key.</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </Layout>
-    )
-  }
+      </div>
 
-  if (deposit.generatedConsensusAccount) {
-    return <Deposit generatedConsensusAccount={deposit.generatedConsensusAccount} />
-  }
-  if (withdraw.generatedSapphireAccount && withdraw.generatedConsensusAccount) {
-    return (
-      <Withdraw
-        generatedSapphireAccount={withdraw.generatedSapphireAccount}
-        generatedConsensusAccount={withdraw.generatedConsensusAccount}
-      />
-    )
-  }
+      {/* Footer */}
+      <footer className="h-10 border-t px-6 py-3 flex justify-between items-center text-xs text-muted-foreground">
+        <div>Copyright @ OASIS 2025</div>
+        <div className="flex items-center gap-2.5">
+          <span>Version 2.0</span>
+          <span>|</span>
+          <span>Privacy Policy</span>
+        </div>
+      </footer>
+    </div>
+  )
 }
