@@ -190,6 +190,9 @@ importers:
       '@oasisprotocol/rose-app-ui':
         specifier: workspace:*
         version: link:../ui
+      '@oasisprotocol/ui-library':
+        specifier: link:../ui-library
+        version: link:../ui-library
       '@rainbow-me/rainbowkit':
         specifier: ^2.1.2
         version: 2.2.1(@tanstack/react-query@5.45.1)(@types/react@18.3.11)(react-dom@18.3.1)(react@18.3.1)(viem@2.23.1)(wagmi@2.14.11)
@@ -202,6 +205,9 @@ importers:
       fathom-client:
         specifier: ^3.7.2
         version: 3.7.2
+      lucide-react:
+        specifier: ^0.513.0
+        version: 0.513.0(react@18.3.1)
       react:
         specifier: ^18.2.0
         version: 18.3.1
