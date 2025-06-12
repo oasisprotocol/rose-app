@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { WagmiProvider } from 'wagmi'
-import { wagmiConfig } from './constants/wagmi-config.ts'
+import { wagmiConfig } from './constants/wagmi-config'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { lightTheme, RainbowKitProvider, Theme } from '@rainbow-me/rainbowkit'
-import { AccountAvatar, Sidebar, SidebarAccount } from '@oasisprotocol/rose-app-ui/core'
+import { FathomAnalytics } from './components/FathomAnalytics'
+import { AppLayout } from '@oasisprotocol/rose-app-ui'
 
 import '@rainbow-me/rainbowkit/styles.css'
-import { FathomAnalytics } from './components/FathomAnalytics.tsx'
 
 const queryClient = new QueryClient()
 const rainbowKitTheme: Theme = {
@@ -20,13 +20,8 @@ export const ProvidersWithSidebar: FC = () => (
   <>
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider
-          theme={rainbowKitTheme}
-          avatar={({ address, size }) => (
-            <AccountAvatar diameter={size} account={{ address_eth: address as `0x${string}` }} />
-          )}
-        >
-          <Sidebar navItem={<SidebarAccount />} />
+        <RainbowKitProvider theme={rainbowKitTheme}>
+          <AppLayout />
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

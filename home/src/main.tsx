@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom/client'
+import { createRoot } from 'react-dom/client'
 import { MoveApp } from '@oasisprotocol/rose-app-move'
 import { stakeRouteObject } from '@oasisprotocol/rose-app-stake'
 import { wrapRouteObject } from '@oasisprotocol/rose-app-wrap'
@@ -50,4 +50,4 @@ if (location.pathname + location.hash === '/#/stake') location.href = '/stake'
 if (location.pathname + location.hash === '/#/move') location.href = '/move'
 if (location.pathname + location.hash === '/#/discover') location.href = '/discover'
 
-ReactDOM.createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />)
+createRoot(document.getElementById('root')!).render(<RouterProvider router={router} />)

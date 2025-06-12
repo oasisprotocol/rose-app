@@ -69,7 +69,7 @@ body {
   line-height: 150%;
   color: var(--white);
   text-align: left;
-  background-color: #0d0d0f;
+  background-color: var(--background);
   min-height: 100dvh;
 }
 
