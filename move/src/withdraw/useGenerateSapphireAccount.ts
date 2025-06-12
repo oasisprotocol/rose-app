@@ -6,6 +6,7 @@ import { privateKeyToAddress } from 'viem/accounts'
 import { useSignMessage } from 'wagmi'
 import { getConsensusBalance } from '../utils/getBalances'
 import { siweMessageSapphireToConsensus } from './siweMessageSapphireToConsensus'
+import { trackEvent } from 'fathom-client'
 
 export interface ConsensusAccount {
   address: `oasis1${string}`
@@ -60,6 +61,7 @@ export function useGenerateSapphireAccount() {
 
       setGeneratedSapphireAccount(sapphireAccount)
       setGeneratedConsensusAccount(consensusAccount)
+      if (consensusAccount.isFresh) trackEvent('withdrawal account created')
       return {
         generatedSapphireAccount: sapphireAccount,
         generatedConsensusAccount: consensusAccount,

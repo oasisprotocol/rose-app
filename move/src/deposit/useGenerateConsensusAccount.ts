@@ -4,6 +4,7 @@ import { hexToBytes } from 'viem'
 import { useSignMessage } from 'wagmi'
 import { getConsensusBalance } from '../utils/getBalances'
 import { siweMessageConsensusToSapphire } from './siweMessageConsensusToSapphire'
+import { trackEvent } from 'fathom-client'
 
 export interface ConsensusAccount {
   address: `oasis1${string}`
@@ -33,6 +34,7 @@ export function useGenerateConsensusAccount() {
 
       const consensusAccount = { address, privateKey, signer, isFresh }
       setGeneratedConsensusAccount(consensusAccount)
+      if (consensusAccount.isFresh) trackEvent('deposit account created')
       return consensusAccount
       // Ignore errors
     },
