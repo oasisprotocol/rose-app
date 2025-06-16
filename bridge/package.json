@@ -1,0 +1,42 @@
+{
+  "name": "@oasisprotocol/rose-app-bridge",
+  "private": true,
+  "version": "1.0.0",
+  "license": "See License in ../LICENSE",
+  "type": "module",
+  "scripts": {
+    "preinstall": "npx only-allow pnpm",
+    "checkTs": "tsc --noEmit",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "packageManager": "pnpm@8.15.4",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@oasisprotocol/rose-app-ui": "workspace:*",
+    "@oasisprotocol/ui-library": "file:../ui-library",
+    "@routerprotocol/asset-transfer-sdk-ts": "0.5.0",
+    "@routerprotocol/chain-api": "1.2.4",
+    "@routerprotocol/router-chain-sdk-ts": "0.8.70-beta-0.2",
+    "ethers": "^6.7.1",
+    "lucide-react": "^0.513.0",
+    "react": "^18.2.0",
+    "react-responsive": "^9.0.2"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.56",
+    "typescript": "^5.2.2",
+    "vite": "^5.4.9",
+    "vite-plugin-dts": "^4.1.0",
+    "vitest": "^2.1.9"
+  },
+  "exports": {
+    ".": {
+      "import": "./src/main.tsx"
+    }
+  }
+}
