@@ -32,7 +32,7 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
         page: 0,
         limit: 100,
         sortKey: 'createdAt',
-        sortOrder: 'asc' as const,
+        sortOrder: 'asc',
         isEnabledForMainnet: true,
       }
 
@@ -55,15 +55,53 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
         address?: string
         chainId?: string
         isNative?: boolean
+        isReserved?: boolean
+        sortKey?: string
+        sortOrder?: 'asc' | 'desc'
       } = {}
     ) => {
-      const searchParams = new URLSearchParams()
+      const defaultParams = {
+        sortKey: 'createdAt',
+        sortOrder: 'asc',
+      }
 
-      Object.entries(params).forEach(([key, value]) => {
+      const searchParams = new URLSearchParams()
+      const mergedParams = { ...defaultParams, ...params }
+
+      Object.entries(mergedParams).forEach(([key, value]) => {
         searchParams.append(key, String(value))
       })
 
       const response = await fetch(`${state.BASE_URL}/token?${searchParams}`)
+      return await response.json()
+    },
+    [state.BASE_URL]
+  )
+
+  const getTokens = useCallback(
+    async (
+      params: {
+        page?: number
+        limit?: number
+        sortKey?: string
+        sortOrder?: 'asc' | 'desc'
+        chainId?: string
+      } = {}
+    ) => {
+      const defaultParams = {
+        page: 0,
+        limit: 1000,
+        sortKey: 'createdAt',
+        sortOrder: 'asc',
+      }
+
+      const mergedParams = { ...defaultParams, ...params }
+
+      const response = await fetch(`${state.BASE_URL}/token/getPaginatedTokens`, {
+        method: 'POST',
+        body: JSON.stringify(mergedParams),
+      })
+
       return await response.json()
     },
     [state.BASE_URL]
@@ -114,6 +152,7 @@ export const NitroSwapAPIContextProvider: FC<PropsWithChildren> = ({ children })
     state,
     getChains,
     getToken,
+    getTokens,
   }
 
   return <NitroSwapAPIContext.Provider value={providerState}>{children}</NitroSwapAPIContext.Provider>

@@ -22,6 +22,9 @@ pnpm-lock.yaml
 # Add OasisScan API distribution package
 !oasisscan/dist/
 
+# Add Router PathFinder API distribution package
+!router-pathfinder/dist/
+
 # Include prettier config
 !.prettierrc.cjs
 

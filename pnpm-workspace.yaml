@@ -10,3 +10,4 @@ packages:
   - 'discover'
   - 'wrap'
   - 'e2e'
+  - 'router-pathfinder'

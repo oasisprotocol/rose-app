@@ -1,12 +1,12 @@
 import { FC } from 'react'
 import { App } from './App'
-import { RouterTransferSDKContextProvider } from './providers/RouterTransferSDKProvider'
+import { RouterPathfinderContextProvider } from './providers/RouterPathfinderProvider'
 import { NitroSwapAPIContextProvider } from './providers/NitroSwapAPIProvider'
 
 export const BridgeApp: FC = () => (
   <NitroSwapAPIContextProvider>
-    <RouterTransferSDKContextProvider>
+    <RouterPathfinderContextProvider>
       <App />
-    </RouterTransferSDKContextProvider>
+    </RouterPathfinderContextProvider>
   </NitroSwapAPIContextProvider>
 )

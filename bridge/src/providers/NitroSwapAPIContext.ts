@@ -9,7 +9,7 @@ export interface NitroSwapAPIProviderState {
 }
 
 export interface NitroSwapAPIProviderContext {
-  readonly state: NitroSwapAPIProviderState
+  state: NitroSwapAPIProviderState
   getChains: (params?: {
     page?: number
     limit?: number
@@ -18,7 +18,21 @@ export interface NitroSwapAPIProviderContext {
     isEnabledForMainnet?: boolean
     chainId?: string
   }) => Promise<ChainsResponse>
-  getToken: (params?: { address?: string; chainId?: string; isNative?: boolean }) => Promise<TokenResponse>
+  getToken: (params?: {
+    address?: string
+    chainId?: string
+    isNative?: boolean
+    isReserved?: boolean
+    sortKey?: string
+    sortOrder?: 'asc' | 'desc'
+  }) => Promise<TokenResponse>
+  getTokens: (params?: {
+    page?: number
+    limit?: number
+    sortKey?: string
+    sortOrder?: 'asc' | 'desc'
+    chainId?: string
+  }) => Promise<TokenResponse>
 }
 
 export const NitroSwapAPIContext = createContext<NitroSwapAPIProviderContext>(
