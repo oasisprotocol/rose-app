@@ -1,0 +1,17 @@
+@reference '@oasisprotocol/ui-library/src/styles/global.css';
+
+.navigationMenuContent {
+  @apply gap-0;
+
+  > [data-slot='sheet-header'] {
+    @apply gap-0 p-0;
+  }
+
+  > button {
+    > svg {
+      @apply h-4 w-4 text-secondary-foreground;
+    }
+
+    @apply flex justify-center items-center hover:bg-accent hover:text-accent-foreground hover:cursor-pointer dark:hover:bg-accent/50 w-8 h-8 bg-secondary top-[13px] right-3;
+  }
+}
