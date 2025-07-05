@@ -1,0 +1,21 @@
+{
+  "name": "@oasisprotocol/router-pathfinder-api",
+  "private": true,
+  "version": "1.0.0",
+  "license": "See License in ../LICENSE",
+  "scripts": {
+    "start:github": "swagger-typescript-api -p https://raw.githubusercontent.com/router-protocol/router-chain-docs/refs/heads/main/static/api/PATHFINDER.yaml -o ./dist -n index.ts",
+    "start": "swagger-typescript-api -p ./api.yaml -o ./dist -n index.ts"
+  },
+  "dependencies": {
+    "swagger-typescript-api": "^13.0.22"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.ts"
+    }
+  },
+  "devDependencies": {
+    "vitest": "^2.1.9"
+  }
+}

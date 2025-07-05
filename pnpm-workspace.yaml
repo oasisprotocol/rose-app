@@ -1,5 +1,6 @@
 packages:
   - 'home'
+  - 'bridge'
   - 'stake'
   - 'nexus'
   - 'subcall'
@@ -9,3 +10,4 @@ packages:
   - 'discover'
   - 'wrap'
   - 'e2e'
+  - 'router-pathfinder'
