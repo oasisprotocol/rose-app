@@ -85,8 +85,8 @@ importers:
   home:
     dependencies:
       '@material-design-icons/svg':
-        specifier: ^0.14.13
-        version: 0.14.13
+        specifier: ^0.14.15
+        version: 0.14.15
       '@metamask/jazzicon':
         specifier: ^2.0.0
         version: 2.0.0
@@ -176,8 +176,8 @@ importers:
   move:
     dependencies:
       '@material-design-icons/svg':
-        specifier: ^0.14.13
-        version: 0.14.13
+        specifier: ^0.14.15
+        version: 0.14.15
       '@oasisprotocol/client':
         specifier: ^1.1.0
         version: 1.1.0
@@ -379,8 +379,8 @@ importers:
         specifier: ^5.0.18
         version: 5.1.0
       '@material-design-icons/svg':
-        specifier: ^0.14.13
-        version: 0.14.13
+        specifier: ^0.14.15
+        version: 0.14.15
       '@metamask/jazzicon':
         specifier: ^2.0.0
         version: 2.0.0
@@ -1103,8 +1103,8 @@ packages:
       '@lit-labs/ssr-dom-shim': 1.2.1
     dev: false
 
-  /@material-design-icons/svg@0.14.13:
-    resolution: {integrity: sha512-nCExGZOtoLoFeeqShEOM4XA9DkkLzLlQdk/ZxHxps0//dz6e1Lw3fvQbZ2X/+0Dz2O+udiEukfZ4Nd4KpHg8aA==}
+  /@material-design-icons/svg@0.14.15:
+    resolution: {integrity: sha512-6nbjwGwyJnphwQUscJAYqw1Tk6+W8KvsgOAeyVgzIFXVsHfgX5XyplTUcZ29wbcTUysMMyCUi1LYpmFKA/e61g==}
     dev: false
 
   /@metamask/eth-json-rpc-provider@1.0.1:
