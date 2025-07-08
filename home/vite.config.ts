@@ -22,7 +22,7 @@ export default defineConfig({
   },
   define: {
     APP_VERSION: JSON.stringify(version),
-    BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString()),
+    BUILD_COMMIT: JSON.stringify(execSync('git rev-parse HEAD').toString().trim()),
     BUILD_DATETIME: JSON.stringify(new Date().getTime()),
     GITHUB_REPOSITORY_URL: JSON.stringify('https://github.com/oasisprotocol/rose-app/'),
     OASIS_HOME_PAGE_URL: JSON.stringify('https://oasisprotocol.org/'),
