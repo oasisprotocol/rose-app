@@ -134,11 +134,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://docs.oasis.io/',
     },
     {
-      title: 'Transak',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Transak.jpg',
-      externalLink: 'https://global.transak.com/',
-    },
-    {
       title: 'CoinMarketCap',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/CoinMarketCap.jpg',
       externalLink: 'https://coinmarketcap.com/currencies/oasis-network/',
