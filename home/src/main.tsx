@@ -3,6 +3,7 @@ import { MoveApp } from '@oasisprotocol/rose-app-move'
 import { stakeRouteObject } from '@oasisprotocol/rose-app-stake'
 import { wrapRouteObject } from '@oasisprotocol/rose-app-wrap'
 import { DiscoverApp } from '@oasisprotocol/rose-app-discover'
+import { BridgeApp } from '@oasisprotocol/rose-app-bridge'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 
 import { App } from './App.tsx'
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
       {
         path: 'discover',
         element: <DiscoverApp />,
+      },
+      {
+        path: 'bridge',
+        element: <BridgeApp />,
       },
       {
         path: '*',
