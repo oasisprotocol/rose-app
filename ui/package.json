@@ -19,7 +19,7 @@
     "@fontsource-variable/roboto-mono": "^5.0.18",
     "@material-design-icons/svg": "^0.14.13",
     "@metamask/jazzicon": "^2.0.0",
-    "@oasisprotocol/client": "^1.1.0",
+    "@oasisprotocol/client": "^1.3.0",
     "@oasisprotocol/nexus-api": "workspace:*",
     "@oasisprotocol/rose-app-subcall": "workspace:*",
     "@oasisprotocol/ui-library": "file:../ui-library",
