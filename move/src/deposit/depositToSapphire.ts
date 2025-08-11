@@ -97,7 +97,7 @@ export async function depositToSapphireStep2(props: {
 }
 
 async function getEvmBech32Address(evmAddress: `0x${string}`) {
-  const evmBytes = oasis.misc.fromHex(evmAddress.replace('0x', ''))
+  const evmBytes = oasis.misc.fromHex(evmAddress)
   const address = await oasis.address.fromData(
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
