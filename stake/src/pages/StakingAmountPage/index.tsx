@@ -94,32 +94,31 @@ const StakingAmountPageCmp: FC = () => {
     const sapphireAmount = NumberUtils.consensusAmountToSapphireAmount(value)
     setStep(Steps.DelegateInProgress)
 
-    sendTransactionAsync(await populateDelegateTx(sapphireAmount, to, gasPriceSnapshot), {
-      onSuccess: async hash => {
-        await getTransactionReceipt(hash)
+    try {
+      const hash = await sendTransactionAsync(await populateDelegateTx(sapphireAmount, to, gasPriceSnapshot))
 
-        const [delegations] = await Promise.all([fetchDelegations(), fetchValidators()])
+      await getTransactionReceipt(hash)
 
-        // This should work in 99% of cases!
-        const [diff] = delegations.filter(
-          d =>
-            !prevDelegations.some(prevD => {
-              return FormattingUtils.serializeObj(prevD) === FormattingUtils.serializeObj(d)
-            })
-        )
+      const [delegations] = await Promise.all([fetchDelegations(), fetchValidators()])
 
-        if (!diff) {
-          setError('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
-          setStep(Steps.DelegateFailed)
-        }
+      // This should work in 99% of cases!
+      const [diff] = delegations.filter(
+        d =>
+          !prevDelegations.some(prevD => {
+            return FormattingUtils.serializeObj(prevD) === FormattingUtils.serializeObj(d)
+          })
+      )
 
-        setStep(Steps.DelegateSuccessful)
-      },
-      onError: e => {
-        setError(toErrorString(e as Error))
+      if (!diff) {
+        setError('Unable to retrieve stake! Navigate to dashboard, and continue from there.')
         setStep(Steps.DelegateFailed)
-      },
-    })
+      }
+
+      setStep(Steps.DelegateSuccessful)
+    } catch (e) {
+      setError(toErrorString(e as Error))
+      setStep(Steps.DelegateFailed)
+    }
   }
 
   const getAmountFromPercentage = (accountBalance => (percentage: number) => {
