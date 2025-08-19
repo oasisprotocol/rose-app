@@ -1,7 +1,6 @@
 import * as oasis from '@oasisprotocol/client'
 import * as oasisRT from '@oasisprotocol/client-rt'
 import { getNodeInternal } from './client.ts'
-import { getOasisScanClient } from './getOasisScanClient.ts'
 import { sapphireConfig } from './oasisConfig.ts'
 import { retry } from './retry.ts'
 
@@ -17,20 +16,13 @@ function checkNonce(nonce: oasis.types.longnum, lastKnownNonce: oasis.types.long
 }
 
 async function _getConsensusNonce(oasisAddress: `oasis1${string}`) {
-  const [oasisScanNonce, grpcNonce] = await Promise.all([
-    getOasisScanClient()
-      .account.accountInfoHandler(oasisAddress)
-      .then(accountInfoResponse => (accountInfoResponse.ok ? accountInfoResponse.json() : 0))
-      .then(accountInfoJson => accountInfoJson.data.nonce),
-    getNodeInternal()
-      .consensusGetSignerNonce({
-        account_address: oasis.staking.addressFromBech32(oasisAddress),
-        height: 0,
-      })
-      .then(nonce => nonce ?? 0),
-  ])
-
-  return Math.max(oasisScanNonce, Number(grpcNonce))
+  const nic = getNodeInternal()
+  const nonce =
+    (await nic.consensusGetSignerNonce({
+      account_address: oasis.staking.addressFromBech32(oasisAddress),
+      height: 0,
+    })) ?? 0
+  return nonce
 }
 
 const consensusLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longnum } = {}
