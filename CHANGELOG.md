@@ -12,6 +12,13 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.2 (2025-08-19)
+
+### Bug Fixes and Improvements
+
+- move: Fix by removing oasisscan as an alternative source for consensus nonce
+  ([#273](https://github.com/oasisprotocol/rose-app/issues/273))
+
 ## 1.1.1 (2025-05-22)
 
 ### Bug Fixes and Improvements
