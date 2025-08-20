@@ -9,9 +9,9 @@
     "checkTs": "tsc --noEmit",
     "build": "tsc && vite build"
   },
-  "packageManager": "pnpm@8.15.4",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=10.0.0"
   },
   "dependencies": {
     "@floating-ui/react": "^0.26.24",
