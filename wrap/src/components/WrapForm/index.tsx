@@ -100,12 +100,12 @@ export const WrapForm: FC = () => {
     ) {
       setIsWrapFeeModalOpen(true)
     } else {
-      submitTransaction(amount)
+      void submitTransaction(amount)
     }
   }
 
   const submitWrapFeeModal = (amount: BigNumber) => {
-    submitTransaction(amount)
+    void submitTransaction(amount)
     setIsWrapFeeModalOpen(false)
   }
 
