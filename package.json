@@ -19,9 +19,9 @@
     "test-e2e": "pnpm --filter @oasisprotocol/rose-app-e2e test"
   },
   "license": "Apache-2.0",
-  "packageManager": "pnpm@8.15.4",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=10.0.0"
   },
   "lint-staged": {
     "*.{js,cjs,mjs,ts,tsx}": "eslint --ext .js,.ts,.tsx  --max-warnings 0 --ignore-path .eslintignore",
