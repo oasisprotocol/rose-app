@@ -1,4 +1,3 @@
-export { Alert as WrapAlert } from './Alert'
 export * from './icons'
 export { Input as WrapInput } from './Input'
 export { Layout as WrapLayout } from './Layout'
