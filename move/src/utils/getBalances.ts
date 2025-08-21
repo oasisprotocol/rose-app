@@ -70,7 +70,7 @@ export async function getSapphireBalance(ethAddress: `0x${string}`) {
   const underlyingAddress = await oasis.address.fromData(
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_IDENTIFIER,
     oasisRT.address.V0_SECP256K1ETH_CONTEXT_VERSION,
-    oasis.misc.fromHex(ethAddress.replace('0x', ''))
+    oasis.misc.fromHex(ethAddress)
   )
 
   const balanceResult = await consensusWrapper

@@ -17,7 +17,7 @@ export interface ConsensusAccount {
 export interface SapphireAccount {
   address: `0x${string}`
   privateKey: `0x${string}`
-  signer: oasis.signature.NaclSigner
+  signer: oasisRT.signatureSecp256k1.NobleSigner
 }
 
 export function useGenerateSapphireAccount() {
@@ -38,11 +38,11 @@ export function useGenerateSapphireAccount() {
         // Only take half
         const seed32bytes = new Uint8Array(hashedSignature.slice(0, hashedSignature.byteLength / 2))
         if (seed32bytes.length !== 32) throw new Error('Unexpected derived private key length')
-        const signer = oasisRT.signatureSecp256k1.EllipticSigner.fromPrivate(
+        const signer = oasisRT.signatureSecp256k1.NobleSigner.fromPrivate(
           seed32bytes,
           'this key is not important'
         )
-        const privateKey = `0x${signer.key.getPrivate('hex')}` as `0x${string}`
+        const privateKey = `0x${oasis.misc.toHex(signer.key)}` as `0x${string}`
         const address = privateToEthAddress(privateKey)
         return { address, privateKey, signer }
       })()
