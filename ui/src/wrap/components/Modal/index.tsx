@@ -1,6 +1,6 @@
 import { FC, PropsWithChildren } from 'react'
 import classes from './index.module.css'
-import { TimesIcon } from '../icons/TimesIcon'
+import { X as TimesIcon } from 'lucide-react'
 import { WrapModalProps } from '../../types'
 
 export const Modal: FC<PropsWithChildren<WrapModalProps>> = ({
@@ -23,7 +23,7 @@ export const Modal: FC<PropsWithChildren<WrapModalProps>> = ({
     <div className={classes.modalOverlay} onClick={handleOverlayClick}>
       <div className={classes.modal}>
         <button className={classes.modalCloseButton} onClick={closeModal}>
-          <TimesIcon />
+          <TimesIcon color={'purple'} />
         </button>
         <div className={classes.modalContent}>{children}</div>
       </div>
