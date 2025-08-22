@@ -125,37 +125,31 @@ const UnstakePageCmp: FC = () => {
     setError('')
     setStep(Steps.UndelegateInProgress)
 
-    sendTransactionAsync(await populateUndelegateTx(amountShares, to, gasPrice!), {
-      onSuccess: async hash => {
-        await getTransactionReceipt(hash)
+    try {
+      const hash = await sendTransactionAsync(await populateUndelegateTx(amountShares, to, gasPrice!))
+      await getTransactionReceipt(hash)
 
-        const [undelegations] = await Promise.all([
-          fetchUndelegations(),
-          fetchDelegations(),
-          fetchValidators(),
-        ])
+      const [undelegations] = await Promise.all([fetchUndelegations(), fetchDelegations(), fetchValidators()])
 
-        // This should work in 99% of cases!
-        const [diff] = undelegations.filter(
-          und =>
-            !prevUndelegations.some(prevUnd => {
-              return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
-            })
-        )
+      // This should work in 99% of cases!
+      const [diff] = undelegations.filter(
+        und =>
+          !prevUndelegations.some(prevUnd => {
+            return FormattingUtils.serializeObj(prevUnd) === FormattingUtils.serializeObj(und)
+          })
+      )
 
-        if (!diff) {
-          throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
-        }
+      if (!diff) {
+        throw new Error('Unable to retrieve unstake! Navigate to dashboard, and continue from there.')
+      }
 
-        setUndelegationEpoch(diff.epoch)
+      setUndelegationEpoch(diff.epoch)
 
-        setStep(Steps.UndelegateSuccessful)
-      },
-      onError: e => {
-        setError(toErrorString(e as Error))
-        setStep(Steps.UndelegateFailed)
-      },
-    })
+      setStep(Steps.UndelegateSuccessful)
+    } catch (e) {
+      setError(toErrorString(e as Error))
+      setStep(Steps.UndelegateFailed)
+    }
   }
 
   const getAmountFromPercentage = (delegationShares => (percentage: number) => {
