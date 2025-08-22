@@ -1,5 +1,6 @@
 import { FC } from 'react'
-import { WrapModal, WrapModalProps, LogoIconRound, WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
+import { WrapModal, WrapModalProps, WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
+import { Logo } from '@oasisprotocol/rose-app-ui'
 import { Button } from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useWrapForm } from '../../hooks/useWrapForm'
@@ -25,7 +26,7 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
     <WrapModal isOpen={isOpen} closeModal={closeModal} disableBackdropClick>
       <div className={classes.wrapFeeWarningModalContent}>
         <div className={classes.wrapFeeWarningModalLogo}>
-          <LogoIconRound />
+          <Logo imageOnly />
         </div>
 
         <h4>You have chosen to wrap your entire balance</h4>
