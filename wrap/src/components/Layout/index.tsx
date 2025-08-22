@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren } from 'react'
 import { NavLink, Outlet, useMatch } from 'react-router-dom'
-import { WrapLogoIcon } from '../icons/WrapLogoIcon'
+import { WrapLogoIcon } from '../Logo/WrapLogoIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useMediaQuery } from 'react-responsive'
 import classes from './index.module.css'
-import globalClasses from '../../index.module.css'
-import { Header } from '../../../core'
+import globalClasses from '../../../../ui/src/wrap/index.module.css'
+import { Header } from '@oasisprotocol/rose-app-ui/core'
 
 const dateFormatLong = new Intl.DateTimeFormat('en', {
   year: 'numeric',
