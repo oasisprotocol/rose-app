@@ -1,7 +1,16 @@
 import { FC } from 'react'
-import { WrapModal, WrapModalProps, WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
+import { WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
 import { Logo } from '@oasisprotocol/rose-app-ui'
-import { Button } from '@oasisprotocol/ui-library/src'
+import {
+  Button,
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WRAP_FEE_DEDUCTION_MULTIPLIER } from '../../constants/config'
@@ -9,7 +18,9 @@ import { NumberUtils } from '../../utils/number.utils'
 import BigNumber from 'bignumber.js'
 import { formatEther } from 'viem'
 
-interface WrapFeeWarningModalProps extends Pick<WrapModalProps, 'isOpen' | 'closeModal'> {
+interface WrapFeeWarningModalProps {
+  isOpen: boolean
+  closeModal: () => void
   next: (amount: BigNumber) => void
 }
 
@@ -23,22 +34,28 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
   const estimatedAmountWithDeductedFees = roseAmount!.minus(estimatedFeeDeduction)
 
   return (
-    <WrapModal isOpen={isOpen} closeModal={closeModal} disableBackdropClick>
-      <div className={classes.wrapFeeWarningModalContent}>
-        <div className={classes.wrapFeeWarningModalLogo}>
-          <Logo imageOnly />
-        </div>
+    <Dialog open={isOpen} onOpenChange={closeModal} modal>
+      <DialogContent className={'gap-[3.125rem]'}>
+        <DialogHeader className={'gap-[1rem]'}>
+          <div className="self-center mb-[2rem]">
+            <Logo imageOnly />
+          </div>
 
-        <h4>You have chosen to wrap your entire balance</h4>
+          <DialogTitle>You have chosen to wrap your entire balance</DialogTitle>
 
-        <p>
-          It is recommended to keep a small amount in your wallet at all times to cover future transactions.
-        </p>
-        <p>
-          Choose if you want to wrap the reduced amount and keep &#123;sum of {WRAP_FEE_DEDUCTION_MULTIPLIER}{' '}
-          x gas fee - e.g. ‘<b>{formatEther(NumberUtils.BNtoBigInt(estimatedFeeDeduction))} ROSE</b>’&#125; in
-          your account, or continue with the full amount.
-        </p>
+          <DialogDescription>
+            <p className={'mb-[1rem]'}>
+              It is recommended to keep a small amount in your wallet at all times to cover future
+              transactions.
+            </p>
+            <p>
+              Choose if you want to wrap the reduced amount and keep &#123;sum of{' '}
+              {WRAP_FEE_DEDUCTION_MULTIPLIER} x gas fee - e.g. ‘
+              <b>{formatEther(NumberUtils.BNtoBigInt(estimatedFeeDeduction))} ROSE</b>’&#125; in your account,
+              or continue with the full amount.
+            </p>
+          </DialogDescription>
+        </DialogHeader>
 
         <WrapInput<string>
           className={classes.wrapFeeWarningModalInput}
@@ -51,19 +68,20 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
           value={formatEther(NumberUtils.BNtoBigInt(estimatedAmountWithDeductedFees))}
         />
 
-        <div className={classes.wrapFeeWarningModalActions}>
-          <Button
-            className={classes.wrapFeeWarningModalButton}
-            onClick={() => next(estimatedAmountWithDeductedFees)}
-          >
-            <span className={classes.wrapFeeWarningModalButtonText}>Wrap reduced amount</span>
-          </Button>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button size="lg" onClick={() => next(estimatedAmountWithDeductedFees)}>
+              Wrap reduced amount
+            </Button>
+          </DialogClose>
 
-          <button className={classes.wrapFeeWarningModalFullAmount} onClick={() => next(amount!)}>
-            Continue with full amount
-          </button>
-        </div>
-      </div>
-    </WrapModal>
+          <DialogClose asChild>
+            <Button variant="destructive" size="lg" onClick={() => next(amount!)}>
+              Continue with full amount
+            </Button>
+          </DialogClose>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   )
 }
