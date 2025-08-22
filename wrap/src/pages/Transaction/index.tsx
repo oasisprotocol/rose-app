@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react'
-import { OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui'
+import { ExternalLink } from 'lucide-react'
+import { Spinner } from '@oasisprotocol/rose-app-ui'
 import { Button } from '@oasisprotocol/ui-library/src'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import classes from './index.module.css'
@@ -92,7 +93,7 @@ const TransactionCmp: FC = () => {
             <a className={classes.noUnderlineLink} href={txUrl} target="_blank" rel="noopener noreferrer">
               <Button className={[classes.openInExplorerBtn, 'w-full'].join(' ')}>
                 View on explorer
-                <OpenInNewIcon />
+                <ExternalLink />
               </Button>
             </a>
           )}
