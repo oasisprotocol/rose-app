@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from 'react'
-import { OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui/wrap'
+import { OpenInNewIcon, Spinner } from '@oasisprotocol/rose-app-ui'
 import { Button } from '@oasisprotocol/ui-library/src'
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import classes from './index.module.css'
