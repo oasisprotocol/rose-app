@@ -1,6 +1,6 @@
 import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
 import { Button, Alert } from '@oasisprotocol/ui-library/src'
-import { WrapInput, WrapToggleButton } from '@oasisprotocol/rose-app-ui/wrap'
+import { WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
 import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useWrapForm } from '../../hooks/useWrapForm'
@@ -10,6 +10,7 @@ import { NumberUtils } from '../../utils/number.utils'
 import { WrapFeeWarningModal } from '../WrapFeeWarningModal'
 import { formatEther, parseEther } from 'viem'
 import BigNumber from 'bignumber.js'
+import { ToggleButton } from '../ToggleButton'
 
 const AMOUNT_PATTERN = '^[0-9]*[.,]?[0-9]*$'
 
@@ -136,11 +137,7 @@ export const WrapForm: FC = () => {
             value={value}
             valueChange={handleValueChange}
           />
-          <WrapToggleButton
-            className={classes.toggleBtn}
-            onClick={handleToggleFormType}
-            disabled={isLoading}
-          />
+          <ToggleButton className={classes.toggleBtn} onClick={handleToggleFormType} disabled={isLoading} />
         </div>
 
         <h4 className={classes.gasEstimateLabel}>Estimated fee: {estimatedFeeTruncated}</h4>
