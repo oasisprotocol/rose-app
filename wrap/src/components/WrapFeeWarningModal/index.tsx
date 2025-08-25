@@ -1,8 +1,8 @@
 import { FC } from 'react'
-import { WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
 import { Logo } from '@oasisprotocol/rose-app-ui'
 import {
   Button,
+  cn,
   Dialog,
   DialogClose,
   DialogContent,
@@ -10,6 +10,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
+  Input,
+  Label,
 } from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useWrapForm } from '../../hooks/useWrapForm'
@@ -57,16 +59,18 @@ export const WrapFeeWarningModal: FC<WrapFeeWarningModalProps> = ({ isOpen, clos
           </DialogDescription>
         </DialogHeader>
 
-        <WrapInput<string>
-          className={classes.wrapFeeWarningModalInput}
-          variant="dark"
-          disabled
-          type="text"
-          label="wROSE"
-          placeholder="0"
-          inputMode="decimal"
-          value={formatEther(NumberUtils.BNtoBigInt(estimatedAmountWithDeductedFees))}
-        />
+        <div className={cn('flex gap-2')}>
+          <Label htmlFor="value-field">wROSE</Label>
+          <Input
+            id="value-field"
+            className={classes.wrapFeeWarningModalInput}
+            disabled
+            type="text"
+            placeholder="0"
+            inputMode="decimal"
+            value={formatEther(NumberUtils.BNtoBigInt(estimatedAmountWithDeductedFees))}
+          />
+        </div>
 
         <DialogFooter>
           <DialogClose asChild>
