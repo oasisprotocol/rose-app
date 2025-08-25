@@ -1,6 +1,6 @@
-import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
+import { ChangeEvent, FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
 import { Button, Alert } from '@oasisprotocol/ui-library/src'
-import { WrapInput } from '@oasisprotocol/rose-app-ui/wrap'
+import { Input, Label } from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useWrapForm } from '../../hooks/useWrapForm'
@@ -64,8 +64,8 @@ export const WrapForm: FC = () => {
     setValue(formattedAmount)
   }, [setValue, amount])
 
-  const handleValueChange = (amount: string) => {
-    setValue(amount)
+  const handleValueChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setValue(event.target.value)
   }
 
   const handleToggleFormType = (e: MouseEvent) => {
@@ -117,25 +117,27 @@ export const WrapForm: FC = () => {
     <div>
       <form className={classes.wrapForm} onSubmit={handleFormSubmit}>
         <div className={classes.wrapFormInputs}>
-          <WrapInput<string>
+          <Label htmlFor="field-1">{firstInputLabel}</Label>
+          <Input
+            id="field-1"
             disabled={isLoading}
             type="text"
-            label={firstInputLabel}
             pattern={AMOUNT_PATTERN}
             placeholder="0"
             inputMode="decimal"
             value={value}
-            valueChange={handleValueChange}
+            onChange={handleValueChange}
           />
-          <WrapInput<string>
+          <Label htmlFor="field-2">{secondInputLabel}</Label>
+          <Input
+            id="field-2"
             disabled={isLoading}
             type="text"
-            label={secondInputLabel}
             pattern={AMOUNT_PATTERN}
             placeholder="0"
             inputMode="decimal"
             value={value}
-            valueChange={handleValueChange}
+            onChange={handleValueChange}
           />
           <ToggleButton className={classes.toggleBtn} onClick={handleToggleFormType} disabled={isLoading} />
         </div>
