@@ -1,5 +1,5 @@
 import { ChangeEvent, FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
-import { Button, Alert } from '@oasisprotocol/ui-library/src'
+import { Button, Alert, cn } from '@oasisprotocol/ui-library/src'
 import { Input, Label } from '@oasisprotocol/ui-library/src'
 import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
@@ -117,28 +117,32 @@ export const WrapForm: FC = () => {
     <div>
       <form className={classes.wrapForm} onSubmit={handleFormSubmit}>
         <div className={classes.wrapFormInputs}>
-          <Label htmlFor="field-1">{firstInputLabel}</Label>
-          <Input
-            id="field-1"
-            disabled={isLoading}
-            type="text"
-            pattern={AMOUNT_PATTERN}
-            placeholder="0"
-            inputMode="decimal"
-            value={value}
-            onChange={handleValueChange}
-          />
-          <Label htmlFor="field-2">{secondInputLabel}</Label>
-          <Input
-            id="field-2"
-            disabled={isLoading}
-            type="text"
-            pattern={AMOUNT_PATTERN}
-            placeholder="0"
-            inputMode="decimal"
-            value={value}
-            onChange={handleValueChange}
-          />
+          <div className={cn('flex gap-2')}>
+            <Label htmlFor="field-1">{firstInputLabel}</Label>
+            <Input
+              id="field-1"
+              disabled={isLoading}
+              type="text"
+              pattern={AMOUNT_PATTERN}
+              placeholder="0"
+              inputMode="decimal"
+              value={value}
+              onChange={handleValueChange}
+            />
+          </div>
+          <div className={cn('flex gap-2')}>
+            <Label htmlFor="field-2">{secondInputLabel}</Label>
+            <Input
+              id="field-2"
+              disabled={isLoading}
+              type="text"
+              pattern={AMOUNT_PATTERN}
+              placeholder="0"
+              inputMode="decimal"
+              value={value}
+              onChange={handleValueChange}
+            />
+          </div>
           <ToggleButton className={classes.toggleBtn} onClick={handleToggleFormType} disabled={isLoading} />
         </div>
 
