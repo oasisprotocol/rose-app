@@ -3,10 +3,10 @@ import { CardConfig } from '@oasisprotocol/rose-app-ui/discover'
 export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; tooling: CardConfig[] } = {
   featured: [
     {
-      title: 'NEBY',
-      type: 'DEX',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Neby.jpg',
-      externalLink: 'https://www.neby.exchange/',
+      title: 'ROFL',
+      type: 'Verifiable off-chain apps in TEE',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/Rofl.jpg',
+      externalLink: 'https://rofl.app',
     },
     {
       title: 'Accumulated Finance',
@@ -81,6 +81,12 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       type: 'Launchpad & Token Minter',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
       externalLink: 'https://daosis.io/',
+    },
+    {
+      title: 'NEBY',
+      type: 'DEX',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/Neby.jpg',
+      externalLink: 'https://www.neby.exchange/',
     },
   ],
   tooling: [
