@@ -16,7 +16,6 @@ export type Undelegations = Undelegation[]
 export type ParaTimeChainId = string | bigint | number
 
 export interface ParatimeConfig {
-  subcallAddress: string
   paratimeRuntimeId: string
   grpcUrl: string
 }
