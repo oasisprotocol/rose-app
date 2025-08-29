@@ -1,11 +1,11 @@
 import { FC, PropsWithChildren } from 'react'
 import { NavLink, Outlet, useMatch } from 'react-router-dom'
-import { WrapLogoIcon } from '../icons/WrapLogoIcon'
+import { WrapLogoIcon } from '../Logo/WrapLogoIcon'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { useMediaQuery } from 'react-responsive'
 import classes from './index.module.css'
-import globalClasses from '../../index.module.css'
-import { Header } from '../../../core'
+import { Header } from '@oasisprotocol/rose-app-ui/core'
+import { cn } from '@oasisprotocol/ui-library/src'
 
 const dateFormatLong = new Intl.DateTimeFormat('en', {
   year: 'numeric',
@@ -21,7 +21,7 @@ export const Layout: FC<PropsWithChildren> = () => {
   const isMobileScreen = useMediaQuery({ query: '(max-width: 1023px)' })
 
   return (
-    <div className={`${globalClasses.global} ${classes.layout}`}>
+    <div className={cn(classes.layout)}>
       <Header
         navLink={
           !isHomePage && (
