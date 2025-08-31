@@ -79,7 +79,14 @@ export const WrapForm: FC = () => {
 
       navigate(`/wrap/tx/${txHash}?amount=${value}&action=${formType}`)
     } catch (ex) {
-      setError((ex as Error)?.message || JSON.stringify(ex))
+      if (
+        typeof ex === 'object' &&
+        (ex as { details: string }).details === 'MetaMask Tx Signature: User denied transaction signature.'
+      ) {
+        setError('User rejected to sign this.')
+      } else {
+        setError((ex as Error)?.message || JSON.stringify(ex))
+      }
     }
   }
 
