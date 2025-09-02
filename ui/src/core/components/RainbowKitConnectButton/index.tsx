@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ChevronDown, Wallet } from 'lucide-react'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { cn, Button } from '@oasisprotocol/ui-library/src'
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -25,7 +25,26 @@ const TruncatedAddress: FC<{ address: string; className?: string }> = ({ address
 
 interface Props {
   onMobileClose?: () => void
+  className?: string
 }
+
+export const ConnectWalletButton: FC<Props> = ({ onMobileClose, className }) => (
+  <ConnectButton.Custom>
+    {({ openConnectModal }) => (
+      <Button
+        onClick={() => {
+          openConnectModal()
+          onMobileClose?.()
+        }}
+        variant="default"
+        className={cn('max-md:w-full', className)}
+      >
+        <Wallet className="w-4 h-4 mr-2" />
+        Connect Wallet
+      </Button>
+    )}
+  </ConnectButton.Custom>
+)
 
 export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
   const isMobile = useIsMobile()
@@ -33,7 +52,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
 
   return (
     <ConnectButton.Custom>
-      {({ account, chain, openAccountModal, openChainModal, openConnectModal, mounted }) => {
+      {({ account, chain, openAccountModal, openChainModal, mounted }) => {
         const ready = mounted
         const connected = ready && account && chain
 
@@ -50,19 +69,7 @@ export const RainbowKitConnectButton: FC<Props> = ({ onMobileClose }) => {
           >
             {(() => {
               if (!connected) {
-                return (
-                  <Button
-                    onClick={() => {
-                      openConnectModal()
-                      onMobileClose?.()
-                    }}
-                    variant="secondary"
-                    className="max-md:w-full"
-                  >
-                    <Wallet className="w-4 h-4 mr-2" />
-                    Connect Wallet
-                  </Button>
-                )
+                return <ConnectWalletButton onMobileClose={onMobileClose} />
               }
 
               if (chain.unsupported) {
