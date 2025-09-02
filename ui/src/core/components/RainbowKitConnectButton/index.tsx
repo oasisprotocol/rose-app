@@ -39,7 +39,7 @@ export const ConnectWalletButton: FC<Props> = ({ onMobileClose, className }) => 
         variant="default"
         className={cn('max-md:w-full', className)}
       >
-        <Wallet className="w-4 h-4 mr-2" />
+        <Wallet className="w-4 h-4" />
         Connect Wallet
       </Button>
     )}
