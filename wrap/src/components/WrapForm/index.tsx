@@ -1,7 +1,6 @@
 import { ChangeEvent, FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
-import { Button, Alert, cn } from '@oasisprotocol/ui-library/src'
-import { Input, Label } from '@oasisprotocol/ui-library/src'
-import classes from './index.module.css'
+import { Button, Alert, AlertTitle, cn, Separator, Input, Label } from '@oasisprotocol/ui-library/src'
+import { Typography } from '@oasisprotocol/ui-library/src/components/typography'
 import { useNavigate } from 'react-router-dom'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WrapFormType } from '../../utils/types'
@@ -14,34 +13,45 @@ import { ToggleButton } from '../ToggleButton'
 
 const AMOUNT_PATTERN = '^[0-9]*[.,]?[0-9]*$'
 
-interface WrapFormLabels {
+interface WrapFormData {
   firstInputLabel: string
   secondInputLabel: string
   submitBtnLabel: string
-}
-
-const labelMapByFormType: Record<WrapFormType, WrapFormLabels> = {
-  [WrapFormType.WRAP]: {
-    firstInputLabel: 'ROSE',
-    secondInputLabel: 'wROSE',
-    submitBtnLabel: 'Wrap tokens',
-  },
-  [WrapFormType.UNWRAP]: {
-    firstInputLabel: 'wROSE',
-    secondInputLabel: 'ROSE',
-    submitBtnLabel: 'Unwrap tokens',
-  },
+  firstBalance: string
+  secondBalance: string
 }
 
 export const WrapForm: FC = () => {
   const navigate = useNavigate()
   const {
-    state: { formType, amount, isLoading, balance, estimatedFee },
+    state: { formType, amount, isLoading, balance, wRoseBalance, estimatedFee },
     toggleFormType,
     submit,
     debounceLeadingSetFeeAmount,
   } = useWrapForm()
-  const { firstInputLabel, secondInputLabel, submitBtnLabel } = labelMapByFormType[formType]
+
+  const roseBalanceString = `${balance ? formatEther(NumberUtils.BNtoBigInt(balance)) : '0'} ROSE`
+  const wRoseBalanceString = `${wRoseBalance ? formatEther(NumberUtils.BNtoBigInt(wRoseBalance)) : '0'} wROSE`
+
+  const labelMapByFormType: Record<WrapFormType, WrapFormData> = {
+    [WrapFormType.WRAP]: {
+      firstInputLabel: 'ROSE',
+      secondInputLabel: 'wROSE',
+      submitBtnLabel: 'Wrap tokens',
+      firstBalance: roseBalanceString,
+      secondBalance: wRoseBalanceString,
+    },
+    [WrapFormType.UNWRAP]: {
+      firstInputLabel: 'wROSE',
+      secondInputLabel: 'ROSE',
+      submitBtnLabel: 'Unwrap tokens',
+      firstBalance: wRoseBalanceString,
+      secondBalance: roseBalanceString,
+    },
+  }
+
+  const { firstInputLabel, secondInputLabel, submitBtnLabel, firstBalance, secondBalance } =
+    labelMapByFormType[formType]
   const [value, setValue] = useState('')
   const [error, setError] = useState('')
   const [isWrapFeeModalOpen, setIsWrapFeeModalOpen] = useState(false)
@@ -115,43 +125,73 @@ export const WrapForm: FC = () => {
 
   return (
     <div>
-      <form className={classes.wrapForm} onSubmit={handleFormSubmit}>
-        <div className={classes.wrapFormInputs}>
-          <div className={cn('flex gap-2')}>
-            <Label htmlFor="field-1">{firstInputLabel}</Label>
-            <Input
-              id="field-1"
-              disabled={isLoading}
-              type="text"
-              pattern={AMOUNT_PATTERN}
-              placeholder="0"
-              inputMode="decimal"
-              value={value}
-              onChange={handleValueChange}
-            />
+      <form className={'flex flex-col gap-7'} onSubmit={handleFormSubmit}>
+        <div className={'flex flex-col gap-5'}>
+          <div className={'flex flex-col gap-2'}>
+            <Label htmlFor="field-1">From</Label>
+            <div className={'flex flex-row gap-1 items-center'}>
+              <Input
+                id="field-1"
+                disabled={isLoading}
+                type="text"
+                pattern={AMOUNT_PATTERN}
+                placeholder="0"
+                inputMode="decimal"
+                value={value}
+                onChange={handleValueChange}
+              />
+              <span>{firstInputLabel}</span>
+            </div>
+            <Typography variant={'small'} className={'text-[var(--muted-foreground,#A1A1AA)]'}>
+              Balance: {firstBalance}
+            </Typography>
           </div>
-          <div className={cn('flex gap-2')}>
-            <Label htmlFor="field-2">{secondInputLabel}</Label>
-            <Input
-              id="field-2"
-              disabled={isLoading}
-              type="text"
-              pattern={AMOUNT_PATTERN}
-              placeholder="0"
-              inputMode="decimal"
-              value={value}
-              onChange={handleValueChange}
-            />
+
+          <div className={'flex flex-row items-center gap-4'}>
+            <div className={'flex-1'}>
+              <Separator />
+            </div>
+            <ToggleButton onClick={handleToggleFormType} disabled={isLoading} />
+            <div className={'flex-1'}>
+              <Separator />
+            </div>
           </div>
-          <ToggleButton className={classes.toggleBtn} onClick={handleToggleFormType} disabled={isLoading} />
+          <div className={cn('flex flex-col gap-2')}>
+            <Label htmlFor="field-2">To</Label>
+            <div className={'flex flex-row gap-1 items-center'}>
+              <Input
+                id="field-2"
+                disabled={isLoading}
+                type="text"
+                pattern={AMOUNT_PATTERN}
+                placeholder="0"
+                inputMode="decimal"
+                value={value}
+                onChange={handleValueChange}
+              />
+              <span>{secondInputLabel}</span>
+            </div>
+            <Typography variant={'small'} className={'text-[var(--muted-foreground,#A1A1AA)]'}>
+              Balance: {secondBalance}
+            </Typography>
+          </div>
         </div>
 
-        <h4 className={classes.gasEstimateLabel}>Estimated fee: {estimatedFeeTruncated}</h4>
+        <div className={'flex flex-row justify-between'}>
+          <span>Estimated gas fee:</span>
+          <span>{estimatedFeeTruncated}</span>
+        </div>
 
-        <Button variant="default" disabled={isLoading} type="submit" className="w-full">
-          {submitBtnLabel}
-        </Button>
-        {error && <Alert variant="destructive">{error}</Alert>}
+        <div className={'flex flex-col gap-3'}>
+          <Button variant="default" disabled={isLoading} type="submit" className="w-full">
+            {submitBtnLabel}
+          </Button>
+          {error && (
+            <Alert variant="destructive" className={'border-none p-0'}>
+              <AlertTitle>{error}</AlertTitle>
+            </Alert>
+          )}
+        </div>
       </form>
       <WrapFeeWarningModal
         isOpen={isWrapFeeModalOpen}

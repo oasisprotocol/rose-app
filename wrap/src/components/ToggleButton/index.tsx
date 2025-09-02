@@ -1,15 +1,17 @@
-import classes from './index.module.css'
 import { FC, MouseEventHandler } from 'react'
-import { RefreshCw } from 'lucide-react'
+import { ArrowDownUp } from 'lucide-react'
 
 interface Props {
-  className?: string
   disabled?: boolean
   onClick?: MouseEventHandler<HTMLButtonElement>
 }
 
-export const ToggleButton: FC<Props> = ({ className, disabled, onClick }) => (
-  <button className={[className, classes.toggleButton].join(' ')} onClick={onClick} disabled={disabled}>
-    <RefreshCw />
+export const ToggleButton: FC<Props> = ({ disabled, onClick }) => (
+  <button
+    className="w-[40px] h-[40px] rounded-md flex items-center justify-center select-none bg-[var(--secondary)] "
+    onClick={onClick}
+    disabled={disabled}
+  >
+    <ArrowDownUp size={'16'} strokeWidth={2.5} />
   </button>
 )
