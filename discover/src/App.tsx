@@ -11,8 +11,8 @@ export const App: FC = () => {
       <div className={classes.app}>
         <h1 className={classes.discoverTitle}>Discover</h1>
         <div className={classes.featured}>
-          {featured.map(cardConfig => (
-            <Card isFeatured key={cardConfig.title} {...cardConfig} />
+          {featured.map((cardConfig, index) => (
+            <Card isFeatured isHero={index === 0} key={cardConfig.title} {...cardConfig} />
           ))}
         </div>
         <h2 className={classes.dAppsTitle}>dApps</h2>

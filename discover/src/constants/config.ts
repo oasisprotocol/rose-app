@@ -3,20 +3,25 @@ import { CardConfig } from '@oasisprotocol/rose-app-ui/discover'
 export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; tooling: CardConfig[] } = {
   featured: [
     {
-      title: 'ROFL',
-      type: 'Verifiable off-chain apps in TEE',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Rofl.jpg',
+      title: 'ROFL App',
+      type: 'TOOLING',
+      description:
+        'Build trustless apps. Start quickly with templates. Manage everything from one interface.',
+      imgSrc: 'https://assets.oasis.io/rose-app-discover/RoflApp.jpg',
       externalLink: 'https://rofl.app',
     },
     {
       title: 'Accumulated Finance',
-      type: 'Liquid staking',
+      type: 'LIQUID STAKING',
+      description:
+        'Omnichain liquid staking protocol. Lending of liquid staked tokens (LSTs). Leveraged staking.',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/AccumulatedFinance.png',
       externalLink: 'https://accumulated.finance/',
     },
     {
       title: 'Bit Protocol',
-      type: 'CDP Stablecoin',
+      type: 'CDP STABLECOIN',
+      description: 'The first privacy-focused stablecoin built on Oasis Sapphire EVM.',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/BitProtocol.png',
       externalLink: 'https://bitusd.finance/',
     },
