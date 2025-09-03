@@ -9,7 +9,6 @@ export const App: FC = () => {
   return (
     <Layout>
       <div className={classes.app}>
-        <h1 className={classes.discoverTitle}>Discover</h1>
         <div className={classes.featured}>
           {featured.map((cardConfig, index) => (
             <Card isFeatured isHero={index === 0} key={cardConfig.title} {...cardConfig} />
