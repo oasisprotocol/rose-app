@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import { cn } from '@oasisprotocol/ui-library/src'
-import { Card } from '@oasisprotocol/rose-app-ui/discover'
+import { Card } from './Card'
 import { CARDS_CONFIG } from './constants/config'
 import classes from './App.module.css'
 

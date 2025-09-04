@@ -1,4 +1,4 @@
-import { CardConfig } from '@oasisprotocol/rose-app-ui/discover'
+import { CardConfig } from '../Card'
 
 export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; tooling: CardConfig[] } = {
   featured: [
