@@ -1,7 +1,14 @@
 import { FC } from 'react'
-import { CardConfig } from '../../types'
 import classes from './index.module.css'
 import { cn } from '@oasisprotocol/ui-library/src'
+
+export interface CardConfig {
+  title: string
+  type?: string
+  description?: string
+  imgSrc: string
+  externalLink: string
+}
 
 interface Props extends CardConfig {
   className?: string

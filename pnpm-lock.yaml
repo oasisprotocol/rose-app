@@ -47,9 +47,6 @@ importers:
 
   discover:
     dependencies:
-      '@oasisprotocol/rose-app-ui':
-        specifier: workspace:*
-        version: link:../ui
       '@oasisprotocol/ui-library':
         specifier: file:../ui-library
         version: file:ui-library(@types/react-dom@18.3.1)(@types/react@18.3.11)(vite@5.4.19(@types/node@22.7.7)(lightningcss@1.30.1))
