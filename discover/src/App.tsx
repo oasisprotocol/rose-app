@@ -1,6 +1,7 @@
 import { FC } from 'react'
+import { cn } from '@oasisprotocol/ui-library/src'
 import { useMediaQuery } from 'react-responsive'
-import { Layout, Card } from '@oasisprotocol/rose-app-ui/discover'
+import { Card } from '@oasisprotocol/rose-app-ui/discover'
 import { CARDS_CONFIG } from './constants/config'
 
 import classes from './App.module.css'
@@ -12,13 +13,13 @@ export const App: FC = () => {
   const isMobileScreen = useMediaQuery({ query: '(max-width: 1023px)' })
 
   return (
-    <Layout>
+    <div className={classes.global}>
       <Header logo={isMobileScreen && <Logo />} />
-      <div className={classes.app}>
+      <div className={cn(classes.app, 'max-w-[1200px] mx-auto')}>
         <h1 className={classes.discoverTitle}>Discover</h1>
         <div className={classes.featured}>
-          {featured.map(cardConfig => (
-            <Card isFeatured key={cardConfig.title} {...cardConfig} />
+          {featured.map((cardConfig, index) => (
+            <Card isFeatured isHero={index === 0} key={cardConfig.title} {...cardConfig} />
           ))}
         </div>
         <h2 className={classes.dAppsTitle}>dApps</h2>
@@ -34,6 +35,6 @@ export const App: FC = () => {
           ))}
         </div>
       </div>
-    </Layout>
+    </div>
   )
 }
