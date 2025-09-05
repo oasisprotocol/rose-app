@@ -4,9 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "license": "See License in ./LICENSE",
-  "packageManager": "pnpm@8.15.4",
   "engines": {
-    "node": ">=20"
+    "node": ">=20",
+    "pnpm": ">=10.0.0"
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
