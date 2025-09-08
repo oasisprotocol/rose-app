@@ -1,8 +1,66 @@
+.global {
+  color: var(--white);
+
+  :global(h1) {
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 36.31px;
+  }
+
+  :global(h2) {
+    font-size: 20px;
+    font-weight: 600;
+    line-height: 24.2px;
+  }
+
+  :global(p) {
+    &:global(.text-xxxl) {
+      font-size: 48px;
+      line-height: 48px;
+    }
+
+    &:global(.text-xxl) {
+      font-size: 24px;
+      line-height: 24px;
+    }
+
+    &:global(.text-xl) {
+      font-size: 20px;
+      line-height: 24.2px;
+    }
+
+    &:global(.text-base) {
+      font-size: 16px;
+      line-height: 19.36px;
+    }
+
+    &:global(.text-sm) {
+      font-size: 14px;
+      line-height: 16.94px;
+    }
+
+    &:global(.text-tiny) {
+      font-size: 12px;
+      line-height: 12px;
+    }
+
+    &:global(.regular) {
+      font-weight: 400;
+    }
+
+    &:global(.medium) {
+      font-weight: 500;
+    }
+  }
+}
+
 .app {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
   padding: 0 1rem 2.25rem;
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .discoverTitle {
