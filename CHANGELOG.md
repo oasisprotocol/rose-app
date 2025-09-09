@@ -12,6 +12,18 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.3 (2025-09-09)
+
+### Features
+
+- Discover: Backport discovery design fixes to stable branch
+  ([#289](https://github.com/oasisprotocol/rose-app/issues/289))
+
+### Internal Changes
+
+- Run GH linter on pushes / PRs to the stable branch
+  ([#291](https://github.com/oasisprotocol/rose-app/issues/291))
+
 ## 1.1.2 (2025-08-19)
 
 ### Bug Fixes and Improvements
