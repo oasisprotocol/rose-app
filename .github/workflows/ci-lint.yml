@@ -5,11 +5,11 @@ name: ci-lint
 on:
   # A push occurs to one of the matched branches.
   push:
-    branches: [master]
+    branches: [stable/1.1.x]
   # Or when a pull request event occurs for a pull request against one of the
   # matched branches.
   pull_request:
-    branches: [master]
+    branches: [stable/1.1.x]
 
 jobs:
   lint:
