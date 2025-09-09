@@ -12,6 +12,8 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.4 (2025-09-09)
+
 ## 1.1.3 (2025-09-09)
 
 ### Features
