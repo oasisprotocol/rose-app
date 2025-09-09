@@ -82,12 +82,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       externalLink: 'https://midas.app/',
     },
     {
-      title: 'Daosis',
-      type: 'Launchpad & Token Minter',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Daosis.jpg',
-      externalLink: 'https://daosis.io/',
-    },
-    {
       title: 'NEBY',
       type: 'DEX',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/Neby.jpg',
@@ -100,12 +94,6 @@ export const CARDS_CONFIG: { featured: CardConfig[]; dApps: CardConfig[]; toolin
       type: 'SDK & AI Agents',
       imgSrc: 'https://assets.oasis.io/rose-app-discover/Empyreal.jpg',
       externalLink: 'https://empyrealsdk.com/',
-    },
-    {
-      title: 'Router Bridge',
-      type: 'Bridge',
-      imgSrc: 'https://assets.oasis.io/rose-app-discover/Router.jpg',
-      externalLink: 'https://app.routernitro.com/swap',
     },
     {
       title: 'DEX Screener',
