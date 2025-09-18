@@ -1,77 +1,9 @@
-import { Chain, defineChain } from 'viem'
-
-export const SAPPHIRE_CHAIN_CONFIG = defineChain({
-  id: 23294,
-  name: 'Oasis Sapphire',
-  network: 'sapphire',
-  nativeCurrency: { name: 'Sapphire Rose', symbol: 'ROSE', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://sapphire.oasis.io'],
-      webSocket: ['wss://sapphire.oasis.io/ws'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Oasis Explorer',
-      url: 'https://explorer.oasis.io/mainnet/sapphire',
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 734531,
-    },
-  },
-})
-
-export const SAPPHIRE_1RPC_CHAIN_CONFIG = defineChain({
-  id: 23294,
-  name: 'Oasis Sapphire',
-  network: 'sapphire',
-  nativeCurrency: { name: 'Sapphire Rose', symbol: 'ROSE', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://1rpc.io/oasis/sapphire'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Oasis Explorer',
-      url: 'https://explorer.oasis.io/mainnet/sapphire',
-    },
-  },
-  contracts: {
-    multicall3: {
-      address: '0xcA11bde05977b3631167028862bE2a173976CA11',
-      blockCreated: 734531,
-    },
-  },
-})
-
-export const SAPPHIRE_TESTNET_CHAIN_CONFIG = defineChain({
-  id: 23295,
-  name: 'Oasis Sapphire Testnet',
-  network: 'sapphire-testnet',
-  nativeCurrency: { name: 'Sapphire Test Rose', symbol: 'TEST', decimals: 18 },
-  rpcUrls: {
-    default: {
-      http: ['https://testnet.sapphire.oasis.dev'],
-      webSocket: ['wss://testnet.sapphire.oasis.dev/ws'],
-    },
-  },
-  blockExplorers: {
-    default: {
-      name: 'Oasis Explorer',
-      url: 'https://explorer.oasis.io/testnet/sapphire',
-    },
-  },
-  testnet: true,
-})
+import { Chain } from 'viem'
+import { sapphire, sapphireTestnet } from 'viem/chains'
 
 export const SUPPORTED_CHAIN_IDS: Record<number, Chain> = {
-  [23294]: SAPPHIRE_1RPC_CHAIN_CONFIG,
-  [23295]: SAPPHIRE_TESTNET_CHAIN_CONFIG,
+  [23294]: sapphire,
+  [23295]: sapphireTestnet,
 }
 
 export const NEXUS_BASE_URL_CONFIG: Map<number, string> = new Map([

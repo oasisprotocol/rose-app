@@ -1,27 +1,16 @@
 import { FC, PropsWithChildren, useEffect, useState } from 'react'
-import {
-  GAS_LIMIT_STAKE,
-  GAS_LIMIT_UNSTAKE,
-  SAPPHIRE_1RPC_CHAIN_CONFIG,
-  SAPPHIRE_CHAIN_CONFIG,
-  SAPPHIRE_TESTNET_CHAIN_CONFIG,
-  SUPPORTED_CHAIN_IDS,
-} from '../constants/config'
+import { GAS_LIMIT_STAKE, GAS_LIMIT_UNSTAKE, SUPPORTED_CHAIN_IDS } from '../constants/config'
 import { Web3Context, Web3ProviderContext, Web3ProviderState } from './Web3Context'
 import { consensusDelegate, consensusUndelegate } from '@oasisprotocol/rose-app-subcall'
 import { useAccount, usePublicClient } from 'wagmi'
 import { TransactionRequestLegacy, createPublicClient, http, PublicClient } from 'viem'
+import { sapphire, sapphireTestnet } from 'viem/chains'
 
 const { PROD } = import.meta.env
 
-/* eslint-disable indent */
 const clients: PublicClient[] = PROD
-  ? [
-      createPublicClient({ chain: SAPPHIRE_1RPC_CHAIN_CONFIG, transport: http() }),
-      createPublicClient({ chain: SAPPHIRE_CHAIN_CONFIG, transport: http() }),
-    ]
-  : [createPublicClient({ chain: SAPPHIRE_TESTNET_CHAIN_CONFIG, transport: http() })]
-/* eslint-enable indent */
+  ? [createPublicClient({ chain: sapphire, transport: http() })]
+  : [createPublicClient({ chain: sapphireTestnet, transport: http() })]
 
 const web3ProviderInitialState: Web3ProviderState = {
   explorerBaseUrl: null,
