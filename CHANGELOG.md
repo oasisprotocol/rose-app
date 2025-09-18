@@ -12,6 +12,13 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.4 (2025-09-18)
+
+### Bug Fixes and Improvements
+
+- Backport update Web3 gateway
+  ([#298](https://github.com/oasisprotocol/rose-app/issues/298))
+
 ## 1.1.3 (2025-09-09)
 
 ### Features
