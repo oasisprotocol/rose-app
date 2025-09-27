@@ -1,6 +1,6 @@
 import classes from './index.module.css'
 import { FC, MouseEventHandler } from 'react'
-import { CachedIcon } from '../icons/CachedIcon'
+import { RefreshCw } from 'lucide-react'
 
 interface Props {
   className?: string
@@ -10,6 +10,6 @@ interface Props {
 
 export const ToggleButton: FC<Props> = ({ className, disabled, onClick }) => (
   <button className={[className, classes.toggleButton].join(' ')} onClick={onClick} disabled={disabled}>
-    <CachedIcon />
+    <RefreshCw />
   </button>
 )
