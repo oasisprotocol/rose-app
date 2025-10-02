@@ -7,7 +7,7 @@ import { WrapFormType } from '../../utils/types'
 import { useInterval } from '../../hooks/useInterval'
 import { NumberUtils } from '../../utils/number.utils'
 import { WrapFeeWarningModal } from '../WrapFeeWarningModal'
-import { formatEther, parseEther } from 'viem'
+import { BaseError, formatEther, parseEther } from 'viem'
 import BigNumber from 'bignumber.js'
 
 const AMOUNT_PATTERN = '^[0-9]*[.,]?[0-9]*$'
@@ -79,7 +79,10 @@ export const WrapForm: FC = () => {
 
       navigate(`/wrap/tx/${txHash}?amount=${value}&action=${formType}`)
     } catch (ex) {
-      setError((ex as Error)?.message || JSON.stringify(ex))
+      // E.g. ex.shortMessage: 'User rejected the request.'
+      // ex.message: 'User rejected the request.\n\nRequest Arguments:\n  from: ...'
+      // ex.cause.cause.code: 4001
+      setError((ex as BaseError)?.shortMessage || (ex as Error)?.message || JSON.stringify(ex))
     }
   }
 
