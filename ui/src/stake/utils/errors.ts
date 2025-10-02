@@ -4,7 +4,7 @@ export const toErrorString = (error: Error = new Error('Unknown error')) => {
   if (Object.prototype.hasOwnProperty.call(error, 'message')) {
     errorString = (error as Error).message
   } else if (typeof error === 'object') {
-    errorString = JSON.stringify(errorString)
+    errorString = JSON.stringify(error)
   } else {
     errorString = error
   }
