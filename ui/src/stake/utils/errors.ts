@@ -1,13 +1,8 @@
-export const toErrorString = (error: Error = new Error('Unknown error')) => {
-  let errorString = ''
+import { BaseError } from 'viem'
 
-  if (Object.prototype.hasOwnProperty.call(error, 'message')) {
-    errorString = (error as Error).message
-  } else if (typeof error === 'object') {
-    errorString = JSON.stringify(errorString)
-  } else {
-    errorString = error
-  }
-
-  return errorString
+export const toErrorString = (error: Error | BaseError = new Error('Unknown error')) => {
+  if ('shortMessage' in error) return error?.shortMessage
+  if ('message' in error) return error?.message
+  if (typeof error === 'object') return JSON.stringify(error)
+  return error
 }

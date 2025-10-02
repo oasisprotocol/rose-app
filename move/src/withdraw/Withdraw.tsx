@@ -23,6 +23,7 @@ import { amountPattern, consensusConfig, multiplyConsensusToSapphire } from '../
 import { withdrawFeeAmount, minimalWithdrawableAmount } from './withdrawToConsensus.ts'
 import { ExistingBalance } from './ExistingBalance.tsx'
 import { ConsensusAccount, SapphireAccount } from './useGenerateSapphireAccount.ts'
+import { BaseError } from 'wagmi'
 
 interface FormItem<T = string> {
   value: T | undefined
@@ -205,7 +206,10 @@ export function Withdraw({
       try {
         await step3(amount.value * multiplyConsensusToSapphire)
       } catch (err) {
-        setDestinationForm(prevState => ({ ...prevState, error: (err as Error).message }))
+        setDestinationForm(prevState => ({
+          ...prevState,
+          error: (err as BaseError).shortMessage || (err as Error).message,
+        }))
         return
       }
     }
