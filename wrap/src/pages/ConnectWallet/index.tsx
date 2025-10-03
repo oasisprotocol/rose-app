@@ -2,7 +2,7 @@ import { FC } from 'react'
 import classes from './index.module.css'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { withConnectedWallet } from '../../hoc/withConnectedWallet'
-import { WrapLogoIcon } from '@oasisprotocol/rose-app-ui'
+import { WrapLogoIcon } from '../../components/Logo/WrapLogoIcon'
 
 const ConnectWalletCmp: FC = () => {
   return (
