@@ -1,22 +1,24 @@
 import { FC } from 'react'
-import classes from './index.module.css'
-import { ConnectButton } from '@rainbow-me/rainbowkit'
+import { Card, CardHeader, CardDescription, CardTitle, CardFooter } from '@oasisprotocol/ui-library/src'
 import { withConnectedWallet } from '../../hoc/withConnectedWallet'
-import { WrapLogoIcon } from '@oasisprotocol/rose-app-ui'
+import { ConnectWalletButton } from '@oasisprotocol/rose-app-ui'
 
 const ConnectWalletCmp: FC = () => {
   return (
-    <div className={classes.connectWallet}>
-      <WrapLogoIcon />
+    <Card className={'w-[380px]'}>
+      <CardHeader>
+        <CardTitle>WRAP</CardTitle>
 
-      <p className={classes.subHeader}>
-        Quickly wrap your ROSE into wROSE and vice versa with the (un)wrap ROSE tool.
-        <br />
-        Please connect your wallet to get started.
-      </p>
+        <CardDescription>
+          Quickly wrap your ROSE into wROSE and vice versa with the (un)wrap ROSE tool. Please connect your
+          wallet to get started.
+        </CardDescription>
+      </CardHeader>
 
-      <ConnectButton />
-    </div>
+      <CardFooter>
+        <ConnectWalletButton className={'w-full'} />
+      </CardFooter>
+    </Card>
   )
 }
 

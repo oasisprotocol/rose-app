@@ -1,9 +1,11 @@
 import { FC } from 'react'
-import { WrapLayout } from '@oasisprotocol/rose-app-ui/wrap'
+import { Outlet } from 'react-router-dom'
 import { Web3ContextProvider } from './providers/Web3Provider'
 
 export const App: FC = () => (
   <Web3ContextProvider>
-    <WrapLayout />
+    <div className={'p-6'}>
+      <Outlet />
+    </div>
   </Web3ContextProvider>
 )
