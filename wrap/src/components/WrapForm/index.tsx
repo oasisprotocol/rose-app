@@ -90,19 +90,23 @@ export const WrapForm: FC = () => {
     setError('')
     e.preventDefault()
 
-    const amount = NumberUtils.BigIntToBN(parseEther(value || '0'))
+    try {
+      const amount = NumberUtils.BigIntToBN(parseEther(value || '0'))
 
-    if (
-      formType === WrapFormType.WRAP &&
-      NumberUtils.shouldShowWrapFeeWarningModal({
-        fee: estimatedFee,
-        amount,
-        accountBalanceAmount: balance,
-      })
-    ) {
-      setIsWrapFeeModalOpen(true)
-    } else {
-      submitTransaction(amount)
+      if (
+        formType === WrapFormType.WRAP &&
+        NumberUtils.shouldShowWrapFeeWarningModal({
+          fee: estimatedFee,
+          amount,
+          accountBalanceAmount: balance,
+        })
+      ) {
+        setIsWrapFeeModalOpen(true)
+      } else {
+        submitTransaction(amount)
+      }
+    } catch (ex) {
+      setError((ex as BaseError)?.shortMessage || (ex as Error)?.message || JSON.stringify(ex))
     }
   }
 
