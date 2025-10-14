@@ -21,7 +21,7 @@
     "@oasisprotocol/nexus-api": "workspace:*",
     "@oasisprotocol/rose-app-subcall": "workspace:*",
     "@oasisprotocol/rose-app-ui": "workspace:*",
-    "@rainbow-me/rainbowkit": "^2.1.2",
+    "@rainbow-me/rainbowkit": "^2.2.9",
     "axios": "^1.8.4",
     "bignumber.js": "^9.1.2",
     "date-fns": "^3.6.0",
