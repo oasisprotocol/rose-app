@@ -32,7 +32,10 @@ export function useGenerateSapphireAccount() {
       const signature = await signMessageAsync({
         message: siweMessageSapphireToConsensus(sapphireAddress),
       })
-      const hashedSignature = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature))
+      const hashedSignature = await window.crypto.subtle.digest(
+        'SHA-512',
+        hexToBytes(signature) as Uint8Array<ArrayBuffer>
+      )
 
       const sapphireAccount = await (async () => {
         // Only take half

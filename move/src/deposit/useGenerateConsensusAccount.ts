@@ -22,7 +22,10 @@ export function useGenerateConsensusAccount() {
       const signature = await signMessageAsync({
         message: siweMessageConsensusToSapphire(sapphireAddress),
       })
-      const hashedSignature = await window.crypto.subtle.digest('SHA-512', hexToBytes(signature))
+      const hashedSignature = await window.crypto.subtle.digest(
+        'SHA-512',
+        hexToBytes(signature) as Uint8Array<ArrayBuffer>
+      )
       // Only take half
       const seed32bytes = new Uint8Array(hashedSignature.slice(0, hashedSignature.byteLength / 2))
       if (seed32bytes.length !== 32) throw new Error('Unexpected derived private key length')
