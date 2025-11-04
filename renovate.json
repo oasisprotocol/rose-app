@@ -26,5 +26,6 @@
       "rangeStrategy": "auto"
     }
   ],
-  "rangeStrategy": "bump"
+  "rangeStrategy": "bump",
+  "cloneSubmodules": true
 }
