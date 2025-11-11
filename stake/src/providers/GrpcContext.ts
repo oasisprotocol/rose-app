@@ -7,7 +7,6 @@ export interface GrpcProviderState {
 }
 
 export interface GrpcProviderContext {
-  readonly state: GrpcProviderState
   fetchConsensusStatus: () => Promise<oasis.types.ConsensusStatus>
   getTimeEstimateForFutureEpoch: (epoch: bigint) => Promise<Date | null>
   fetchDelegations: () => Promise<Delegations>

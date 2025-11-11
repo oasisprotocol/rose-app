@@ -77,7 +77,6 @@ export const GrpcContextProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [isSupportedNetwork])
 
   const providerState: GrpcProviderContext = {
-    state,
     fetchConsensusStatus,
     getTimeEstimateForFutureEpoch,
     fetchDelegations: () => getDelegations(chainId!, address!),
