@@ -245,7 +245,7 @@ const UnstakePageCmp: FC = () => {
             calcAmountFromPercentage={getAmountFromPercentage}
           />
           <p className="body mute">
-            <b>Note:</b> users will be able to claim their staked ROSE after the 14 day debonding period has
+            <b>Note:</b> users will be able to use their staked ROSE after the 14 day debonding period has
             finished.
           </p>
           <div className={classes.actionButtonsContainer}>

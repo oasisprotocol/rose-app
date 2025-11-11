@@ -82,10 +82,6 @@
   margin: 1.375rem 1.375rem 1.125rem;
 }
 
-.infoBoxSuccess {
-  background: var(--green-25);
-}
-
 .overviewTab {
   padding: 1rem 2.9375rem 1rem 1.25rem;
 
@@ -212,12 +208,10 @@
     p {
       line-height: 40px;
     }
-  }
 
-  .debondingReady {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    .debondingRowExpandedAmount.debondingRowExpandedAmount {
+      width: auto;
+    }
   }
 }
 
