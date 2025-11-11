@@ -23,7 +23,7 @@
     "@oasisprotocol/nexus-api": "workspace:*",
     "@oasisprotocol/rose-app-subcall": "workspace:*",
     "@oasisprotocol/ui-library": "file:../ui-library",
-    "@rainbow-me/rainbowkit": "^2.1.2",
+    "@rainbow-me/rainbowkit": "^2.2.9",
     "bignumber.js": "^9.1.2",
     "lucide-react": "^0.513.0",
     "react": "^18.2.0",
