@@ -208,6 +208,10 @@
     p {
       line-height: 40px;
     }
+
+    .debondingRowExpandedAmount.debondingRowExpandedAmount {
+      width: auto;
+    }
   }
 }
 
