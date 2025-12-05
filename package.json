@@ -39,6 +39,6 @@
     "lint-staged": "^15.2.2",
     "markdownlint-cli": "^0.39.0",
     "prettier": "^3.2.5",
-    "semver": "^7.7.1"
+    "semver": "^7.7.3"
   }
 }
