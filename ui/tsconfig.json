@@ -20,10 +20,12 @@
     "noFallthroughCasesInSwitch": true,
 
     /* Path mappings */
+    "baseUrl": ".",
     "paths": {
       "@oasisprotocol/ui-library/src/*": ["../ui-library/src/*"]
     }
   },
   "include": ["src", "types"],
+  "exclude": ["../ui-library"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
