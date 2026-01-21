@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
 import svgr from 'vite-plugin-svgr'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import pkg from './package.json' assert { type: 'json' }
 import { resolve } from 'path'
 
@@ -22,5 +23,5 @@ export default defineConfig({
     target: 'esnext',
   },
   resolve: { alias: { src: resolve('src/') } },
-  plugins: [svgr(), dts()], // emit TS declaration files
+  plugins: [tsconfigPaths(), svgr(), dts()], // emit TS declaration files
 })

@@ -1,5 +1,6 @@
 import { defineConfig } from 'vite'
 import dts from 'vite-plugin-dts'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import pkg from './package.json' assert { type: 'json' }
 import { resolve } from 'path'
 
@@ -20,5 +21,5 @@ export default defineConfig({
     target: 'esnext',
   },
   resolve: { alias: { src: resolve('src/') } },
-  plugins: [dts()], // emit TS declaration files
+  plugins: [tsconfigPaths(), dts()], // emit TS declaration files
 })

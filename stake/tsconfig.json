@@ -17,7 +17,12 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    /* Path mappings */
+    "paths": {
+      "@oasisprotocol/ui-library/src/*": ["../ui-library/src/*"]
+    }
   },
   "include": ["src", "types"],
   "references": [{ "path": "./tsconfig.node.json" }]

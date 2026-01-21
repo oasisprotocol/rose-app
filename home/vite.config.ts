@@ -3,13 +3,14 @@ import { defineConfig } from 'vite'
 import svgr from 'vite-plugin-svgr'
 import react from '@vitejs/plugin-react-swc'
 import tailwindcss from '@tailwindcss/vite'
+import tsconfigPaths from 'vite-tsconfig-paths'
 import { nodePolyfills } from 'vite-plugin-node-polyfills'
 import { version } from '../package.json'
 import path from 'node:path'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [nodePolyfills(), svgr(), react(), tailwindcss()],
+  plugins: [tsconfigPaths(), nodePolyfills(), svgr(), react(), tailwindcss()],
   base: '/',
   build: {
     sourcemap: true,
