@@ -1,14 +1,15 @@
 import { FC } from 'react'
 import { ConnectButton } from '@rainbow-me/rainbowkit'
 import { ChevronDown, Wallet } from 'lucide-react'
-import { cn, Button } from '@oasisprotocol/ui-library/src'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
+import { Button } from '@oasisprotocol/ui-library/src/components/button'
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/dropdown-menu'
+} from '@oasisprotocol/ui-library/src/components/dropdown-menu'
 import { AccountAvatar } from '../AccountAvatar'
 import { useDisconnect } from 'wagmi'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'

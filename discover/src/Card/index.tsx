@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import classes from './index.module.css'
-import { cn } from '@oasisprotocol/ui-library/src'
+import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
 
 export interface CardConfig {
   title: string

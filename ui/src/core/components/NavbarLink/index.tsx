@@ -1,4 +1,4 @@
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Button } from '@oasisprotocol/ui-library/src/components/button'
 import { FC, PropsWithChildren } from 'react'
 import { NavLink } from 'react-router-dom'
 
