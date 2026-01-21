@@ -1,4 +1,4 @@
-import { Layout } from '@oasisprotocol/ui-library/src/components/ui/layout'
+import { Layout } from '@oasisprotocol/ui-library/src/components/layout'
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { Disc, Layers, Menu, Repeat, Sparkles } from 'lucide-react'
 import { useState } from 'react'
@@ -9,11 +9,11 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from '@oasisprotocol/ui-library/src/components/ui/sheet'
+} from '@oasisprotocol/ui-library/src/components/sheet'
 import { useIsMobile } from '@oasisprotocol/ui-library/src/hooks/use-mobile'
-import { Button } from '@oasisprotocol/ui-library/src/components/ui/button'
+import { Button } from '@oasisprotocol/ui-library/src/components/button'
 import { cn } from '@oasisprotocol/ui-library/src/lib/utils'
-import { Separator } from '@oasisprotocol/ui-library/src/components/ui/separator'
+import { Separator } from '@oasisprotocol/ui-library/src/components/separator'
 
 import classes from './index.module.css'
 import {
@@ -22,7 +22,7 @@ import {
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbSeparator,
-} from '@oasisprotocol/ui-library/src/components/ui/breadcrumb'
+} from '@oasisprotocol/ui-library/src/components/breadcrumb'
 import { NavbarLink } from '../NavbarLink'
 import {
   Sidebar,
@@ -31,7 +31,7 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-} from '@oasisprotocol/ui-library/src/components/ui/sidebar'
+} from '@oasisprotocol/ui-library/src/components/sidebar'
 import { AppLogo } from '../icons'
 
 const locationListMap: Record<string, string[]> = {
