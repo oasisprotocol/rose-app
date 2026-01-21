@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx only-allow pnpm",
+    "checkTs": "tsc --noEmit",
     "dev": "vite",
     "build": "tsc && vite build",
     "generate:oasisscanv2": "swagger-typescript-api -p https://api.oasisscan.com/v2/swagger/api.json -o ./src/generated -n OasisScanV2Api.ts",
