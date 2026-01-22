@@ -12,7 +12,7 @@ import { ConnectWalletButton } from '@oasisprotocol/rose-app-ui'
 const ConnectWalletCmp: FC = () => {
   return (
     <Card className="w-full max-w-[380px]">
-      <CardHeader>
+      <CardHeader className="text-xl">
         <CardTitle>Wrap</CardTitle>
         <CardDescription>
           Quickly wrap your ROSE into wROSE and vice versa with the (un)wrap ROSE tool. Please connect your
