@@ -15,7 +15,7 @@
     "prettier": "prettier --write . --ignore-path .eslintignore",
     "build": "pnpm --filter @oasisprotocol/rose-app-home build",
     "dev": "pnpm --filter @oasisprotocol/rose-app-home dev",
-    "test": "pnpm --filter=!@oasisprotocol/rose-app-e2e --parallel -r exec vitest run --passWithNoTests",
+    "test": "pnpm --filter=!@oasisprotocol/rose-app-e2e --parallel -r run test",
     "test-e2e": "pnpm --filter @oasisprotocol/rose-app-e2e test"
   },
   "license": "Apache-2.0",
