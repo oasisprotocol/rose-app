@@ -55,6 +55,7 @@ export const AppLayout = () => {
 
   return (
     <Layout
+      className="[&_main]:mx-0"
       headerContent={
         <div className="w-full flex justify-between items-center">
           <NavLink to="/">

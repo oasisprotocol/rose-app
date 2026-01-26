@@ -1,6 +1,4 @@
 import { FC, FormEvent, MouseEvent, useEffect, useRef, useState } from 'react'
-import { WrapInput, WrapButton, WrapAlert, WrapToggleButton } from '@oasisprotocol/rose-app-ui/wrap'
-import classes from './index.module.css'
 import { useNavigate } from 'react-router-dom'
 import { useWrapForm } from '../../hooks/useWrapForm'
 import { WrapFormType } from '../../utils/types'
@@ -9,6 +7,16 @@ import { NumberUtils } from '../../utils/number.utils'
 import { WrapFeeWarningModal } from '../WrapFeeWarningModal'
 import { BaseError, formatEther, parseEther } from 'viem'
 import BigNumber from 'bignumber.js'
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from '@oasisprotocol/ui-library/src/components/ui/input-group' // TODO: fix import path in UIL
+import { Button } from '@oasisprotocol/ui-library/src/components/button'
+import { ArrowUpDown } from 'lucide-react'
+import { Separator } from '@oasisprotocol/ui-library/src/components/separator'
+import { Label } from '@oasisprotocol/ui-library/src/components/label'
 
 const AMOUNT_PATTERN = '^[0-9]*[.,]?[0-9]*$'
 
@@ -34,8 +42,9 @@ const labelMapByFormType: Record<WrapFormType, WrapFormLabels> = {
 export const WrapForm: FC = () => {
   const navigate = useNavigate()
   const {
-    state: { formType, amount, isLoading, balance, estimatedFee },
+    state: { formType, amount, isLoading, balance, estimatedFee, wRoseBalance },
     toggleFormType,
+    setAmount,
     submit,
     debounceLeadingSetFeeAmount,
   } = useWrapForm()
@@ -118,43 +127,105 @@ export const WrapForm: FC = () => {
   const estimatedFeeTruncated =
     estimatedFee && estimatedFee.gt(0) ? `~${NumberUtils.getTruncatedAmount(estimatedFee)} ROSE` : '/'
 
+  const handlePercentageCalc = () => {
+    const percentage = BigNumber(100)
+    if (formType === WrapFormType.WRAP) {
+      /* In case of 100% WRAP, deduct gas fee */
+      const percAmount = NumberUtils.getPercentageAmount(balance, percentage)
+      setAmount(percAmount.minus(estimatedFee))
+    } else if (formType === WrapFormType.UNWRAP) {
+      setAmount(NumberUtils.getPercentageAmount(wRoseBalance, percentage))
+    } else {
+      throw new Error('[formType] Invalid form type')
+    }
+  }
+
   return (
     <div>
-      <form className={classes.wrapForm} onSubmit={handleFormSubmit}>
-        <div className={classes.wrapFormInputs}>
-          <WrapInput<string>
-            disabled={isLoading}
-            type="text"
-            label={firstInputLabel}
-            pattern={AMOUNT_PATTERN}
-            placeholder="0"
-            inputMode="decimal"
-            value={value}
-            valueChange={handleValueChange}
-          />
-          <WrapInput<string>
-            disabled={isLoading}
-            type="text"
-            label={secondInputLabel}
-            pattern={AMOUNT_PATTERN}
-            placeholder="0"
-            inputMode="decimal"
-            value={value}
-            valueChange={handleValueChange}
-          />
-          <WrapToggleButton
-            className={classes.toggleBtn}
-            onClick={handleToggleFormType}
-            disabled={isLoading}
-          />
+      <form onSubmit={handleFormSubmit}>
+        <div className="mt-6 flex flex-col gap-4">
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="firstInputLabel">From</Label>
+            <InputGroup>
+              <InputGroupInput
+                id="firstInputLabel"
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                autoCorrect="off"
+                pattern={AMOUNT_PATTERN}
+                disabled={isLoading}
+                placeholder="0"
+                value={value}
+                onChange={handleValueChange}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton onClick={handlePercentageCalc} variant="link" size="sm">
+                  Max
+                </InputGroupButton>
+                <span className="text-muted-foreground font-medium">{firstInputLabel}</span>
+              </InputGroupAddon>
+            </InputGroup>
+            <span className="text-xs text-muted-foreground">
+              Balance: {formType === WrapFormType.WRAP && NumberUtils.getTruncatedAmount(balance)}
+              {formType === WrapFormType.UNWRAP && NumberUtils.getTruncatedAmount(wRoseBalance)}{' '}
+              {firstInputLabel}
+            </span>
+          </div>
+
+          <div className="flex items-center justify-between">
+            <Separator className="max-w-[40%]" />
+            <Button
+              className="text-primary bg-[#162A2D]"
+              variant="secondary"
+              size="icon"
+              onClick={handleToggleFormType}
+              disabled={isLoading}
+            >
+              <ArrowUpDown className="h-4 w-4" />
+            </Button>
+            <Separator className="max-w-[40%]" />
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <Label htmlFor="firstInputLabel">To</Label>
+            <InputGroup>
+              <InputGroupInput
+                id="secondInputLabel"
+                type="text"
+                inputMode="decimal"
+                autoComplete="off"
+                autoCorrect="off"
+                pattern={AMOUNT_PATTERN}
+                disabled={isLoading}
+                placeholder="0"
+                value={value}
+                onChange={handleValueChange}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton onClick={handlePercentageCalc} variant="link" size="sm">
+                  Max
+                </InputGroupButton>
+                <span className="text-muted-foreground font-medium">{secondInputLabel}</span>
+              </InputGroupAddon>
+            </InputGroup>
+            <span className="text-xs text-muted-foreground">
+              Balance: {formType === WrapFormType.WRAP && NumberUtils.getTruncatedAmount(wRoseBalance)}
+              {formType === WrapFormType.UNWRAP && NumberUtils.getTruncatedAmount(balance)} {secondInputLabel}
+            </span>
+          </div>
         </div>
 
-        <h4 className={classes.gasEstimateLabel}>Estimated fee: {estimatedFeeTruncated}</h4>
+        <div className="my-6 flex items-center justify-between">
+          <span className="text-sm text-foreground">Estimated gas fee:</span>
+          <span className="text-sm font-medium text-foreground"> {estimatedFeeTruncated}</span>
+        </div>
 
-        <WrapButton disabled={isLoading} type="submit" fullWidth>
+        <Button size="lg" disabled={isLoading} type="submit" className="w-full">
           {submitBtnLabel}
-        </WrapButton>
-        {error && <WrapAlert variant="danger">{error}</WrapAlert>}
+        </Button>
+
+        {error && <p className="pt-2 text-error text-xs">{error}</p>}
       </form>
       <WrapFeeWarningModal
         isOpen={isWrapFeeModalOpen}
