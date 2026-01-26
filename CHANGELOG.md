@@ -12,6 +12,16 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.5 (2026-01-26)
+
+### Internal Changes
+
+- Trigger workflows for stable/* branches
+  ([#300](https://github.com/oasisprotocol/rose-app/issues/300))
+
+- Update Wallet Connect id
+  ([#321](https://github.com/oasisprotocol/rose-app/issues/321))
+
 ## 1.1.4 (2025-09-18)
 
 ### Bug Fixes and Improvements
