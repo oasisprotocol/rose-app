@@ -17,12 +17,11 @@ function checkNonce(nonce: oasis.types.longnum, lastKnownNonce: oasis.types.long
 
 async function _getConsensusNonce(oasisAddress: `oasis1${string}`) {
   const nic = getNodeInternal()
-  const nonce =
-    (await nic.consensusGetSignerNonce({
-      account_address: oasis.staking.addressFromBech32(oasisAddress),
-      height: 0,
-    })) ?? 0
-  return nonce
+  const account = await nic.stakingAccount({
+    owner: oasis.staking.addressFromBech32(oasisAddress),
+    height: 0,
+  })
+  return BigInt(account.general?.nonce?.toString() ?? '0')
 }
 
 const consensusLastKnownNonce: { [address: `oasis1${string}`]: oasis.types.longnum } = {}

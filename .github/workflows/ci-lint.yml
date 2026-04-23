@@ -31,7 +31,7 @@ jobs:
       - name: Set up Python 3
         uses: actions/setup-python@v4
         with:
-          python-version: '3.x'
+          python-version: '3.12'
       - name: Set up Node.js 20
         uses: actions/setup-node@v4
         with:
@@ -62,10 +62,10 @@ jobs:
       - name: Install gitlint
         run: |
           python -m pip install gitlint
-        # Needed for Towncrier fork to work with 3.12 and above
+        # Pin to <82; setuptools 82.0.0 removed pkg_resources which towncrier needs
       - name: Install setuptools
         run: |
-          python -m pip install setuptools
+          python -m pip install 'setuptools<82'
       - name: Install towncrier
         run: |
           python -m pip install https://github.com/oasisprotocol/towncrier/archive/oasis-master.tar.gz
