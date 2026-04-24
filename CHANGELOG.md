@@ -12,6 +12,13 @@ The format is inspired by [Keep a Changelog].
 
 <!-- TOWNCRIER -->
 
+## 1.1.6 (2026-04-23)
+
+### Bug Fixes and Improvements
+
+- Fix deprecated GetSignerNonce
+  ([#326](https://github.com/oasisprotocol/rose-app/issues/326))
+
 ## 1.1.5 (2026-01-26)
 
 ### Internal Changes
