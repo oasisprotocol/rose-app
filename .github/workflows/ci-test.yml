@@ -15,7 +15,7 @@ jobs:
   test:
     # NOTE: This name appears in GitHub's Checks API.
     name: test
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
